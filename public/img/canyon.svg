@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Cânion com neblina ao amanhecer e uma tirolesa cruzando o vale">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4c58a"/><stop offset=".45" stop-color="#f6d9b0"/><stop offset="1" stop-color="#dfeadf"/>
+    </linearGradient>
+    <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#ffffff" stop-opacity=".75"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff6dc"/><stop offset="1" stop-color="#fff6dc" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="720" fill="url(#sky)"/>
+  <circle cx="1120" cy="250" r="190" fill="url(#sun)"/>
+  <circle cx="1120" cy="250" r="46" fill="#fff3d1"/>
+  <path d="M0 330 L120 290 L230 320 L380 250 L520 310 L640 280 L780 340 L900 300 L1040 350 L1180 310 L1320 360 L1460 320 L1600 350 V720 H0Z" fill="#9db9a5" opacity=".55"/>
+  <path d="M0 400 L90 360 L210 395 L340 330 L470 390 L560 360 L690 420 L800 380 L900 440 L1010 395 L1130 450 L1270 400 L1400 445 L1500 410 L1600 440 V720 H0Z" fill="#6f9a82" opacity=".8"/>
+  <rect y="360" width="1600" height="160" fill="url(#mist)"/>
+  <path d="M0 470 L130 440 L170 520 L260 480 L300 560 L360 520 L380 720 H0Z" fill="#2c5a45"/>
+  <path d="M1600 450 L1490 420 L1450 500 L1370 470 L1330 560 L1260 520 L1240 720 H1600Z" fill="#244c3a"/>
+  <path d="M0 560 L200 520 L260 600 L420 560 L470 720 H0Z" fill="#16372a"/>
+  <path d="M1600 540 L1400 505 L1350 600 L1190 565 L1130 720 H1600Z" fill="#102c21"/>
+  <path d="M470 720 L560 600 L640 640 L720 600 L800 650 L880 610 L960 650 L1050 600 L1130 720Z" fill="#7aa88f" opacity=".55"/>
+  <!-- cabo da tirolesa e passageiro -->
+  <path d="M232 322 Q 800 470 1368 392" fill="none" stroke="#10261b" stroke-width="2.5" stroke-linecap="round"/>
+  <g transform="translate(838 438)">
+    <line x1="0" y1="-12" x2="0" y2="2" stroke="#10261b" stroke-width="2"/>
+    <circle cx="0" cy="-16" r="4" fill="#10261b"/>
+    <circle cx="0" cy="12" r="5.5" fill="#d9702b"/>
+    <path d="M0 18 L0 32 M0 24 L-9 31 M0 24 L9 31 M0 32 L-6 44 M0 32 L6 44" stroke="#10261b" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  </g>
+  <circle cx="232" cy="322" r="5" fill="#10261b"/><circle cx="1368" cy="392" r="5" fill="#10261b"/>
+</svg>

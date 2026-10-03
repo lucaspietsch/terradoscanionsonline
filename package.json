@@ -1,0 +1,29 @@
+{
+  "name": "terra-dos-canions-online",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portal de turismo de Cambará do Sul (Terra dos Cânions) com venda de ingressos da Tirolesa e vitrine de parceiros.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test --test-concurrency=1 test/*.test.js",
+    "seed": "node scripts/seed.js",
+    "create-admin": "node scripts/create-admin.js",
+    "gen-secrets": "node scripts/gen-secrets.js"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.1.2",
+    "@fastify/helmet": "^13.1.1",
+    "@fastify/rate-limit": "^11.2.0",
+    "@fastify/static": "^10.1.5",
+    "better-sqlite3": "^13.0.3",
+    "fastify": "^5.12.5",
+    "nodemailer": "^10.0.14",
+    "qrcode": "^1.5.4",
+    "zod": "^4.6.5"
+  }
+}
