@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escala Outubro 2026 - Tirolesa SGV</title>
+<style>
+  :root{
+    --fundo:#f6dcc2;      /* laranja discreto */
+    --papel:#fbeedd;
+    --texto:#5b6122;      /* verde oliva */
+    --linha:#d9b98f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fundo);color:var(--texto);
+       font-family:Georgia,"Times New Roman",serif;padding:20px 12px 40px}
+  main{max-width:900px;margin:0 auto}
+  h1{font-size:clamp(1.6rem,5vw,2.6rem);margin:0 0 4px;letter-spacing:.5px}
+  .sub{margin:0 0 18px;opacity:.85}
+
+  .semana,.grade{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .semana div{text-align:center;font-weight:bold;padding:6px 0;font-size:.9rem}
+
+  .dia{position:relative;min-height:88px;background:var(--papel);border:1px solid var(--linha);
+       border-radius:8px;padding:6px;cursor:pointer;font:inherit;color:inherit;text-align:left;
+       display:flex;flex-direction:column;justify-content:space-between}
+  .dia:hover,.dia:focus-visible{outline:3px solid var(--texto);outline-offset:1px}
+  .dia.vazio{visibility:hidden;cursor:default}
+  .num{font-weight:bold;font-size:1.05rem}
+
+  /* terça cancelada: grade "///" na vertical */
+  .dia.cancelado{
+    background:
+      repeating-linear-gradient(115deg,transparent 0 9px,rgba(91,97,34,.55) 9px 12px),
+      var(--papel);
+    opacity:.8}
+  .dia.cancelado .num{background:var(--papel);padding:0 5px;border-radius:4px;align-self:flex-start}
+
+  .bolinhas{display:flex;flex-wrap:wrap;gap:4px}
+  .bolinha{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.35)}
+
+  /* janela do dia */
+  #janela{position:fixed;inset:0;background:rgba(91,97,34,.45);display:none;
+          align-items:center;justify-content:center;padding:12px;z-index:10}
+  #janela.aberta{display:flex}
+  .caixa{border:2px solid var(--texto);border-radius:12px;background:var(--papel);color:var(--texto);
+         padding:20px;width:min(92vw,420px);max-height:90vh;overflow:auto}
+  .caixa h2{margin:0 0 12px;font-size:1.3rem}
+  .caixa h3{margin:16px 0 6px;font-size:1rem;border-bottom:1px solid var(--linha);padding-bottom:3px}
+  .nomes{display:flex;flex-wrap:wrap;gap:6px}
+  .nome{padding:3px 10px;border-radius:14px;font-weight:bold;font-size:.9rem}
+  .aviso{font-style:italic}
+  .fechar{margin-top:18px;background:var(--texto);color:var(--papel);border:0;border-radius:8px;
+          padding:8px 18px;font:inherit;cursor:pointer}
+
+  /* alerta "!" */
+  .alerta-marca{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;
+                background:#d32f2f;color:#fff;font:bold 15px/22px Arial,sans-serif;text-align:center}
+  .alerta-box{margin-top:6px;padding:10px 12px;border:2px solid #d32f2f;border-radius:8px;
+              background:#fdecea;color:#b71c1c;font-weight:bold}
+  .alerta-box .ex{display:inline-block;width:22px;height:22px;border-radius:50%;background:#d32f2f;color:#fff;
+                  font:bold 15px/22px Arial,sans-serif;text-align:center;margin-right:8px}
+  .obs{font-size:.8rem;font-weight:normal;margin-left:4px;opacity:.9}
+  #toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:none;
+         max-width:92vw;background:#d32f2f;color:#fff;border-radius:10px;padding:10px 14px;
+         box-shadow:0 4px 14px rgba(0,0,0,.3);font:bold 1rem Arial,sans-serif;cursor:pointer;
+         align-items:center;gap:10px}
+  #toast.aberto{display:flex}
+  #toast .ex{background:#fff;color:#d32f2f;width:24px;height:24px;border-radius:50%;
+             text-align:center;line-height:24px;flex:none}
+  #toast button{background:transparent;border:0;color:#fff;font-size:1.2rem;cursor:pointer}
+
+  .legenda{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
+  @media (max-width:560px){.dia{min-height:64px;padding:4px}.bolinha{width:10px;height:10px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Escala Outubro 2026 - Tirolesa SGV</h1>
+  <p class="sub">Toque em um dia para ver quem trabalha e quem está de folga. As terças não têm operação.</p>
+  <div class="semana" id="semana"></div>
+  <div class="grade" id="grade"></div>
+  <div class="legenda" id="legenda"></div>
+</main>
+
+<div id="toast" role="alert"><span class="ex">!</span><span id="toastTxt"></span><button id="toastX" aria-label="Fechar aviso">×</button></div>
+
+<div id="janela">
+  <div class="caixa" role="dialog" aria-modal="true">
+    <h2 id="titulo"></h2>
+    <div id="conteudo"></div>
+    <button class="fechar" id="fechar">Fechar</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   EDITE AQUI (como uma planilha)
+   ===================================================================== */
+const ANO = 2026, MES = 10;               // outubro de 2026
+
+// Cores de cada colaborador (fundo do nome e da bolinha, cor do texto)
+const CORES = {
+  "KRÜGER":   { cor:"#1e88e5", texto:"#fff" },     // azul
+  "PIETSCH":    { cor:"#ff9800", texto:"#3b2a00" },  // laranja
+  "KAULING":  { cor:"#fdd835", texto:"#4a4000" },  // amarelo
+  "CARLOS":   { cor:"#43a047", texto:"#fff" },     // verde
+  "JACKSON":  { cor:"#e53935", texto:"#fff" },     // vermelho
+  "DIULLY":   { cor:"#b48ee6", texto:"#fff" },     // lilás
+  "MARIA":    { cor:"#f48fb1", texto:"#4a1428" },  // rosa
+  "MANINHO":  { cor:"#26a69a", texto:"#fff" }      // verde-água (sem cor definida)
+};
+
+// Quem trabalha em cada posto (sai do posto nos dias de folga)
+const POSTOS = {
+  "LANÇAMENTO":  ["KRÜGER","KAULING","CARLOS","MARIA","MANINHO"],
+  "RECEBIMENTO": ["PIETSCH","JACKSON","DIULLY"]
+};
+
+// Folgas: dia do mês -> lista de nomes
+const FOLGAS = {
+   4:["DIULLY","MANINHO"],   // domingo
+   9:["MARIA"],              // sexta
+  10:["KAULING"],            // sábado
+  11:["CARLOS","KAULING"],   // domingo
+  18:["MARIA","JACKSON"],    // domingo
+  25:["DIULLY","PIETSCH"]    // domingo
+};
+
+const DIA_SEM_CANCELADO = 2;  // 0=dom, 1=seg, 2=terça...
+
+// Observações por colaborador: continua na escala normal, só aparece a nota ao lado do nome
+// (de, até = dias do mês, inclusive)
+const OBSERVACOES = [
+  { nome:"MARIA", de:2, ate:9, texto:"(Atestado Médico)" }
+];
+
+// Alertas "!" em vermelho. Semanais: dia da semana -> texto (1 = segunda-feira)
+const ALERTAS_SEMANAIS = {
+  1: "ASSINAR APR (ANÁLISE PRELIMINAR DE RISCOS)"
+};
+// Alertas de um dia específico (opcional): dia do mês -> texto
+const ALERTAS_DIA = {};
+const MSG_ALERTA_HOJE = "Você tem um alerta para hoje.";
+/* ===================================================================== */
+
+const NOMES_SEMANA = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const NOMES_LONGOS = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const $ = id => document.getElementById(id);
+
+const chip = n => {
+  const c = CORES[n] || { cor:"#ccc", texto:"#000" };
+  return `<span class="nome" style="background:${c.cor};color:${c.texto}">${n}</span>`;
+};
+
+function obs(n, d){
+  const o = OBSERVACOES.find(o => o.nome === n && d >= o.de && d <= o.ate);
+  return o ? ` <span class="obs">${o.texto}</span>` : "";
+}
+const chipDia = (n, d) => chip(n).replace("</span>", `${obs(n, d)}</span>`);
+
+function alertaDoDia(d){
+  return ALERTAS_DIA[d] || ALERTAS_SEMANAIS[dataDoDia(d).getDay()] || null;
+}
+
+function dataDoDia(d){ return new Date(ANO, MES-1, d); }
+function cancelado(d){ return dataDoDia(d).getDay() === DIA_SEM_CANCELADO; }
+
+function montarCalendario(){
+  $("semana").innerHTML = NOMES_SEMANA.map(n => `<div>${n}</div>`).join("");
+  const total = new Date(ANO, MES, 0).getDate();
+  const inicio = dataDoDia(1).getDay();
+  let html = "";
+  for(let i=0;i<inicio;i++) html += `<div class="dia vazio"></div>`;
+  for(let d=1; d<=total; d++){
+    const canc = cancelado(d);
+    const bolas = canc ? "" : (FOLGAS[d]||[]).map(n =>
+      `<span class="bolinha" title="${n}" style="background:${(CORES[n]||{}).cor||'#ccc'}"></span>`).join("");
+    const al = !canc && alertaDoDia(d);
+    const marca = al ? `<span class="alerta-marca" title="${al}">!</span>` : "";
+    html += `<button class="dia ${canc?'cancelado':''}" data-dia="${d}" aria-label="Dia ${d}${al?' - alerta: '+al:''}">
+               ${marca}<span class="num">${d}</span><span class="bolinhas">${bolas}</span></button>`;
+  }
+  $("grade").innerHTML = html;
+  $("legenda").innerHTML = Object.keys(CORES).map(chip).join("");
+}
+
+function abrirDia(d){
+  const dt = dataDoDia(d);
+  $("titulo").textContent = `${NOMES_LONGOS[dt.getDay()]}, ${d} de outubro de 2026`;
+  let h = "";
+  if(cancelado(d)){
+    h = `<p class="aviso">Sem operação neste dia. Todos estão de folga.</p>`;
+  } else {
+    const folga = FOLGAS[d] || [];
+    for(const [posto, lista] of Object.entries(POSTOS)){
+      const trab = lista.filter(n => !folga.includes(n));
+      h += `<h3>${posto}</h3><div class="nomes">${
+        trab.length ? trab.map(n => chipDia(n, d)).join("") : '<span class="aviso">Ninguém escalado</span>'}</div>`;
+    }
+    const al = alertaDoDia(d);
+    if(al) h = `<div class="alerta-box"><span class="ex">!</span>${al}</div>` + h;
+    h += `<h3>FOLGA</h3><div class="nomes">${
+      folga.length ? folga.map(n => chipDia(n, d)).join("") : '<span class="aviso">Ninguém de folga</span>'}</div>`;
+  }
+  $("conteudo").innerHTML = h;
+  $("janela").classList.add("aberta");
+}
+function fechar(){ $("janela").classList.remove("aberta"); }
+
+$("grade").addEventListener("click", e => {
+  const b = e.target.closest("[data-dia]");
+  if(b) abrirDia(+b.dataset.dia);
+});
+$("fechar").onclick = fechar;
+$("janela").addEventListener("click", e => { if(e.target === $("janela")) fechar(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") fechar(); });
+
+/* Aviso no dia do alerta: ao abrir a página no dia, mostra o aviso (e a notificação do aparelho, se permitida).
+   Para testar outro dia: escala-outubro-2026.html?hoje=2026-10-12 */
+function hoje(){
+  const q = location.search.match(/hoje=(\d{4})-(\d{2})-(\d{2})/);
+  return q ? new Date(+q[1], +q[2]-1, +q[3]) : new Date();
+}
+function avisarHoje(){
+  const h = hoje();
+  if(h.getFullYear() !== ANO || h.getMonth() !== MES-1) return;
+  const d = h.getDate();
+  if(cancelado(d) || !alertaDoDia(d)) return;
+  $("toastTxt").textContent = MSG_ALERTA_HOJE;
+  $("toast").classList.add("aberto");
+  $("toast").onclick = e => { if(e.target !== $("toastX")) abrirDia(d); };
+  $("toastX").onclick = e => { e.stopPropagation(); $("toast").classList.remove("aberto"); };
+  try{
+    if("Notification" in window){
+      const mostrar = () => new Notification("!", { body: MSG_ALERTA_HOJE });
+      if(Notification.permission === "granted") mostrar();
+      else if(Notification.permission === "default")
+        Notification.requestPermission().then(p => { if(p === "granted") mostrar(); });
+    }
+  }catch(_){}
+}
+
+montarCalendario();
+avisarHoje();
+// Link direto para um dia: escala-outubro-2026.html#dia=12
+const m = location.hash.match(/dia=(\d+)/);
+if(m && +m[1]>=1 && +m[1]<=31) abrirDia(+m[1]);
+</script>
+</body>
+</html>
