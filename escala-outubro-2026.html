@@ -88,7 +88,7 @@
   @keyframes pulso{0%{box-shadow:0 0 0 0 rgba(255,59,48,.7)}70%,100%{box-shadow:0 0 0 10px rgba(255,59,48,0)}}
   .alerta-marca{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;
                 background:var(--alerta);color:#fff;font:bold 15px/22px Arial,sans-serif;text-align:center;
-                transform-origin:50% 0;animation:balancar 1.8s ease-in-out infinite,pulso 1.8s infinite}
+                transform-origin:50% 0;will-change:transform;animation:balancar 1.8s ease-in-out infinite,pulso 1.8s infinite}
   .alerta-box{margin-top:6px;padding:10px 12px;border:2px solid var(--alerta);border-radius:8px;
               background:rgba(255,59,48,.12);color:#ff8a80;font-weight:bold;
               animation:balancar 1.8s ease-in-out infinite;transform-origin:50% 0}
@@ -111,7 +111,6 @@
 
   .legenda{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
   @media (max-width:560px){.dia{min-height:64px;padding:4px}.bolinha{width:10px;height:10px}}
-  @media (prefers-reduced-motion:reduce){.alerta-marca,.alerta-box,#toast.aberto,.caixa{animation:none}}
 </style>
 </head>
 <body>
@@ -334,6 +333,7 @@ function avisarHoje(){
   if(cancelado(d) || !alertaDoDia(d)) return;
   $("toastTxt").textContent = MSG_ALERTA_HOJE;
   $("toast").classList.add("aberto");
+  try{ if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]); }catch(_){}
   $("toast").onclick = e => { if(e.target !== $("toastX")) abrirDia(d); };
   $("toastX").onclick = e => { e.stopPropagation(); $("toast").classList.remove("aberto"); };
   try{
