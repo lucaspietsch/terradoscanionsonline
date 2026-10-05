@@ -6,72 +6,107 @@
 <title>Escala Outubro 2026 - Tirolesa SGV</title>
 <style>
   :root{
-    --fundo:#f6dcc2;      /* laranja discreto */
-    --papel:#fbeedd;
-    --texto:#5b6122;      /* verde oliva */
-    --linha:#d9b98f;
+    --fundo:#12130e;       /* tema escuro */
+    --papel:#1b1d15;
+    --papel2:#23261b;
+    --texto:#c9d28a;       /* verde oliva claro (padrão) */
+    --oliva:#8a9a3b;
+    --laranja:#e0883a;     /* laranja discreto (destaque) */
+    --linha:#3a3f27;
+    --alerta:#ff3b30;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--fundo);color:var(--texto);
-       font-family:Georgia,"Times New Roman",serif;padding:20px 12px 40px}
+  body{margin:0;color:var(--texto);font-family:var(--mono);padding:20px 12px 40px;min-height:100vh;
+       background:
+         linear-gradient(rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         linear-gradient(90deg,rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         radial-gradient(1000px 500px at 80% -10%,rgba(224,136,58,.12),transparent 60%),
+         var(--fundo)}
   main{max-width:900px;margin:0 auto}
-  h1{font-size:clamp(1.6rem,5vw,2.6rem);margin:0 0 4px;letter-spacing:.5px}
-  .sub{margin:0 0 18px;opacity:.85}
+  h1{font-size:clamp(1.3rem,4.5vw,2.2rem);margin:0 0 4px;letter-spacing:1px;text-transform:uppercase;
+     color:var(--laranja);text-shadow:0 0 14px rgba(224,136,58,.35)}
+  h1::before{content:"> ";color:var(--oliva)}
+  .sub{margin:0 0 18px;opacity:.8;font-size:.85rem}
 
   .semana,.grade{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .semana div{text-align:center;font-weight:bold;padding:6px 0;font-size:.9rem}
+  .semana div{text-align:center;font-weight:bold;padding:6px 0;font-size:.8rem;color:var(--oliva);
+              letter-spacing:2px;text-transform:uppercase}
 
-  .dia{position:relative;min-height:88px;background:var(--papel);border:1px solid var(--linha);
-       border-radius:8px;padding:6px;cursor:pointer;font:inherit;color:inherit;text-align:left;
-       display:flex;flex-direction:column;justify-content:space-between}
-  .dia:hover,.dia:focus-visible{outline:3px solid var(--texto);outline-offset:1px}
+  .dia{position:relative;min-height:88px;background:linear-gradient(160deg,var(--papel2),var(--papel));
+       border:1px solid var(--linha);border-radius:8px;padding:6px;cursor:pointer;font:inherit;color:inherit;
+       text-align:left;display:flex;flex-direction:column;justify-content:space-between;
+       transition:border-color .15s,box-shadow .15s,transform .15s}
+  .dia:hover,.dia:focus-visible{outline:none;border-color:var(--laranja);
+       box-shadow:0 0 0 1px var(--laranja),0 0 16px rgba(224,136,58,.35);transform:translateY(-1px)}
   .dia.vazio{visibility:hidden;cursor:default}
-  .num{font-weight:bold;font-size:1.05rem}
+  .dia.hoje{border-color:var(--oliva);box-shadow:0 0 0 1px var(--oliva),0 0 14px rgba(138,154,59,.4)}
+  .num{font-weight:bold;font-size:1.05rem;color:var(--laranja)}
 
   /* terça cancelada: grade "///" na vertical */
   .dia.cancelado{
     background:
-      repeating-linear-gradient(115deg,transparent 0 9px,rgba(91,97,34,.55) 9px 12px),
+      repeating-linear-gradient(115deg,transparent 0 9px,rgba(138,154,59,.35) 9px 12px),
       var(--papel);
-    opacity:.8}
+    opacity:.7}
   .dia.cancelado .num{background:var(--papel);padding:0 5px;border-radius:4px;align-self:flex-start}
 
   .bolinhas{display:flex;flex-wrap:wrap;gap:4px}
-  .bolinha{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.35)}
+  .bolinha{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.35)}
 
   /* janela do dia */
-  #janela{position:fixed;inset:0;background:rgba(91,97,34,.45);display:none;
+  #janela{position:fixed;inset:0;background:rgba(5,6,3,.7);backdrop-filter:blur(3px);display:none;
           align-items:center;justify-content:center;padding:12px;z-index:10}
   #janela.aberta{display:flex}
-  .caixa{border:2px solid var(--texto);border-radius:12px;background:var(--papel);color:var(--texto);
-         padding:20px;width:min(92vw,420px);max-height:90vh;overflow:auto}
-  .caixa h2{margin:0 0 12px;font-size:1.3rem}
-  .caixa h3{margin:16px 0 6px;font-size:1rem;border-bottom:1px solid var(--linha);padding-bottom:3px}
+  .caixa{border:1px solid var(--oliva);border-radius:12px;background:var(--papel);color:var(--texto);
+         padding:20px;width:min(92vw,440px);max-height:90vh;overflow:auto;
+         box-shadow:0 0 0 1px rgba(138,154,59,.2),0 0 30px rgba(138,154,59,.25);animation:entra .18s ease-out}
+  @keyframes entra{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+  .caixa h2{margin:0 0 12px;font-size:1.05rem;color:var(--laranja);text-transform:uppercase;letter-spacing:.5px}
+  .caixa h3{margin:16px 0 6px;font-size:.8rem;letter-spacing:2px;color:var(--oliva);
+            border-bottom:1px dashed var(--linha);padding-bottom:3px}
   .nomes{display:flex;flex-wrap:wrap;gap:6px}
-  .nome{padding:3px 10px;border-radius:14px;font-weight:bold;font-size:.9rem}
-  .aviso{font-style:italic}
-  .fechar{margin-top:18px;background:var(--texto);color:var(--papel);border:0;border-radius:8px;
-          padding:8px 18px;font:inherit;cursor:pointer}
+  .nome{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:18px;
+        font-weight:bold;font-size:.85rem}
+  .nome svg.bottom{width:24px;height:30px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+  .nome svg.cruz{width:14px;height:14px;flex:none;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
+  .aviso{font-style:italic;opacity:.8}
+  .fechar{margin-top:18px;background:transparent;color:var(--laranja);border:1px solid var(--laranja);
+          border-radius:8px;padding:8px 18px;font:inherit;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+  .fechar:hover{background:var(--laranja);color:var(--fundo)}
 
-  /* alerta "!" */
+  /* alerta "!" em vermelho, balançando para chamar atenção */
+  @keyframes balancar{
+    0%,60%,100%{transform:rotate(0)}
+    64%{transform:rotate(-16deg)} 68%{transform:rotate(14deg)} 72%{transform:rotate(-12deg)}
+    76%{transform:rotate(10deg)}  80%{transform:rotate(-6deg)} 84%{transform:rotate(4deg)}}
+  @keyframes pulso{0%{box-shadow:0 0 0 0 rgba(255,59,48,.7)}70%,100%{box-shadow:0 0 0 10px rgba(255,59,48,0)}}
   .alerta-marca{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;
-                background:#d32f2f;color:#fff;font:bold 15px/22px Arial,sans-serif;text-align:center}
-  .alerta-box{margin-top:6px;padding:10px 12px;border:2px solid #d32f2f;border-radius:8px;
-              background:#fdecea;color:#b71c1c;font-weight:bold}
-  .alerta-box .ex{display:inline-block;width:22px;height:22px;border-radius:50%;background:#d32f2f;color:#fff;
+                background:var(--alerta);color:#fff;font:bold 15px/22px Arial,sans-serif;text-align:center;
+                transform-origin:50% 0;animation:balancar 1.8s ease-in-out infinite,pulso 1.8s infinite}
+  .alerta-box{margin-top:6px;padding:10px 12px;border:2px solid var(--alerta);border-radius:8px;
+              background:rgba(255,59,48,.12);color:#ff8a80;font-weight:bold;
+              animation:balancar 1.8s ease-in-out infinite;transform-origin:50% 0}
+  .alerta-box .ex{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--alerta);color:#fff;
                   font:bold 15px/22px Arial,sans-serif;text-align:center;margin-right:8px}
-  .obs{font-size:.8rem;font-weight:normal;margin-left:4px;opacity:.9}
+  .obs{font-size:.75rem;font-weight:normal;opacity:.9}
   #toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:none;
-         max-width:92vw;background:#d32f2f;color:#fff;border-radius:10px;padding:10px 14px;
-         box-shadow:0 4px 14px rgba(0,0,0,.3);font:bold 1rem Arial,sans-serif;cursor:pointer;
+         max-width:92vw;background:var(--alerta);color:#fff;border-radius:10px;padding:10px 14px;
+         box-shadow:0 4px 24px rgba(255,59,48,.55);font:bold 1rem var(--mono);cursor:pointer;
          align-items:center;gap:10px}
-  #toast.aberto{display:flex}
-  #toast .ex{background:#fff;color:#d32f2f;width:24px;height:24px;border-radius:50%;
+  #toast.aberto{display:flex;animation:toastBalanca 1.4s ease-in-out infinite}
+  @keyframes toastBalanca{
+    0%,55%,100%{transform:translateX(-50%) rotate(0)}
+    60%{transform:translateX(-50%) rotate(-3deg)} 66%{transform:translateX(-50%) rotate(3deg)}
+    72%{transform:translateX(-50%) rotate(-2deg)} 78%{transform:translateX(-50%) rotate(2deg)}
+    84%{transform:translateX(-50%) rotate(-1deg)}}
+  #toast .ex{background:#fff;color:var(--alerta);width:24px;height:24px;border-radius:50%;
              text-align:center;line-height:24px;flex:none}
   #toast button{background:transparent;border:0;color:#fff;font-size:1.2rem;cursor:pointer}
 
   .legenda{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
   @media (max-width:560px){.dia{min-height:64px;padding:4px}.bolinha{width:10px;height:10px}}
+  @media (prefers-reduced-motion:reduce){.alerta-marca,.alerta-box,#toast.aberto,.caixa{animation:none}}
 </style>
 </head>
 <body>
@@ -127,6 +162,26 @@ const FOLGAS = {
   25:["DIULLY","PIETSCH"]    // domingo
 };
 
+// Bottoms (arquivos bottom_*.png) exibidos antes do nome. cruz = cruz vermelha (resgatista) depois do nome.
+const BOTTOMS = {
+  "PIETSCH":  { tipo:"lucas",    cruz:true  },
+  "KAULING":  { tipo:"kauling" },
+  "CARLOS":   { tipo:"carlos" },
+  "MARIA":    { tipo:"operador" },
+  "DIULLY":   { tipo:"operador" },
+  "MANINHO":  { tipo:"operador" },
+  "JACKSON":  { tipo:"operador", cruz:true  },
+  "KRÜGER":   { tipo:"kruger",   cruz:true  }
+};
+// Desenho de cada bottom: cor da barra, borda e quantas pílulas (de baixo para cima)
+const TIPOS_BOTTOM = {
+  lucas:    { barra:"#951c24", borda:"#7a1219", pilulas:4, mosq:"#ece3cf" },
+  kauling:  { barra:"#951c24", borda:"#7a1219", pilulas:2, mosq:"#ece3cf" },
+  carlos:   { barra:"#0a0a0a", borda:"#4a4d5e", pilulas:3, mosq:"#ece3cf" },
+  operador: { barra:"#0a0a0a", borda:"#4a4d5e", pilulas:2, mosq:"#ece3cf" },
+  kruger:   { barra:"#e8731a", borda:"#c85f0e", pilulas:1, mosq:"#3b82e0" }
+};
+
 const DIA_SEM_CANCELADO = 2;  // 0=dom, 1=seg, 2=terça...
 
 // Observações por colaborador: continua na escala normal, só aparece a nota ao lado do nome
@@ -148,9 +203,28 @@ const NOMES_SEMANA = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 const NOMES_LONGOS = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
 const $ = id => document.getElementById(id);
 
+function svgBottom(tipo){
+  const t = TIPOS_BOTTOM[tipo]; if(!t) return "";
+  let pil = "";
+  for(let i=0;i<t.pilulas;i++){
+    const y = 424 - i*68;
+    pil += `<rect x="94" y="${y+6}" width="104" height="54" rx="27" fill="#b8ad93"/>`+
+           `<rect x="94" y="${y}" width="104" height="54" rx="27" fill="#ece3cf"/>`;
+  }
+  return `<svg class="bottom" viewBox="0 0 460 580" role="img" aria-label="bottom ${tipo}">`+
+    `<rect x="30" y="30" width="400" height="520" rx="42" fill="#1c1d29" stroke="#0e0e16" stroke-width="12"/>`+
+    `<rect x="80" y="80" width="130" height="420" rx="14" fill="${t.barra}" stroke="${t.borda}" stroke-width="5"/>${pil}`+
+    `<path d="M375 218C380 140 262 130 262 215L290 415C296 450 356 450 358 415L376 236" fill="none" stroke="${t.mosq}" stroke-width="16" stroke-linecap="round"/>`+
+    `</svg>`;
+}
+const SVG_CRUZ = `<svg class="cruz" viewBox="0 0 24 24" role="img" aria-label="resgatista"><title>Resgatista</title>`+
+  `<rect x="1" y="1" width="22" height="22" rx="4" fill="#fff"/>`+
+  `<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="#e53935"/></svg>`;
+
 const chip = n => {
   const c = CORES[n] || { cor:"#ccc", texto:"#000" };
-  return `<span class="nome" style="background:${c.cor};color:${c.texto}">${n}</span>`;
+  const b = BOTTOMS[n] || {};
+  return `<span class="nome" style="background:${c.cor};color:${c.texto}">${svgBottom(b.tipo)}${n}${b.cruz?SVG_CRUZ:""}</span>`;
 };
 
 function obs(n, d){
@@ -178,7 +252,8 @@ function montarCalendario(){
       `<span class="bolinha" title="${n}" style="background:${(CORES[n]||{}).cor||'#ccc'}"></span>`).join("");
     const al = !canc && alertaDoDia(d);
     const marca = al ? `<span class="alerta-marca" title="${al}">!</span>` : "";
-    html += `<button class="dia ${canc?'cancelado':''}" data-dia="${d}" aria-label="Dia ${d}${al?' - alerta: '+al:''}">
+    const eHoje = hoje().getFullYear()===ANO && hoje().getMonth()===MES-1 && hoje().getDate()===d;
+    html += `<button class="dia ${canc?'cancelado':''} ${eHoje?'hoje':''}" data-dia="${d}" aria-label="Dia ${d}${al?' - alerta: '+al:''}">
                ${marca}<span class="num">${d}</span><span class="bolinhas">${bolas}</span></button>`;
   }
   $("grade").innerHTML = html;
