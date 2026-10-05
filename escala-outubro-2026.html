@@ -112,7 +112,7 @@
 <body>
 <main>
   <h1>Escala Outubro 2026 - Tirolesa SGV</h1>
-  <p class="sub">Toque em um dia para ver quem trabalha e quem está de folga. As terças não têm operação.</p>
+  <p class="sub">Toque em um dia para ver quem trabalha e quem está de folga. A semana vai de quarta a segunda; as terças não têm operação.</p>
   <div class="semana" id="semana"></div>
   <div class="grade" id="grade"></div>
   <div class="legenda" id="legenda"></div>
@@ -148,9 +148,22 @@ const CORES = {
 
 // Quem trabalha em cada posto (sai do posto nos dias de folga)
 const POSTOS = {
-  "LANÇAMENTO":  ["KRÜGER","KAULING","CARLOS","MARIA","MANINHO"],
-  "RECEBIMENTO": ["PIETSCH","JACKSON","DIULLY"]
+  "LANÇAMENTO":  ["KRÜGER","KAULING","CARLOS","MANINHO"],
+  "RECEBIMENTO": ["PIETSCH","JACKSON"]
 };
+
+// DIULLY e MARIA se alternam entre os postos a cada semana.
+// A semana começa na quarta e termina na segunda (terça é folga de todos).
+// Semana de 07 a 12: DIULLY no Lançamento e MARIA no Recebimento; na semana seguinte inverte.
+const ALTERNANCIA = { duplas:["DIULLY","MARIA"], inicioSemana:7 };   // dia 07 (quarta) = início de uma semana
+function postosDoDia(d){
+  const sem = Math.floor((d - ALTERNANCIA.inicioSemana) / 7);       // 0 = semana de 07, 1 = 14, -1 = anterior...
+  const [a, b] = sem % 2 === 0 ? ALTERNANCIA.duplas : [...ALTERNANCIA.duplas].reverse();
+  return {
+    "LANÇAMENTO":  [...POSTOS["LANÇAMENTO"],  a],
+    "RECEBIMENTO": [...POSTOS["RECEBIMENTO"], b]
+  };
+}
 
 // Folgas: dia do mês -> lista de nomes
 const FOLGAS = {
@@ -268,7 +281,7 @@ function abrirDia(d){
     h = `<p class="aviso">Sem operação neste dia. Todos estão de folga.</p>`;
   } else {
     const folga = FOLGAS[d] || [];
-    for(const [posto, lista] of Object.entries(POSTOS)){
+    for(const [posto, lista] of Object.entries(postosDoDia(d))){
       const trab = lista.filter(n => !folga.includes(n));
       h += `<h3>${posto}</h3><div class="nomes">${
         trab.length ? trab.map(n => chipDia(n, d)).join("") : '<span class="aviso">Ninguém escalado</span>'}</div>`;
