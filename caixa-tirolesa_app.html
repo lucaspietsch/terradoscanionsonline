@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caixa Tirolesa dos Cânions 2026</title>
+<meta name="description" content="Controle de caixa da Tirolesa dos Cânions · Serra Geral Vertical — revisão 2.4, em formato de aplicativo para celular.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2f5d3a">
+<meta name="color-scheme" content="light dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Caixa Tirolesa">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f5d3a'/%3E%3Cpath d='M8 20L56 36' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='34' cy='28.5' r='6' fill='%23f2a33a'/%3E%3Cpath d='M34 34v10' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f3f5f1; --card:#fff; --ink:#1f2a22; --muted:#667267; --line:#e1e6df; --soft:#eef2ec;
+  --brand:#2f5d3a; --brand2:#4a7c59; --brand-ink:#fff;
+  --blue:#2f6fb5; --red:#c0392b; --red2:#8e2418; --green:#2e9e5b; --orange:#e08a2e; --purple:#7e57a8; --teal:#1f8a8a; --olive:#8a9659; --gray:#7b857d; --amber:#c98a00;
+  --shadow:0 1px 2px rgba(20,30,20,.06),0 4px 14px rgba(20,30,20,.06);
+  --sab:env(safe-area-inset-bottom,0px); --sat:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1511; --card:#18211b; --ink:#e8efe9; --muted:#9aa89d; --line:#2a362d; --soft:#212d24;
+    --brand:#3f7a4d; --brand2:#5b9a6a; --blue:#5b9be0; --red:#e5655a; --red2:#f08b80; --green:#4cc37e; --orange:#f0a24c; --purple:#a98bd0; --teal:#4cb8b8; --olive:#a9b67a; --gray:#98a39b; --amber:#e6b032;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1511; --card:#18211b; --ink:#e8efe9; --muted:#9aa89d; --line:#2a362d; --soft:#212d24;
+  --brand:#3f7a4d; --brand2:#5b9a6a; --blue:#5b9be0; --red:#e5655a; --red2:#f08b80; --green:#4cc37e; --orange:#f0a24c; --purple:#a98bd0; --teal:#4cb8b8; --olive:#a9b67a; --gray:#98a39b; --amber:#e6b032;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4;min-height:100vh;overscroll-behavior-y:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--brand2)}
+.num{font-variant-numeric:tabular-nums}
+
+/* app bar */
+.bar{position:sticky;top:0;z-index:30;background:var(--brand);color:#fff;padding:calc(10px + var(--sat)) 14px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.bar h1{font-size:17px;font-weight:700;line-height:1.15;flex:1;min-width:0}
+.bar h1 small{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:inherit;font-size:20px}
+.bar .ibtn:active{background:rgba(255,255,255,.18)}
+main{padding:12px 12px calc(86px + var(--sab));max-width:820px;margin:0 auto}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;padding:4px 2px calc(4px + var(--sab));box-shadow:0 -4px 16px rgba(0,0,0,.06)}
+.nav a{flex:1;min-width:0;text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 0 4px;border-radius:12px;font-size:10.5px;font-weight:600}
+.nav a svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav a.on{color:var(--brand2)}
+.nav a.on svg{stroke-width:2.3}
+
+/* blocks */
+h2.sec{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:18px 4px 8px;font-weight:700;display:flex;align-items:center;gap:8px}
+h2.sec .sp{flex:1}
+h2.sec button{font-size:12px;text-transform:none;letter-spacing:0;font-weight:600;color:var(--brand2);padding:4px 8px;border-radius:8px;background:var(--soft)}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
+.card h3{font-size:14px;font-weight:700;margin-bottom:8px}
+.card h3 small{font-weight:500;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:12px 13px;border-left:5px solid var(--gray);min-width:0;text-align:left;width:100%;display:block}
+.kpi .l{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);line-height:1.2}
+.kpi .v{font-size:20px;font-weight:800;margin-top:5px;line-height:1.1;overflow-wrap:anywhere}
+.kpi .s{font-size:11.5px;color:var(--muted);margin-top:3px}
+.kpi.c-red{border-color:var(--red)}.kpi.c-green{border-color:var(--green)}.kpi.c-orange{border-color:var(--orange)}.kpi.c-blue{border-color:var(--blue)}.kpi.c-purple{border-color:var(--purple)}.kpi.c-olive{border-color:var(--olive)}.kpi.c-amber{border-color:var(--amber)}.kpi.c-teal{border-color:var(--teal)}.kpi.c-brand{border-color:var(--brand2)}
+.pos{color:var(--green)}.neg{color:var(--red)}.warn{color:var(--amber)}.mut{color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.chip.ok{background:rgba(46,158,91,.15);color:var(--green)}
+.chip.bad{background:rgba(192,57,43,.14);color:var(--red)}
+.chip.am{background:rgba(201,138,0,.16);color:var(--amber)}
+.chip.bl{background:rgba(47,111,181,.14);color:var(--blue)}
+.chip.pu{background:rgba(126,87,168,.15);color:var(--purple)}
+.chip.or{background:rgba(224,138,46,.18);color:var(--orange)}
+.chip.te{background:rgba(31,138,138,.15);color:var(--teal)}
+
+/* chips row / segmented */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.pill{flex:0 0 auto;padding:7px 13px;border-radius:99px;background:var(--card);box-shadow:var(--shadow);font-weight:700;font-size:13px;color:var(--muted);border:1.5px solid transparent}
+.pill.on{background:var(--brand);color:#fff}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;padding:8px 4px;border-radius:10px;font-weight:700;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+
+/* lists */
+.list{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line);width:100%;text-align:left;min-height:52px}
+.row:last-child{border-bottom:0}
+button.row:active,.row.tap:active{background:var(--soft)}
+.row .main{flex:1;min-width:0}
+.row .t{font-weight:650;overflow-wrap:anywhere;display:block}
+.row .d{display:block;font-size:12px;color:var(--muted);margin-top:1px;overflow-wrap:anywhere}
+.row .amt{font-weight:800;text-align:right;white-space:nowrap}
+.row .amt small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.bullet{width:6px;align-self:stretch;border-radius:4px;flex:0 0 6px;background:var(--gray);margin:-4px 0}
+.day .dd{width:42px;text-align:center;flex:0 0 42px}
+.day .dd b{font-size:19px;display:block;line-height:1}
+.day .dd small{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase}
+.day.off{opacity:.62}
+.day .dd{position:relative}
+.apr{position:absolute;top:-9px;right:-6px;width:21px;height:21px;border-radius:50%;background:var(--amber);color:#fff;font-weight:900;font-size:14px;line-height:21px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3);cursor:pointer}
+.day.off .apr{opacity:1}
+.empty{padding:26px 14px;text-align:center;color:var(--muted)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.kv:last-child{border-bottom:0}
+.kv span:first-child{color:var(--muted)}
+.kv b{text-align:right}
+.note{font-size:12.5px;color:var(--muted);line-height:1.5}
+.note li{margin-left:18px;margin-bottom:4px}
+.alert{display:flex;gap:10px;padding:11px 13px;border-radius:14px;background:rgba(201,138,0,.13);border:1px solid rgba(201,138,0,.35);margin-bottom:8px;font-size:13px;text-align:left;width:100%}
+.alert.bad{background:rgba(192,57,43,.1);border-color:rgba(192,57,43,.3)}
+.alert .ic{font-size:16px}
+
+/* tables */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;background:var(--card);box-shadow:var(--shadow);margin-bottom:12px}
+table{border-collapse:separate;border-spacing:0;font-size:12.5px;width:100%}
+th,td{padding:8px 9px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:var(--brand);position:sticky;top:0;font-weight:700;white-space:normal;line-height:1.15;vertical-align:bottom}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:2;font-weight:700;border-right:1px solid var(--line)}
+th:first-child{background:var(--brand);z-index:3}
+tr.tot td{background:var(--soft);font-weight:800}
+tr.tot td:first-child{background:var(--soft)}
+tr.tap{cursor:pointer}
+tr.tap:active td{background:var(--soft)}
+td.r{color:var(--red)}td.g{color:var(--green)}td.o{color:var(--orange)}
+
+/* charts */
+.chart{width:100%;display:block}
+.chart text{fill:var(--muted);font-size:9.5px;font-family:inherit}
+.chart .grid line{stroke:var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;margin-bottom:9px;text-align:left;width:100%}
+.hbar .nm{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .vv{font-size:12.5px;font-weight:800}
+.hbar .tr{grid-column:1/-1;height:9px;border-radius:6px;background:var(--soft);overflow:hidden}
+.hbar .tr i{display:block;height:100%;border-radius:6px;background:var(--orange)}
+#tip{position:fixed;z-index:80;pointer-events:none;background:#111;color:#fff;font-size:12px;padding:6px 9px;border-radius:9px;max-width:230px;opacity:0;transition:opacity .12s;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#tip.on{opacity:.96}
+
+/* sheet / modal */
+.scrim{position:fixed;inset:0;background:rgba(10,18,12,.5);z-index:60;opacity:0;transition:opacity .2s}
+.scrim.on{opacity:1}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--card);border-radius:22px 22px 0 0;max-height:92vh;display:flex;flex-direction:column;transform:translateY(102%);transition:transform .25s cubic-bezier(.2,.8,.2,1);max-width:640px;margin:0 auto;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sheet.on{transform:none}
+.sheet header{padding:14px 16px 8px;display:flex;align-items:center;gap:10px}
+.sheet header h3{flex:1;font-size:17px}
+.sheet .body{overflow-y:auto;padding:4px 16px 12px;-webkit-overflow-scrolling:touch}
+.sheet footer{display:flex;gap:10px;padding:10px 16px calc(12px + var(--sab));border-top:1px solid var(--line)}
+.btn{padding:12px 16px;border-radius:13px;font-weight:700;background:var(--soft);color:var(--ink);flex:1;text-align:center}
+.btn.pri{background:var(--brand);color:#fff}
+.btn.dng{background:rgba(192,57,43,.12);color:var(--red);flex:0 0 auto}
+.btn.sm{padding:8px 12px;font-size:13px;flex:0 0 auto}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.f input,.f select,.f textarea{width:100%;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-size:16px;appearance:none;-webkit-appearance:none}
+.f select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--brand2)}
+.f textarea{min-height:70px;resize:vertical}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fab{position:fixed;right:16px;bottom:calc(78px + var(--sab));z-index:25;width:56px;height:56px;border-radius:18px;background:var(--orange);color:#fff;font-size:30px;font-weight:300;box-shadow:0 6px 18px rgba(0,0,0,.28);display:grid;place-items:center;line-height:1}
+.fab:active{transform:scale(.95)}
+.menu a,.menu button.mi{display:flex;align-items:center;gap:14px;padding:14px 4px;width:100%;text-align:left;font-size:16px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+.menu .mi:last-child{border-bottom:0}
+.menu span.e{width:26px;text-align:center;font-size:19px}
+.menu small{display:block;color:var(--muted);font-size:12px}
+#toast{position:fixed;left:50%;bottom:calc(90px + var(--sab));transform:translate(-50%,20px);background:#1d2a21;color:#fff;padding:10px 16px;border-radius:14px;z-index:90;font-size:14px;opacity:0;transition:.2s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.search{position:relative;margin-bottom:10px}
+.search input{width:100%;padding:11px 12px 11px 38px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-size:16px}
+.search input:focus{outline:none;border-color:var(--brand2)}
+.search:before{content:"🔍";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.7}
+.sel-inline{padding:6px 24px 6px 9px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);font-size:12.5px;font-weight:700;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 12px) 52%,calc(100% - 8px) 52%;background-size:4px 4px;background-repeat:no-repeat;max-width:132px}
+.sel-inline.s-conf{color:var(--amber);border-color:rgba(201,138,0,.5)}
+.sel-inline.s-coord{color:var(--green);border-color:rgba(46,158,91,.5)}
+.sel-inline.s-emp{color:var(--blue);border-color:rgba(47,111,181,.5)}
+.hide{display:none!important}
+.foot{text-align:center;color:var(--muted);font-size:11.5px;margin:18px 0 6px}
+
+@media (min-width:700px){
+  .grid.g3{grid-template-columns:repeat(3,1fr)}
+  .grid.g4{grid-template-columns:repeat(4,1fr)}
+  .sheet{border-radius:22px;bottom:4vh}
+}
+@media print{
+  .bar,.nav,.fab,.chips,.seg,#toast,#tip,.noprint{display:none!important}
+  body{background:#fff;color:#000}
+  main{padding:0;max-width:none}
+  .card,.kpi,.list,.tw{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  th{background:#2f5d3a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="bar">
+  <h1 id="ttl">Caixa 2026<small id="sub"></small></h1>
+  <button class="ibtn" id="btnMenu" aria-label="Menu">⋮</button>
+</div>
+<main id="view"></main>
+<button class="fab hide" id="fab" aria-label="Adicionar">+</button>
+<nav class="nav" id="nav"></nav>
+<div id="tip"></div>
+<div id="toast"></div>
+<div id="layer"></div>
+<input type="file" id="fileIn" accept="application/json,.json" class="hide">
+
+<script>
+const SEED = {"meses":[{"id":1,"abr":"Jan","nome":"Janeiro","pdf":null,"obs":["Correção de janeiro conforme orientação do coordenador (04/10/2026): abertura de 05/01 trocada de R$ 795 para R$ 135 (trocados do Filipe, entregues pelo Richard).","Vendas não anotadas no PDF incluídas: 05/01 – 3 tirolesas (R$ 660) e 4 tirolesas cheias + 2 com desconto (R$ 1.240); 06/01 – 2 tirolesas (R$ 440). Total R$ 2.340.","Com a correção, os fechamentos de 05/01 (R$ 235) e 06/01 (R$ 675) passam a bater, sem diferença.","Janeiro não tem linha de total de sangria nem de assiduidade no PDF.","NF Ivonete Macedo (30/01, R$ 26,50) incluída – valor confirmado também na planilha anterior.","Planilha anterior confirma a sangria Gabriel de janeiro = R$ 3.800 (mesmo valor calculado aqui) e acrescenta: assiduidade R$ 2.000, bonificação R$ 2.500 e DEV Brasil R$ 5.720 – incluídos.","Planilha anterior mostra fechamento de caixa R$ 385; o PDF de caixa mostra R$ 395 em 31/01 e abertura de R$ 395 em 01/02. Mantido R$ 395 – confirmar."],"dias":[{"d":"2026-01-01","s":"Sem registro","f":null},{"d":"2026-01-02","s":"Sem registro","f":null},{"d":"2026-01-03","s":"Sem registro","f":null},{"d":"2026-01-04","s":"Sem registro","f":null},{"d":"2026-01-05","s":"Caixa aberto","f":235.0},{"d":"2026-01-06","s":"Caixa aberto","f":675.0},{"d":"2026-01-07","s":"Caixa aberto","f":675.0},{"d":"2026-01-08","s":"Caixa aberto","f":675.0},{"d":"2026-01-09","s":"Caixa aberto","f":675.0},{"d":"2026-01-10","s":"Caixa aberto","f":675.0},{"d":"2026-01-11","s":"Caixa aberto","f":675.0},{"d":"2026-01-12","s":"Caixa aberto","f":675.0},{"d":"2026-01-13","s":"Terça-feira (fechado)","f":null},{"d":"2026-01-14","s":"Caixa aberto","f":1335.0},{"d":"2026-01-15","s":"Caixa aberto","f":1335.0},{"d":"2026-01-16","s":"Caixa aberto","f":195.0},{"d":"2026-01-17","s":"Caixa aberto","f":415.0},{"d":"2026-01-18","s":"Caixa aberto","f":415.0},{"d":"2026-01-19","s":"Caixa aberto","f":415.0},{"d":"2026-01-20","s":"Terça-feira (fechado)","f":null},{"d":"2026-01-21","s":"Caixa aberto","f":415.0},{"d":"2026-01-22","s":"Caixa aberto","f":1075.0},{"d":"2026-01-23","s":"Caixa aberto","f":1075.0},{"d":"2026-01-24","s":"Caixa aberto","f":495.0},{"d":"2026-01-25","s":"Caixa aberto","f":495.0},{"d":"2026-01-26","s":"Caixa aberto","f":1155.0},{"d":"2026-01-27","s":"Terça-feira (fechado)","f":null},{"d":"2026-01-28","s":"Caixa aberto","f":1155.0},{"d":"2026-01-29","s":"Caixa aberto","f":1375.0},{"d":"2026-01-30","s":"Caixa aberto","f":175.0},{"d":"2026-01-31","s":"Caixa aberto","f":395.0}],"lanc":[{"d":"2026-01-05","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":"venda não anotada no PDF, lançada conforme orientação do coordenador (04/10/2026)"},{"d":"2026-01-05","t":"Entrada","x":"4 tirolesas cheias + 2 com desconto","e":1240.0,"s":0,"o":"venda não anotada no PDF, lançada conforme orientação do coordenador (04/10/2026)"},{"d":"2026-01-05","t":"Sangria – outros","x":"sangria para mae do Filipe","e":0,"s":1800.0,"o":"Destaque vermelho no PDF – destinatário: mãe do Filipe"},{"d":"2026-01-06","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":"venda não anotada no PDF, lançada conforme orientação do coordenador (04/10/2026)"},{"d":"2026-01-14","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-01-16","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-01-16","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1800.0,"o":""},{"d":"2026-01-17","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-01-22","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-01-22","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-01-24","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-01-24","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":800.0,"o":""},{"d":"2026-01-26","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-01-26","t":"Entrada","x":"1 tirolesas","e":220.0,"s":0,"o":""},{"d":"2026-01-29","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-01-30","t":"Sangria Gabriel","x":"sangria para gabriel","e":0,"s":1200.0,"o":""},{"d":"2026-01-31","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":2000.0,"p":"A confirmar","o":"Informado na planilha anterior (jan/2026)","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Bonificação","x":"Total de bonificação","f":"Funcionários","g":"—","v":2500.0,"p":"A confirmar","o":"Informado na planilha anterior (jan/2026)","dn":null,"nf":"","dest":"","cf":"—"},{"c":"DEV Brasil","x":"Valor da DEV","f":"DEV Brasil","g":"—","v":5720.0,"p":"A confirmar","o":"Informado na planilha anterior (jan/2026) – destaque vermelho","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"PARAFUSOS/PORCAS (NF Ivonete)","f":"Ivonete Macedo","g":"Materiais e ferragens","v":26.5,"p":"A confirmar","o":"Incluído pela NF – não constava no PDF de caixa","dn":"2026-01-30","nf":"NF-e 002","dest":"ELEV8 Adventures Ltda","cf":"+ Incluída pela NF"}],"nfPag":1},{"id":2,"abr":"Fev","nome":"Fevereiro","pdf":2050.0,"obs":["22/02: fechamento não informado (abertura do dia 23 = R$ 605).","28/02: \"2 tirolesas\" sem valor no PDF – R$ 440 inferido pela abertura de 01/03.","Conferido com a planilha anterior: sangria Gabriel R$ 2.050 ✔, assiduidade R$ 2.000 ✔, Elétrica e Mecânica Macedo R$ 65 ✔ (NFS-e 25).","DEV Brasil R$ 2.560 incluído (constava só na planilha anterior).","Jaboinski & Souza R$ 300 confirmado na planilha anterior, mas sem nota de fevereiro. A NFS-e 25 da Jaboinski (23/04, R$ 300, corte de chave) já está em abril – se não houver nota própria de fevereiro, pode ser o mesmo serviço lançado duas vezes."],"dias":[{"d":"2026-02-01","s":"Caixa aberto","f":395.0},{"d":"2026-02-02","s":"Caixa aberto","f":395.0},{"d":"2026-02-03","s":"Terça-feira (fechado)","f":null},{"d":"2026-02-04","s":"Caixa aberto","f":395.0},{"d":"2026-02-05","s":"Caixa aberto","f":395.0},{"d":"2026-02-06","s":"Caixa aberto","f":395.0},{"d":"2026-02-07","s":"Caixa aberto","f":395.0},{"d":"2026-02-08","s":"Caixa aberto","f":395.0},{"d":"2026-02-09","s":"Caixa aberto","f":395.0},{"d":"2026-02-10","s":"Terça-feira (fechado)","f":null},{"d":"2026-02-11","s":"Caixa aberto","f":395.0},{"d":"2026-02-12","s":"Caixa aberto","f":395.0},{"d":"2026-02-13","s":"Caixa aberto","f":395.0},{"d":"2026-02-14","s":"Caixa aberto","f":395.0},{"d":"2026-02-15","s":"Caixa aberto","f":975.0},{"d":"2026-02-16","s":"Caixa aberto","f":165.0},{"d":"2026-02-17","s":"Terça-feira (fechado)","f":null},{"d":"2026-02-18","s":"Caixa aberto","f":165.0},{"d":"2026-02-19","s":"Caixa aberto","f":165.0},{"d":"2026-02-20","s":"Caixa aberto","f":165.0},{"d":"2026-02-21","s":"Caixa aberto","f":165.0},{"d":"2026-02-22","s":"Caixa aberto","f":null},{"d":"2026-02-23","s":"Caixa aberto","f":1045.0},{"d":"2026-02-24","s":"Terça-feira (fechado)","f":null},{"d":"2026-02-25","s":"Caixa aberto","f":1045.0},{"d":"2026-02-26","s":"Caixa aberto","f":1045.0},{"d":"2026-02-27","s":"Caixa aberto","f":245.0},{"d":"2026-02-28","s":"Caixa aberto","f":null}],"lanc":[{"d":"2026-02-15","t":"Entrada","x":"2 tirolesas ecomerc","e":220.0,"s":0,"o":""},{"d":"2026-02-15","t":"Entrada","x":"2 tirolesas parcerias","e":360.0,"s":0,"o":""},{"d":"2026-02-16","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-02-16","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1250.0,"o":""},{"d":"2026-02-22","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-02-23","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-02-27","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":800.0,"o":""},{"d":"2026-02-28","t":"Entrada","x":"2 tirolesas morador","e":220.0,"s":0,"o":""},{"d":"2026-02-28","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":"Valor não informado no PDF – inferido pela abertura de 01/03 (R$ 905,00)"}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":2000.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"DEV Brasil","x":"Valor da DEV","f":"DEV Brasil","g":"—","v":2560.0,"p":"A confirmar","o":"Informado na planilha anterior (fev/2026)","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"ELETRICA E MECANICA MACEDO","f":"Elétrica e Mecânica Macedo","g":"Veículos – manutenção e peças","v":65.0,"p":"A confirmar","o":"NF em nome de ELEV8 Adventures Ltda","dn":"2026-02-02","nf":"NFS-e 25","dest":"ELEV8 Adventures Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"JABOINSKY","f":"Jaboinski & Souza (chaveiro)","g":"Veículos – manutenção e peças","v":300.0,"p":"A confirmar","o":"Confirmado na planilha anterior, porém sem NF de fevereiro. A única nota Jaboinski de R$ 300 é a NFS-e 25 de 23/04 (corte de chave), já lançada em abril. Confirmar se é duplicidade","dn":null,"nf":"","dest":"","cf":"⚠ Sem NF – possível duplicidade"}],"nfPag":1},{"id":3,"abr":"Mar","nome":"Março","pdf":3460.0,"obs":["Total de sangria no PDF (R$ 3.460) não inclui a sangria de R$ 1.500 de 08/03.","31/03 sem registro no PDF."],"dias":[{"d":"2026-03-01","s":"Caixa aberto","f":905.0},{"d":"2026-03-02","s":"Caixa aberto","f":205.0},{"d":"2026-03-03","s":"Terça-feira (fechado)","f":null},{"d":"2026-03-04","s":"Caixa aberto","f":205.0},{"d":"2026-03-05","s":"Caixa aberto","f":205.0},{"d":"2026-03-06","s":"Caixa aberto","f":745.0},{"d":"2026-03-07","s":"Caixa aberto","f":745.0},{"d":"2026-03-08","s":"Caixa aberto","f":125.0},{"d":"2026-03-09","s":"Caixa aberto","f":125.0},{"d":"2026-03-10","s":"Terça-feira (fechado)","f":null},{"d":"2026-03-11","s":"Caixa aberto","f":345.0},{"d":"2026-03-12","s":"Caixa aberto","f":345.0},{"d":"2026-03-13","s":"Caixa aberto","f":345.0},{"d":"2026-03-14","s":"Caixa aberto","f":455.0},{"d":"2026-03-15","s":"Caixa aberto","f":995.0},{"d":"2026-03-16","s":"Caixa aberto","f":245.0},{"d":"2026-03-17","s":"Terça-feira (fechado)","f":null},{"d":"2026-03-18","s":"Caixa aberto","f":245.0},{"d":"2026-03-19","s":"Caixa aberto","f":685.0},{"d":"2026-03-20","s":"Caixa aberto","f":1125.0},{"d":"2026-03-21","s":"Caixa aberto","f":885.0},{"d":"2026-03-22","s":"Caixa aberto","f":885.0},{"d":"2026-03-23","s":"Caixa aberto","f":365.0},{"d":"2026-03-24","s":"Terça-feira (fechado)","f":null},{"d":"2026-03-25","s":"Caixa aberto","f":365.0},{"d":"2026-03-26","s":"Caixa aberto","f":365.0},{"d":"2026-03-27","s":"Caixa aberto","f":365.0},{"d":"2026-03-28","s":"Caixa aberto","f":585.0},{"d":"2026-03-29","s":"Caixa aberto","f":585.0},{"d":"2026-03-30","s":"Caixa aberto","f":585.0},{"d":"2026-03-31","s":"Sem registro","f":null}],"lanc":[{"d":"2026-03-02","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":700.0,"o":""},{"d":"2026-03-06","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-03-06","t":"Entrada","x":"2 tirolesas  desconto","e":360.0,"s":0,"o":""},{"d":"2026-03-08","t":"Entrada","x":"4 tirolesas","e":880.0,"s":0,"o":""},{"d":"2026-03-08","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1500.0,"o":""},{"d":"2026-03-11","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-03-14","t":"Entrada","x":"1 tirolesa ecomerc","e":110.0,"s":0,"o":""},{"d":"2026-03-15","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-03-15","t":"Entrada","x":"1 tirolesa(120,00 no C.credito)","e":100.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-03-16","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":900.0,"o":""},{"d":"2026-03-16","t":"Entrada","x":"2 tirolesas(290,00 no pix)","e":150.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-03-19","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-03-20","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-03-21","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":900.0,"o":""},{"d":"2026-03-21","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-03-23","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-03-23","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":960.0,"o":""},{"d":"2026-03-28","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":2000.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"}],"nfPag":0},{"id":4,"abr":"Abr","nome":"Abril","pdf":4700.0,"obs":["Bonificação (destaque amarelo) registrada como pagamento fora do caixa."],"dias":[{"d":"2026-04-01","s":"Caixa aberto","f":585.0},{"d":"2026-04-02","s":"Caixa aberto","f":585.0},{"d":"2026-04-03","s":"Caixa aberto","f":585.0},{"d":"2026-04-04","s":"Caixa aberto","f":1905.0},{"d":"2026-04-05","s":"Caixa aberto","f":205.0},{"d":"2026-04-06","s":"Sem operação","f":null},{"d":"2026-04-07","s":"Terça-feira (fechado)","f":null},{"d":"2026-04-08","s":"Sem operação","f":null},{"d":"2026-04-09","s":"Caixa aberto","f":205.0},{"d":"2026-04-10","s":"Caixa aberto","f":205.0},{"d":"2026-04-11","s":"Caixa aberto","f":645.0},{"d":"2026-04-12","s":"Sem operação","f":null},{"d":"2026-04-13","s":"Caixa aberto","f":645.0},{"d":"2026-04-14","s":"Terça-feira (fechado)","f":null},{"d":"2026-04-15","s":"Caixa aberto","f":645.0},{"d":"2026-04-16","s":"Caixa aberto","f":645.0},{"d":"2026-04-17","s":"Caixa aberto","f":645.0},{"d":"2026-04-18","s":"Caixa aberto","f":645.0},{"d":"2026-04-19","s":"Caixa aberto","f":1362.0},{"d":"2026-04-20","s":"Caixa aberto","f":3029.0},{"d":"2026-04-21","s":"Caixa aberto","f":3249.0},{"d":"2026-04-22","s":"Caixa aberto","f":249.0},{"d":"2026-04-23","s":"Caixa aberto","f":249.0},{"d":"2026-04-24","s":"Caixa aberto","f":469.0},{"d":"2026-04-25","s":"Caixa aberto","f":469.0},{"d":"2026-04-26","s":"Caixa aberto","f":1296.0},{"d":"2026-04-27","s":"Caixa aberto","f":1296.0},{"d":"2026-04-28","s":"Terça-feira (fechado)","f":null},{"d":"2026-04-29","s":"Caixa aberto","f":1296.0},{"d":"2026-04-30","s":"Caixa aberto","f":1296.0}],"lanc":[{"d":"2026-04-04","t":"Entrada","x":"6 tirolesas","e":1320.0,"s":0,"o":""},{"d":"2026-04-05","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1700.0,"o":""},{"d":"2026-04-11","t":"Entrada","x":"2 tirolesas ecomerc","e":220.0,"s":0,"o":""},{"d":"2026-04-11","t":"Entrada","x":"2 tirolesas ecomerc","e":220.0,"s":0,"o":""},{"d":"2026-04-19","t":"Entrada","x":"2 tirolesas morador","e":220.0,"s":0,"o":""},{"d":"2026-04-19","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-04-19","t":"Entrada","x":"1 tirolesa morador","e":110.0,"s":0,"o":""},{"d":"2026-04-19","t":"Entrada","x":"2 tirolesas morador","e":220.0,"s":0,"o":""},{"d":"2026-04-20","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-04-20","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-04-20","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-04-20","t":"Entrada","x":"estacionamento","e":440.0,"s":0,"o":""},{"d":"2026-04-20","t":"Entrada","x":"estacionamento dia 19/04","e":387.0,"s":0,"o":""},{"d":"2026-04-21","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-04-22","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":3000.0,"o":""},{"d":"2026-04-24","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-04-26","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-04-26","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Bonificação","x":"Total de bonificação","f":"Funcionários","g":"—","v":2900.0,"p":"A confirmar","o":"Destaque amarelo no PDF","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"CONSERTO CHAVE UNO","f":"Jaboinski & Souza (chaveiro)","g":"Veículos – manutenção e peças","v":300.0,"p":"A confirmar","o":"","dn":"2026-04-23","nf":"NFS-e 25","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"JANTA SGV","f":"Janta SGV","g":"Alimentação e eventos","v":500.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"LAVAÇAO","f":"Christian Lavagem","g":"Lavagem de veículos","v":60.0,"p":"A confirmar","o":"NF em nome de ELEV8 Adventures Ltda","dn":"2026-04-06","nf":"NFS-e 8","dest":"ELEV8 Adventures Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CARROS","f":"Carros (sem detalhe)","g":"A classificar","v":60.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"}],"nfPag":2},{"id":5,"abr":"Mai","nome":"Maio","pdf":6900.0,"obs":["Total de sangria no PDF (R$ 6.900) é R$ 1.000 menor que a soma das 4 sangrias lançadas (R$ 7.900).","Data 23/04 no PDF corrigida para 23/05 (erro de digitação).","\"Doc dos carros\" R$ 1.420 excluído: é a soma das NFS-e 795 + 796 + 2.502, já lançadas separadamente.","Tomé e Ilíbio corrigido de R$ 18,80 para R$ 19,80 (NF-e 4.097).","NFS-e 796 veio digitalizada duas vezes – cópia desconsiderada."],"dias":[{"d":"2026-05-01","s":"Caixa aberto","f":383.0},{"d":"2026-05-02","s":"Caixa aberto","f":383.0},{"d":"2026-05-03","s":"Caixa aberto","f":1517.0},{"d":"2026-05-04","s":"Caixa aberto","f":517.0},{"d":"2026-05-05","s":"Terça-feira (fechado)","f":null},{"d":"2026-05-06","s":"Caixa aberto","f":517.0},{"d":"2026-05-07","s":"Caixa aberto","f":904.0},{"d":"2026-05-08","s":"Caixa aberto","f":904.0},{"d":"2026-05-09","s":"Caixa aberto","f":1124.0},{"d":"2026-05-10","s":"Caixa aberto","f":1511.0},{"d":"2026-05-11","s":"Caixa aberto","f":1511.0},{"d":"2026-05-12","s":"Terça-feira (fechado)","f":null},{"d":"2026-05-13","s":"Caixa aberto","f":511.0},{"d":"2026-05-14","s":"Caixa aberto","f":511.0},{"d":"2026-05-15","s":"Caixa aberto","f":511.0},{"d":"2026-05-16","s":"Caixa aberto","f":511.0},{"d":"2026-05-17","s":"Caixa aberto","f":511.0},{"d":"2026-05-18","s":"Caixa aberto","f":511.0},{"d":"2026-05-19","s":"Terça-feira (fechado)","f":null},{"d":"2026-05-20","s":"Caixa aberto","f":511.0},{"d":"2026-05-21","s":"Caixa aberto","f":511.0},{"d":"2026-05-22","s":"Caixa aberto","f":511.0},{"d":"2026-05-23","s":"Caixa aberto","f":511.0},{"d":"2026-05-24","s":"Caixa aberto","f":511.0},{"d":"2026-05-25","s":"Caixa aberto","f":731.0},{"d":"2026-05-26","s":"Terça-feira (fechado)","f":null},{"d":"2026-05-27","s":"Caixa aberto","f":731.0},{"d":"2026-05-28","s":"Caixa aberto","f":731.0},{"d":"2026-05-29","s":"Caixa aberto","f":731.0},{"d":"2026-05-30","s":"Caixa aberto","f":951.0},{"d":"2026-05-31","s":"Caixa aberto","f":392.0}],"lanc":[{"d":"2026-05-01","t":"Entrada","x":"2 tirolesas agencias","e":360.0,"s":0,"o":""},{"d":"2026-05-01","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-05-01","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-05-01","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-05-01","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-05-01","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":3200.0,"o":""},{"d":"2026-05-03","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-05-03","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-05-03","t":"Entrada","x":"caixa cav","e":360.0,"s":0,"o":""},{"d":"2026-05-03","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-05-03","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-05-04","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-05-07","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-05-07","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-05-09","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-05-10","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-05-10","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-05-13","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-05-25","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-05-30","t":"Entrada","x":"2 tirolesas morador","e":220.0,"s":0,"o":""},{"d":"2026-05-31","t":"Entrada","x":"3 tirolesas","e":540.0,"s":0,"o":""},{"d":"2026-05-31","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-05-31","t":"Entrada","x":"3 pacotes midia","e":501.0,"s":0,"o":""},{"d":"2026-05-31","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-05-31","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":2700.0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"AGUA","f":"Água mineral","g":"Água","v":68.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"MATERIAL BRENTANO","f":"Brentano","g":"Materiais e ferragens","v":8.8,"p":"A confirmar","o":"","dn":"2026-05-20","nf":"NF-e 2.397","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"MATERIAL DE CONSTRUÇAO","f":"Material de construção","g":"Materiais e ferragens","v":426.99,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"LAVAÇAO","f":"Lavação (sem detalhe)","g":"Lavagem de veículos","v":120.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"DOC DOS CARROS","f":"Documentação dos carros","g":"Veículos – documentação","v":null,"p":"A confirmar","o":"Valor original no PDF: R$ 1.420,00. R$ 1.420 = soma das NFS-e 795 (R$ 390) + 796 (R$ 790) + 2.502 (R$ 240), já lançadas uma a uma no mesmo mês","dn":null,"nf":"","dest":"","cf":"✖ Duplicado – excluído"},{"c":"Custo / conta paga","x":"FABRICAÇAO DE 2 PARAQUEDAS","f":"Fabricação de paraquedas","g":"Equipamentos da operação","v":140.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"2 PEDAGIOS","f":"Pedágio","g":"Deslocamento / pedágio","v":11.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"BRENTANO","f":"Brentano","g":"Materiais e ferragens","v":44.0,"p":"A confirmar","o":"","dn":"2026-05-14","nf":"NF-e 2.388","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"JABOINSKY","f":"Jaboinski & Souza (chaveiro)","g":"Veículos – manutenção e peças","v":550.0,"p":"A confirmar","o":"","dn":"2026-05-20","nf":"NFS-e 30","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CHRISTIAN LAVAGEM","f":"Christian Lavagem","g":"Lavagem de veículos","v":180.0,"p":"A confirmar","o":"NF em nome de ELEV8 Adventures Ltda","dn":"2026-05-21","nf":"NFS-e 11","dest":"ELEV8 Adventures Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"DESPACHANTE CASA GRANDE","f":"Despachante Casa Grande","g":"Veículos – documentação","v":390.0,"p":"A confirmar","o":"","dn":"2026-05-21","nf":"NFS-e 795","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":19.8,"p":"A confirmar","o":"Caixa informava R$ 18,80; NF = R$ 19,80 (2 escovas de aço)","dn":"2026-05-21","nf":"NF-e 4.097","dest":"Serra Geral Vertical Ltda","cf":"✎ Valor corrigido pela NF"},{"c":"Custo / conta paga","x":"DESPACHANTE CASA GRANDE","f":"Despachante Casa Grande","g":"Veículos – documentação","v":790.0,"p":"A confirmar","o":"","dn":"2026-05-22","nf":"NFS-e 796","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"DESPACHANTE CASA GRANDE","f":"Vistoria Veicular Praia Grande","g":"Veículos – documentação","v":240.0,"p":"A confirmar","o":"","dn":"2026-05-22","nf":"NFS-e 2.502","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"BRENTANO","f":"Brentano","g":"Materiais e ferragens","v":13.2,"p":"A confirmar","o":"","dn":"2026-05-22","nf":"NF-e 2.404","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"IVONETE MACEDO (TROCA DE OLEO","f":"Ivonete Macedo","g":"Veículos – manutenção e peças","v":190.0,"p":"A confirmar","o":"NF em nome de ELEV8 Adventures Ltda","dn":"2026-05-26","nf":"NF-e 67.139.243","dest":"ELEV8 Adventures Ltda","cf":"✔ Conferida com NF"}],"nfPag":11},{"id":6,"abr":"Jun","nome":"Junho","pdf":5400.0,"obs":["\"Alimentação Richard\" (destaque azul) registrada como pagamento fora do caixa.","Pedido de venda do extensor (25/06) é a mesma compra da NF-e 4.159 – não foi somado de novo.","NF IM Rodrigues (macacões) está em nome de Pricila Feltrin Cordova."],"dias":[{"d":"2026-06-01","s":"Caixa aberto","f":392.0},{"d":"2026-06-02","s":"Terça-feira (fechado)","f":null},{"d":"2026-06-03","s":"Caixa aberto","f":392.0},{"d":"2026-06-04","s":"Caixa aberto","f":722.0},{"d":"2026-06-05","s":"Caixa aberto","f":1342.0},{"d":"2026-06-06","s":"Caixa aberto","f":2552.0},{"d":"2026-06-07","s":"Caixa aberto","f":552.0},{"d":"2026-06-08","s":"Caixa aberto","f":552.0},{"d":"2026-06-09","s":"Terça-feira (fechado)","f":null},{"d":"2026-06-10","s":"Caixa aberto","f":662.0},{"d":"2026-06-11","s":"Caixa aberto","f":882.0},{"d":"2026-06-12","s":"Caixa aberto","f":882.0},{"d":"2026-06-13","s":"Caixa aberto","f":1102.0},{"d":"2026-06-14","s":"Caixa aberto","f":1212.0},{"d":"2026-06-15","s":"Sem operação","f":null},{"d":"2026-06-16","s":"Terça-feira (fechado)","f":null},{"d":"2026-06-17","s":"Caixa aberto","f":512.0},{"d":"2026-06-18","s":"Caixa aberto","f":512.0},{"d":"2026-06-19","s":"Sem operação","f":null},{"d":"2026-06-20","s":"Caixa aberto","f":512.0},{"d":"2026-06-21","s":"Caixa aberto","f":3657.0},{"d":"2026-06-22","s":"Caixa aberto","f":3657.0},{"d":"2026-06-23","s":"Terça-feira (fechado)","f":null},{"d":"2026-06-24","s":"Caixa aberto","f":957.0},{"d":"2026-06-25","s":"Caixa aberto","f":1187.0},{"d":"2026-06-26","s":"Caixa aberto","f":1187.0},{"d":"2026-06-27","s":"Caixa aberto","f":1407.0},{"d":"2026-06-28","s":"Sem operação","f":null},{"d":"2026-06-29","s":"Caixa aberto","f":1407.0},{"d":"2026-06-30","s":"Terça-feira (fechado)","f":null}],"lanc":[{"d":"2026-06-04","t":"Entrada","x":"3 tirolesas morador","e":330.0,"s":0,"o":""},{"d":"2026-06-05","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-06-05","t":"Entrada","x":"1 tiroolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-06-06","t":"Entrada","x":"5 tirolesas","e":1100.0,"s":0,"o":""},{"d":"2026-06-06","t":"Entrada","x":"1 tirolesa ecomerc","e":110.0,"s":0,"o":""},{"d":"2026-06-07","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":2000.0,"o":""},{"d":"2026-06-10","t":"Entrada","x":"1 tirolesa morador","e":110.0,"s":0,"o":""},{"d":"2026-06-11","t":"Entrada","x":"2 tirolesas ecomerc","e":220.0,"s":0,"o":""},{"d":"2026-06-13","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-06-14","t":"Entrada","x":"1 tirolesa morador","e":110.0,"s":0,"o":""},{"d":"2026-06-17","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":700.0,"o":""},{"d":"2026-06-21","t":"Entrada","x":"10 tirolesas","e":2200.0,"s":0,"o":""},{"d":"2026-06-21","t":"Entrada","x":"5 pacote midias","e":835.0,"s":0,"o":""},{"d":"2026-06-21","t":"Entrada","x":"tirolesa ecomerc","e":110.0,"s":0,"o":""},{"d":"2026-06-24","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":2700.0,"o":""},{"d":"2026-06-25","t":"Entrada","x":"2 tirolesas ecomerc","e":220.0,"s":0,"o":""},{"d":"2026-06-25","t":"Ajuste de caixa","x":"entrada no caixa","e":10.0,"s":0,"o":"Ajuste de conferência do caixa"},{"d":"2026-06-27","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""}],"pag":[{"c":"Alimentação","x":"ALIMENTAÇAO RICHARD","f":"Richard (alimentação)","g":"Alimentação e eventos","v":100.0,"p":"A confirmar","o":"Destaque azul no PDF","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"4 AGUAS MINEIRAS","f":"Água mineral","g":"Água","v":68.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"EXTENSOR 3M TROLLEY","f":"Peças de trolley","g":"Equipamentos da operação","v":66.9,"p":"A confirmar","o":"","dn":"2026-06-25","nf":"NF-e 4.159","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"MANIVELA TROLLEY","f":"Peças de trolley","g":"Equipamentos da operação","v":70.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"},{"c":"Custo / conta paga","x":"IVONETE MACEDO","f":"Ivonete Macedo","g":"Veículos – manutenção e peças","v":205.0,"p":"A confirmar","o":"NF em nome de ELEV8 Adventures Ltda","dn":"2026-06-01","nf":"NF-e 67.248.213","dest":"ELEV8 Adventures Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ABAST. SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":1612.44,"p":"A confirmar","o":"","dn":"2026-06-05","nf":"NF-e 1.026","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"BOCHADINHA PNEU","f":"Bochadinha Pneus (Ronaldo O. Silvestre)","g":"Pneus","v":290.0,"p":"A confirmar","o":"","dn":"2026-06-08","nf":"NF-e 67.362.661","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"IM RODRIGUES DA SILVA LTDA","f":"IM Rodrigues da Silva Ltda","g":"Uniformes e EPI","v":153.8,"p":"A confirmar","o":"NF em nome de Pricila Feltrin Cordova (CPF)","dn":"2026-06-11","nf":"NF-e 12.608","dest":"Pricila Feltrin Cordova (CPF)","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":1081.04,"p":"A confirmar","o":"","dn":"2026-06-15","nf":"NF-e 1.064","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ALEX SARTOR","f":"Alex Sartor Emerim","g":"Materiais e ferragens","v":33.0,"p":"A confirmar","o":"","dn":"2026-06-16","nf":"NF-e 2.112","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"}],"nfPag":8},{"id":7,"abr":"Jul","nome":"Julho","pdf":4000.0,"obs":["Tomé e Ilíbio R$ 66,90 excluído: é o extensor de junho (NF-e 4.159) lançado de novo.","Pedidos Canyon de 14/07 e 21/07 são apoio: viraram NF-e 3.462 (R$ 294,19) + NFS-e 225 (R$ 235)."],"dias":[{"d":"2026-07-01","s":"Caixa aberto","f":1407.0},{"d":"2026-07-02","s":"Sem operação","f":null},{"d":"2026-07-03","s":"Caixa aberto","f":1407.0},{"d":"2026-07-04","s":"Caixa aberto","f":1517.0},{"d":"2026-07-05","s":"Caixa aberto","f":1517.0},{"d":"2026-07-06","s":"Caixa aberto","f":1517.0},{"d":"2026-07-07","s":"Terça-feira (fechado)","f":null},{"d":"2026-07-08","s":"Caixa aberto","f":1737.0},{"d":"2026-07-09","s":"Caixa aberto","f":927.0},{"d":"2026-07-10","s":"Caixa aberto","f":1147.0},{"d":"2026-07-11","s":"Caixa aberto","f":1147.0},{"d":"2026-07-12","s":"Caixa aberto","f":1367.0},{"d":"2026-07-13","s":"Caixa aberto","f":1587.0},{"d":"2026-07-14","s":"Terça-feira (fechado)","f":null},{"d":"2026-07-15","s":"Caixa aberto","f":1974.0},{"d":"2026-07-16","s":"Caixa aberto","f":974.0},{"d":"2026-07-17","s":"Caixa aberto","f":1084.0},{"d":"2026-07-18","s":"Caixa aberto","f":1424.0},{"d":"2026-07-19","s":"Caixa aberto","f":1864.0},{"d":"2026-07-20","s":"Sem operação","f":null},{"d":"2026-07-21","s":"Terça-feira (fechado)","f":null},{"d":"2026-07-22","s":"Caixa aberto","f":864.0},{"d":"2026-07-23","s":"Caixa aberto","f":1304.0},{"d":"2026-07-24","s":"Caixa aberto","f":1304.0},{"d":"2026-07-25","s":"Caixa aberto","f":1021.0},{"d":"2026-07-26","s":"Caixa aberto","f":1461.0},{"d":"2026-07-27","s":"Caixa aberto","f":1511.0},{"d":"2026-07-28","s":"Terça-feira (fechado)","f":null},{"d":"2026-07-29","s":"Sem operação","f":null},{"d":"2026-07-30","s":"Caixa aberto","f":1511.0},{"d":"2026-07-31","s":"Caixa aberto","f":1661.0}],"lanc":[{"d":"2026-07-04","t":"Entrada","x":"1 tirolesa ecomerc","e":110.0,"s":0,"o":""},{"d":"2026-07-08","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-07-09","t":"Entrada","x":"2 tirolesas(170,00 no C deb)","e":190.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-07-09","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-07-10","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-07-12","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-07-13","t":"Entrada","x":"2 tirolesas morador","e":220.0,"s":0,"o":""},{"d":"2026-07-15","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-07-15","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-07-16","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-07-17","t":"Entrada","x":"1 tirolesa ecomerc","e":110.0,"s":0,"o":""},{"d":"2026-07-18","t":"Entrada","x":"3 tirolesas morador","e":330.0,"s":0,"o":""},{"d":"2026-07-18","t":"Ajuste de caixa","x":"valor adicionado ao caixa","e":10.0,"s":0,"o":"Ajuste de conferência do caixa"},{"d":"2026-07-19","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-07-22","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-07-23","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-07-25","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-07-25","t":"Entrada","x":"3 tirolesas morador","e":330.0,"s":0,"o":""},{"d":"2026-07-25","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-07-25","t":"Sangria Gabriel","x":"sangria para Gabrel","e":0,"s":1000.0,"o":""},{"d":"2026-07-26","t":"Entrada","x":"2 tirolesas morador","e":220.0,"s":0,"o":""},{"d":"2026-07-26","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-07-27","t":"Entrada","x":"1 tirolesa(170,00 no pix)","e":50.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-07-31","t":"Entrada","x":"1 tirolesa(restante do valor C","e":150.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":1054.7,"p":"A confirmar","o":"","dn":"2026-07-03","nf":"NF-e 1.129","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CANYONS GRAFICA","f":"Canyons Gráfica","g":"Gráfica","v":250.0,"p":"A confirmar","o":"NF informa pagamento em dinheiro de R$ 230,00","dn":"2026-07-03","nf":"NF-e 722","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":111.6,"p":"A confirmar","o":"","dn":"2026-07-06","nf":"NF-e 4.178","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":21.36,"p":"A confirmar","o":"","dn":"2026-07-03","nf":"NF-e 4.176","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":null,"p":"A confirmar","o":"Valor original no PDF: R$ 66,90. R$ 66,90 = NF-e 4.159 de 25/06 (extensor 3 m), já lançada em junho como \"Extensor 3M Trolley\"","dn":null,"nf":"","dest":"","cf":"✖ Duplicado – excluído"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":290.0,"p":"A confirmar","o":"","dn":"2026-07-15","nf":"NF-e 4.196","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":23.6,"p":"A confirmar","o":"","dn":"2026-07-15","nf":"NF-e 4.200","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":1423.35,"p":"A confirmar","o":"","dn":"2026-07-16","nf":"NF-e 1.160","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":236.0,"p":"A confirmar","o":"","dn":"2026-07-24","nf":"NF-e 4.213","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CANYONS AUTOPEÇAS","f":"Canyons Autopeças","g":"Veículos – manutenção e peças","v":235.0,"p":"A confirmar","o":"","dn":"2026-07-24","nf":"NFS-e 225","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CANYONS AUTOPEÇAS","f":"Canyons Autopeças","g":"Veículos – manutenção e peças","v":294.19,"p":"A confirmar","o":"","dn":"2026-07-24","nf":"NF-e 3.462","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"EVENTO DIULLY","f":"Evento Diully","g":"Alimentação e eventos","v":170.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"Sem NF no arquivo"}],"nfPag":12},{"id":8,"abr":"Ago","nome":"Agosto","pdf":2400.0,"obs":["Sangrias de 10/08 e 22/08 (R$ 1.000 cada) sem destaque vermelho e fora do total do PDF (R$ 2.400). Os fechamentos diários confirmam que saíram do caixa.","Incluídos: Canyon Autopeças 07/08 (peças R$ 125 + mão de obra R$ 170 = R$ 295 pago em dinheiro) e impressora Magazine Luiza R$ 877,50 (NF em nome de Fernanda Dias Silva Pinto).","NF Robinson 68.401.976 veio três vezes (2× no 1º arquivo e 1× no 2º) – cópias desconsideradas.","Cartão de memória (R$ 299) com NF em nome do Gabriel."],"dias":[{"d":"2026-08-01","s":"Caixa aberto","f":1661.0},{"d":"2026-08-02","s":"Caixa aberto","f":1661.0},{"d":"2026-08-03","s":"Caixa aberto","f":1771.0},{"d":"2026-08-04","s":"Terça-feira (fechado)","f":null},{"d":"2026-08-05","s":"Caixa aberto","f":1881.0},{"d":"2026-08-06","s":"Caixa aberto","f":881.0},{"d":"2026-08-07","s":"Sem operação","f":null},{"d":"2026-08-08","s":"Caixa aberto","f":1588.0},{"d":"2026-08-09","s":"Caixa aberto","f":808.0},{"d":"2026-08-10","s":"Caixa aberto","f":1048.0},{"d":"2026-08-11","s":"Terça-feira (fechado)","f":null},{"d":"2026-08-12","s":"Sem operação","f":null},{"d":"2026-08-13","s":"Sem operação","f":null},{"d":"2026-08-14","s":"Sem operação","f":null},{"d":"2026-08-15","s":"Sem operação","f":null},{"d":"2026-08-16","s":"Caixa aberto","f":1228.0},{"d":"2026-08-17","s":"Caixa aberto","f":1228.0},{"d":"2026-08-18","s":"Terça-feira (fechado)","f":null},{"d":"2026-08-19","s":"Caixa aberto","f":1228.0},{"d":"2026-08-20","s":"Caixa aberto","f":1228.0},{"d":"2026-08-21","s":"Caixa aberto","f":1228.0},{"d":"2026-08-22","s":"Caixa aberto","f":835.0},{"d":"2026-08-23","s":"Caixa aberto","f":1235.0},{"d":"2026-08-24","s":"Caixa aberto","f":1235.0},{"d":"2026-08-25","s":"Terça-feira (fechado)","f":null},{"d":"2026-08-26","s":"Caixa aberto","f":1235.0},{"d":"2026-08-27","s":"Caixa aberto","f":835.0},{"d":"2026-08-28","s":"Sem operação","f":null},{"d":"2026-08-29","s":"Sem operação","f":null},{"d":"2026-08-30","s":"Caixa aberto","f":1055.0},{"d":"2026-08-31","s":"Sem operação","f":null}],"lanc":[{"d":"2026-08-03","t":"Entrada","x":"1 tirolesa","e":110.0,"s":0,"o":""},{"d":"2026-08-05","t":"Entrada","x":"1 tirolesa morador","e":110.0,"s":0,"o":""},{"d":"2026-08-06","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-08-08","t":"Entrada","x":"2 tirolesas desconto","e":360.0,"s":0,"o":""},{"d":"2026-08-08","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-08-08","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-08-09","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-08-09","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":""},{"d":"2026-08-10","t":"Entrada","x":"2 tirolesas desconto","e":360.0,"s":0,"o":""},{"d":"2026-08-10","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-08-10","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-08-10","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":"Sem destaque vermelho no PDF e fora do total informado (R$ 2.400)"},{"d":"2026-08-16","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-08-22","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-08-22","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-08-22","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1000.0,"o":"Sem destaque vermelho no PDF e fora do total informado (R$ 2.400)"},{"d":"2026-08-23","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-08-23","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-08-27","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":400.0,"o":""},{"d":"2026-08-30","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":1164.72,"p":"A confirmar","o":"","dn":"2026-08-02","nf":"NF-e 1.229","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"SEBASTIAO MEDEIROS","f":"Sebastião Medeiros","g":"Materiais e ferragens","v":77.0,"p":"A confirmar","o":"","dn":"2026-08-25","nf":"NF-e (folhas 1 e 2)","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":1231.08,"p":"A confirmar","o":"","dn":"2026-08-16","nf":"NF-e 1.239","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ALEXANDRO FARIAS","f":"Alexsandro Farias","g":"Escritório e TI","v":299.0,"p":"A confirmar","o":"NF em nome de Gabriel Livio Cardoso Kruger (CPF)","dn":"2026-08-10","nf":"NF-e 5.241","dest":"Gabriel Livio Cardoso Kruger (CPF)","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CANYONS GRAFICA","f":"Canyons Gráfica","g":"Gráfica","v":687.9,"p":"A confirmar","o":"","dn":"2026-08-14","nf":"NF-e 751","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ROBINSON E SILVA LTDA","f":"Robinson e Silva (água 20 L)","g":"Água","v":67.0,"p":"A confirmar","o":"","dn":"2026-08-07","nf":"NF-e 68.401.976","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"ROBINSON E SILVA LTDA","f":"Robinson e Silva (água 20 L)","g":"Água","v":68.0,"p":"A confirmar","o":"NF de 27/07/2026 lançada em agosto","dn":"2026-07-27","nf":"NF-e 68.196.111","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":15.9,"p":"A confirmar","o":"","dn":"2026-08-27","nf":"NF-e 4.265","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"CANYON AUTOPEÇAS – PEÇAS (07/08)","f":"Canyon Autopeças","g":"Veículos – manutenção e peças","v":125.0,"p":"A confirmar","o":"Incluído pela NF – não constava no PDF de caixa. Pago em dinheiro (anotação na nota)","dn":"2026-08-07","nf":"Pedido 118823 + NF-e peças","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"CANYON AUTOPEÇAS – MÃO DE OBRA (07/08)","f":"Canyon Autopeças","g":"Veículos – manutenção e peças","v":170.0,"p":"A confirmar","o":"Incluído pela NFS-e – não constava no PDF de caixa","dn":"2026-08-07","nf":"NFS-e 234","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"IMPRESSORA MULTIFUNCIONAL (Magazine Luiza)","f":"Magazine Luiza","g":"Escritório e TI","v":877.5,"p":"A confirmar","o":"Incluído pela NF – não constava no PDF de caixa. NF em nome de Fernanda Dias Silva Pinto","dn":"2026-08-07","nf":"NF-e 41.411","dest":"Fernanda Dias Silva Pinto (CPF)","cf":"+ Incluída pela NF"}],"nfPag":14},{"id":9,"abr":"Set","nome":"Setembro","pdf":6750.0,"obs":["2º arquivo de notas: 7 notas novas incluídas (R$ 1.742,93) – Tomé 4.298 e 4.314, Auto Elétrica Macedo NF 828 + NFS-e 191, combustível NF 1.372, placas PVC Canyon e água Robinson 29/09.","Souza Pneus NF-e 62 veio de novo no 2º arquivo – cópia desconsiderada (já estava lançada).","Compras de mercado (Lauri e Deoclécio) pagas com cartão de débito final 0819 – confirmar de quem é o cartão."],"dias":[{"d":"2026-09-01","s":"Terça-feira (fechado)","f":null},{"d":"2026-09-02","s":"Caixa aberto","f":1055.0},{"d":"2026-09-03","s":"Caixa aberto","f":1055.0},{"d":"2026-09-04","s":"Caixa aberto","f":855.0},{"d":"2026-09-05","s":"Caixa aberto","f":855.0},{"d":"2026-09-06","s":"Caixa aberto","f":795.0},{"d":"2026-09-07","s":"Caixa aberto","f":1182.0},{"d":"2026-09-08","s":"Terça-feira (fechado)","f":null},{"d":"2026-09-09","s":"Caixa aberto","f":1182.0},{"d":"2026-09-10","s":"Caixa aberto","f":1182.0},{"d":"2026-09-11","s":"Sem operação","f":null},{"d":"2026-09-12","s":"Caixa aberto","f":1402.0},{"d":"2026-09-13","s":"Caixa aberto","f":852.0},{"d":"2026-09-14","s":"Caixa aberto","f":852.0},{"d":"2026-09-15","s":"Terça-feira (fechado)","f":null},{"d":"2026-09-16","s":"Caixa aberto","f":1292.0},{"d":"2026-09-17","s":"Caixa aberto","f":906.0},{"d":"2026-09-18","s":"Caixa aberto","f":899.0},{"d":"2026-09-19","s":"Caixa aberto","f":149.0},{"d":"2026-09-20","s":"Caixa aberto","f":149.0},{"d":"2026-09-21","s":"Sem operação","f":null},{"d":"2026-09-22","s":"Terça-feira (fechado)","f":null},{"d":"2026-09-23","s":"Caixa aberto","f":449.0},{"d":"2026-09-24","s":"Caixa aberto","f":1330.0},{"d":"2026-09-25","s":"Caixa aberto","f":1330.0},{"d":"2026-09-26","s":"Caixa aberto","f":360.0},{"d":"2026-09-27","s":"Caixa aberto","f":210.0},{"d":"2026-09-28","s":"Caixa aberto","f":210.0},{"d":"2026-09-29","s":"Terça-feira (fechado)","f":null},{"d":"2026-09-30","s":"Caixa aberto","f":210.0}],"lanc":[{"d":"2026-09-04","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":200.0,"o":""},{"d":"2026-09-06","t":"Entrada","x":"3 tirolesas","e":660.0,"s":0,"o":""},{"d":"2026-09-06","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-09-06","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":900.0,"o":""},{"d":"2026-09-07","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-09-07","t":"Entrada","x":"1 pacote midia","e":167.0,"s":0,"o":""},{"d":"2026-09-12","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""},{"d":"2026-09-13","t":"Entrada","x":"1 tirolesa(120,00 no C.deb)","e":100.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-09-13","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":650.0,"o":""},{"d":"2026-09-16","t":"Entrada","x":"2 tirolesas","e":440.0,"s":0,"o":""},{"d":"2026-09-17","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-09-17","t":"Entrada","x":"tirolesa + pacote midia","e":354.0,"s":0,"o":""},{"d":"2026-09-17","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-09-17","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":1100.0,"o":""},{"d":"2026-09-18","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-09-18","t":"Entrada","x":"1 pacote midia desconto","e":133.0,"s":0,"o":""},{"d":"2026-09-18","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-09-18","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":500.0,"o":""},{"d":"2026-09-19","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":750.0,"o":""},{"d":"2026-09-23","t":"Entrada","x":"2 tirolesas(2 formas de pag.)","e":300.0,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-09-24","t":"Entrada","x":"4 tirolesas","e":880.0,"s":0,"o":""},{"d":"2026-09-24","t":"Ajuste de caixa","x":"valor a mais no caixa","e":1.0,"s":0,"o":"Ajuste de conferência do caixa"},{"d":"2026-09-26","t":"Entrada","x":"5 tirolesas descontos","e":900.0,"s":0,"o":""},{"d":"2026-09-26","t":"Entrada","x":"1 pacote midia(83,50 no deb)","e":83.5,"s":0,"o":"Apenas a parte em dinheiro entrou no caixa"},{"d":"2026-09-26","t":"Entrada","x":"3 tirolesas","e":540.0,"s":0,"o":""},{"d":"2026-09-26","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":2500.0,"o":""},{"d":"2026-09-26","t":"Ajuste de caixa","x":"sobrou valor no caixa","e":6.5,"s":0,"o":"Ajuste de conferência do caixa"},{"d":"2026-09-27","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":150.0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários)","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL","f":"Abastecedora Serra Geral","g":"Combustível","v":975.54,"p":"A confirmar","o":"","dn":"2026-09-05","nf":"NF-e 1.331","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"SOUZA PNEUS LTDA","f":"Souza Pneus","g":"Pneus","v":540.0,"p":"A confirmar","o":"","dn":"2026-09-09","nf":"NF-e 62","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":16.0,"p":"A confirmar","o":"","dn":"2026-09-09","nf":"NF-e 4.296","dest":"Serra Geral Vertical Ltda","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"LAURI R DA SILVEIRA LTDA","f":"Lauri R. da Silveira (supermercado)","g":"Alimentação e eventos","v":42.89,"p":"A confirmar","o":"","dn":"2026-09-04","nf":"NFC-e 362.467","dest":"Consumidor não identificado","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"LAURI R DA SILVEIRA","f":"Lauri R. da Silveira (supermercado)","g":"Alimentação e eventos","v":203.78,"p":"A confirmar","o":"","dn":"2026-09-05","nf":"NFC-e 356.378","dest":"Consumidor não identificado","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"DEOCLECIO BRESOLIN","f":"Deoclécio Bresolin (mercado)","g":"Alimentação e eventos","v":496.04,"p":"A confirmar","o":"","dn":"2026-09-05","nf":"NFC-e 401.103","dest":"Consumidor não identificado","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"DEOCLECIO BRESOLIN","f":"Deoclécio Bresolin (mercado)","g":"Alimentação e eventos","v":150.32,"p":"A confirmar","o":"","dn":"2026-09-05","nf":"NFC-e 401.168","dest":"Consumidor não identificado","cf":"✔ Conferida com NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO (NF 4298)","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":35.9,"p":"A confirmar","o":"Incluído pela NF (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-10","nf":"NF-e 4.298","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"AUTO ELÉTRICA MACEDO – PEÇAS (NF 828)","f":"Elétrica e Mecânica Macedo","g":"Veículos – manutenção e peças","v":36.0,"p":"A confirmar","o":"Incluído pela NF (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-10","nf":"NF-e 828","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"AUTO ELÉTRICA MACEDO – MÃO DE OBRA (NFS-e 191)","f":"Elétrica e Mecânica Macedo","g":"Veículos – manutenção e peças","v":125.0,"p":"A confirmar","o":"Incluído pela NFS-e (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-10","nf":"NFS-e 191","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"TOME E ILIBIO (NF 4314)","f":"Tomé e Ilíbio","g":"Materiais e ferragens","v":20.0,"p":"A confirmar","o":"Incluído pela NF (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-18","nf":"NF-e 4.314","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL (NF 1372)","f":"Abastecedora Serra Geral","g":"Combustível","v":1078.03,"p":"A confirmar","o":"Incluído pela NF (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-21","nf":"NF-e 1.372","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"CANYON GRÁFICA – PLACAS PVC (NF 779)","f":"Canyons Gráfica","g":"Gráfica","v":380.0,"p":"A confirmar","o":"Incluído pela NF (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-22","nf":"NF-e 779","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"},{"c":"Custo / conta paga","x":"ROBINSON E SILVA (NF 69264352)","f":"Robinson e Silva (água 20 L)","g":"Água","v":68.0,"p":"A confirmar","o":"Incluído pela NF (2º arquivo) – não constava no PDF de caixa","dn":"2026-09-29","nf":"NF-e 69.264.352","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"}],"nfPag":15},{"id":10,"abr":"Out","nome":"Outubro","pdf":null,"obs":["Mês em andamento – dados até 05/10/2026.","Abastecimento de 01/10 (NF-e 1.413, R$ 883,95) incluído.","Assiduidade de 01/10/2026 – R$ 1.600 incluída (informada pelo usuário).","Caixa de 28/09 a 03/10 com abertura e fechamento de R$ 210,00; abertura de 04/10 = R$ 210,00 (informado pelo usuário).","Caixa de 04/10 e 05/10 informado pelo usuário: 04/10 abertura R$ 210,00 → fechamento R$ 390,00; 05/10 abertura R$ 390,00 → fechamento R$ 360,00."],"dias":[{"d":"2026-10-01","s":"Caixa aberto","f":210.0},{"d":"2026-10-02","s":"Caixa aberto","f":210.0},{"d":"2026-10-03","s":"Caixa aberto","f":210.0},{"d":"2026-10-04","s":"Caixa aberto","f":390.0},{"d":"2026-10-05","s":"Caixa aberto","f":360.0},{"d":"2026-10-06","s":"","f":null},{"d":"2026-10-07","s":"","f":null},{"d":"2026-10-08","s":"","f":null},{"d":"2026-10-09","s":"","f":null},{"d":"2026-10-10","s":"","f":null},{"d":"2026-10-11","s":"","f":null},{"d":"2026-10-12","s":"","f":null},{"d":"2026-10-13","s":"","f":null},{"d":"2026-10-14","s":"","f":null},{"d":"2026-10-15","s":"","f":null},{"d":"2026-10-16","s":"","f":null},{"d":"2026-10-17","s":"","f":null},{"d":"2026-10-18","s":"","f":null},{"d":"2026-10-19","s":"","f":null},{"d":"2026-10-20","s":"","f":null},{"d":"2026-10-21","s":"","f":null},{"d":"2026-10-22","s":"","f":null},{"d":"2026-10-23","s":"","f":null},{"d":"2026-10-24","s":"","f":null},{"d":"2026-10-25","s":"","f":null},{"d":"2026-10-26","s":"","f":null},{"d":"2026-10-27","s":"","f":null},{"d":"2026-10-28","s":"","f":null},{"d":"2026-10-29","s":"","f":null},{"d":"2026-10-30","s":"","f":null},{"d":"2026-10-31","s":"","f":null}],"lanc":[{"d":"2026-10-04","t":"Entrada","x":"1 tirolesa desconto","e":180.0,"s":0,"o":""},{"d":"2026-10-05","t":"Sangria Gabriel","x":"sangria para Gabriel","e":0,"s":250.0,"o":""},{"d":"2026-10-05","t":"Entrada","x":"1 tirolesa","e":220.0,"s":0,"o":""}],"pag":[{"c":"Assiduidade","x":"Total de assiduidade (funcionários) – 01/10/2026","f":"Funcionários","g":"—","v":1600.0,"p":"A confirmar","o":"Informado pelo usuário","dn":null,"nf":"","dest":"","cf":"—"},{"c":"Custo / conta paga","x":"ABAST SERRA GERAL (NF 1413)","f":"Abastecedora Serra Geral","g":"Combustível","v":883.95,"p":"A confirmar","o":"Incluído pela NF – outubro ainda não tem lançamento de custos no PDF","dn":"2026-10-01","nf":"NF-e 1.413","dest":"Serra Geral Vertical Ltda","cf":"+ Incluída pela NF"}],"nfPag":1}],"nf":[{"pg":"1","m":"Jan","d":"2026-01-30","em":"Ivonete dos Santos de Macedo Ltda","doc":"NF-e 002","v":26.5,"dest":"ELEV8 Adventures Ltda","sit":"Incluída na planilha","o":"Parafusos, porcas e arruelas – não constava no caixa de janeiro"},{"pg":"2","m":"Fev","d":"2026-02-02","em":"Auto Elétrica e Mecânica Macedo Ltda","doc":"NFS-e 25","v":65.0,"dest":"ELEV8 Adventures Ltda","sit":"Conferida","o":"Conserto elétrico vidro – Uno MHE5B41"},{"pg":"29","m":"Abr","d":"2026-04-06","em":"Christian Pereira da Silva (MEI)","doc":"NFS-e 8","v":60.0,"dest":"ELEV8 Adventures Ltda","sit":"Conferida","o":"1 lavagem"},{"pg":"30","m":"Abr","d":"2026-04-23","em":"Jaboinski & Souza Ltda","doc":"NFS-e 25","v":300.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Cilindro de ignição e corte de chave (Uno)"},{"pg":"18","m":"Mai","d":"2026-05-14","em":"Supermercado Brentano Ltda","doc":"NF-e 2.388","v":44.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Mosquetão, óculos e escova de aço"},{"pg":"19","m":"Mai","d":"2026-05-20","em":"Jaboinski & Souza Ltda","doc":"NFS-e 30","v":550.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Cilindro de ignição e fechaduras"},{"pg":"20","m":"Mai","d":"2026-05-20","em":"Supermercado Brentano Ltda","doc":"NF-e 2.397","v":8.8,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Corda 4 mm (10 m)"},{"pg":"21","m":"Mai","d":"2026-05-21","em":"Christian Pereira da Silva (MEI)","doc":"NFS-e 11","v":180.0,"dest":"ELEV8 Adventures Ltda","sit":"Conferida","o":"3 lavagens"},{"pg":"22","m":"Mai","d":"2026-05-21","em":"Despachante (Praia Grande/SC)","doc":"NFS-e 795","v":390.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Alteração de dados – placa MHE5B41"},{"pg":"23","m":"Mai","d":"2026-05-21","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.097","v":19.8,"dest":"Serra Geral Vertical Ltda","sit":"Valor corrigido","o":"Caixa informava R$ 18,80; NF = R$ 19,80 (2 escovas de aço)"},{"pg":"24","m":"Mai","d":"2026-05-22","em":"Despachante (Praia Grande/SC)","doc":"NFS-e 796","v":790.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"IPVA R$ 400 + transferência R$ 390"},{"pg":"25","m":"Mai","d":"2026-05-22","em":"Despachante (Praia Grande/SC)","doc":"NFS-e 796 (2ª cópia)","v":790.0,"dest":"Serra Geral Vertical Ltda","sit":"Cópia duplicada (desconsiderada)","o":"Mesma NFS-e 796 – cópia marcada \"DUPLICADA\""},{"pg":"26","m":"Mai","d":"2026-05-22","em":"Supermercado Brentano Ltda","doc":"NF-e 2.404","v":13.2,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Corda 4 mm (15 m)"},{"pg":"27","m":"Mai","d":"2026-05-22","em":"Vistoria Veicular Praia Grande","doc":"NFS-e 2.502","v":240.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Vistoria Fiat Uno MJT1A30 (lançado como Despachante Casa Grande)"},{"pg":"28","m":"Mai","d":"2026-05-26","em":"Ivonete dos Santos de Macedo Ltda","doc":"NF-e 67.139.243","v":190.0,"dest":"ELEV8 Adventures Ltda","sit":"Conferida","o":"Óleo 15w40 + filtro – Uno MHE5B41"},{"pg":"10","m":"Jun","d":"2026-06-01","em":"Ivonete dos Santos de Macedo Ltda","doc":"NF-e 67.248.213","v":205.0,"dest":"ELEV8 Adventures Ltda","sit":"Conferida","o":"Óleo 5w30 + filtro – Uno MJT1A30"},{"pg":"11","m":"Jun","d":"2026-06-05","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.026","v":1612.44,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"236,4 L gasolina"},{"pg":"12","m":"Jun","d":"2026-06-08","em":"Ronaldo Oliveira Silvestre","doc":"NF-e 67.362.661","v":290.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"1 pneu 175/70/14 (lançado como \"Bochadinha Pneu\")"},{"pg":"13","m":"Jun","d":"2026-06-11","em":"I M Rodrigues da Silva Ltda","doc":"NF-e 12.608","v":153.8,"dest":"Pricila Feltrin Cordova (CPF)","sit":"Conferida","o":"2 macacões de trabalho – NF em nome de pessoa física"},{"pg":"14","m":"Jun","d":"2026-06-15","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.064","v":1081.04,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"158,5 L gasolina"},{"pg":"15","m":"Jun","d":"2026-06-16","em":"Alex Sartor Emerim","doc":"NF-e 2.112","v":33.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Luvas e pano multiuso"},{"pg":"16","m":"Jun","d":"2026-06-25","em":"Tomé e Ilíbio Ltda","doc":"Pedido de venda 170346","v":66.9,"dest":"Serra Geral Vertical Ltda","sit":"Documento de apoio","o":"Mesmo extensor da NF-e 4.159 – não somar de novo"},{"pg":"17","m":"Jun","d":"2026-06-25","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.159","v":66.9,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Extensor telescópio 3 m"},{"pg":"3","m":"Jul","d":"2026-07-03","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.176","v":21.36,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Pincel, chave allen, parafusos"},{"pg":"5","m":"Jul","d":"2026-07-03","em":"Canyon Gráfica Ltda","doc":"NF-e 722","v":250.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Adesivos – NF informa pagamento em dinheiro de R$ 230,00"},{"pg":"6","m":"Jul","d":"2026-07-03","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.129","v":1054.7,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"154,6 L gasolina"},{"pg":"4","m":"Jul","d":"2026-07-06","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.178","v":111.6,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"4 pastas lubrificantes"},{"pg":"32","m":"Jul","d":"2026-07-14","em":"Canyon Auto Peças Ltda","doc":"Pedido 118318","v":414.19,"dest":"Serra Geral Vertical Ltda","sit":"Documento de apoio","o":"Peças R$ 294,19 (NF-e 3.462) + mão de obra R$ 120 (na NFS-e 225)"},{"pg":"7","m":"Jul","d":"2026-07-15","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.200","v":23.6,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Luvas e óculos"},{"pg":"8","m":"Jul","d":"2026-07-15","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.196","v":290.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"2 botinas"},{"pg":"9","m":"Jul","d":"2026-07-16","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.160","v":1423.35,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"209,2 L gasolina"},{"pg":"31","m":"Jul","d":"2026-07-21","em":"Canyon Auto Peças Ltda","doc":"Pedido 118467","v":115.0,"dest":"Serra Geral Vertical Ltda","sit":"Documento de apoio","o":"Scanner + socorro R$ 115 – faturado na NFS-e 225"},{"pg":"33","m":"Jul","d":"2026-07-24","em":"Canyon Autopeças Ltda","doc":"NFS-e 225","v":235.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Mão de obra (R$ 120 + R$ 115 dos pedidos)"},{"pg":"34","m":"Jul","d":"2026-07-24","em":"Canyon Auto Peças Ltda","doc":"NF-e 3.462","v":294.19,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Cilindro mestre, fluido, lâmpada – MHE5B41"},{"pg":"43","m":"Jul","d":"2026-07-24","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.213","v":236.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Lonas e corda"},{"pg":"42","m":"Ago","d":"2026-07-27","em":"Robinson e Silva Ltda","doc":"NF-e 68.196.111","v":68.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"4 cargas de bombona 20 L – NF de julho lançada em agosto"},{"pg":"44","m":"Ago","d":"2026-08-02","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.229","v":1164.72,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"170,8 L gasolina"},{"pg":"40","m":"Ago","d":"2026-08-07","em":"Robinson e Silva Ltda","doc":"NF-e 68.401.976","v":67.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Bombona 20 L completa + carga"},{"pg":"41","m":"Ago","d":"2026-08-07","em":"Robinson e Silva Ltda","doc":"NF-e 68.401.976 (2ª cópia)","v":67.0,"dest":"Serra Geral Vertical Ltda","sit":"Cópia duplicada (desconsiderada)","o":"Mesma NF-e – digitalizada duas vezes"},{"pg":"45","m":"Ago","d":"2026-08-07","em":"Canyon Auto Peças Ltda","doc":"Pedido 118823 + NF-e peças","v":125.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"Pedido R$ 308,41 com desconto → R$ 295 pago em dinheiro (peças R$ 125)"},{"pg":"46","m":"Ago","d":"2026-08-07","em":"Canyon Autopeças Ltda","doc":"NFS-e 234","v":170.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"Mão de obra mecânica (soma com as peças = R$ 295)"},{"pg":"47","m":"Ago","d":"2026-08-07","em":"Magazine Luiza S/A","doc":"NF-e 41.411","v":877.5,"dest":"Fernanda Dias Silva Pinto (CPF)","sit":"Incluída na planilha","o":"Impressora multifuncional – NF em nome de pessoa física"},{"pg":"A2-8","m":"Ago","d":"2026-08-07","em":"Robinson e Silva Ltda","doc":"NF-e 68.401.976 (3ª cópia)","v":67.0,"dest":"Serra Geral Vertical Ltda","sit":"Cópia duplicada (desconsiderada)","o":"Mesma NF-e de agosto – já enviada duas vezes no 1º arquivo e já lançada"},{"pg":"38","m":"Ago","d":"2026-08-10","em":"Alexsandro Farias de Carvalho","doc":"NF-e 5.241","v":299.0,"dest":"Gabriel Livio Cardoso Kruger (CPF)","sit":"Conferida","o":"Cartão de memória 128 GB – NF em nome do coordenador"},{"pg":"39","m":"Ago","d":"2026-08-14","em":"Canyon Gráfica Ltda","doc":"NF-e 751","v":687.9,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"5.000 flyers"},{"pg":"37","m":"Ago","d":"2026-08-16","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.239","v":1231.08,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"180,5 L gasolina"},{"pg":"35","m":"Ago","d":"2026-08-25","em":"Sebastião Medeiros da Silva ME","doc":"NF-e (folhas 1 e 2)","v":77.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Parafusos allen + chave allen (pág. 35–36)"},{"pg":"56","m":"Ago","d":"2026-08-27","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.265","v":15.9,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Grampo p/ cabo de aço"},{"pg":"52","m":"Set","d":"2026-09-04","em":"Lauri R. da Silveira & Cia Ltda","doc":"NFC-e 362.467","v":42.89,"dest":"Consumidor não identificado","sit":"Conferida","o":"Prato descartável e chantilly – cartão débito final 0819"},{"pg":"49","m":"Set","d":"2026-09-05","em":"Deoclécio Bresolin","doc":"NFC-e 401.168","v":150.32,"dest":"Consumidor não identificado","sit":"Conferida","o":"Bebidas e carne – cartão débito final 0819"},{"pg":"50","m":"Set","d":"2026-09-05","em":"Deoclécio Bresolin","doc":"NFC-e 401.103","v":496.04,"dest":"Consumidor não identificado","sit":"Conferida","o":"Carnes, carvão, descartáveis – cartão débito final 0819"},{"pg":"51","m":"Set","d":"2026-09-05","em":"Lauri R. da Silveira & Cia Ltda","doc":"NFC-e 356.378","v":203.78,"dest":"Consumidor não identificado","sit":"Conferida","o":"Bebidas e limpeza – cartão débito final 0819"},{"pg":"53","m":"Set","d":"2026-09-05","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.331","v":975.54,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"143 L gasolina"},{"pg":"54","m":"Set","d":"2026-09-09","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.296","v":16.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"Corda 4 mm (20 m)"},{"pg":"55","m":"Set","d":"2026-09-09","em":"Souza Pneus Ltda","doc":"NF-e 62","v":540.0,"dest":"Serra Geral Vertical Ltda","sit":"Conferida","o":"2 pneus 175/70/13"},{"pg":"A2-6","m":"Set","d":"2026-09-09","em":"Souza Pneus Ltda","doc":"NF-e 62 (2ª cópia)","v":540.0,"dest":"Serra Geral Vertical Ltda","sit":"Cópia duplicada (desconsiderada)","o":"Mesma NF-e 62 já enviada no 1º arquivo (pág. 55) e já lançada em setembro"},{"pg":"A2-1","m":"Set","d":"2026-09-10","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.298","v":35.9,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"Limpa contato spray + 25 abraçadeiras"},{"pg":"A2-2","m":"Set","d":"2026-09-10","em":"Auto Elétrica e Mecânica Macedo Ltda","doc":"NF-e 828","v":36.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"Fita isolante, fita tecido e fio"},{"pg":"A2-3","m":"Set","d":"2026-09-10","em":"Auto Elétrica e Mecânica Macedo Ltda","doc":"NFS-e 191","v":125.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"Mão de obra – reparação elétrica de veículo"},{"pg":"A2-5","m":"Set","d":"2026-09-18","em":"Tomé e Ilíbio Ltda","doc":"NF-e 4.314","v":20.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"Luvas (malha e PU)"},{"pg":"A2-4","m":"Set","d":"2026-09-21","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.372","v":1078.03,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"158,1 L gasolina"},{"pg":"A2-7","m":"Set","d":"2026-09-22","em":"Canyon Gráfica Ltda","doc":"NF-e 779","v":380.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"2 placas em PVC 1,00 × 0,70"},{"pg":"A2-9","m":"Set","d":"2026-09-29","em":"Robinson e Silva Ltda","doc":"NF-e 69.264.352","v":68.0,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"4 cargas de bombona 20 L"},{"pg":"48","m":"Out","d":"2026-10-01","em":"Abastecedora de Combustível Serra Geral","doc":"NF-e 1.413","v":883.95,"dest":"Serra Geral Vertical Ltda","sit":"Incluída na planilha","o":"129,6 L gasolina – outubro"}],"abertura":135.0,"rev":"2.4+assiduidade-out+caixa-05-10+jan-corrigido"};
+</script>
+<script>
+'use strict';
+/* ===================== utilidades ===================== */
+const KEY = 'caixa-tirolesa-canions-2026';
+const LEGACY_KEY = 'caixa-tirolesa-canions-2026-v2.4';
+const REV = SEED.rev;          // revisão dos dados embutidos (controla a atualização)
+const LABEL = '2.4';           // revisão exibida da planilha
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const NUM = v => { const n = Number(v); return isFinite(n) ? n : 0; };
+const z = v => Math.abs(v) < 0.005;
+const BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
+const BRL0 = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+const nb = s => s.replace(/ /g, ' ');
+const brl = v => nb(BRL.format(z(v) ? 0 : v));
+const brl0 = v => nb(BRL0.format(z(v) ? 0 : v));
+const dash = v => (v == null || z(v)) ? '–' : brl(v);
+const dash0 = v => (v == null || z(v)) ? '–' : brl0(v);
+const pct = v => (v * 100).toFixed(1).replace('.', ',') + '%';
+const short = v => { const a = Math.abs(v); return a >= 1000 ? (v / 1000).toFixed(a % 1000 === 0 ? 0 : 1).replace('.', ',') + 'k' : String(Math.round(v)); };
+const DOW = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const dow = iso => DOW[new Date(iso + 'T12:00:00Z').getUTCDay()];
+const fdate = iso => iso ? iso.split('-').reverse().join('/') : '';
+const dnum = iso => +iso.slice(8, 10);
+const clone = o => JSON.parse(JSON.stringify(o));
+const sum = (a, f) => a.reduce((t, x) => t + NUM(f ? f(x) : x), 0);
+
+const TIPOS = ['Entrada','Sangria Gabriel','Sangria – outros','Ajuste de caixa (sobrou)','Ajuste de caixa (faltou)'];
+const CATS = ['Assiduidade','Custo / conta paga','Bonificação','Alimentação','DEV Brasil'];
+const CAT_COLOR = {'Assiduidade':'var(--green)','Custo / conta paga':'var(--orange)','Bonificação':'var(--purple)','Alimentação':'var(--teal)','DEV Brasil':'var(--red)'};
+const CAT_CHIP = {'Assiduidade':'ok','Custo / conta paga':'or','Bonificação':'pu','Alimentação':'te','DEV Brasil':'bad'};
+const PAGO = ['A confirmar','Coordenador','Caixa','Empresa'];
+const STATUS = ['Caixa aberto','Terça-feira (fechado)','Sem operação','Sem registro',''];
+const CONF = ['—','✔ Conferida com NF','+ Incluída pela NF','✎ Valor corrigido pela NF','Sem NF no arquivo','⚠ Sem NF – possível duplicidade','✖ Duplicado – excluído'];
+const MESNOME = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const EMPRESA = 'Serra Geral Vertical Ltda';
+
+/* ===================== estado ===================== */
+function readSaved() {
+  for (const k of [KEY, LEGACY_KEY]) {
+    try {
+      const r = localStorage.getItem(k);
+      if (r) { const o = JSON.parse(r); if (o && Array.isArray(o.meses) && o.meses.length >= 10 && Array.isArray(o.nf)) { if (!o.rev) o.rev = '2.4'; return o; } }
+    } catch (e) {}
+  }
+  return null;
+}
+function freshState() { const s = clone(SEED); s.edits = 0; return s; }
+function saveState() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const SAVED = readSaved();
+let S = SAVED || freshState();
+const UI = {tab:'dia', pagCat:'Todas', coordMes:null, coordPP:'Todos', custos:'grupo', nfMes:'Todos', nfSit:'Todas', nfQ:'', dest:'Todos'};
+const lastMes = () => { for (let i = S.meses.length - 1; i >= 0; i--) if (S.meses[i].dias.some(d => d.s === 'Caixa aberto') || S.meses[i].pag.length) return i; return 0; };
+let curMes = null;
+
+/* ===================== cálculos ===================== */
+let C;
+function compute() {
+  let carry = NUM(S.abertura);
+  const meses = [];
+  S.meses.forEach((m, mi) => {
+    const c = {m, mi, abertura:carry, dias:[], aberto:0, difDias:0};
+    const ent = {}, sai = {};
+    m.lanc.forEach(l => { ent[l.d] = (ent[l.d] || 0) + NUM(l.e); sai[l.d] = (sai[l.d] || 0) + NUM(l.s); });
+    let lastInf = null;
+    m.dias.forEach(d => {
+      const o = {d:d.d, s:d.s, f:d.f, ent:0, sai:0, abertura:null, calc:null, dif:null};
+      if (d.s === 'Caixa aberto') {
+        c.aberto++;
+        o.abertura = carry; o.ent = ent[d.d] || 0; o.sai = sai[d.d] || 0; o.calc = carry + o.ent - o.sai;
+        if (d.f != null) { o.dif = d.f - o.calc; lastInf = d.f; if (!z(o.dif)) c.difDias++; }
+        carry = d.f != null ? d.f : o.calc;
+      }
+      c.dias.push(o);
+    });
+    c.ent = sum(m.lanc, l => l.e);
+    c.sai = sum(m.lanc, l => l.s);
+    c.gab = sum(m.lanc.filter(l => l.t === 'Sangria Gabriel'), l => l.s);
+    c.outras = sum(m.lanc.filter(l => l.t === 'Sangria – outros'), l => l.s);
+    const cat = k => sum(m.pag.filter(p => p.c === k), p => p.v);
+    c.assid = cat('Assiduidade'); c.custos = cat('Custo / conta paga'); c.bonif = cat('Bonificação'); c.alim = cat('Alimentação'); c.dev = cat('DEV Brasil');
+    c.alimDev = c.alim + c.dev;
+    c.outros = c.bonif + c.alimDev;
+    c.fora = c.assid + c.custos + c.outros;
+    c.pCoord = sum(m.pag.filter(p => p.p === 'Coordenador'), p => p.v);
+    c.pConf = sum(m.pag.filter(p => p.p === 'A confirmar'), p => p.v);
+    c.pCx = sum(m.pag.filter(p => p.p === 'Caixa' || p.p === 'Empresa'), p => p.v);
+    c.fech = lastInf != null ? lastInf : carry;
+    c.fimCarry = carry;
+    c.confPDF = m.pdf == null ? 'sem' : (z(m.pdf - c.gab) ? 'ok' : 'warn');
+    c.difPDF = m.pdf == null ? null : c.gab - m.pdf;
+    c.saldoMes = c.pCoord + c.pConf - c.gab;
+    meses.push(c);
+  });
+  const T = {meses, abertura:meses[0].abertura, fech:meses[meses.length - 1].fech};
+  ['ent','gab','outras','assid','custos','bonif','alim','dev','alimDev','outros','fora','pCoord','pConf','pCx','aberto','difDias'].forEach(k => T[k] = sum(meses, c => c[k]));
+  let acc = 0, accS = 0;
+  meses.forEach(c => { acc += c.gab; c.gabAcum = acc; accS += c.saldoMes; c.saldoAcum = accS; });
+  T.alertas = meses.filter(c => c.confPDF === 'warn').length;
+  const pos = k => meses.filter(c => c[k] > 0.004);
+  T.mesesGab = pos('gab').length; T.mesesAssid = pos('assid').length; T.mesesCustos = pos('custos').length;
+  T.mediaGab = T.mesesGab ? T.gab / T.mesesGab : 0;
+  T.mediaAssid = T.mesesAssid ? T.assid / T.mesesAssid : 0;
+  T.mediaCustos = T.mesesCustos ? T.custos / T.mesesCustos : 0;
+  const mx = k => meses.reduce((b, c) => c[k] > b[k] ? c : b, meses[0]);
+  T.maxGab = mx('gab'); T.maxCustos = mx('custos');
+  T.saldoCenario = T.pCoord + T.pConf - T.gab;
+  T.saldoConfirmado = T.pCoord - T.gab;
+  // custos por grupo / fornecedor
+  const g = {}, f = {};
+  S.meses.forEach((m, mi) => m.pag.forEach((p, pi) => {
+    if ((p.c === 'Custo / conta paga' || p.c === 'Alimentação') && NUM(p.v) > 0) {
+      const gk = (p.g && p.g !== '—') ? p.g : 'A classificar';
+      const fk = p.f || p.x || 'Sem fornecedor';
+      (g[gk] = g[gk] || {n:gk, m:Array(10).fill(0), t:0, it:[]});
+      (f[fk] = f[fk] || {n:fk, m:Array(10).fill(0), t:0, it:[]});
+      [g[gk], f[fk]].forEach(o => { o.m[mi] += NUM(p.v); o.t += NUM(p.v); o.it.push([mi, pi]); });
+    }
+  }));
+  T.grupos = Object.values(g).sort((a, b) => b.t - a.t);
+  T.forns = Object.values(f).sort((a, b) => b.t - a.t);
+  T.custosTot = sum(T.grupos, x => x.t);
+  T.maiorGrupo = T.grupos[0] ? T.grupos[0].n : '–';
+  return T;
+}
+
+/* ===================== gráficos (SVG) ===================== */
+const COL = {sang:'var(--red)', ass:'var(--green)', cus:'var(--orange)', ent:'var(--blue)', fech:'var(--olive)', out:'var(--purple)'};
+function nice(max) {
+  if (max <= 0) return {max:1, step:.25};
+  const e = Math.pow(10, Math.floor(Math.log10(max))), f = max / e;
+  const nf = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10;
+  return {max:nf * e, step:nf * e / 4};
+}
+function tipAttr(t) { return ` data-tip="${esc(t)}"`; }
+function barChart({labels, series, stacked, h = 190, fmt = brl}) {
+  const W = 360, pl = 34, pr = 6, pt = 8, pb = 22, iw = W - pl - pr, ih = h - pt - pb, n = labels.length;
+  const tot = labels.map((_, i) => stacked ? sum(series, s => Math.max(0, s.data[i])) : Math.max(...series.map(s => s.data[i]), 0));
+  const mn = Math.min(0, ...series.flatMap(s => s.data));
+  const nz = nice(Math.max(...tot, 1));
+  const lo = mn < 0 ? -nice(-mn).max : 0, span = nz.max - lo;
+  const y = v => pt + ih - (v - lo) / span * ih;
+  let g = '';
+  for (let v = lo; v <= nz.max + 1e-6; v += nz.step) g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl - 4}" y="${y(v) + 3}" text-anchor="end">${short(v)}</text>`;
+  const gw = iw / n, k = stacked ? 1 : series.length, bw = Math.min(26, gw * .72 / k);
+  let bars = '';
+  labels.forEach((lb, i) => {
+    const cx = pl + gw * i + gw / 2;
+    if (stacked) {
+      let base = 0;
+      series.forEach(s => { const v = Math.max(0, s.data[i]); if (v > 0) { bars += `<rect x="${cx - bw / 2}" y="${y(base + v)}" width="${bw}" height="${Math.max(.5, y(base) - y(base + v))}" fill="${s.color}" rx="2"${tipAttr(lb + ' · ' + s.name + ': ' + fmt(s.data[i]))}/>`; base += v; } });
+    } else {
+      series.forEach((s, j) => { const v = s.data[i], x = cx - bw * k / 2 + j * bw; bars += `<rect x="${x}" y="${Math.min(y(v), y(0))}" width="${bw - 1}" height="${Math.max(.5, Math.abs(y(v) - y(0)))}" fill="${s.color}" rx="2"${tipAttr(lb + ' · ' + s.name + ': ' + fmt(v))}/>`; });
+    }
+    bars += `<text x="${cx}" y="${h - 7}" text-anchor="middle">${esc(lb)}</text>`;
+  });
+  return `<svg class="chart" viewBox="0 0 ${W} ${h}" role="img"><g class="grid">${g}</g>${bars}</svg>` + legend(series);
+}
+function lineChart({labels, series, h = 180, fmt = brl}) {
+  const W = 360, pl = 34, pr = 10, pt = 10, pb = 22, iw = W - pl - pr, ih = h - pt - pb, n = labels.length;
+  const all = series.flatMap(s => s.data), mn = Math.min(0, ...all);
+  const nz = nice(Math.max(...all, 1)), lo = mn < 0 ? -nice(-mn).max : 0, span = nz.max - lo;
+  const x = i => pl + (n === 1 ? iw / 2 : iw * i / (n - 1)), y = v => pt + ih - (v - lo) / span * ih;
+  let g = '';
+  for (let v = lo; v <= nz.max + 1e-6; v += nz.step) g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl - 4}" y="${y(v) + 3}" text-anchor="end">${short(v)}</text>`;
+  let out = '';
+  series.forEach((s, si) => {
+    const pts = s.data.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    if (si === 0) out += `<polygon points="${x(0)},${y(0)} ${pts} ${x(n - 1)},${y(0)}" fill="${s.color}" opacity=".12"/>`;
+    out += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
+    s.data.forEach((v, i) => out += `<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="var(--card)" stroke="${s.color}" stroke-width="2"${tipAttr(labels[i] + ' · ' + s.name + ': ' + fmt(v))}/>`);
+  });
+  labels.forEach((lb, i) => out += `<text x="${x(i)}" y="${h - 7}" text-anchor="middle">${esc(lb)}</text>`);
+  return `<svg class="chart" viewBox="0 0 ${W} ${h}" role="img"><g class="grid">${g}</g>${out}</svg>` + (series.length > 1 ? legend(series) : '');
+}
+function donut(items) {
+  const tot = sum(items, i => i.v), R = 38, Cc = 2 * Math.PI * R;
+  let off = 0, segs = '';
+  items.forEach(it => { const len = tot ? it.v / tot * Cc : 0; segs += `<circle cx="60" cy="60" r="${R}" fill="none" stroke="${it.color}" stroke-width="20" stroke-dasharray="${len} ${Cc - len}" stroke-dashoffset="${-off}" transform="rotate(-90 60 60)"${tipAttr(it.name + ': ' + brl(it.v) + ' (' + pct(tot ? it.v / tot : 0) + ')')}/>`; off += len; });
+  const lg = items.map(it => `<div class="kv" style="padding:6px 0"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${it.color};margin-right:7px"></i>${esc(it.name)}</span><b class="num">${brl0(it.v)} <small class="mut">${pct(tot ? it.v / tot : 0)}</small></b></div>`).join('');
+  return `<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><svg viewBox="0 0 120 120" style="width:140px;height:140px;flex:0 0 140px">${segs}<text x="60" y="57" text-anchor="middle" style="font-size:8px">Total</text><text x="60" y="70" text-anchor="middle" style="font-size:11px;font-weight:800;fill:var(--ink)">${short(tot)}</text></svg><div style="flex:1;min-width:190px">${lg}</div></div>`;
+}
+function hbars(items, color, dataAct) {
+  const mx = Math.max(...items.map(i => i.v), 1);
+  return items.map(i => `<${dataAct ? 'button' : 'div'} class="hbar"${dataAct ? ` data-act="${dataAct}" data-k="${esc(i.k || i.n)}"` : ''}><span class="nm">${esc(i.n)}</span><span class="vv num">${brl0(i.v)}</span><span class="tr"><i style="width:${(i.v / mx * 100).toFixed(1)}%;${color ? 'background:' + color : ''}"></i></span></${dataAct ? 'button' : 'div'}>`).join('');
+}
+function legend(series) { return `<div class="legend">${series.map(s => `<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('')}</div>`; }
+function comboChart(c) {
+  const W = 360, h = 200, pl = 34, pr = 34, pt = 8, pb = 22, iw = W - pl - pr, ih = h - pt - pb, n = c.dias.length;
+  const fs = c.dias.map(d => d.f).filter(v => v != null);
+  const nzL = nice(Math.max(...fs, 1)), nzR = nice(Math.max(...c.dias.map(d => d.ent), 1));
+  const yL = v => pt + ih - v / nzL.max * ih, yR = v => pt + ih - v / nzR.max * ih, gw = iw / n, xc = i => pl + gw * i + gw / 2;
+  let g = '';
+  for (let k = 0; k <= 4; k++) { const v = nzL.step * k, v2 = nzR.step * k; g += `<line x1="${pl}" x2="${W - pr}" y1="${yL(v)}" y2="${yL(v)}"/><text x="${pl - 4}" y="${yL(v) + 3}" text-anchor="end">${short(v)}</text><text x="${W - pr + 4}" y="${yR(v2) + 3}" fill="var(--orange)" style="fill:var(--orange)">${short(v2)}</text>`; }
+  let o = '', pts = [];
+  c.dias.forEach((d, i) => {
+    if (d.ent > 0) o += `<rect x="${xc(i) - gw * .35}" y="${yR(d.ent)}" width="${gw * .7}" height="${yR(0) - yR(d.ent)}" fill="var(--orange)" opacity=".8" rx="1.5"${tipAttr(dnum(d.d) + '/' + c.m.abr + ' · Entradas: ' + brl(d.ent))}/>`;
+    if (d.f != null) pts.push([xc(i), yL(d.f), d]);
+    if (i % 5 === 0 || i === n - 1) o += `<text x="${xc(i)}" y="${h - 7}" text-anchor="middle">${dnum(d.d)}</text>`;
+  });
+  if (pts.length > 1) o += `<polyline points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="none" stroke="var(--olive)" stroke-width="2.2" stroke-linejoin="round"/>`;
+  pts.forEach(p => o += `<circle cx="${p[0]}" cy="${p[1]}" r="3.2" fill="var(--olive)"${tipAttr(dnum(p[2].d) + '/' + c.m.abr + ' · Fechamento: ' + brl(p[2].f))}/>`);
+  return `<svg class="chart" viewBox="0 0 ${W} ${h}" role="img"><g class="grid">${g}</g>${o}</svg>` + legend([{name:'Fechamento informado (eixo esq.)', color:'var(--olive)'}, {name:'Entradas do dia (eixo dir.)', color:'var(--orange)'}]);
+}
+
+/* ===================== telas ===================== */
+const kpi = (l, v, s, cls, go) => `<${go ? 'button' : 'div'} class="kpi ${cls || ''}"${go ? ` data-act="go" data-go="${go}"` : ''}><div class="l">${l}</div><div class="v num">${v}</div>${s ? `<div class="s">${s}</div>` : ''}</${go ? 'button' : 'div'}>`;
+const MABR = () => S.meses.map(m => m.abr);
+
+function viewPainel(T) {
+  const k = [
+    kpi('Sangria · Gabriel', brl0(T.gab), 'recebido pelo coordenador', 'c-red', '#/resumo'),
+    kpi('Assiduidade', brl0(T.assid), 'funcionários', 'c-green', '#/coord'),
+    kpi('Custos e contas pagas', brl0(T.custos), 'pagos fora do caixa', 'c-orange', '#/custos'),
+    kpi('Entradas no caixa', brl0(T.ent), 'tirolesas e pacotes', 'c-blue', '#/resumo'),
+    kpi('Saldo atual do caixa', brl0(T.fech), 'fechamento de ' + S.meses[lastMes()].nome.toLowerCase(), 'c-olive', '#/mes/' + lastMes()),
+    kpi('Alertas de conferência', T.alertas + ' alerta(s)', 'sangria × total do PDF', 'c-amber', '#/resumo'),
+    kpi('Média mensal sangria', brl0(T.mediaGab), 'meses com sangria: ' + T.mesesGab, 'c-red', '#/resumo'),
+    kpi('Bonif. · Alim. · DEV', brl0(T.outros), 'fora do caixa', 'c-purple', '#/coord'),
+    kpi('Maior grupo de custo', esc(T.maiorGrupo), T.grupos[0] ? brl0(T.grupos[0].t) + ' · ' + pct(T.grupos[0].t / T.custosTot) : '', 'c-orange', '#/custos'),
+    kpi('Dias com caixa aberto', T.aberto, 'em ' + S.meses.filter(m => m.dias.some(d => d.s === 'Caixa aberto')).length + ' meses', 'c-brand', '#/resumo'),
+    kpi('Pagamentos "a confirmar"', brl0(T.pConf), 'definir quem pagou', 'c-amber', '#/coord'),
+    kpi('Saldo cenário coordenador', brl0(T.saldoCenario), T.saldoCenario >= 0 ? 'empresa deve ao coordenador' : 'sangrias superam pagamentos', T.saldoCenario >= 0 ? 'c-green' : 'c-red', '#/coord'),
+  ].join('');
+  const avisos = pontos(T);
+  const L = MABR();
+  let h = `<div class="grid g3">${k}</div>`;
+  h += `<h2 class="sec">Pontos de atenção <span class="sp"></span></h2>`;
+  h += avisos.length ? avisos.map(a => `<button class="alert ${a.bad ? 'bad' : ''}" data-act="go" data-go="${a.go}"><span class="ic">${a.bad ? '⛔' : '⚠️'}</span><span>${a.t}</span></button>`).join('') : `<div class="card empty">Nenhum ponto de atenção 🎉</div>`;
+  h += `<h2 class="sec">Gráficos</h2>`;
+  h += `<div class="card"><h3>Saídas por mês <small>· sangria, assiduidade e custos</small></h3>${barChart({labels:L, stacked:true, series:[{name:'Sangria Gabriel', color:COL.sang, data:T.meses.map(c => c.gab)}, {name:'Assiduidade', color:COL.ass, data:T.meses.map(c => c.assid)}, {name:'Custos e contas pagas', color:COL.cus, data:T.meses.map(c => c.custos)}]})}</div>`;
+  h += `<div class="card"><h3>Entradas × fechamento do caixa</h3>${barChart({labels:L, series:[{name:'Entradas no caixa', color:COL.ent, data:T.meses.map(c => c.ent)}, {name:'Fechamento', color:COL.fech, data:T.meses.map(c => c.fech)}]})}</div>`;
+  h += `<div class="card"><h3>Composição das saídas</h3>${donut([{name:'Sangria Gabriel', color:COL.sang, v:T.gab}, {name:'Assiduidade', color:COL.ass, v:T.assid}, {name:'Custos e contas pagas', color:COL.cus, v:T.custos}, {name:'Bonif./Alim./DEV', color:COL.out, v:T.outros}])}</div>`;
+  h += `<div class="card"><h3>Sangria Gabriel acumulada</h3>${lineChart({labels:L, series:[{name:'Acumulado', color:COL.sang, data:T.meses.map(c => c.gabAcum)}]})}</div>`;
+  h += `<div class="card"><h3>Custos por grupo <small>· toque para detalhar</small></h3>${hbars(T.grupos.slice(0, 8).map(g => ({n:g.n, v:g.t})), '', 'drill-g')}<button class="btn sm" data-act="go" data-go="#/custos" style="margin-top:2px">Ver todos →</button></div>`;
+  h += `<div class="card"><h3>Maiores fornecedores</h3>${hbars(T.forns.slice(0, 8).map(g => ({n:g.n, v:g.t})), 'var(--brand2)', 'drill-f')}<button class="btn sm" data-act="go" data-go="#/custos" style="margin-top:2px">Ver todos →</button></div>`;
+  h += `<div class="card"><h3>Dias com caixa aberto por mês</h3>${barChart({labels:L, h:160, fmt:v => v + ' dias', series:[{name:'Dias', color:COL.fech, data:T.meses.map(c => c.aberto)}]})}</div>`;
+  return h;
+}
+function pontos(T) {
+  const a = [];
+  T.meses.forEach((c, i) => {
+    if (c.confPDF === 'warn') a.push({t:`<b>${c.m.nome}</b>: sangria lançada ${brl(c.gab)} ≠ total no PDF ${brl(c.m.pdf)} (diferença ${brl(c.difPDF)}).`, go:`#/mes/${i}?tab=conf`, bad:true});
+    if (c.difDias) a.push({t:`<b>${c.m.nome}</b>: ${c.difDias} dia(s) com diferença no fechamento.`, go:`#/mes/${i}?tab=dia`});
+    const nx = T.meses[i + 1];
+    if (nx && c.dias.some(d => d.s === 'Caixa aberto') && !z(c.fech - nx.abertura)) a.push({t:`<b>${c.m.nome}</b>: último fechamento informado ${brl(c.fech)} ≠ abertura de ${nx.m.nome.toLowerCase()} ${brl(nx.abertura)}.`, go:`#/mes/${i}?tab=dia`});
+    c.m.pag.forEach(p => { if (p.cf && p.cf.indexOf('⚠') === 0) a.push({t:`<b>${c.m.nome}</b>: ${esc(p.f || p.x)} ${dash(p.v)} — ${esc(p.cf.replace('⚠ ', ''))}.`, go:`#/mes/${i}?tab=pag`}); });
+  });
+  const semDest = S.nf.filter(n => n.dest && n.dest.indexOf('Serra Geral Vertical') < 0 && !/(Cópia|apoio)/.test(n.sit));
+  if (semDest.length) a.push({t:`<b>${semDest.length} nota(s) fiscal(is)</b> emitida(s) para outro destinatário (outra empresa ou pessoa física).`, go:'#/nf?dest=Outros'});
+  return a;
+}
+
+/* ---- mês ---- */
+function viewMes(T, mi) {
+  const c = T.meses[mi], m = c.m;
+  const chips = `<div class="chips">${S.meses.map((x, i) => `<button class="pill ${i === mi ? 'on' : ''}" data-act="mon" data-m="${i}">${x.abr}</button>`).join('')}</div>`;
+  const k = `<div class="grid g4">
+    ${kpi('Abertura do mês', brl0(c.abertura), '', 'c-olive')}
+    ${kpi('Entradas no caixa', brl0(c.ent), '', 'c-blue')}
+    ${kpi('Fechamento do mês', brl0(c.fech), '', 'c-olive')}
+    ${kpi('Sangria · Gabriel', dash0(c.gab), '', 'c-red')}
+    ${kpi('Assiduidade', dash0(c.assid), '', 'c-green')}
+    ${kpi('Custos e contas pagas', dash0(c.custos), '', 'c-orange')}
+    ${kpi('Outros', dash0(c.outros + c.outras), 'bonif. · alim. · DEV · outras sangrias', 'c-purple')}
+    ${kpi('Dias com caixa aberto', c.aberto, c.difDias ? c.difDias + ' dia(s) c/ diferença' : 'sem diferenças', 'c-brand')}
+  </div>`;
+  const nfLink = m.nfPag ? `<a class="card row tap" style="text-decoration:none;color:inherit;margin-top:12px" href="Notas_Fiscais/NF_2026-${String(mi + 1).padStart(2, '0')}_${m.nome}.pdf" target="_blank" rel="noopener"><span style="font-size:22px">📎</span><span class="main"><span class="t">Notas fiscais · ${m.nome}</span><span class="d">${m.nfPag} pág. · abrir PDF (pasta Notas_Fiscais junto do arquivo)</span></span><span class="mut">›</span></a>` : '';
+  const seg = `<div class="seg" style="margin-top:12px">${[['dia','Diário'],['lanc','Lançamentos'],['pag','Fora do caixa'],['conf','Conferência']].map(([t, l]) => `<button class="${UI.tab === t ? 'on' : ''}" data-act="tab" data-t="${t}">${l}</button>`).join('')}</div>`;
+  let body = '';
+  if (UI.tab === 'dia') body = tabDia(c);
+  else if (UI.tab === 'lanc') body = tabLanc(c);
+  else if (UI.tab === 'pag') body = tabPag(c);
+  else body = tabConf(c);
+  return chips + k + nfLink + seg + body;
+}
+const ST_CHIP = {'Caixa aberto':'ok', 'Terça-feira (fechado)':'', 'Sem operação':'am', 'Sem registro':'bad', '':''};
+function tabDia(c) {
+  let h = `<div class="card"><h3>Fechamento × entradas do dia</h3>${comboChart(c)}</div>`;
+  h += `<h2 class="sec">Resumo diário do caixa</h2><div class="list">`;
+  c.dias.forEach((d, i) => {
+    const op = d.s === 'Caixa aberto';
+    const apr = dow(d.d) === 'Seg' ? `<span class="apr" role="button" tabindex="0" aria-label="Assinar APR" data-act="apr" data-d="${d.d}">!</span>` : '';
+    h += `<button class="row day ${op ? '' : 'off'}" data-act="day" data-i="${i}"><span class="dd"><b>${dnum(d.d)}</b><small>${dow(d.d)}</small>${apr}</span><span class="main"><span class="chip ${ST_CHIP[d.s]}">${esc(d.s || 'a lançar')}</span>${op ? `<span class="d">Abertura ${brl(d.abertura)}${d.ent ? ` · <span style="color:var(--blue)">+${brl(d.ent)}</span>` : ''}${d.sai ? ` · <span class="neg">−${brl(d.sai)}</span>` : ''}</span>` : ''}</span>${op ? `<span class="amt num">${d.f != null ? brl(d.f) : '<span class="mut">' + brl(d.calc) + '</span>'}<small>${d.f != null ? 'fechamento' : 'calculado'}${d.dif != null && !z(d.dif) ? ` · <span class="${d.dif < 0 ? 'neg' : 'warn'}">dif. ${brl(d.dif)}</span>` : ''}</small></span>` : ''}</button>`;
+  });
+  h += `</div><div class="note noprint" style="padding:0 4px">Toque em um dia para ver detalhes, informar o fechamento, mudar o status ou lançar movimentos.</div>`;
+  return h;
+}
+const TIPO_COL = {'Entrada':'var(--blue)', 'Sangria Gabriel':'var(--red)', 'Sangria – outros':'var(--red2)', 'Ajuste de caixa':'var(--gray)'};
+function tabLanc(c) {
+  const m = c.m, items = m.lanc.map((l, i) => [l, i]).sort((a, b) => a[0].d.localeCompare(b[0].d));
+  let h = `<div class="grid"><div class="kpi c-blue"><div class="l">Entradas</div><div class="v num">${brl(c.ent)}</div></div><div class="kpi c-red"><div class="l">Saídas (sangrias)</div><div class="v num">${brl(c.sai)}</div></div></div><div style="height:12px"></div>`;
+  if (!items.length) return h + `<div class="card empty">Nenhum lançamento neste mês.<br>Toque em <b>+</b> para adicionar.</div>`;
+  h += `<div class="list">` + items.map(([l, i]) => {
+    const v = NUM(l.e) || NUM(l.s), ent = NUM(l.e) > 0;
+    return `<button class="row" data-act="lanc" data-i="${i}"><span class="bullet" style="background:${TIPO_COL[l.t] || 'var(--gray)'}"></span><span class="main"><span class="t">${esc(l.x || l.t)}</span><span class="d">${fdate(l.d)} · ${dow(l.d)} · ${esc(l.t)}${l.o ? ' · ' + esc(l.o) : ''}</span></span><span class="amt num ${ent ? '' : 'neg'}" style="${ent ? 'color:var(--blue)' : ''}">${ent ? '+' : '−'}${brl(v)}</span></button>`;
+  }).join('') + `</div>`;
+  return h;
+}
+function nfInfo(p) {
+  const bits = [];
+  if (p.nf) bits.push(esc(p.nf) + (p.dn ? ' · ' + fdate(p.dn) : ''));
+  return bits.join('');
+}
+function confChip(cf) {
+  if (!cf || cf === '—') return '';
+  const cls = cf.indexOf('✔') === 0 ? 'ok' : cf.indexOf('+') === 0 ? 'bl' : cf.indexOf('⚠') === 0 ? 'bad' : cf.indexOf('✖') === 0 ? 'bad' : cf.indexOf('✎') === 0 ? 'am' : 'am';
+  return `<span class="chip ${cls}">${esc(cf)}</span>`;
+}
+function ppSelect(mi, i, v) {
+  const cls = v === 'A confirmar' ? 's-conf' : v === 'Coordenador' ? 's-coord' : 's-emp';
+  return `<select class="sel-inline ${cls}" data-pp="1" data-m="${mi}" data-i="${i}" aria-label="Pago por">${PAGO.map(o => `<option${o === v ? ' selected' : ''}>${o}</option>`).join('')}</select>`;
+}
+function rowPag(mi, i, p, showMes) {
+  const excl = p.v == null;
+  return `<div class="row tap" data-act="pag" data-m="${mi}" data-i="${i}" style="align-items:flex-start;flex-wrap:wrap"><span class="bullet" style="background:${CAT_COLOR[p.c] || 'var(--gray)'}"></span><span class="main"><span class="t">${esc(p.f || p.x)}</span><span class="d">${showMes ? '<b>' + S.meses[mi].abr + '</b> · ' : ''}${esc(p.c)}${p.g && p.g !== '—' ? ' · ' + esc(p.g) : ''}</span><span class="d">${esc(p.x && p.f && p.x !== p.f ? p.x : '')}${nfInfo(p) ? ' · ' + nfInfo(p) : ''}</span><span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px">${confChip(p.cf)}</span></span><span class="amt num">${excl ? '<span class="mut">excluído</span>' : brl(p.v)}<small>${ppSelect(mi, i, p.p)}</small></span></div>`;
+}
+function tabPag(c) {
+  const m = c.m, mi = c.mi;
+  const cats = ['Todas', ...CATS];
+  let h = `<div class="grid"><div class="kpi c-orange"><div class="l">Total fora do caixa</div><div class="v num">${brl(c.fora)}</div><div class="s">${m.pag.filter(p => p.v != null).length} lançamentos</div></div><div class="kpi c-amber"><div class="l">A confirmar</div><div class="v num">${brl(c.pConf)}</div><div class="s">coordenador: ${brl(c.pCoord)}</div></div></div>`;
+  h += `<div class="chips" style="margin-top:12px">${cats.map(k => `<button class="pill ${UI.pagCat === k ? 'on' : ''}" data-act="pcat" data-k="${esc(k)}">${esc(k === 'Custo / conta paga' ? 'Custos' : k)}</button>`).join('')}</div>`;
+  const items = m.pag.map((p, i) => [p, i]).filter(([p]) => UI.pagCat === 'Todas' || p.c === UI.pagCat);
+  if (!items.length) return h + `<div class="card empty">Nenhum pagamento nesta categoria.<br>Toque em <b>+</b> para adicionar.</div>`;
+  h += `<div class="list">` + items.map(([p, i]) => rowPag(mi, i, p)).join('') + `</div>`;
+  return h;
+}
+function tabConf(c) {
+  const m = c.m, mi = c.mi;
+  const st = c.confPDF === 'ok' ? '<span class="chip ok">✔ Confere</span>' : c.confPDF === 'warn' ? '<span class="chip bad">⚠ Verificar</span>' : '<span class="chip">Sem total no PDF</span>';
+  let h = `<div class="card"><h3>Subtotais e conferência com o PDF</h3>
+    <div class="kv"><span>Sangria · Gabriel (lançamentos)</span><b class="num neg">${dash(c.gab)}</b></div>
+    <div class="kv"><span>Sangria · total informado no PDF</span><b class="num"><button class="btn sm" data-act="pdf">${m.pdf == null ? 'informar' : brl(m.pdf) + ' ✎'}</button></b></div>
+    <div class="kv"><span>Diferença (lançamentos − PDF)</span><b class="num">${c.difPDF == null ? '–' : dash(c.difPDF)}</b></div>
+    <div class="kv"><span>Status da conferência</span><b>${st}</b></div>
+    <div class="kv"><span>Assiduidade</span><b class="num" style="color:var(--green)">${dash(c.assid)}</b></div>
+    <div class="kv"><span>Custos e contas pagas</span><b class="num" style="color:var(--orange)">${dash(c.custos)}</b></div>
+    <div class="kv"><span>Bonificação</span><b class="num">${dash(c.bonif)}</b></div>
+    <div class="kv"><span>Alimentação</span><b class="num">${dash(c.alim)}</b></div>
+    <div class="kv"><span>DEV Brasil</span><b class="num">${dash(c.dev)}</b></div>
+    <div class="kv"><span>Outras sangrias</span><b class="num">${dash(c.outras)}</b></div>
+    <div class="kv"><span>Pago pelo coordenador (confirmado)</span><b class="num">${dash(c.pCoord)}</b></div>
+    <div class="kv"><span>Pagamentos "a confirmar"</span><b class="num warn">${dash(c.pConf)}</b></div>
+    <div class="kv"><span>Pago pelo caixa / empresa</span><b class="num">${dash(c.pCx)}</b></div>
+    <div class="kv"><span><b>TOTAL FORA DO CAIXA</b></span><b class="num">${dash(c.fora)}</b></div>
+    <div class="kv"><span>Dias com caixa aberto</span><b>${c.aberto}</b></div>
+    <div class="kv"><span>Dias com diferença no fechamento</span><b>${c.difDias}</b></div>
+  </div>`;
+  h += `<div class="card"><h3>Total do mês</h3><div class="kv"><span>Entradas</span><b class="num" style="color:var(--blue)">${brl(c.ent)}</b></div><div class="kv"><span>Saídas (sangrias)</span><b class="num neg">${brl(c.sai)}</b></div></div>`;
+  h += `<h2 class="sec">Observações da revisão <span class="sp"></span><button data-act="obs-add">+ Adicionar</button></h2>`;
+  h += m.obs.length ? `<div class="list">${m.obs.map((o, i) => `<div class="row" style="align-items:flex-start"><span class="main" style="font-size:13.5px">• ${esc(o)}</span><button class="ibtn" style="width:34px;height:34px;color:var(--muted);font-size:15px" data-act="obs-del" data-i="${i}" aria-label="Remover">✕</button></div>`).join('')}</div>` : `<div class="card empty">Sem observações.</div>`;
+  return h;
+}
+
+/* ---- resumo anual ---- */
+function viewResumo(T) {
+  const hd = ['Mês','Abertura','Entradas no caixa','Sangria Gabriel','Outras sangrias','Fechamento','Assiduidade','Custos e contas pagas','Bonificação','Alimen- tação + DEV','Total fora do caixa','Sangria Gabriel acumulada','Dias caixa aberto','Dias c/ dif. no fechamento','Conferência sangria (PDF)'];
+  const confTxt = c => c.confPDF === 'ok' ? '✔ Confere' : c.confPDF === 'warn' ? '⚠ Verificar' : 'Sem total no PDF';
+  const rows = T.meses.map((c, i) => `<tr class="tap" data-act="go" data-go="#/mes/${i}"><td>${c.m.nome}</td><td>${dash(c.abertura)}</td><td>${dash(c.ent)}</td><td class="r">${dash(c.gab)}</td><td>${dash(c.outras)}</td><td>${dash(c.fech)}</td><td class="g">${dash(c.assid)}</td><td class="o">${dash(c.custos)}</td><td>${dash(c.bonif)}</td><td>${dash(c.alimDev)}</td><td><b>${dash(c.fora)}</b></td><td>${dash(c.gabAcum)}</td><td>${c.aberto}</td><td>${c.difDias}</td><td>${confTxt(c)}</td></tr>`).join('');
+  const tot = `<tr class="tot"><td>TOTAL 2026</td><td>${dash(T.abertura)}</td><td>${dash(T.ent)}</td><td>${dash(T.gab)}</td><td>${dash(T.outras)}</td><td>${dash(T.fech)}</td><td>${dash(T.assid)}</td><td>${dash(T.custos)}</td><td>${dash(T.bonif)}</td><td>${dash(T.alimDev)}</td><td>${dash(T.fora)}</td><td>${dash(T.gab)}</td><td>${T.aberto}</td><td>${T.difDias}</td><td>${T.alertas} alerta(s)</td></tr>`;
+  let h = `<h2 class="sec" style="margin-top:6px">Movimento mensal</h2><div class="tw"><table><thead><tr>${hd.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows}${tot}</tbody></table></div>`;
+  h += `<div class="note" style="padding:0 4px 8px">Abertura total = abertura de janeiro; fechamento total = fechamento do último mês (saldo atual do caixa). Deslize a tabela para o lado; toque em um mês para abrir.</div>`;
+  h += `<h2 class="sec">Indicadores</h2><div class="card">
+    <div class="kv"><span>Média mensal de sangria (Gabriel)</span><b class="num">${brl(T.mediaGab)}</b></div>
+    <div class="kv"><span>Maior sangria mensal</span><b class="num">${brl(T.maxGab.gab)}</b></div>
+    <div class="kv"><span>Mês com maior sangria</span><b>${T.maxGab.m.nome}</b></div>
+    <div class="kv"><span>Média mensal de assiduidade</span><b class="num">${brl(T.mediaAssid)}</b></div>
+    <div class="kv"><span>Média mensal de custos</span><b class="num">${brl(T.mediaCustos)}</b></div>
+    <div class="kv"><span>Mês com maior custo</span><b>${T.maxCustos.m.nome}</b></div>
+    <div class="kv"><span>Sangria ÷ entradas no caixa</span><b class="num">${T.ent ? pct(T.gab / T.ent) : '–'}</b></div>
+    <div class="kv"><span>Custos + assiduidade ÷ sangria</span><b class="num">${T.gab ? pct((T.custos + T.assid) / T.gab) : '–'}</b></div>
+  </div>`;
+  h += `<div class="card"><h3>Sangria × entradas por mês</h3>${barChart({labels:MABR(), series:[{name:'Entradas', color:COL.ent, data:T.meses.map(c => c.ent)}, {name:'Sangria Gabriel', color:COL.sang, data:T.meses.map(c => c.gab)}]})}</div>`;
+  return h;
+}
+
+/* ---- conta do coordenador ---- */
+function viewCoord(T) {
+  if (UI.coordMes == null) UI.coordMes = lastMes();
+  const k = `<div class="grid g3">
+    ${kpi('Sangrias recebidas', brl0(T.gab), '', 'c-red')}
+    ${kpi('Pagamentos fora do caixa', brl0(T.fora), 'assiduidade, custos, bonif., alim., DEV', 'c-orange')}
+    ${kpi('Pago pelo coordenador (confirmado)', dash0(T.pCoord), '', 'c-green')}
+    ${kpi('Ainda "a confirmar"', brl0(T.pConf), '', 'c-amber')}
+    ${kpi('Saldo cenário (pagamentos − sangrias)', brl0(T.saldoCenario), T.saldoCenario >= 0 ? 'empresa deve ao coordenador' : 'sangrias superam os pagamentos', T.saldoCenario >= 0 ? 'c-green' : 'c-red')}
+    ${kpi('Saldo confirmado', brl0(T.saldoConfirmado), 'só o que está como "Coordenador"', 'c-brand')}
+  </div>`;
+  const hd = ['Mês','Sangrias recebidas','Assiduidade','Custos e contas pagas','Outros (bonif./alim./DEV)','Pago pelo coordenador','A confirmar','Pago caixa / empresa','Saldo cenário (mês)','Saldo cenário (acumulado)','Pagamentos fora do caixa'];
+  const rw = T.meses.map((c, i) => `<tr class="tap" data-act="go" data-go="#/mes/${i}?tab=pag"><td>${c.m.nome}</td><td class="r">${dash(c.gab)}</td><td class="g">${dash(c.assid)}</td><td class="o">${dash(c.custos)}</td><td>${dash(c.outros)}</td><td>${dash(c.pCoord)}</td><td>${dash(c.pConf)}</td><td>${dash(c.pCx)}</td><td class="${c.saldoMes < -0.004 ? 'r' : 'g'}">${dash(c.saldoMes)}</td><td class="${c.saldoAcum < -0.004 ? 'r' : 'g'}">${dash(c.saldoAcum)}</td><td>${dash(c.fora)}</td></tr>`).join('');
+  const tt = `<tr class="tot"><td>TOTAL</td><td>${dash(T.gab)}</td><td>${dash(T.assid)}</td><td>${dash(T.custos)}</td><td>${dash(T.outros)}</td><td>${dash(T.pCoord)}</td><td>${dash(T.pConf)}</td><td>${dash(T.pCx)}</td><td>${dash(T.saldoCenario)}</td><td>${dash(T.saldoCenario)}</td><td>${dash(T.fora)}</td></tr>`;
+  let h = k + `<h2 class="sec">Evolução mensal</h2><div class="tw"><table><thead><tr>${hd.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rw}${tt}</tbody></table></div>`;
+  h += `<div class="card"><h3>Sangrias recebidas × pagamentos fora do caixa</h3>${barChart({labels:MABR(), series:[{name:'Sangrias recebidas', color:COL.sang, data:T.meses.map(c => c.gab)}, {name:'Pagamentos fora do caixa', color:COL.cus, data:T.meses.map(c => c.fora)}]})}</div>`;
+  h += `<div class="card"><h3>Saldo cenário acumulado</h3>${lineChart({labels:MABR(), series:[{name:'Saldo cenário', color:COL.fech, data:T.meses.map(c => c.saldoAcum)}]})}</div>`;
+  // marcar quem pagou
+  h += `<h2 class="sec">Marcar quem pagou <span class="sp"></span><button data-act="bulk">Marcar em lote</button></h2>`;
+  h += `<div class="chips">${S.meses.map((m, i) => `<button class="pill ${i === UI.coordMes ? 'on' : ''}" data-act="cmes" data-m="${i}">${m.abr}</button>`).join('')}</div>`;
+  h += `<div class="chips">${['Todos', ...PAGO].map(k => `<button class="pill ${UI.coordPP === k ? 'on' : ''}" data-act="cpp" data-k="${k}">${k}</button>`).join('')}</div>`;
+  const items = S.meses[UI.coordMes].pag.map((p, i) => [p, i]).filter(([p]) => p.v != null && (UI.coordPP === 'Todos' || p.p === UI.coordPP));
+  h += items.length ? `<div class="list">${items.map(([p, i]) => rowPag(UI.coordMes, i, p)).join('')}</div>` : `<div class="card empty">Nenhum pagamento com este filtro.</div>`;
+  h += `<h2 class="sec">Como ler esta aba</h2><div class="card"><ul class="note">
+    <li><b>Sangrias</b> (vermelho) = dinheiro retirado do caixa e entregue ao coordenador Gabriel.</li>
+    <li><b>Pagamentos fora do caixa</b> = assiduidade (verde), custos e contas pagas (laranja), bonificação, alimentação e DEV — não passaram pelo caixa diário.</li>
+    <li><b>Pago por</b>: marque em cada pagamento quem pagou (Coordenador, Caixa ou Empresa). Enquanto estiver "A confirmar", o valor não entra como dívida confirmada.</li>
+    <li><b>Saldo cenário</b> = (pagamentos feitos pelo coordenador + a confirmar) − sangrias recebidas, supondo que o coordenador usou as sangrias para pagar essas despesas. Positivo = empresa deve ao coordenador; negativo = as sangrias superam os pagamentos registrados. Pagamentos marcados como "Caixa" ou "Empresa" saem do cenário.</li>
+    <li>Esta aba é preliminar: será conciliada com a planilha anterior à revisão 2.0.</li></ul></div>`;
+  return h;
+}
+
+/* ---- custos ---- */
+function viewCustos(T) {
+  const g = UI.custos === 'grupo', list = g ? T.grupos : T.forns, tot = T.custosTot;
+  let h = `<div class="seg"><button class="${g ? 'on' : ''}" data-act="cmode" data-k="grupo">Por grupo</button><button class="${!g ? 'on' : ''}" data-act="cmode" data-k="forn">Por fornecedor</button></div>`;
+  h += `<div class="card"><h3>${g ? 'Custos por grupo' : 'Maiores fornecedores'} <small>· total ${brl(tot)}</small></h3>${hbars(list.slice(0, 10).map(x => ({n:x.n, v:x.t})), g ? '' : 'var(--brand2)', g ? 'drill-g' : 'drill-f')}</div>`;
+  h += `<h2 class="sec" style="margin-top:6px">${g ? 'Por grupo de custo' : 'Por fornecedor (ordenado pelo total)'}</h2><div class="tw"><table><thead><tr><th>${g ? 'Grupo' : 'Fornecedor'}</th>${MABR().map(a => `<th>${a}</th>`).join('')}<th>Total</th><th>%</th></tr></thead><tbody>` +
+    list.map(x => `<tr class="tap" data-act="${g ? 'drill-g' : 'drill-f'}" data-k="${esc(x.n)}"><td style="white-space:normal;min-width:150px">${esc(x.n)}</td>${x.m.map(v => `<td>${dash0(v)}</td>`).join('')}<td><b>${brl(x.t)}</b></td><td>${tot ? pct(x.t / tot) : '–'}</td></tr>`).join('') +
+    `<tr class="tot"><td>TOTAL</td>${T.meses.map((c, i) => `<td>${dash0(sum(list, x => x.m[i]))}</td>`).join('')}<td>${brl(tot)}</td><td>100%</td></tr></tbody></table></div>`;
+  h += `<div class="note" style="padding:0 4px">Somente lançamentos da categoria "Custo / conta paga" e "Alimentação". A classificação é editável no campo "Grupo de custo" de cada pagamento. Toque em uma linha para ver os lançamentos.</div>`;
+  return h;
+}
+function drill(kind, key) {
+  const T = C, o = (kind === 'g' ? T.grupos : T.forns).find(x => x.n === key);
+  if (!o) return;
+  const body = `<div class="list" style="box-shadow:none;border:1px solid var(--line)">${o.it.map(([mi, pi]) => { const p = S.meses[mi].pag[pi]; return `<div class="row"><span class="bullet" style="background:var(--orange)"></span><span class="main"><span class="t">${esc(p.f || p.x)}</span><span class="d">${S.meses[mi].nome} · ${esc(p.x)}${p.nf ? ' · ' + esc(p.nf) : ''}</span></span><span class="amt num">${brl(p.v)}</span></div>`; }).join('')}</div><div class="kv" style="margin-top:6px"><span><b>Total</b></span><b class="num">${brl(o.t)}</b></div>`;
+  openSheet({title:key, body, saveLabel:'Fechar', noCancel:true, onSave:() => true});
+}
+
+/* ---- notas fiscais ---- */
+function viewNF(T) {
+  const validas = S.nf.filter(n => !/(Cópia|apoio)/.test(n.sit));
+  const kk = `<div class="grid g4">
+    ${kpi('Páginas conferidas', sum(S.meses, m => m.nfPag), '2 arquivos de notas', 'c-brand')}
+    ${kpi('Notas válidas lançadas', validas.length, brl0(sum(validas, n => n.v)), 'c-green')}
+    ${kpi('Notas incluídas (faltavam)', S.nf.filter(n => n.sit === 'Incluída na planilha').length, 'não constavam no caixa', 'c-blue')}
+    ${kpi('Cópias / apoio (não somados)', S.nf.filter(n => /(Cópia|apoio)/.test(n.sit)).length, '', 'c-amber')}
+    ${kpi('Lançamentos duplicados excluídos', S.meses.reduce((t, m) => t + m.pag.filter(p => (p.cf || '').indexOf('✖') === 0).length, 0), '', 'c-red')}
+  </div>`;
+  let h = kk + `<h2 class="sec">Notas fiscais por mês</h2><div class="list">`;
+  S.meses.forEach((m, i) => {
+    if (!m.nfPag && !S.nf.some(n => n.m === m.abr)) return;
+    const val = sum(S.nf.filter(n => n.m === m.abr && !/(Cópia|apoio)/.test(n.sit)), n => n.v);
+    h += `<a class="row tap" style="text-decoration:none;color:inherit" href="Notas_Fiscais/NF_2026-${String(i + 1).padStart(2, '0')}_${m.nome}.pdf" target="_blank" rel="noopener"><span style="font-size:20px">📎</span><span class="main"><span class="t">${m.nome}</span><span class="d">${m.nfPag} página(s) · NF_2026-${String(i + 1).padStart(2, '0')}_${m.nome}.pdf</span></span><span class="amt num">${brl(val)}<small>valor das notas válidas</small></span></a>`;
+  });
+  h += `</div><h2 class="sec">Índice completo dos documentos</h2>`;
+  h += `<div class="search"><input type="search" id="nfq" placeholder="Buscar emitente, documento, observação…" value="${esc(UI.nfQ)}"></div>`;
+  h += `<div class="chips">${['Todos', ...S.meses.map(m => m.abr).filter(a => S.nf.some(n => n.m === a))].map(k => `<button class="pill ${UI.nfMes === k ? 'on' : ''}" data-act="nmes" data-k="${k}">${k}</button>`).join('')}</div>`;
+  const sits = ['Todas', ...new Set(S.nf.map(n => n.sit))];
+  h += `<div class="chips">${sits.map(k => `<button class="pill ${UI.nfSit === k ? 'on' : ''}" data-act="nsit" data-k="${esc(k)}">${esc(k)}</button>`).join('')}</div>`;
+  h += `<div class="chips">${['Todos', 'Serra Geral Vertical', 'Outros'].map(k => `<button class="pill ${UI.dest === k ? 'on' : ''}" data-act="ndest" data-k="${k}">${k === 'Outros' ? 'Outro destinatário' : k === 'Todos' ? 'Todos destinatários' : k}</button>`).join('')}</div>`;
+  h += `<div id="nflist">${nfList()}</div>`;
+  h += `<div class="note" style="padding:0 4px">Destinatário em vermelho = NF emitida para outra empresa (ELEV8 Adventures) ou pessoa física, e não para a Serra Geral Vertical.</div>`;
+  return h;
+}
+function nfList() {
+  const q = UI.nfQ.trim().toLowerCase();
+  const it = S.nf.filter(n => (UI.nfMes === 'Todos' || n.m === UI.nfMes) && (UI.nfSit === 'Todas' || n.sit === UI.nfSit) &&
+    (UI.dest === 'Todos' || (UI.dest === 'Outros' ? n.dest.indexOf('Serra Geral Vertical') < 0 : n.dest.indexOf('Serra Geral Vertical') >= 0)) &&
+    (!q || [n.em, n.doc, n.o, n.dest, n.sit].join(' ').toLowerCase().includes(q)));
+  if (!it.length) return `<div class="card empty">Nenhuma nota encontrada.</div>`;
+  return `<div class="list">` + it.map(n => {
+    const cls = /(Cópia)/.test(n.sit) ? 'bad' : /apoio/.test(n.sit) ? 'am' : n.sit === 'Conferida' ? 'ok' : n.sit.indexOf('Incluída') === 0 ? 'bl' : 'am';
+    const outro = n.dest.indexOf('Serra Geral Vertical') < 0;
+    return `<div class="row" style="align-items:flex-start"><span class="main"><span class="t">${esc(n.em)}</span><span class="d">${esc(n.doc)} · ${fdate(n.d)} · pág. ${esc(n.pg)} · ${n.m}</span><span class="d" style="${outro ? 'color:var(--red)' : ''}">Dest.: ${esc(n.dest)}</span><span class="d">${esc(n.o)}</span><span style="margin-top:5px;display:block"><span class="chip ${cls}">${esc(n.sit)}</span></span></span><span class="amt num">${brl(n.v)}</span></div>`;
+  }).join('') + `</div><div class="note" style="padding:0 4px 8px">${it.length} documento(s) · soma ${brl(sum(it, n => n.v))}</div>`;
+}
+
+/* ===================== sheets (janelas) ===================== */
+let sheetEl = null, scrimEl = null, sheetCfg = null;
+function openSheet(cfg) {
+  closeSheet(true);
+  sheetCfg = cfg;
+  scrimEl = document.createElement('div'); scrimEl.className = 'scrim';
+  sheetEl = document.createElement('div'); sheetEl.className = 'sheet'; sheetEl.setAttribute('role', 'dialog');
+  sheetEl.innerHTML = `<header><h3>${esc(cfg.title)}</h3><button class="ibtn" data-sx="close" aria-label="Fechar">✕</button></header><div class="body">${cfg.body}</div>${cfg.noFooter ? '' : `<footer>${cfg.onDelete ? '<button class="btn dng" data-sx="del">Excluir</button>' : ''}${cfg.noCancel ? '' : '<button class="btn" data-sx="close">Cancelar</button>'}<button class="btn pri" data-sx="save">${cfg.saveLabel || 'Salvar'}</button></footer>`}`;
+  $('#layer').append(scrimEl, sheetEl);
+  requestAnimationFrame(() => { scrimEl.classList.add('on'); sheetEl.classList.add('on'); });
+  if (cfg.onOpen) cfg.onOpen(sheetEl);
+}
+function closeSheet(instant) {
+  if (!sheetEl) return;
+  const s = sheetEl, sc = scrimEl; sheetEl = scrimEl = null; sheetCfg = null;
+  if (instant) { s.remove(); sc.remove(); return; }
+  s.classList.remove('on'); sc.classList.remove('on'); setTimeout(() => { s.remove(); sc.remove(); }, 260);
+}
+const fld = (label, name, val, o = {}) => {
+  const t = o.type || 'text';
+  let inner;
+  if (t === 'select') inner = `<select name="${name}">${o.opts.map(x => `<option value="${esc(x)}"${x === val ? ' selected' : ''}>${esc(x === '' ? '(a lançar)' : x)}</option>`).join('')}</select>`;
+  else if (t === 'textarea') inner = `<textarea name="${name}">${esc(val)}</textarea>`;
+  else inner = `<input name="${name}" type="${t}" value="${esc(val)}"${o.attrs ? ' ' + o.attrs : ''}${o.list ? ` list="${o.list}"` : ''} autocomplete="off">`;
+  return `<div class="f"><label>${label}</label>${inner}</div>`;
+};
+const val = n => { const e = $('[name="' + n + '"]', sheetEl); return e ? e.value : ''; };
+const numIn = n => { const s = val(n).trim().replace(',', '.'); return s === '' ? null : Number(s); };
+
+function commit(msg) { S.edits = (S.edits || 0) + 1; saveState(); render(true); if (msg) toast(msg); }
+
+const APR_HTML = `<div class="alert" style="margin:0;cursor:default"><span class="ic">❗</span><span><b>ASSINAR APR</b><br>(ANÁLISE PRELIMINAR DE RISCOS)</span></div>`;
+function sheetAPR(iso) {
+  openSheet({title:`Segunda-feira · ${fdate(iso).slice(0, 5)}`, body:APR_HTML, noCancel:true, saveLabel:'Entendi', onSave:() => true});
+}
+function sheetDia(mi, i) {
+  const c = C.meses[mi], d = c.dias[i], m = c.m, raw = m.dias[i];
+  const movs = m.lanc.map((l, li) => [l, li]).filter(([l]) => l.d === d.d);
+  const op = d.s === 'Caixa aberto';
+  const body = (dow(d.d) === 'Seg' ? APR_HTML + '<div style="height:10px"></div>' : '') + `<div class="card" style="box-shadow:none;border:1px solid var(--line)">
+    <div class="kv"><span>Abertura</span><b class="num">${op ? brl(d.abertura) : '–'}</b></div>
+    <div class="kv"><span>Entradas</span><b class="num" style="color:var(--blue)">${dash(d.ent)}</b></div>
+    <div class="kv"><span>Saídas (sangrias)</span><b class="num neg">${dash(d.sai)}</b></div>
+    <div class="kv"><span>Fechamento calculado</span><b class="num">${op ? brl(d.calc) : '–'}</b></div>
+    <div class="kv"><span>Diferença</span><b class="num ${d.dif != null && !z(d.dif) ? 'warn' : ''}">${d.dif == null ? '–' : dash(d.dif)}</b></div></div>
+    ${fld('Status', 'st', raw.s, {type:'select', opts:STATUS})}
+    ${fld('Fechamento informado (R$)', 'fi', raw.f == null ? '' : raw.f, {type:'number', attrs:'step="0.01" inputmode="decimal" placeholder="deixe vazio se não informado"'})}
+    <h2 class="sec" style="margin:14px 0 6px">Lançamentos do dia <span class="sp"></span><button data-sx="addl">+ Lançar</button></h2>
+    ${movs.length ? `<div class="list" style="box-shadow:none;border:1px solid var(--line)">${movs.map(([l, li]) => `<button class="row" data-sx="editl" data-i="${li}"><span class="bullet" style="background:${TIPO_COL[l.t] || 'var(--gray)'}"></span><span class="main"><span class="t">${esc(l.x || l.t)}</span><span class="d">${esc(l.t)}</span></span><span class="amt num ${NUM(l.e) ? '' : 'neg'}">${NUM(l.e) ? '+' + brl(l.e) : '−' + brl(l.s)}</span></button>`).join('')}</div>` : '<div class="note">Sem lançamentos neste dia.</div>'}`;
+  openSheet({title:`${String(dnum(d.d)).padStart(2, '0')}/${String(mi + 1).padStart(2, '0')} · ${dow(d.d)}`, body,
+    onSave() { raw.s = val('st'); const f = numIn('fi'); raw.f = (f == null || isNaN(f)) ? null : f; commit('Dia atualizado'); return true; },
+    onOpen(el) {
+      el.addEventListener('click', e => {
+        const b = e.target.closest('[data-sx]'); if (!b) return;
+        if (b.dataset.sx === 'addl') { sheetLanc(mi, null, d.d); }
+        if (b.dataset.sx === 'editl') { sheetLanc(mi, +b.dataset.i); }
+      });
+    }});
+}
+function sheetLanc(mi, idx, date) {
+  const m = S.meses[mi], l = idx == null ? null : m.lanc[idx];
+  let tipo = 'Entrada', v = '';
+  if (l) { tipo = l.t === 'Ajuste de caixa' ? (NUM(l.s) > 0 ? 'Ajuste de caixa (faltou)' : 'Ajuste de caixa (sobrou)') : l.t; v = NUM(l.e) || NUM(l.s); }
+  const mm = String(mi + 1).padStart(2, '0'), first = `2026-${mm}-01`, last = m.dias.length ? m.dias[m.dias.length - 1].d : `2026-${mm}-28`;
+  const body = fld('Data', 'd', l ? l.d : (date || first), {type:'date', attrs:`min="${first}" max="${last}"`}) +
+    fld('Tipo', 't', tipo, {type:'select', opts:TIPOS}) +
+    fld('Descrição', 'x', l ? l.x : '', {attrs:'placeholder="ex.: 2 tirolesas / sangria para Gabriel"'}) +
+    fld('Valor (R$)', 'v', v, {type:'number', attrs:'step="0.01" min="0" inputmode="decimal"'}) +
+    fld('Observação', 'o', l ? l.o : '', {type:'textarea'});
+  openSheet({title:l ? 'Editar lançamento' : 'Novo lançamento', body,
+    onDelete:l ? () => { if (confirm('Excluir este lançamento?')) { m.lanc.splice(idx, 1); commit('Lançamento excluído'); return true; } return false; } : null,
+    onSave() {
+      const d = val('d'), valor = numIn('v');
+      if (!d || d.slice(0, 7) !== `2026-${mm}`) { alert('Informe uma data dentro de ' + m.nome + '.'); return false; }
+      if (valor == null || isNaN(valor) || valor <= 0) { alert('Informe um valor maior que zero.'); return false; }
+      const t = val('t'), entry = t === 'Entrada' || t === 'Ajuste de caixa (sobrou)';
+      const o = {d, t:t.indexOf('Ajuste') === 0 ? 'Ajuste de caixa' : t, x:val('x').trim(), e:entry ? valor : 0, s:entry ? 0 : valor, o:val('o').trim()};
+      if (l) m.lanc[idx] = o; else m.lanc.push(o);
+      const dia = m.dias.find(x => x.d === d);
+      let extra = '';
+      if (dia && dia.s !== 'Caixa aberto') { dia.s = 'Caixa aberto'; extra = ' (dia marcado como caixa aberto)'; }
+      commit('Lançamento salvo' + extra); return true;
+    }});
+}
+function sheetPag(mi, idx) {
+  const m = S.meses[mi], p = idx == null ? null : m.pag[idx];
+  const grupos = [...new Set(S.meses.flatMap(x => x.pag.map(y => y.g)).filter(Boolean).concat(['—', 'A classificar']))];
+  const forns = [...new Set(S.meses.flatMap(x => x.pag.map(y => y.f)).filter(Boolean))].sort();
+  const body = fld('Categoria', 'c', p ? p.c : 'Custo / conta paga', {type:'select', opts:CATS}) +
+    fld('Descrição', 'x', p ? p.x : '') +
+    fld('Fornecedor (padronizado)', 'f', p ? p.f : '', {list:'dl-forn'}) + `<datalist id="dl-forn">${forns.map(x => `<option value="${esc(x)}">`).join('')}</datalist>` +
+    `<div class="f2">${fld('Grupo de custo', 'g', p ? (p.g || '—') : '—', {type:'select', opts:grupos.includes(p && p.g) || !p ? grupos : [...grupos, p.g]})}${fld('Valor (R$)', 'v', p && p.v != null ? p.v : '', {type:'number', attrs:'step="0.01" min="0" inputmode="decimal"'})}</div>` +
+    fld('Pago por', 'p', p ? p.p : 'A confirmar', {type:'select', opts:PAGO}) +
+    fld('Observação', 'o', p ? p.o : '', {type:'textarea'}) +
+    `<h2 class="sec" style="margin:6px 0">Nota fiscal</h2><div class="f2">${fld('Data da NF', 'dn', p ? p.dn || '' : '', {type:'date'})}${fld('Nº da NF', 'nf', p ? p.nf : '')}</div>` +
+    fld('Destinatário da NF', 'dest', p ? p.dest : '') +
+    fld('Conferência NF', 'cf', p ? (p.cf || '—') : '—', {type:'select', opts:p && p.cf && !CONF.includes(p.cf) ? [...CONF, p.cf] : CONF});
+  openSheet({title:p ? 'Editar pagamento' : 'Novo pagamento fora do caixa', body,
+    onDelete:p ? () => { if (confirm('Excluir este pagamento?')) { m.pag.splice(idx, 1); commit('Pagamento excluído'); return true; } return false; } : null,
+    onSave() {
+      const v = numIn('v');
+      const cf = val('cf');
+      if ((v == null || isNaN(v)) && cf.indexOf('✖') !== 0) { alert('Informe o valor (ou marque a conferência como "Duplicado – excluído").'); return false; }
+      const o = {c:val('c'), x:val('x').trim(), f:val('f').trim(), g:val('g'), v:(v == null || isNaN(v)) ? null : v, p:val('p'), o:val('o').trim(), dn:val('dn') || null, nf:val('nf').trim(), dest:val('dest').trim(), cf};
+      if (!o.x && !o.f) { alert('Informe uma descrição ou fornecedor.'); return false; }
+      if (p) m.pag[idx] = o; else m.pag.push(o);
+      commit('Pagamento salvo'); return true;
+    }});
+}
+function sheetText(title, label, ph, onOk) {
+  openSheet({title, body:fld(label, 'tx', '', {type:'textarea', attrs:`placeholder="${ph}"`}), onSave() { const t = val('tx').trim(); if (!t) return false; onOk(t); return true; }});
+}
+function sheetPDF(mi) {
+  const m = S.meses[mi];
+  openSheet({title:'Total de sangria no PDF · ' + m.nome, body:fld('Total informado no PDF (R$)', 'v', m.pdf == null ? '' : m.pdf, {type:'number', attrs:'step="0.01" inputmode="decimal" placeholder="deixe vazio se o PDF não traz total"'}),
+    onSave() { const v = numIn('v'); m.pdf = (v == null || isNaN(v)) ? null : v; commit('Conferência atualizada'); return true; }});
+}
+function sheetBulk() {
+  const mi = UI.coordMes, m = S.meses[mi];
+  const body = `<div class="note" style="margin-bottom:10px">Aplica a todos os pagamentos de <b>${m.nome}</b> que estão visíveis no filtro atual (${UI.coordPP}).</div>` + fld('Marcar como pago por', 'p', 'Coordenador', {type:'select', opts:PAGO});
+  openSheet({title:'Marcar em lote · ' + m.nome, body, saveLabel:'Aplicar', onSave() {
+    const to = val('p'); let n = 0;
+    m.pag.forEach(p => { if (p.v != null && (UI.coordPP === 'Todos' || p.p === UI.coordPP)) { p.p = to; n++; } });
+    if (!n) { alert('Nenhum pagamento no filtro atual.'); return false; }
+    commit(n + ' pagamento(s) marcados como "' + to + '"'); return true;
+  }});
+}
+
+/* ===================== menu / backup / exportação ===================== */
+function download(name, mime, content) {
+  const blob = new Blob([content], {type:mime}), url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+const csvCell = v => { const s = v == null ? '' : String(v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+const csvNum = v => v == null ? '' : String(v).replace('.', ',');
+function exportCSV(kind) {
+  let rows;
+  if (kind === 'lanc') {
+    rows = [['Mês','Data','Tipo','Descrição','Entrada','Saída','Observação']];
+    S.meses.forEach(m => m.lanc.forEach(l => rows.push([m.nome, fdate(l.d), l.t, l.x, csvNum(l.e || ''), csvNum(l.s || ''), l.o])));
+  } else {
+    rows = [['Mês','Categoria','Descrição','Fornecedor','Grupo de custo','Valor','Pago por','Observação','Data NF','Nº NF','Destinatário NF','Conferência NF']];
+    S.meses.forEach(m => m.pag.forEach(p => rows.push([m.nome, p.c, p.x, p.f, p.g, csvNum(p.v), p.p, p.o, fdate(p.dn), p.nf, p.dest, p.cf])));
+  }
+  download(kind === 'lanc' ? 'caixa-2026-lancamentos.csv' : 'caixa-2026-pagamentos.csv', 'text/csv;charset=utf-8', '﻿' + rows.map(r => r.map(csvCell).join(';')).join('\r\n'));
+  toast('CSV gerado');
+}
+function exportJSON() {
+  download('caixa-tirolesa-2026-backup-' + new Date().toISOString().slice(0, 10) + '.json', 'application/json', JSON.stringify(S));
+  toast('Backup baixado');
+}
+function importJSON(file) {
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const o = JSON.parse(r.result);
+      if (!o || !Array.isArray(o.meses) || o.meses.length < 10 || !Array.isArray(o.nf)) throw 0;
+      if (!confirm('Substituir os dados atuais pelo backup selecionado?')) return;
+      S = o; commit('Backup restaurado');
+    } catch (e) { alert('Arquivo inválido. Escolha um backup .json gerado por este aplicativo.'); }
+  };
+  r.readAsText(file);
+}
+function getTheme() { try { return localStorage.getItem(KEY + ':theme') || 'auto'; } catch (e) { return 'auto'; } }
+function applyTheme(t) {
+  const r = document.documentElement;
+  if (t === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', t);
+  const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  $('meta[name=theme-color]').content = dark ? '#1f4a2b' : '#2f5d3a';
+}
+function sheetMenu() {
+  const th = getTheme();
+  const body = `<div class="menu">
+    <button class="mi" data-m="json"><span class="e">💾</span><span>Salvar backup (.json)<small>todas as alterações feitas neste aparelho</small></span></button>
+    <button class="mi" data-m="import"><span class="e">📂</span><span>Restaurar backup<small>importar um arquivo .json</small></span></button>
+    <button class="mi" data-m="csvl"><span class="e">📄</span><span>Exportar lançamentos do caixa (CSV)<small>abre no Excel / Planilhas</small></span></button>
+    <button class="mi" data-m="csvp"><span class="e">🧾</span><span>Exportar pagamentos fora do caixa (CSV)</span></button>
+    <button class="mi" data-m="print"><span class="e">🖨️</span><span>Imprimir / salvar como PDF<small>da tela atual</small></span></button>
+    <button class="mi" data-m="theme"><span class="e">🌓</span><span>Tema: ${th === 'auto' ? 'automático' : th === 'dark' ? 'escuro' : 'claro'}<small>toque para alternar</small></span></button>
+    <button class="mi" data-m="install"><span class="e">📲</span><span>Instalar no celular<small>adicionar à tela inicial</small></span></button>
+    ${S.rev !== REV ? `<button class="mi" data-m="upgrade"><span class="e">🆕</span><span>Atualizar dados<small>inclui o caixa de 04 e 05/10 · baixa um backup dos seus dados atuais antes</small></span></button>` : ''}
+    <button class="mi" data-m="reset"><span class="e">♻️</span><span style="color:var(--red)">Restaurar dados originais<small>descarta as alterações (${S.edits || 0} salvas)</small></span></button>
+  </div><div class="foot">Controle de Caixa · Revisão ${LABEL} · dados até 05/10/2026<br>As alterações ficam salvas apenas neste aparelho.</div>`;
+  openSheet({title:'Menu', body, noFooter:true, onOpen(el) {
+    el.addEventListener('click', e => {
+      const b = e.target.closest('[data-m]'); if (!b) return;
+      const a = b.dataset.m;
+      if (a === 'theme') { const n = {auto:'light', light:'dark', dark:'auto'}[getTheme()]; try { localStorage.setItem(KEY + ':theme', n); } catch (x) {} applyTheme(n); closeSheet(); toast('Tema: ' + {auto:'automático', light:'claro', dark:'escuro'}[n]); return; }
+      closeSheet();
+      if (a === 'json') exportJSON();
+      if (a === 'import') $('#fileIn').click();
+      if (a === 'csvl') exportCSV('lanc');
+      if (a === 'csvp') exportCSV('pag');
+      if (a === 'print') setTimeout(() => window.print(), 300);
+      if (a === 'upgrade') setTimeout(() => upgradeData(true), 280);
+      if (a === 'install') setTimeout(sheetInstall, 280);
+      if (a === 'reset') setTimeout(() => { if (confirm('Descartar todas as alterações e voltar aos dados originais da planilha (revisão ' + LABEL + ')?')) { S = freshState(); try { localStorage.removeItem(KEY); localStorage.removeItem(LEGACY_KEY); } catch (x) {} render(true); toast('Dados originais restaurados'); } }, 280);
+    });
+  }});
+}
+let deferredPrompt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
+function sheetInstall() {
+  if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; return; }
+  openSheet({title:'Instalar como aplicativo', noCancel:true, saveLabel:'Entendi', onSave:() => true, body:`<div class="note" style="font-size:14px">
+    <p><b>Android (Chrome):</b> toque em ⋮ → <i>Instalar app</i> ou <i>Adicionar à tela inicial</i>.</p><br>
+    <p><b>iPhone (Safari):</b> toque em <i>Compartilhar</i> → <i>Adicionar à Tela de Início</i>.</p><br>
+    <p>Depois de instalado, abre em tela cheia, como um aplicativo. Funciona sem internet e guarda as alterações no próprio aparelho — use <b>Menu → Salvar backup</b> de vez em quando.</p><br>
+    <p>Para abrir os PDFs das notas fiscais, mantenha a pasta <b>Notas_Fiscais</b> junto deste arquivo.</p></div>`});
+}
+
+/* ===================== roteamento / render ===================== */
+const NAV = [
+  ['#/painel','Painel','<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'],
+  ['#/mes','Meses','<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
+  ['#/resumo','Resumo','<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>'],
+  ['#/coord','Coord.','<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>'],
+  ['#/custos','Custos','<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="8" cy="8" r="1.4"/>'],
+  ['#/nf','Notas','<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h7M9 17h7"/>'],
+];
+$('#nav').innerHTML = NAV.map(([h, l, p]) => `<a href="${h}" data-r="${h}"><svg viewBox="0 0 24 24">${p}</svg>${l}</a>`).join('');
+function parseRoute() {
+  const raw = (location.hash || '#/painel').replace(/^#\/?/, ''), [path, q] = raw.split('?'), seg = path.split('/');
+  const qs = new URLSearchParams(q || '');
+  return {name:seg[0] || 'painel', arg:seg[1], qs};
+}
+function setHash(h) { if (location.hash === h) onRoute(); else location.hash = h; }
+function onRoute() {
+  const r = parseRoute();
+  if (r.name === 'mes') { curMes = Math.min(9, Math.max(0, parseInt(r.arg, 10) || 0)); const t = r.qs.get('tab'); if (t) UI.tab = t; }
+  if (r.name === 'nf' && r.qs.get('dest')) UI.dest = r.qs.get('dest');
+  render(false, true);
+}
+function render(keepScroll, fromRoute) {
+  const y = keepScroll ? scrollY : 0;
+  C = compute();
+  const r = parseRoute(), view = $('#view');
+  let h = '', ttl = '', sub = '', fab = false;
+  switch (r.name) {
+    case 'mes': {
+      if (curMes == null) curMes = lastMes();
+      const mi = curMes; h = viewMes(C, mi); ttl = S.meses[mi].nome + ' 2026'; sub = 'Movimento do caixa';
+      fab = UI.tab === 'lanc' || UI.tab === 'pag'; break;
+    }
+    case 'resumo': h = viewResumo(C); ttl = 'Resumo anual 2026'; sub = 'Consolidação mensal automática'; break;
+    case 'coord': h = viewCoord(C); ttl = 'Conta do coordenador'; sub = 'Gabriel · sangrias × pagamentos fora do caixa'; break;
+    case 'custos': h = viewCustos(C); ttl = 'Custos por fornecedor'; sub = 'Por grupo e fornecedor'; break;
+    case 'nf': h = viewNF(C); ttl = 'Notas fiscais'; sub = 'Conferência documento por documento'; break;
+    default: h = viewPainel(C); ttl = 'Painel de caixa 2026'; sub = 'Tirolesa dos Cânions · Serra Geral Vertical';
+  }
+  view.innerHTML = h + `<div class="foot">Revisão ${LABEL} (conferido com notas fiscais) · Janeiro a Outubro/2026 · dados até 05/10${S.edits ? ' · ' + S.edits + ' alteração(ões) neste aparelho' : ''}</div>`;
+  $('#ttl').firstChild.nodeValue = ttl; $('#sub').textContent = sub;
+  $('#fab').classList.toggle('hide', !fab);
+  const key = r.name === 'resumo' || r.name === 'coord' || r.name === 'custos' || r.name === 'nf' ? '#/' + r.name : r.name === 'mes' ? '#/mes' : '#/painel';
+  $$('#nav a').forEach(a => {
+    a.classList.toggle('on', a.dataset.r === key);
+    if (a.dataset.r === '#/mes') a.href = '#/mes/' + (curMes == null ? lastMes() : curMes);
+  });
+  hideTip();
+  scrollTo(0, keepScroll ? y : 0);
+  $$('.chips .pill.on').forEach(e => { const p = e.parentElement, a = e.getBoundingClientRect(), b = p.getBoundingClientRect(); p.scrollLeft += a.left - b.left - (b.width - a.width) / 2; });
+}
+
+/* ===================== eventos ===================== */
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 2400); }
+const tip = $('#tip');
+function showTip(el, x, y) {
+  tip.textContent = el.getAttribute('data-tip'); tip.classList.add('on');
+  const w = tip.offsetWidth; tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)) + 'px'; tip.style.top = Math.max(8, y - 44) + 'px';
+}
+function hideTip() { tip.classList.remove('on'); }
+
+document.addEventListener('click', e => {
+  const t = e.target;
+  const sx = t.closest('[data-tip]');
+  if (sx) { showTip(sx, e.clientX, e.clientY); clearTimeout(showTip.t); showTip.t = setTimeout(hideTip, 3000); return; } else hideTip();
+  if (t.closest('select')) return;
+  if (t.closest('.scrim')) { closeSheet(); return; }
+  const sb = t.closest('[data-sx]');
+  if (sb && sheetEl && sheetEl.contains(sb)) {
+    const a = sb.dataset.sx;
+    if (a === 'close') closeSheet();
+    else if (a === 'save' && sheetCfg) { if (sheetCfg.onSave() !== false) closeSheet(); }
+    else if (a === 'del' && sheetCfg) { if (sheetCfg.onDelete() !== false) closeSheet(); }
+    return;
+  }
+  if (t.closest('.sheet')) return;
+  const a = t.closest('[data-act]'); if (!a) return;
+  const d = a.dataset, act = d.act;
+  const mi = curMes == null ? lastMes() : curMes;
+  switch (act) {
+    case 'go': setHash(d.go); break;
+    case 'mon': setHash('#/mes/' + d.m); break;
+    case 'tab': UI.tab = d.t; render(true); break;
+    case 'day': sheetDia(mi, +d.i); break;
+    case 'apr': sheetAPR(d.d); break;
+    case 'lanc': sheetLanc(mi, +d.i); break;
+    case 'pag': sheetPag(+(d.m != null ? d.m : mi), +d.i); break;
+    case 'pcat': UI.pagCat = d.k; render(true); break;
+    case 'pdf': sheetPDF(mi); break;
+    case 'obs-add': sheetText('Nova observação', 'Observação', 'ex.: 05/01: abertura não fecha com o fechamento informado', t2 => { S.meses[mi].obs.push(t2); commit('Observação adicionada'); }); break;
+    case 'obs-del': if (confirm('Remover esta observação?')) { S.meses[mi].obs.splice(+d.i, 1); commit('Observação removida'); } break;
+    case 'cmes': UI.coordMes = +d.m; render(true); break;
+    case 'cpp': UI.coordPP = d.k; render(true); break;
+    case 'bulk': sheetBulk(); break;
+    case 'cmode': UI.custos = d.k; render(true); break;
+    case 'drill-g': drill('g', d.k); break;
+    case 'drill-f': drill('f', d.k); break;
+    case 'nmes': UI.nfMes = d.k; render(true); break;
+    case 'nsit': UI.nfSit = d.k; render(true); break;
+    case 'ndest': UI.dest = d.k; render(true); break;
+  }
+});
+document.addEventListener('change', e => {
+  const s = e.target.closest('select[data-pp]');
+  if (s) { const p = S.meses[+s.dataset.m].pag[+s.dataset.i]; p.p = s.value; commit('Pago por: ' + s.value); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'nfq') { UI.nfQ = e.target.value; $('#nflist').innerHTML = nfList(); }
+});
+$('#fab').addEventListener('click', () => { const mi = curMes == null ? lastMes() : curMes; if (UI.tab === 'lanc') sheetLanc(mi, null); else sheetPag(mi, null); });
+$('#btnMenu').addEventListener('click', sheetMenu);
+$('#fileIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importJSON(f); });
+addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+addEventListener('hashchange', onRoute);
+addEventListener('scroll', hideTip, {passive:true});
+
+function upgradeData(manual) {
+  if (S.edits > 0) {
+    const msg = manual ? `Atualizar os dados (inclui o caixa de 04 e 05/10)? Um backup (.json) dos seus dados atuais será baixado antes.`
+      : `Há dados novos (caixa de 04 e 05/10). Você tem ${S.edits} alteração(ões) salvas neste aparelho.\n\nOK = baixar um backup delas e carregar os dados atualizados.\nCancelar = continuar com seus dados atuais (dá para atualizar depois pelo Menu).`;
+    if (!confirm(msg)) return;
+    exportJSON();
+  }
+  S = freshState(); saveState(); render(false); toast('Dados atualizados');
+}
+
+/* ===================== PWA (manifesto e ícone gerados no próprio arquivo) ===================== */
+function setupPWA() {
+  try {
+    const mk = n => {
+      const c = document.createElement('canvas'); c.width = c.height = n; const g = c.getContext('2d'), k = n / 64;
+      g.fillStyle = '#2f5d3a'; g.beginPath(); g.roundRect ? g.roundRect(0, 0, n, n, 14 * k) : g.rect(0, 0, n, n); g.fill();
+      g.strokeStyle = '#fff'; g.lineCap = 'round'; g.lineWidth = 4 * k; g.beginPath(); g.moveTo(8 * k, 20 * k); g.lineTo(56 * k, 36 * k); g.stroke();
+      g.fillStyle = '#f2a33a'; g.beginPath(); g.arc(34 * k, 28.5 * k, 6 * k, 0, 7); g.fill();
+      g.lineWidth = 3 * k; g.strokeStyle = '#fff'; g.beginPath(); g.moveTo(34 * k, 34 * k); g.lineTo(34 * k, 44 * k); g.stroke();
+      return c.toDataURL('image/png');
+    };
+    const i192 = mk(192), i512 = mk(512);
+    const ap = document.createElement('link'); ap.rel = 'apple-touch-icon'; ap.href = i192; document.head.append(ap);
+    if (/^https?:$/.test(location.protocol)) {
+      const man = {name:'Caixa Tirolesa dos Cânions 2026', short_name:'Caixa Tirolesa', start_url:location.href.split('#')[0], scope:location.href.split('#')[0].replace(/[^/]*$/, ''), display:'standalone', orientation:'portrait', background_color:'#f3f5f1', theme_color:'#2f5d3a', lang:'pt-BR', icons:[{src:i192, sizes:'192x192', type:'image/png', purpose:'any'}, {src:i512, sizes:'512x512', type:'image/png', purpose:'any'}]};
+      const l = document.createElement('link'); l.rel = 'manifest'; l.href = URL.createObjectURL(new Blob([JSON.stringify(man)], {type:'application/manifest+json'})); document.head.append(l);
+    }
+  } catch (e) {}
+}
+
+applyTheme(getTheme());
+if (SAVED && SAVED.rev !== REV) { if (SAVED.edits > 0) setTimeout(() => upgradeData(false), 400); else { S = freshState(); saveState(); } }
+$('#sub').textContent = '';
+setupPWA();
+if (!location.hash) history.replaceState(null, '', '#/painel');
+onRoute();
+</script>
+</body>
+</html>
