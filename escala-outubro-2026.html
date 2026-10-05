@@ -66,11 +66,16 @@
   .caixa h3{margin:16px 0 6px;font-size:.8rem;letter-spacing:2px;color:var(--oliva);
             border-bottom:1px dashed var(--linha);padding-bottom:3px}
   .nomes{display:flex;flex-wrap:wrap;gap:6px}
-  .nome{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:18px;
+  .nome{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:16px;line-height:1.3;max-width:100%;
         font-weight:bold;font-size:.85rem}
   .nome svg.bottom{width:24px;height:30px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
   .nome svg.cruz{width:14px;height:14px;flex:none;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
   .aviso{font-style:italic;opacity:.8}
+  .caixa{position:relative}
+  .x{position:sticky;float:right;top:-8px;margin:-8px -8px 0 8px;width:34px;height:34px;border-radius:50%;
+     background:var(--papel2);color:var(--laranja);border:1px solid var(--laranja);font:bold 22px/30px var(--mono);
+     cursor:pointer;z-index:2;padding:0}
+  .x:hover{background:var(--laranja);color:var(--fundo)}
   .fechar{margin-top:18px;background:transparent;color:var(--laranja);border:1px solid var(--laranja);
           border-radius:8px;padding:8px 18px;font:inherit;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
   .fechar:hover{background:var(--laranja);color:var(--fundo)}
@@ -122,6 +127,7 @@
 
 <div id="janela">
   <div class="caixa" role="dialog" aria-modal="true">
+    <button class="x" id="fecharX" aria-label="Fechar">×</button>
     <h2 id="titulo"></h2>
     <div id="conteudo"></div>
     <button class="fechar" id="fechar">Fechar</button>
@@ -200,8 +206,14 @@ const DIA_SEM_CANCELADO = 2;  // 0=dom, 1=seg, 2=terça...
 // Observações por colaborador: continua na escala normal, só aparece a nota ao lado do nome
 // (de, até = dias do mês, inclusive)
 const OBSERVACOES = [
-  { nome:"MARIA", de:2, ate:9, texto:"(Atestado Médico)" }
+  { nome:"MARIA",  de:2, ate:9, texto:"(Atestado Médico)" },
+  { nome:"DIULLY", de:1, ate:9, texto:"(Verificar revezamento de almoço com Coordenador)" }
 ];
+
+// Revezamento de almoço das duas ao meio-dia: quem está no Lançamento desce às 11:30
+// e quem está no Recebimento sobe às 12:30. Vale a partir do dia 10 (até o dia 9 é exceção: atestado da Maria).
+const ALMOCO = { nomes:["DIULLY","MARIA"], aPartirDe:10,
+                 "LANÇAMENTO":"(Desce às 11:30)", "RECEBIMENTO":"(Sobe às 12:30)" };
 
 // Alertas "!" em vermelho. Semanais: dia da semana -> texto (1 = segunda-feira)
 const ALERTAS_SEMANAIS = {
@@ -244,7 +256,11 @@ function obs(n, d){
   const o = OBSERVACOES.find(o => o.nome === n && d >= o.de && d <= o.ate);
   return o ? ` <span class="obs">${o.texto}</span>` : "";
 }
-const chipDia = (n, d) => chip(n).replace("</span>", `${obs(n, d)}</span>`);
+function almoco(n, d, posto){
+  return (posto && ALMOCO.nomes.includes(n) && d >= ALMOCO.aPartirDe && ALMOCO[posto])
+    ? ` <span class="obs">${ALMOCO[posto]}</span>` : "";
+}
+const chipDia = (n, d, posto) => chip(n).replace("</span>", `${obs(n, d)}${almoco(n, d, posto)}</span>`);
 
 function alertaDoDia(d){
   return ALERTAS_DIA[d] || ALERTAS_SEMANAIS[dataDoDia(d).getDay()] || null;
@@ -284,7 +300,7 @@ function abrirDia(d){
     for(const [posto, lista] of Object.entries(postosDoDia(d))){
       const trab = lista.filter(n => !folga.includes(n));
       h += `<h3>${posto}</h3><div class="nomes">${
-        trab.length ? trab.map(n => chipDia(n, d)).join("") : '<span class="aviso">Ninguém escalado</span>'}</div>`;
+        trab.length ? trab.map(n => chipDia(n, d, posto)).join("") : '<span class="aviso">Ninguém escalado</span>'}</div>`;
     }
     const al = alertaDoDia(d);
     if(al) h = `<div class="alerta-box"><span class="ex">!</span>${al}</div>` + h;
@@ -301,6 +317,7 @@ $("grade").addEventListener("click", e => {
   if(b) abrirDia(+b.dataset.dia);
 });
 $("fechar").onclick = fechar;
+$("fecharX").onclick = fechar;
 $("janela").addEventListener("click", e => { if(e.target === $("janela")) fechar(); });
 document.addEventListener("keydown", e => { if(e.key === "Escape") fechar(); });
 
