@@ -207,10 +207,13 @@ const ALMOCO = { nomes:["DIULLY","MARIA"], aPartirDe:10,
 
 // Alertas "!" em vermelho. Semanais: dia da semana -> texto (1 = segunda-feira)
 const ALERTAS_SEMANAIS = {
-  1: "ASSINAR APR (ANÁLISE PRELIMINAR DE RISCOS)"
+  1: ["ASSINAR APR (ANÁLISE PRELIMINAR DE RISCOS)",
+      "Entrega de Documentos Semanais para Urbia!"]
 };
-// Alertas de um dia específico (opcional): dia do mês -> texto
+// Alertas de um dia específico (opcional): dia do mês -> lista de textos
 const ALERTAS_DIA = {};
+// Alerta do último dia do mês
+const ALERTAS_FIM_DO_MES = ["Entrega de Documentos Mensais à Urbia."];
 const MSG_ALERTA_HOJE = "Você tem um alerta para hoje.";
 /* ===================================================================== */
 
@@ -253,7 +256,13 @@ function almoco(n, d, posto){
 const chipDia = (n, d, posto) => chip(n).replace("</span>", `${obs(n, d)}${almoco(n, d, posto)}</span>`);
 
 function alertaDoDia(d){
-  return ALERTAS_DIA[d] || ALERTAS_SEMANAIS[dataDoDia(d).getDay()] || null;
+  const ultimo = d === new Date(ANO, MES, 0).getDate();
+  const lista = [
+    ...(ALERTAS_SEMANAIS[dataDoDia(d).getDay()] || []),
+    ...(ALERTAS_DIA[d] || []),
+    ...(ultimo ? ALERTAS_FIM_DO_MES : [])
+  ];
+  return lista.length ? lista : null;
 }
 
 function dataDoDia(d){ return new Date(ANO, MES-1, d); }
@@ -270,9 +279,9 @@ function montarCalendario(){
     const bolas = canc ? "" : (FOLGAS[d]||[]).map(n =>
       `<span class="bolinha" title="${n}" style="background:${(CORES[n]||{}).cor||'#ccc'}"></span>`).join("");
     const al = !canc && alertaDoDia(d);
-    const marca = al ? `<span class="alerta-marca" title="${al}">!</span>` : "";
+    const marca = al ? `<span class="alerta-marca" title="${al.join(' / ')}">!</span>` : "";
     const eHoje = hoje().getFullYear()===ANO && hoje().getMonth()===MES-1 && hoje().getDate()===d;
-    html += `<button class="dia ${canc?'cancelado':''} ${eHoje?'hoje':''}" data-dia="${d}" aria-label="Dia ${d}${al?' - alerta: '+al:''}">
+    html += `<button class="dia ${canc?'cancelado':''} ${eHoje?'hoje':''}" data-dia="${d}" aria-label="Dia ${d}${al?' - alerta: '+al.join(', '):''}">
                ${marca}<span class="num">${d}</span><span class="bolinhas">${bolas}</span></button>`;
   }
   $("grade").innerHTML = html;
@@ -293,7 +302,7 @@ function abrirDia(d){
         trab.length ? trab.map(n => chipDia(n, d, posto)).join("") : '<span class="aviso">Ninguém escalado</span>'}</div>`;
     }
     const al = alertaDoDia(d);
-    if(al) h = `<div class="alerta-box"><span class="ex">!</span>${al}</div>` + h;
+    if(al) h = al.map(t => `<div class="alerta-box"><span class="ex">!</span>${t}</div>`).join("") + h;
     h += `<h3>FOLGA</h3><div class="nomes">${
       folga.length ? folga.map(n => chipDia(n, d)).join("") : '<span class="aviso">Ninguém de folga</span>'}</div>`;
   }
