@@ -81,17 +81,13 @@
   .fechar:hover{background:var(--laranja);color:var(--fundo)}
 
   /* alerta "!" em vermelho, balançando para chamar atenção */
-  @keyframes balancar{
-    0%,60%,100%{transform:rotate(0)}
-    64%{transform:rotate(-16deg)} 68%{transform:rotate(14deg)} 72%{transform:rotate(-12deg)}
-    76%{transform:rotate(10deg)}  80%{transform:rotate(-6deg)} 84%{transform:rotate(4deg)}}
   @keyframes pulso{0%{box-shadow:0 0 0 0 rgba(255,59,48,.7)}70%,100%{box-shadow:0 0 0 10px rgba(255,59,48,0)}}
   .alerta-marca{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;
                 background:var(--alerta);color:#fff;font:bold 15px/22px Arial,sans-serif;text-align:center;
-                transform-origin:50% 0;will-change:transform;animation:balancar 1.8s ease-in-out infinite,pulso 1.8s infinite}
+                transform-origin:50% 0;will-change:transform;animation:pulso 1.8s infinite}
   .alerta-box{margin-top:6px;padding:10px 12px;border:2px solid var(--alerta);border-radius:8px;
               background:rgba(255,59,48,.12);color:#ff8a80;font-weight:bold;
-              animation:balancar 1.8s ease-in-out infinite;transform-origin:50% 0}
+              transform-origin:50% 0;will-change:transform}
   .alerta-box .ex{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--alerta);color:#fff;
                   font:bold 15px/22px Arial,sans-serif;text-align:center;margin-right:8px}
   .obs{font-size:.75rem;font-weight:normal;opacity:.9}
@@ -99,12 +95,7 @@
          max-width:92vw;background:var(--alerta);color:#fff;border-radius:10px;padding:10px 14px;
          box-shadow:0 4px 24px rgba(255,59,48,.55);font:bold 1rem var(--mono);cursor:pointer;
          align-items:center;gap:10px}
-  #toast.aberto{display:flex;animation:toastBalanca 1.4s ease-in-out infinite}
-  @keyframes toastBalanca{
-    0%,55%,100%{transform:translateX(-50%) rotate(0)}
-    60%{transform:translateX(-50%) rotate(-3deg)} 66%{transform:translateX(-50%) rotate(3deg)}
-    72%{transform:translateX(-50%) rotate(-2deg)} 78%{transform:translateX(-50%) rotate(2deg)}
-    84%{transform:translateX(-50%) rotate(-1deg)}}
+  #toast.aberto{display:flex}
   #toast .ex{background:#fff;color:var(--alerta);width:24px;height:24px;border-radius:50%;
              text-align:center;line-height:24px;flex:none}
   #toast button{background:transparent;border:0;color:#fff;font-size:1.2rem;cursor:pointer}
@@ -345,6 +336,21 @@ function avisarHoje(){
     }
   }catch(_){}
 }
+
+/* Balanço do alerta feito por JavaScript (requestAnimationFrame): funciona em qualquer celular,
+   mesmo com "reduzir movimento"/economia de bateria, que costumam pausar animações CSS. */
+function balancar(t){
+  const ciclo = (t % 1800) / 1800;                       // 0..1 a cada 1,8 s
+  const k = ciclo < .55 ? 0 : (ciclo - .55) / .45;       // parado no começo, balança no fim
+  const ang = k === 0 ? 0 : 18 * Math.sin(k * Math.PI * 7) * (1 - k);
+  document.querySelectorAll(".alerta-marca,.alerta-box").forEach(el => {
+    el.style.transform = `rotate(${ang}deg)`;
+  });
+  const tt = $("toast");
+  if(tt.classList.contains("aberto")) tt.style.transform = `translateX(-50%) rotate(${ang * .35}deg)`;
+  requestAnimationFrame(balancar);
+}
+requestAnimationFrame(balancar);
 
 montarCalendario();
 avisarHoje();
