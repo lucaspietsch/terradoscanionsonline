@@ -436,11 +436,8 @@ function viewPainel(T) {
     kpi('Pagamentos "a confirmar"', brl0(T.pConf), 'definir quem pagou', 'c-amber', '#/coord'),
     kpi('Saldo cenário coordenador', brl0(T.saldoCenario), T.saldoCenario >= 0 ? 'empresa deve ao coordenador' : 'sangrias superam pagamentos', T.saldoCenario >= 0 ? 'c-green' : 'c-red', '#/coord'),
   ].join('');
-  const avisos = pontos(T);
   const L = MABR();
   let h = `<div class="grid g3">${k}</div>`;
-  h += `<h2 class="sec">Pontos de atenção <span class="sp"></span></h2>`;
-  h += avisos.length ? avisos.map(a => `<button class="alert ${a.bad ? 'bad' : ''}" data-act="go" data-go="${a.go}"><span class="ic">${a.bad ? '⛔' : '⚠️'}</span><span>${a.t}</span></button>`).join('') : `<div class="card empty">Nenhum ponto de atenção 🎉</div>`;
   h += `<h2 class="sec">Gráficos</h2>`;
   h += `<div class="card"><h3>Saídas por mês <small>· sangria, assiduidade e custos</small></h3>${barChart({labels:L, stacked:true, series:[{name:'Sangria Gabriel', color:COL.sang, data:T.meses.map(c => c.gab)}, {name:'Assiduidade', color:COL.ass, data:T.meses.map(c => c.assid)}, {name:'Custos e contas pagas', color:COL.cus, data:T.meses.map(c => c.custos)}]})}</div>`;
   h += `<div class="card"><h3>Entradas × fechamento do caixa</h3>${barChart({labels:L, series:[{name:'Entradas no caixa', color:COL.ent, data:T.meses.map(c => c.ent)}, {name:'Fechamento', color:COL.fech, data:T.meses.map(c => c.fech)}]})}</div>`;
@@ -451,20 +448,6 @@ function viewPainel(T) {
   h += `<div class="card"><h3>Dias com caixa aberto por mês</h3>${barChart({labels:L, h:160, fmt:v => v + ' dias', series:[{name:'Dias', color:COL.fech, data:T.meses.map(c => c.aberto)}]})}</div>`;
   return h;
 }
-function pontos(T) {
-  const a = [];
-  T.meses.forEach((c, i) => {
-    if (c.confPDF === 'warn') a.push({t:`<b>${c.m.nome}</b>: sangria lançada ${brl(c.gab)} ≠ total no PDF ${brl(c.m.pdf)} (diferença ${brl(c.difPDF)}).`, go:`#/mes/${i}?tab=conf`, bad:true});
-    if (c.difDias) a.push({t:`<b>${c.m.nome}</b>: ${c.difDias} dia(s) com diferença no fechamento.`, go:`#/mes/${i}?tab=dia`});
-    const nx = T.meses[i + 1];
-    if (nx && c.dias.some(d => d.s === 'Caixa aberto') && !z(c.fech - nx.abertura)) a.push({t:`<b>${c.m.nome}</b>: último fechamento informado ${brl(c.fech)} ≠ abertura de ${nx.m.nome.toLowerCase()} ${brl(nx.abertura)}.`, go:`#/mes/${i}?tab=dia`});
-    c.m.pag.forEach(p => { if (p.cf && p.cf.indexOf('⚠') === 0) a.push({t:`<b>${c.m.nome}</b>: ${esc(p.f || p.x)} ${dash(p.v)} — ${esc(p.cf.replace('⚠ ', ''))}.`, go:`#/mes/${i}?tab=pag`}); });
-  });
-  const semDest = S.nf.filter(n => n.dest && n.dest.indexOf('Serra Geral Vertical') < 0 && !/(Cópia|apoio)/.test(n.sit));
-  if (semDest.length) a.push({t:`<b>${semDest.length} nota(s) fiscal(is)</b> emitida(s) para outro destinatário (outra empresa ou pessoa física).`, go:'#/nf?dest=Outros'});
-  return a;
-}
-
 /* ---- mês ---- */
 function viewMes(T, mi) {
   const c = T.meses[mi], m = c.m;
