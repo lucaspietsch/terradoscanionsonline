@@ -155,10 +155,16 @@ const ALTERNANCIA = { duplas:["DIULLY","MARIA"], inicioSemana:7 };   // dia 07 (
 function postosDoDia(d){
   const sem = Math.floor((d - ALTERNANCIA.inicioSemana) / 7);       // 0 = semana de 07, 1 = 14, -1 = anterior...
   const [a, b] = sem % 2 === 0 ? ALTERNANCIA.duplas : [...ALTERNANCIA.duplas].reverse();
-  return {
+  const postos = {
     "LANÇAMENTO":  [...POSTOS["LANÇAMENTO"],  a],
     "RECEBIMENTO": [...POSTOS["RECEBIMENTO"], b]
   };
+  for(const r of REMANEJAMENTOS){
+    if(d < r.de || d > r.ate) continue;
+    for(const k in postos) postos[k] = postos[k].filter(n => n !== r.nome);
+    postos[r.posto].push(r.nome);
+  }
+  return postos;
 }
 
 // Folgas: dia do mês -> lista de nomes
@@ -197,13 +203,21 @@ const DIA_SEM_CANCELADO = 2;  // 0=dom, 1=seg, 2=terça...
 // (de, até = dias do mês, inclusive)
 const OBSERVACOES = [
   { nome:"MARIA",  de:2, ate:8, texto:"(Atestado Médico)" },
-  { nome:"DIULLY", de:1, ate:9, texto:"(Verificar revezamento de almoço com Coordenador)" }
+  { nome:"DIULLY", de:1, ate:9, posto:"RECEBIMENTO", texto:"(Verificar revezamento de almoço com Coordenador)" }
 ];
 
 // Revezamento de almoço das duas ao meio-dia: quem está no Lançamento desce às 11:30
 // e quem está no Recebimento sobe às 12:30. Vale a partir do dia 10 (até o dia 9 é exceção: atestado da Maria).
 const ALMOCO = { nomes:["DIULLY","MARIA"], aPartirDe:10,
-                 "LANÇAMENTO":"(Desce às 11:30)", "RECEBIMENTO":"(Sobe às 12:30)" };
+                 "LANÇAMENTO":"(Desce às 11:30)", "RECEBIMENTO":"(Sobe às 12:30)",
+                 // exceção: no posto indicado o horário vale desde o dia 1, sem esperar o dia de início
+                 desdeSempre:{ "DIULLY":["LANÇAMENTO"] } };
+
+// Remanejamentos: o colaborador sai do posto normal e trabalha em outro nos dias indicados.
+// MANINHO cobre o Recebimento até o dia 9 (Maria de atestado e folga).
+const REMANEJAMENTOS = [
+  { nome:"MANINHO", de:1, ate:9, posto:"RECEBIMENTO" }
+];
 
 // Alertas "!" em vermelho. Semanais: dia da semana -> texto (1 = segunda-feira)
 const ALERTAS_SEMANAIS = {
@@ -245,15 +259,16 @@ const chip = n => {
   return `<span class="nome" style="background:${c.cor};color:${c.texto}">${svgBottom(b.tipo)}${n}${b.cruz?SVG_CRUZ:""}</span>`;
 };
 
-function obs(n, d){
-  const o = OBSERVACOES.find(o => o.nome === n && d >= o.de && d <= o.ate);
+function obs(n, d, posto){
+  const o = OBSERVACOES.find(o => o.nome === n && d >= o.de && d <= o.ate && (!o.posto || o.posto === posto));
   return o ? ` <span class="obs">${o.texto}</span>` : "";
 }
 function almoco(n, d, posto){
-  return (posto && ALMOCO.nomes.includes(n) && d >= ALMOCO.aPartirDe && ALMOCO[posto])
+  const vale = d >= ALMOCO.aPartirDe || (ALMOCO.desdeSempre[n] || []).includes(posto);
+  return (posto && ALMOCO.nomes.includes(n) && vale && ALMOCO[posto])
     ? ` <span class="obs">${ALMOCO[posto]}</span>` : "";
 }
-const chipDia = (n, d, posto) => chip(n).replace("</span>", `${obs(n, d)}${almoco(n, d, posto)}</span>`);
+const chipDia = (n, d, posto) => chip(n).replace("</span>", `${obs(n, d, posto)}${almoco(n, d, posto)}</span>`);
 
 function alertaDoDia(d){
   const ultimo = d === new Date(ANO, MES, 0).getDate();
