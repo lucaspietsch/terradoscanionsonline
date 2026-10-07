@@ -1038,7 +1038,7 @@ applyTheme(getTheme());
 if (SAVED && SAVED.rev !== REV) { if (SAVED.edits > 0) setTimeout(() => upgradeData(false), 400); else { S = freshState(); saveState(); } }
 $('#sub').textContent = '';
 setupPWA();
-if (!location.hash) history.replaceState(null, '', '#/painel');
+if (!location.hash) { try { history.replaceState(null, '', '#/painel'); } catch (e) {} }
 onRoute();
 </script>
 </body>
