@@ -17,7 +17,7 @@
     --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;color:var(--texto);font-family:var(--mono);padding:20px 12px 40px;min-height:100vh;
+  body{margin:0;color:var(--texto);font-family:var(--mono);padding:20px 16px 40px;min-height:100vh;
        background:
          linear-gradient(rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
          linear-gradient(90deg,rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
@@ -359,7 +359,7 @@ function avisarHoje(){
       const mostrar = () => new Notification("!", { body: MSG_ALERTA_HOJE });
       if(Notification.permission === "granted") mostrar();
       else if(Notification.permission === "default")
-        Notification.requestPermission().then(p => { if(p === "granted") mostrar(); });
+        Notification.requestPermission().then(p => { if(p === "granted") mostrar(); }).catch(()=>{});
     }
   }catch(_){}
 }
