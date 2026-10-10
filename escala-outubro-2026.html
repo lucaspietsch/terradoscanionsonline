@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escala Outubro 2026 - Tirolesa SGV</title>
+<style>
+  :root{
+    --fundo:#12130e;       /* tema escuro */
+    --papel:#1b1d15;
+    --papel2:#23261b;
+    --texto:#c9d28a;       /* verde oliva claro (padrão) */
+    --oliva:#8a9a3b;
+    --laranja:#e0883a;     /* laranja discreto (destaque) */
+    --linha:#3a3f27;
+    --alerta:#ff3b30;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--texto);font-family:var(--mono);padding:20px 16px 40px;min-height:100vh;
+       background:
+         linear-gradient(rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         linear-gradient(90deg,rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         radial-gradient(1000px 500px at 80% -10%,rgba(224,136,58,.12),transparent 60%),
+         var(--fundo)}
+  main{max-width:900px;margin:0 auto}
+  h1{font-size:clamp(1.3rem,4.5vw,2.2rem);margin:0 0 4px;letter-spacing:1px;text-transform:uppercase;
+     color:var(--laranja);text-shadow:0 0 14px rgba(224,136,58,.35)}
+  h1::before{content:"> ";color:var(--oliva)}
+  .sub{margin:0 0 18px;opacity:.8;font-size:.85rem}
+
+  .semana,.grade{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .semana div{text-align:center;font-weight:bold;padding:6px 0;font-size:.8rem;color:var(--oliva);
+              letter-spacing:2px;text-transform:uppercase}
+
+  .dia{position:relative;min-height:88px;background:linear-gradient(160deg,var(--papel2),var(--papel));
+       border:1px solid var(--linha);border-radius:8px;padding:6px;cursor:pointer;font:inherit;color:inherit;
+       text-align:left;display:flex;flex-direction:column;justify-content:space-between;
+       transition:border-color .15s,box-shadow .15s,transform .15s}
+  .dia:hover,.dia:focus-visible{outline:none;border-color:var(--laranja);
+       box-shadow:0 0 0 1px var(--laranja),0 0 16px rgba(224,136,58,.35);transform:translateY(-1px)}
+  .dia.vazio{visibility:hidden;cursor:default}
+  .dia.hoje{border-color:var(--oliva);box-shadow:0 0 0 1px var(--oliva),0 0 14px rgba(138,154,59,.4)}
+  .num{font-weight:bold;font-size:1.05rem;color:var(--laranja)}
+
+  /* terça cancelada: grade "///" na vertical */
+  .dia.cancelado{
+    background:
+      repeating-linear-gradient(115deg,transparent 0 9px,rgba(138,154,59,.35) 9px 12px),
+      var(--papel);
+    opacity:.7}
+  .dia.cancelado .num{background:var(--papel);padding:0 5px;border-radius:4px;align-self:flex-start}
+
+  .bolinhas{display:flex;flex-wrap:wrap;gap:4px}
+  .bolinha{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.35)}
+
+  /* janela do dia */
+  #janela{position:fixed;inset:0;background:rgba(5,6,3,.7);backdrop-filter:blur(3px);display:none;
+          align-items:center;justify-content:center;padding:12px;z-index:10}
+  #janela.aberta{display:flex}
+  .caixa{border:1px solid var(--oliva);border-radius:12px;background:var(--papel);color:var(--texto);
+         padding:20px;width:min(92vw,440px);max-height:90vh;overflow:auto;
+         box-shadow:0 0 0 1px rgba(138,154,59,.2),0 0 30px rgba(138,154,59,.25);animation:entra .18s ease-out}
+  @keyframes entra{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+  .caixa h2{margin:0 0 12px;font-size:1.05rem;color:var(--laranja);text-transform:uppercase;letter-spacing:.5px}
+  .caixa h3{margin:16px 0 6px;font-size:.8rem;letter-spacing:2px;color:var(--oliva);
+            border-bottom:1px dashed var(--linha);padding-bottom:3px}
+  .nomes{display:flex;flex-wrap:wrap;gap:6px}
+  .nome{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:16px;line-height:1.3;max-width:100%;
+        font-weight:bold;font-size:.85rem}
+  .nome svg.bottom{width:24px;height:30px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+  .nome svg.cruz{width:14px;height:14px;flex:none;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
+  .aviso{font-style:italic;opacity:.8}
+  .caixa{position:relative}
+  .x{position:sticky;float:right;top:-8px;margin:-8px -8px 0 8px;width:34px;height:34px;border-radius:50%;
+     background:var(--papel2);color:var(--laranja);border:1px solid var(--laranja);font:bold 22px/30px var(--mono);
+     cursor:pointer;z-index:2;padding:0}
+  .x:hover{background:var(--laranja);color:var(--fundo)}
+  .fechar{margin-top:18px;background:transparent;color:var(--laranja);border:1px solid var(--laranja);
+          border-radius:8px;padding:8px 18px;font:inherit;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+  .fechar:hover{background:var(--laranja);color:var(--fundo)}
+
+  /* alerta "!" em vermelho, balançando para chamar atenção */
+  @keyframes pulso{0%{box-shadow:0 0 0 0 rgba(255,59,48,.7)}70%,100%{box-shadow:0 0 0 10px rgba(255,59,48,0)}}
+  .alerta-marca{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;
+                background:var(--alerta);color:#fff;font:bold 15px/22px Arial,sans-serif;text-align:center;
+                transform-origin:50% 0;will-change:transform;animation:pulso 1.8s infinite}
+  .alerta-box{margin-top:6px;padding:10px 12px;border:2px solid var(--alerta);border-radius:8px;
+              background:rgba(255,59,48,.12);color:#ff8a80;font-weight:bold;
+              transform-origin:50% 0;will-change:transform}
+  .alerta-box .ex{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--alerta);color:#fff;
+                  font:bold 15px/22px Arial,sans-serif;text-align:center;margin-right:8px}
+  .obs{font-size:.75rem;font-weight:normal;opacity:.9}
+  #toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:none;
+         max-width:92vw;background:var(--alerta);color:#fff;border-radius:10px;padding:10px 14px;
+         box-shadow:0 4px 24px rgba(255,59,48,.55);font:bold 1rem var(--mono);cursor:pointer;
+         align-items:center;gap:10px}
+  #toast.aberto{display:flex}
+  #toast .ex{background:#fff;color:var(--alerta);width:24px;height:24px;border-radius:50%;
+             text-align:center;line-height:24px;flex:none}
+  #toast button{background:transparent;border:0;color:#fff;font-size:1.2rem;cursor:pointer}
+
+  /* aplicativo fora do ar: o layout continua visível por trás, com um X por cima */
+  #foraDoAr{position:fixed;inset:0;z-index:50;display:flex;justify-content:center;padding:16px;overflow:auto;
+            background:rgba(10,11,7,.74);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  #foraDoAr[hidden]{display:none}
+  .fda-card{margin:auto;width:min(100%,520px);border:1px solid var(--alerta);border-radius:14px;background:var(--papel);
+            padding:24px 20px;text-align:center;box-shadow:0 0 40px rgba(255,59,48,.35)}
+  .fda-x{width:min(34vw,120px);height:auto;filter:drop-shadow(0 0 10px rgba(255,59,48,.6))}
+  .fda-card h2{margin:10px 0 14px;font-size:1.25rem;letter-spacing:2px;text-transform:uppercase;color:var(--alerta)}
+  .fda-card p{margin:0 0 12px;line-height:1.55;font-size:.92rem;text-align:left}
+  .fda-card .fda-ass{margin-top:16px;text-align:center;color:var(--laranja);font-weight:bold}
+  .legenda{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
+  @media (max-width:560px){.dia{min-height:64px;padding:4px}.bolinha{width:10px;height:10px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Escala Outubro 2026 - Tirolesa SGV</h1>
+  <p class="sub">Toque em um dia para ver quem trabalha e quem está de folga. A semana vai de quarta a segunda; as terças não têm operação.</p>
+  <div class="semana" id="semana"></div>
+  <div class="grade" id="grade"></div>
+  <div class="legenda" id="legenda"></div>
+</main>
+
+<div id="foraDoAr" role="alertdialog" aria-modal="true" aria-labelledby="fdaTitulo" hidden>
+  <div class="fda-card">
+    <svg class="fda-x" viewBox="0 0 100 100" role="img" aria-label="X">
+      <line x1="16" y1="16" x2="84" y2="84" stroke="#ff3b30" stroke-width="14" stroke-linecap="round"/>
+      <line x1="84" y1="16" x2="16" y2="84" stroke="#ff3b30" stroke-width="14" stroke-linecap="round"/>
+    </svg>
+    <h2 id="fdaTitulo">Aplicativo fora do ar</h2>
+    <p>Este aplicativo de escalas foi criado para facilitar o trabalho dos líderes e do coordenador e para que os operadores pudessem consultar a escala de forma automática.</p>
+    <p>Como a escala continua sendo enviada manualmente todos os dias pelo grupo do WhatsApp, o aplicativo perdeu a sua finalidade e está sendo retirado do ar. Foram muitas noites de dedicação para desenvolvê-lo, e fica o registro de que a proposta era simplificar a rotina de todos.</p>
+    <p>A escala seguirá sendo enviada pelo método atual. O desenvolvedor Pietsch fica à disposição para trabalhos futuros.</p>
+    <p class="fda-ass">Passar bem.</p>
+  </div>
+</div>
+
+<div id="toast" role="alert"><span class="ex">!</span><span id="toastTxt"></span><button id="toastX" aria-label="Fechar aviso">×</button></div>
+
+<div id="janela">
+  <div class="caixa" role="dialog" aria-modal="true">
+    <button class="x" id="fecharX" aria-label="Fechar">×</button>
+    <h2 id="titulo"></h2>
+    <div id="conteudo"></div>
+    <button class="fechar" id="fechar">Fechar</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   EDITE AQUI (como uma planilha)
+   ===================================================================== */
+const ANO = 2026, MES = 10;               // outubro de 2026
+
+// Cores de cada colaborador (fundo do nome e da bolinha, cor do texto)
+const CORES = {
+  "KRÜGER":   { cor:"#1e88e5", texto:"#fff" },     // azul
+  "PIETSCH":    { cor:"#ff9800", texto:"#3b2a00" },  // laranja
+  "KAULING":  { cor:"#fdd835", texto:"#4a4000" },  // amarelo
+  "CARLOS":   { cor:"#43a047", texto:"#fff" },     // verde
+  "JACKSON":  { cor:"#e53935", texto:"#fff" },     // vermelho
+  "DIULLY":   { cor:"#b48ee6", texto:"#fff" },     // lilás
+  "MARIA":    { cor:"#f48fb1", texto:"#4a1428" },  // rosa
+  "MANINHO":  { cor:"#26a69a", texto:"#fff" }      // verde-água (sem cor definida)
+};
+
+// Quem trabalha em cada posto (sai do posto nos dias de folga)
+const POSTOS = {
+  "LANÇAMENTO":  ["KRÜGER","KAULING","CARLOS","MANINHO"],
+  "RECEBIMENTO": ["PIETSCH","JACKSON"]
+};
+
+// DIULLY e MARIA se alternam entre os postos a cada semana.
+// A semana começa na quarta e termina na segunda (terça é folga de todos).
+// Semana de 07 a 12: DIULLY no Lançamento e MARIA no Recebimento; na semana seguinte inverte.
+const ALTERNANCIA = { duplas:["DIULLY","MARIA"], inicioSemana:7 };   // dia 07 (quarta) = início de uma semana
+function postosDoDia(d){
+  const sem = Math.floor((d - ALTERNANCIA.inicioSemana) / 7);       // 0 = semana de 07, 1 = 14, -1 = anterior...
+  const [a, b] = sem % 2 === 0 ? ALTERNANCIA.duplas : [...ALTERNANCIA.duplas].reverse();
+  const postos = {
+    "LANÇAMENTO":  [...POSTOS["LANÇAMENTO"],  a],
+    "RECEBIMENTO": [...POSTOS["RECEBIMENTO"], b]
+  };
+  for(const r of REMANEJAMENTOS){
+    if(d < r.de || d > r.ate) continue;
+    for(const k in postos) postos[k] = postos[k].filter(n => n !== r.nome);
+    postos[r.posto].push(r.nome);
+  }
+  return postos;
+}
+
+// Folgas: dia do mês -> lista de nomes
+const FOLGAS = {
+   4:["DIULLY","MANINHO"],   // domingo
+   9:["MARIA"],              // sexta
+  10:["KAULING"],            // sábado
+  11:["KAULING"],            // domingo
+  18:["MARIA"],             // domingo
+  19:["CARLOS"],             // segunda
+  21:["CARLOS"],             // quarta
+  25:["DIULLY","PIETSCH"],   // domingo
+  28:["JACKSON"]             // quarta
+};
+
+// Bottoms (arquivos bottom_*.png) exibidos antes do nome. cruz = cruz vermelha (resgatista) depois do nome.
+const BOTTOMS = {
+  "PIETSCH":  { tipo:"lucas",    cruz:true  },
+  "KAULING":  { tipo:"kauling" },
+  "CARLOS":   { tipo:"carlos" },
+  "MARIA":    { tipo:"operador" },
+  "DIULLY":   { tipo:"operador" },
+  "MANINHO":  { tipo:"operador" },
+  "JACKSON":  { tipo:"operador", cruz:true  },
+  "KRÜGER":   { tipo:"kruger",   cruz:true  }
+};
+// Desenho de cada bottom: cor da barra, borda e quantas pílulas (de baixo para cima)
+const TIPOS_BOTTOM = {
+  lucas:    { barra:"#951c24", borda:"#7a1219", pilulas:4, mosq:"#ece3cf" },
+  kauling:  { barra:"#951c24", borda:"#7a1219", pilulas:2, mosq:"#ece3cf" },
+  carlos:   { barra:"#0a0a0a", borda:"#4a4d5e", pilulas:3, mosq:"#ece3cf" },
+  operador: { barra:"#0a0a0a", borda:"#4a4d5e", pilulas:2, mosq:"#ece3cf" },
+  kruger:   { barra:"#e8731a", borda:"#c85f0e", pilulas:1, mosq:"#3b82e0" }
+};
+
+// Aplicativo fora do ar: true mostra o X com a mensagem por cima do calendário; false volta ao normal.
+const FORA_DO_AR = true;
+
+const DIA_SEM_CANCELADO = 2;  // 0=dom, 1=seg, 2=terça...
+
+// Observações por colaborador: continua na escala normal, só aparece a nota ao lado do nome
+// (de, até = dias do mês, inclusive)
+const OBSERVACOES = [
+  { nome:"MARIA",  de:2, ate:8, texto:"(Atestado Médico)" },
+  { nome:"DIULLY", de:1, ate:9, posto:"RECEBIMENTO", texto:"(Verificar revezamento de almoço com Coordenador)" }
+];
+
+// Revezamento de almoço das duas ao meio-dia: quem está no Lançamento desce às 11:30
+// e quem está no Recebimento sobe às 12:30. Vale a partir do dia 10 (até o dia 9 é exceção: atestado da Maria).
+const ALMOCO = { nomes:["DIULLY","MARIA"], aPartirDe:10,
+                 "LANÇAMENTO":"(Desce às 11:30)", "RECEBIMENTO":"(Sobe às 12:30)",
+                 // exceção: no posto indicado o horário vale desde o dia 1, sem esperar o dia de início
+                 desdeSempre:{ "DIULLY":["LANÇAMENTO"] } };
+
+// Remanejamentos: o colaborador sai do posto normal e trabalha em outro nos dias indicados.
+// MANINHO cobre o Recebimento até o dia 9 (Maria de atestado e folga).
+const REMANEJAMENTOS = [
+  { nome:"MANINHO", de:1, ate:9, posto:"RECEBIMENTO" }
+];
+
+// Alertas "!" em vermelho. Semanais: dia da semana -> texto (1 = segunda-feira)
+const ALERTAS_SEMANAIS = {
+  1: ["ASSINAR APR (ANÁLISE PRELIMINAR DE RISCOS)",
+      "Entrega de Documentos Semanais para Urbia!"]
+};
+// Alertas de um dia específico (opcional): dia do mês -> lista de textos
+const ALERTAS_DIA = {};
+// Alerta do último dia do mês
+const ALERTAS_FIM_DO_MES = ["Entrega de Documentos Mensais à Urbia."];
+const MSG_ALERTA_HOJE = "Você tem um alerta para hoje.";
+/* ===================================================================== */
+
+const NOMES_SEMANA = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const NOMES_LONGOS = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const $ = id => document.getElementById(id);
+
+function svgBottom(tipo){
+  const t = TIPOS_BOTTOM[tipo]; if(!t) return "";
+  let pil = "";
+  for(let i=0;i<t.pilulas;i++){
+    const y = 424 - i*68;
+    pil += `<rect x="94" y="${y+6}" width="104" height="54" rx="27" fill="#b8ad93"/>`+
+           `<rect x="94" y="${y}" width="104" height="54" rx="27" fill="#ece3cf"/>`;
+  }
+  return `<svg class="bottom" viewBox="0 0 460 580" role="img" aria-label="bottom ${tipo}">`+
+    `<rect x="30" y="30" width="400" height="520" rx="42" fill="#1c1d29" stroke="#0e0e16" stroke-width="12"/>`+
+    `<rect x="80" y="80" width="130" height="420" rx="14" fill="${t.barra}" stroke="${t.borda}" stroke-width="5"/>${pil}`+
+    `<path d="M375 218C380 140 262 130 262 215L290 415C296 450 356 450 358 415L376 236" fill="none" stroke="${t.mosq}" stroke-width="16" stroke-linecap="round"/>`+
+    `</svg>`;
+}
+const SVG_CRUZ = `<svg class="cruz" viewBox="0 0 24 24" role="img" aria-label="resgatista"><title>Resgatista</title>`+
+  `<rect x="1" y="1" width="22" height="22" rx="4" fill="#fff"/>`+
+  `<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="#e53935"/></svg>`;
+
+const chip = n => {
+  const c = CORES[n] || { cor:"#ccc", texto:"#000" };
+  const b = BOTTOMS[n] || {};
+  return `<span class="nome" style="background:${c.cor};color:${c.texto}">${svgBottom(b.tipo)}${n}${b.cruz?SVG_CRUZ:""}</span>`;
+};
+
+function obs(n, d, posto){
+  const o = OBSERVACOES.find(o => o.nome === n && d >= o.de && d <= o.ate && (!o.posto || o.posto === posto));
+  return o ? ` <span class="obs">${o.texto}</span>` : "";
+}
+function almoco(n, d, posto){
+  const vale = d >= ALMOCO.aPartirDe || (ALMOCO.desdeSempre[n] || []).includes(posto);
+  return (posto && ALMOCO.nomes.includes(n) && vale && ALMOCO[posto])
+    ? ` <span class="obs">${ALMOCO[posto]}</span>` : "";
+}
+const chipDia = (n, d, posto) => chip(n).replace("</span>", `${obs(n, d, posto)}${almoco(n, d, posto)}</span>`);
+
+function alertaDoDia(d){
+  const ultimo = d === new Date(ANO, MES, 0).getDate();
+  const lista = [
+    ...(ALERTAS_SEMANAIS[dataDoDia(d).getDay()] || []),
+    ...(ALERTAS_DIA[d] || []),
+    ...(ultimo ? ALERTAS_FIM_DO_MES : [])
+  ];
+  return lista.length ? lista : null;
+}
+
+function dataDoDia(d){ return new Date(ANO, MES-1, d); }
+function cancelado(d){ return dataDoDia(d).getDay() === DIA_SEM_CANCELADO; }
+
+function montarCalendario(){
+  $("semana").innerHTML = NOMES_SEMANA.map(n => `<div>${n}</div>`).join("");
+  const total = new Date(ANO, MES, 0).getDate();
+  const inicio = dataDoDia(1).getDay();
+  let html = "";
+  for(let i=0;i<inicio;i++) html += `<div class="dia vazio"></div>`;
+  for(let d=1; d<=total; d++){
+    const canc = cancelado(d);
+    const bolas = canc ? "" : (FOLGAS[d]||[]).map(n =>
+      `<span class="bolinha" title="${n}" style="background:${(CORES[n]||{}).cor||'#ccc'}"></span>`).join("");
+    const al = !canc && alertaDoDia(d);
+    const marca = al ? `<span class="alerta-marca" title="${al.join(' / ')}">!</span>` : "";
+    const eHoje = hoje().getFullYear()===ANO && hoje().getMonth()===MES-1 && hoje().getDate()===d;
+    html += `<button class="dia ${canc?'cancelado':''} ${eHoje?'hoje':''}" data-dia="${d}" aria-label="Dia ${d}${al?' - alerta: '+al.join(', '):''}">
+               ${marca}<span class="num">${d}</span><span class="bolinhas">${bolas}</span></button>`;
+  }
+  $("grade").innerHTML = html;
+  $("legenda").innerHTML = Object.keys(CORES).map(chip).join("");
+}
+
+function abrirDia(d){
+  const dt = dataDoDia(d);
+  $("titulo").textContent = `${NOMES_LONGOS[dt.getDay()]}, ${d} de outubro de 2026`;
+  let h = "";
+  if(cancelado(d)){
+    h = `<p class="aviso">Sem operação neste dia. Todos estão de folga.</p>`;
+  } else {
+    const folga = FOLGAS[d] || [];
+    for(const [posto, lista] of Object.entries(postosDoDia(d))){
+      const trab = lista.filter(n => !folga.includes(n));
+      h += `<h3>${posto}</h3><div class="nomes">${
+        trab.length ? trab.map(n => chipDia(n, d, posto)).join("") : '<span class="aviso">Ninguém escalado</span>'}</div>`;
+    }
+    const al = alertaDoDia(d);
+    if(al) h = al.map(t => `<div class="alerta-box"><span class="ex">!</span>${t}</div>`).join("") + h;
+    h += `<h3>FOLGA</h3><div class="nomes">${
+      folga.length ? folga.map(n => chipDia(n, d)).join("") : '<span class="aviso">Ninguém de folga</span>'}</div>`;
+  }
+  $("conteudo").innerHTML = h;
+  $("janela").classList.add("aberta");
+}
+function fechar(){ $("janela").classList.remove("aberta"); }
+
+$("grade").addEventListener("click", e => {
+  const b = e.target.closest("[data-dia]");
+  if(b) abrirDia(+b.dataset.dia);
+});
+$("fechar").onclick = fechar;
+$("fecharX").onclick = fechar;
+$("janela").addEventListener("click", e => { if(e.target === $("janela")) fechar(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") fechar(); });
+
+/* Aviso no dia do alerta: ao abrir a página no dia, mostra o aviso (e a notificação do aparelho, se permitida).
+   Para testar outro dia: escala-outubro-2026.html?hoje=2026-10-12 */
+function hoje(){
+  const q = location.search.match(/hoje=(\d{4})-(\d{2})-(\d{2})/);
+  return q ? new Date(+q[1], +q[2]-1, +q[3]) : new Date();
+}
+function avisarHoje(){
+  const h = hoje();
+  if(h.getFullYear() !== ANO || h.getMonth() !== MES-1) return;
+  const d = h.getDate();
+  if(cancelado(d) || !alertaDoDia(d)) return;
+  $("toastTxt").textContent = MSG_ALERTA_HOJE;
+  $("toast").classList.add("aberto");
+  try{ if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]); }catch(_){}
+  $("toast").onclick = e => { if(e.target !== $("toastX")) abrirDia(d); };
+  $("toastX").onclick = e => { e.stopPropagation(); $("toast").classList.remove("aberto"); };
+  try{
+    if("Notification" in window){
+      const mostrar = () => new Notification("!", { body: MSG_ALERTA_HOJE });
+      if(Notification.permission === "granted") mostrar();
+      else if(Notification.permission === "default")
+        Notification.requestPermission().then(p => { if(p === "granted") mostrar(); }).catch(()=>{});
+    }
+  }catch(_){}
+}
+
+/* Balanço do alerta feito por JavaScript (requestAnimationFrame): funciona em qualquer celular,
+   mesmo com "reduzir movimento"/economia de bateria, que costumam pausar animações CSS. */
+function balancar(t){
+  if(FORA_DO_AR) return;
+  const ciclo = (t % 1800) / 1800;                       // 0..1 a cada 1,8 s
+  const k = ciclo < .55 ? 0 : (ciclo - .55) / .45;       // parado no começo, balança no fim
+  const ang = k === 0 ? 0 : 18 * Math.sin(k * Math.PI * 7) * (1 - k);
+  document.querySelectorAll(".alerta-marca,.alerta-box").forEach(el => {
+    el.style.transform = `rotate(${ang}deg)`;
+  });
+  const tt = $("toast");
+  if(tt.classList.contains("aberto")) tt.style.transform = `translateX(-50%) rotate(${ang * .35}deg)`;
+  requestAnimationFrame(balancar);
+}
+requestAnimationFrame(balancar);
+
+montarCalendario();
+if(FORA_DO_AR){
+  $("foraDoAr").hidden = false;
+  document.querySelector("main").setAttribute("inert", "");
+} else {
+  avisarHoje();
+}
+// Link direto para um dia: escala-outubro-2026.html#dia=12
+const m = location.hash.match(/dia=(\d+)/);
+if(!FORA_DO_AR && m && +m[1]>=1 && +m[1]<=31) abrirDia(+m[1]);
+</script>
+</body>
+</html>
