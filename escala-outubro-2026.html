@@ -100,6 +100,16 @@
              text-align:center;line-height:24px;flex:none}
   #toast button{background:transparent;border:0;color:#fff;font-size:1.2rem;cursor:pointer}
 
+  /* aplicativo fora do ar: o layout continua visível por trás, com um X por cima */
+  #foraDoAr{position:fixed;inset:0;z-index:50;display:flex;justify-content:center;padding:16px;overflow:auto;
+            background:rgba(10,11,7,.74);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  #foraDoAr[hidden]{display:none}
+  .fda-card{margin:auto;width:min(100%,520px);border:1px solid var(--alerta);border-radius:14px;background:var(--papel);
+            padding:24px 20px;text-align:center;box-shadow:0 0 40px rgba(255,59,48,.35)}
+  .fda-x{width:min(34vw,120px);height:auto;filter:drop-shadow(0 0 10px rgba(255,59,48,.6))}
+  .fda-card h2{margin:10px 0 14px;font-size:1.25rem;letter-spacing:2px;text-transform:uppercase;color:var(--alerta)}
+  .fda-card p{margin:0 0 12px;line-height:1.55;font-size:.92rem;text-align:left}
+  .fda-card .fda-ass{margin-top:16px;text-align:center;color:var(--laranja);font-weight:bold}
   .legenda{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
   @media (max-width:560px){.dia{min-height:64px;padding:4px}.bolinha{width:10px;height:10px}}
 </style>
@@ -112,6 +122,20 @@
   <div class="grade" id="grade"></div>
   <div class="legenda" id="legenda"></div>
 </main>
+
+<div id="foraDoAr" role="alertdialog" aria-modal="true" aria-labelledby="fdaTitulo" hidden>
+  <div class="fda-card">
+    <svg class="fda-x" viewBox="0 0 100 100" role="img" aria-label="X">
+      <line x1="16" y1="16" x2="84" y2="84" stroke="#ff3b30" stroke-width="14" stroke-linecap="round"/>
+      <line x1="84" y1="16" x2="16" y2="84" stroke="#ff3b30" stroke-width="14" stroke-linecap="round"/>
+    </svg>
+    <h2 id="fdaTitulo">Aplicativo fora do ar</h2>
+    <p>Este aplicativo de escalas foi criado para facilitar o trabalho dos líderes e do coordenador e para que os operadores pudessem consultar a escala de forma automática.</p>
+    <p>Como a escala continua sendo enviada manualmente todos os dias pelo grupo do WhatsApp, o aplicativo perdeu a sua finalidade e está sendo retirado do ar. Foram muitas noites de dedicação para desenvolvê-lo, e fica o registro de que a proposta era simplificar a rotina de todos.</p>
+    <p>A escala seguirá sendo enviada pelo método atual. O desenvolvedor Pietsch fica à disposição para trabalhos futuros.</p>
+    <p class="fda-ass">Passar bem.</p>
+  </div>
+</div>
 
 <div id="toast" role="alert"><span class="ex">!</span><span id="toastTxt"></span><button id="toastX" aria-label="Fechar aviso">×</button></div>
 
@@ -199,6 +223,9 @@ const TIPOS_BOTTOM = {
   operador: { barra:"#0a0a0a", borda:"#4a4d5e", pilulas:2, mosq:"#ece3cf" },
   kruger:   { barra:"#e8731a", borda:"#c85f0e", pilulas:1, mosq:"#3b82e0" }
 };
+
+// Aplicativo fora do ar: true mostra o X com a mensagem por cima do calendário; false volta ao normal.
+const FORA_DO_AR = true;
 
 const DIA_SEM_CANCELADO = 2;  // 0=dom, 1=seg, 2=terça...
 
@@ -367,6 +394,7 @@ function avisarHoje(){
 /* Balanço do alerta feito por JavaScript (requestAnimationFrame): funciona em qualquer celular,
    mesmo com "reduzir movimento"/economia de bateria, que costumam pausar animações CSS. */
 function balancar(t){
+  if(FORA_DO_AR) return;
   const ciclo = (t % 1800) / 1800;                       // 0..1 a cada 1,8 s
   const k = ciclo < .55 ? 0 : (ciclo - .55) / .45;       // parado no começo, balança no fim
   const ang = k === 0 ? 0 : 18 * Math.sin(k * Math.PI * 7) * (1 - k);
@@ -380,10 +408,15 @@ function balancar(t){
 requestAnimationFrame(balancar);
 
 montarCalendario();
-avisarHoje();
+if(FORA_DO_AR){
+  $("foraDoAr").hidden = false;
+  document.querySelector("main").setAttribute("inert", "");
+} else {
+  avisarHoje();
+}
 // Link direto para um dia: escala-outubro-2026.html#dia=12
 const m = location.hash.match(/dia=(\d+)/);
-if(m && +m[1]>=1 && +m[1]<=31) abrirDia(+m[1]);
+if(!FORA_DO_AR && m && +m[1]>=1 && +m[1]<=31) abrirDia(+m[1]);
 </script>
 </body>
 </html>
