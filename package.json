@@ -1,0 +1,10 @@
+{
+  "name": "arauco-protectum",
+  "version": "1.0.0",
+  "description": "Missão Araucária: calculadora de impacto potencial, nota técnica e registro de plantios.",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test"
+  }
+}

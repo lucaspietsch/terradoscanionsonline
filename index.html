@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b160d" />
+    <meta name="description" content="Arauco Protectum: missão de restauração com Araucaria angustifolia nos Campos de Cima da Serra. Calculadora de impacto potencial, nota técnica e registro de plantios." />
+    <meta property="og:title" content="Arauco Protectum — Missão Araucária" />
+    <meta property="og:description" content="Plantar futuro, enraizar proteção: ciência, simulação e ação local para a Floresta com Araucárias." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b160d'/%3E%3Cpath d='M32 10 14 50h36z' fill='none' stroke='%23b8ff43' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <title>Arauco Protectum — Missão Araucária</title>
+    <script>
+      // Aplica o tema salvo antes da primeira pintura (evita "piscar") e marca que há JS.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var t = localStorage.getItem('arauco.theme');
+          if (!t && window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+          if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#inicio" aria-label="Arauco Protectum, início">
+          <span class="brand-mark" aria-hidden="true">△</span>
+          <span>ARAUCO<br /><b>PROTECTUM</b></span>
+        </a>
+        <nav aria-label="Navegação principal">
+          <a class="nav-link active" href="#inicio" data-view="inicio" aria-current="page"><span aria-hidden="true">01</span> Início</a>
+          <a class="nav-link" href="#calculadora" data-view="calculadora"><span aria-hidden="true">02</span> Calculadora</a>
+          <a class="nav-link" href="#estudo" data-view="estudo"><span aria-hidden="true">03</span> Estudo</a>
+          <a class="nav-link" href="#acao" data-view="acao"><span aria-hidden="true">04</span> Ação local</a>
+        </nav>
+        <div class="sidebar-footer"><i aria-hidden="true"></i> MISSÃO EM CURSO<br /><small>Campos de Cima da Serra · RS</small></div>
+      </aside>
+
+      <div class="content">
+        <header class="topbar">
+          <p><span class="pulse" aria-hidden="true"></span> REDE VIVA / SISTEMA ATIVO</p>
+          <button class="icon-button" id="themeButton" type="button" aria-pressed="false" aria-label="Alternar entre tema escuro e claro" title="Alternar tema">☼</button>
+        </header>
+
+        <main id="conteudo">
+          <noscript><p class="noscript">Este site usa JavaScript para a calculadora e para o registro de plantios. A leitura do conteúdo funciona sem ele.</p></noscript>
+
+          <!-- 01 · INÍCIO -->
+          <section class="view active" id="inicio" aria-labelledby="inicio-titulo" data-title="Início">
+            <div class="hero">
+              <p class="eyebrow">MISSÃO DE VIDA · RESTAURAÇÃO ECOLÓGICA</p>
+              <h1 id="inicio-titulo" tabindex="-1">Plantar futuro.<br /><em>Enraizar proteção.</em></h1>
+              <p class="lead">A <i>Araucaria angustifolia</i> é uma espécie-símbolo da Floresta com Araucárias. Este espaço conecta plantio, ciência e cuidado com as nascentes.</p>
+              <div class="hero-actions">
+                <a class="button primary" href="#calculadora">Calcular impacto <b aria-hidden="true">↗</b></a>
+                <a class="button ghost" href="#estudo">Ler o estudo</a>
+              </div>
+            </div>
+
+            <div class="dashboard-grid">
+              <article class="metric-card">
+                <p>ÁRVORES REGISTRADAS</p>
+                <strong id="treeCount" data-base="247">247</strong>
+                <span id="treeNote">mudas e árvores em acompanhamento</span>
+              </article>
+              <article class="metric-card">
+                <p>MISSÃO</p>
+                <strong class="metric-word">Viva</strong>
+                <span>restaurar, monitorar e educar</span>
+              </article>
+              <blockquote class="quote-card">
+                <span aria-hidden="true">“</span>
+                <p>Uma araucária não é apenas uma árvore: é memória profunda da paisagem e abrigo para o futuro.</p>
+              </blockquote>
+            </div>
+
+            <div class="section-title"><h2>POR QUE A ARAUCÁRIA?</h2><span>Ecologia aplicada</span></div>
+            <div class="feature-grid">
+              <article>
+                <div class="feature-icon" aria-hidden="true">◌</div>
+                <h3>Carbono vivo</h3>
+                <p>Ao crescer, a árvore incorpora carbono na biomassa. A permanência da floresta é tão importante quanto o plantio.</p>
+              </article>
+              <article>
+                <div class="feature-icon" aria-hidden="true">≈</div>
+                <h3>Água no território</h3>
+                <p>Cobertura vegetal e solo protegido ajudam a reduzir erosão e favorecem infiltração — sem substituir obras e gestão de bacia.</p>
+              </article>
+              <article>
+                <div class="feature-icon" aria-hidden="true">✣</div>
+                <h3>Biodiversidade</h3>
+                <p>O pinhão alimenta fauna e pessoas; restaurar com espécies nativas amplia conexões ecológicas.</p>
+              </article>
+            </div>
+          </section>
+
+          <!-- 02 · CALCULADORA -->
+          <section class="view" id="calculadora" aria-labelledby="calc-titulo" data-title="Calculadora">
+            <p class="eyebrow">SIMULADOR · PREMISSAS EDITÁVEIS</p>
+            <h1 id="calc-titulo" tabindex="-1">Calculadora de <em>impacto potencial.</em></h1>
+            <p class="lead narrow">Uma ferramenta educativa para planejar e comparar cenários. Não substitui inventário florestal, modelagem hidrológica ou crédito de carbono.</p>
+
+            <div class="calculator-layout">
+              <form class="control-panel" id="calculatorForm" novalidate>
+                <label for="trees"><span class="label-row"><span>Quantidade de araucárias</span></span>
+                  <input id="trees" name="trees" type="number" inputmode="numeric" min="1" max="10000000" step="1" value="247" />
+                </label>
+                <label for="age"><span class="label-row"><span>Idade média projetada</span><output id="ageOutput" for="age">15 anos</output></span>
+                  <input id="age" name="age" type="range" min="1" max="80" value="15" />
+                </label>
+                <label for="co2Rate"><span class="label-row"><span>Captura média por árvore/ano</span><span class="hint">kg CO₂/ano</span></span>
+                  <input id="co2Rate" name="co2Rate" type="number" inputmode="decimal" min="0.1" max="1000" step="any" value="22" />
+                </label>
+                <label for="canopy"><span class="label-row"><span>Área de copa por árvore</span><span class="hint">m²</span></span>
+                  <input id="canopy" name="canopy" type="number" inputmode="decimal" min="1" max="400" step="any" value="20" />
+                </label>
+                <label for="rainfall"><span class="label-row"><span>Chuva anual local</span><span class="hint">mm/ano</span></span>
+                  <input id="rainfall" name="rainfall" type="number" inputmode="numeric" min="100" max="6000" step="1" value="1700" />
+                </label>
+                <label for="infiltration"><span class="label-row"><span>Parcela adicional que infiltra</span><span class="hint">% (cenário)</span></span>
+                  <input id="infiltration" name="infiltration" type="number" inputmode="decimal" min="0" max="100" step="any" value="20" />
+                </label>
+                <p class="field-note">A captura inicial (22 kg/ano) é um valor ilustrativo. Troque por dados de campo ou de literatura para a sua realidade.</p>
+                <div class="form-actions">
+                  <button class="button primary" type="submit">Atualizar cenário <b aria-hidden="true">↻</b></button>
+                  <button class="button ghost" type="button" id="useRegistered">Usar árvores registradas</button>
+                  <button class="text-button" type="button" id="resetCalculator">Restaurar padrões</button>
+                </div>
+                <p id="calculatorStatus" class="status" role="status" aria-live="polite"></p>
+              </form>
+
+              <div class="results-panel" aria-live="polite">
+                <div class="result-card accent"><p>CO₂ potencial acumulado</p><strong id="co2Result">—</strong><span id="co2Sub">—</span></div>
+                <div class="result-card"><p>O₂ associado à fotossíntese*</p><strong id="o2Result">—</strong><span>equivalente estequiométrico, não “oxigênio disponível”</span></div>
+                <div class="result-card"><p>Água direcionada ao solo**</p><strong id="waterResult">—</strong><span id="waterSub">—</span></div>
+                <div class="formula-note"><b>Como é calculado</b><br />CO₂ = árvores × idade × taxa anual. O₂ = CO₂ × 32/44. Água por ano = árvores × copa × chuva × percentual de infiltração (1 mm de chuva sobre 1 m² = 1 litro). * e ** são aproximações educativas; veja as limitações no estudo.</div>
+                <button class="text-button" id="copyResults" type="button">Copiar resumo do cenário</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 03 · ESTUDO -->
+          <section class="view" id="estudo" aria-labelledby="estudo-titulo" data-title="Estudo">
+            <p class="eyebrow">NOTA TÉCNICA · CIÊNCIA E RESPONSABILIDADE</p>
+            <h1 id="estudo-titulo" tabindex="-1">Araucárias: <em>importância no cenário climático.</em></h1>
+            <div class="study-grid">
+              <article class="study-lead">
+                <h2>Uma espécie, uma rede</h2>
+                <p>A araucária integra a Floresta Ombrófila Mista, componente da Mata Atlântica. Seu valor não se resume a uma conta de carbono: ela estrutura habitat, produz pinhão e ajuda a manter paisagens de altitude do Sul do Brasil.</p>
+                <p>Restaurar áreas degradadas com diversidade de espécies nativas, proteger florestas existentes, controlar invasoras e acompanhar a sobrevivência das mudas costuma gerar resultados mais robustos do que plantios isolados.</p>
+              </article>
+              <article><span class="index" aria-hidden="true">01</span><h2>Clima</h2><p>Árvores removem CO₂ enquanto acumulam biomassa. A taxa muda com idade, densidade, solo, clima, mortalidade e manejo. Para números verificáveis, é preciso inventário de campo e método reconhecido.</p></article>
+              <article><span class="index" aria-hidden="true">02</span><h2>Água e cheias</h2><p>Raízes, serapilheira e cobertura do solo podem melhorar a infiltração e reduzir erosão. Mas floresta também evapotranspira; o efeito sobre vazões depende da bacia, solo, uso anterior e evento de chuva. Ela não elimina sozinha enchentes como as do Taquari.</p></article>
+              <article><span class="index" aria-hidden="true">03</span><h2>Resiliência</h2><p>Nascentes e matas ciliares precisam de proteção contínua. Em áreas de risco, o plantio deve caminhar com restauração de APPs, conservação do solo, drenagem urbana e governança de bacia.</p></article>
+            </div>
+            <div class="sources">
+              <h2>Leituras que orientam este projeto</h2>
+              <ul>
+                <li><a href="https://www.ipcc.ch/report/ar6/wg3/chapter/chapter-7/" target="_blank" rel="noopener noreferrer">IPCC AR6 — Agricultura, Florestas e Outros Usos da Terra (AFOLU)</a>: benefícios e incertezas da mitigação baseada em terra.</li>
+                <li><a href="https://www.floram.org/article/doi/10.1590/2179-8087.010318" target="_blank" rel="noopener noreferrer">Floresta e Ambiente — biomassa e carbono de <i>Araucaria angustifolia</i></a>.</li>
+                <li><a href="https://revistas3.unicentro.br/index.php/ambiencia/article/view/2243" target="_blank" rel="noopener noreferrer">Ambiência — quantificação de carbono em povoamentos de araucária no Paraná</a>.</li>
+                <li><a href="https://onlinelibrary.wiley.com/doi/10.1002/hyp.70211" target="_blank" rel="noopener noreferrer">Hydrological Processes — características arbóreas e funções eco-hidrológicas</a>.</li>
+              </ul>
+              <p>Use a calculadora para mobilização e planejamento inicial. Para relatório, captação ou compensação de carbono, envolva engenheiro(a) florestal, hidrólogo(a) e dados locais.</p>
+            </div>
+          </section>
+
+          <!-- 04 · AÇÃO LOCAL -->
+          <section class="view" id="acao" aria-labelledby="acao-titulo" data-title="Ação local">
+            <p class="eyebrow">BASE DE AÇÃO · REGISTRO LOCAL</p>
+            <h1 id="acao-titulo" tabindex="-1">Transforme intenção<br />em <em>território cuidado.</em></h1>
+            <div class="action-grid">
+              <article>
+                <h2>Registro do próximo plantio</h2>
+                <form id="plantingForm" novalidate>
+                  <label for="plantingPlace"><span class="label-row"><span>Local ou nome da ação</span></span>
+                    <input id="plantingPlace" name="place" required maxlength="80" autocomplete="off" placeholder="Ex.: nascente do Arroio..." />
+                  </label>
+                  <label for="plantingTrees"><span class="label-row"><span>Número de mudas</span></span>
+                    <input id="plantingTrees" name="trees" type="number" inputmode="numeric" min="1" max="100000" step="1" required placeholder="0" />
+                  </label>
+                  <label for="plantingDate"><span class="label-row"><span>Data prevista</span><span class="hint">opcional</span></span>
+                    <input id="plantingDate" name="date" type="date" />
+                  </label>
+                  <button class="button primary full" type="submit">Salvar no dispositivo <b aria-hidden="true">+</b></button>
+                </form>
+                <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+                <p class="field-note">Os registros ficam apenas neste navegador. Eles não são enviados a nenhum servidor.</p>
+              </article>
+              <article class="action-list">
+                <h2>Agenda de campo</h2>
+                <ul id="plantingList" class="planting-list"></ul>
+                <button class="text-button" id="clearPlantings" type="button">Limpar registros locais</button>
+              </article>
+            </div>
+          </section>
+        </main>
+
+        <footer class="site-footer">Arauco Protectum · Campos de Cima da Serra, RS · Estimativas educativas, não substituem estudos técnicos.</footer>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="calculator-core.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
