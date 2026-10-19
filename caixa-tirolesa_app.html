@@ -248,6 +248,7 @@ const STATUS = ['Caixa aberto','Terça-feira (fechado)','Sem operação','Sem re
 const CONF = ['—','✔ Conferida com NF','+ Incluída pela NF','✎ Valor corrigido pela NF','Sem NF no arquivo','⚠ Sem NF – possível duplicidade','✖ Duplicado – excluído'];
 const MESNOME = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const EMPRESA = 'Serra Geral Vertical Ltda';
+const CORTE_SANGRIA = '2026-10-05'; // a partir de 06/10/2026 as sangrias são só informativas e não abatem o saldo do coordenador
 
 /* ===================== estado ===================== */
 function readSaved() {
@@ -303,7 +304,8 @@ function compute() {
     c.fimCarry = carry;
     c.confPDF = m.pdf == null ? 'sem' : (z(m.pdf - c.gab) ? 'ok' : 'warn');
     c.difPDF = m.pdf == null ? null : c.gab - m.pdf;
-    c.saldoMes = c.pCoord + c.pConf - c.gab;
+    c.gabAbat = sum(m.lanc.filter(l => l.t === 'Sangria Gabriel' && l.d <= CORTE_SANGRIA), l => l.s);
+    c.saldoMes = c.pCoord + c.pConf - c.gabAbat;
     meses.push(c);
   });
   const T = {meses, abertura:meses[0].abertura, fech:meses[meses.length - 1].fech};
@@ -318,8 +320,9 @@ function compute() {
   T.mediaCustos = T.mesesCustos ? T.custos / T.mesesCustos : 0;
   const mx = k => meses.reduce((b, c) => c[k] > b[k] ? c : b, meses[0]);
   T.maxGab = mx('gab'); T.maxCustos = mx('custos');
-  T.saldoCenario = T.pCoord + T.pConf - T.gab;
-  T.saldoConfirmado = T.pCoord - T.gab;
+  T.gabAbat = sum(meses, c => c.gabAbat);
+  T.saldoCenario = T.pCoord + T.pConf - T.gabAbat;
+  T.saldoConfirmado = T.pCoord - T.gabAbat;
   // custos por grupo / fornecedor
   const g = {}, f = {};
   S.meses.forEach((m, mi) => m.pag.forEach((p, pi) => {
@@ -579,7 +582,7 @@ function viewCoord(T) {
     ${kpi('Pagamentos fora do caixa', brl0(T.fora), 'assiduidade, custos, bonif., alim., DEV', 'c-orange')}
     ${kpi('Pago pelo coordenador (confirmado)', dash0(T.pCoord), '', 'c-green')}
     ${kpi('Ainda "a confirmar"', brl0(T.pConf), '', 'c-amber')}
-    ${kpi('Saldo cenário (pagamentos − sangrias)', brl0(T.saldoCenario), T.saldoCenario >= 0 ? 'empresa deve ao coordenador' : 'sangrias superam os pagamentos', T.saldoCenario >= 0 ? 'c-green' : 'c-red')}
+    ${kpi('Saldo cenário (sangrias abatidas até 05/10)', brl0(T.saldoCenario), T.saldoCenario >= 0 ? 'empresa deve ao coordenador' : 'sangrias superam os pagamentos', T.saldoCenario >= 0 ? 'c-green' : 'c-red')}
     ${kpi('Saldo confirmado', brl0(T.saldoConfirmado), 'só o que está como "Coordenador"', 'c-brand')}
   </div>`;
   const hd = ['Mês','Sangrias recebidas','Assiduidade','Custos e contas pagas','Outros (bonif./alim./DEV)','Pago pelo coordenador','A confirmar','Pago caixa / empresa','Saldo cenário (mês)','Saldo cenário (acumulado)','Pagamentos fora do caixa'];
@@ -595,10 +598,10 @@ function viewCoord(T) {
   const items = S.meses[UI.coordMes].pag.map((p, i) => [p, i]).filter(([p]) => p.v != null && (UI.coordPP === 'Todos' || p.p === UI.coordPP));
   h += items.length ? `<div class="list">${items.map(([p, i]) => rowPag(UI.coordMes, i, p)).join('')}</div>` : `<div class="card empty">Nenhum pagamento com este filtro.</div>`;
   h += `<h2 class="sec">Como ler esta aba</h2><div class="card"><ul class="note">
-    <li><b>Sangrias</b> (vermelho) = dinheiro retirado do caixa e entregue ao coordenador Gabriel.</li>
+    <li><b>Sangrias</b> (vermelho) = dinheiro retirado do caixa e entregue ao coordenador Gabriel. A partir de 06/10/2026 as sangrias são só informativas e NÃO alteram o saldo dele (o dinheiro é usado para contas pagas).</li>
     <li><b>Pagamentos fora do caixa</b> = assiduidade (verde), custos e contas pagas (laranja), bonificação, alimentação e DEV — não passaram pelo caixa diário.</li>
     <li><b>Pago por</b>: marque em cada pagamento quem pagou (Coordenador, Caixa ou Empresa). Enquanto estiver "A confirmar", o valor não entra como dívida confirmada.</li>
-    <li><b>Saldo cenário</b> = (pagamentos feitos pelo coordenador + a confirmar) − sangrias recebidas, supondo que o coordenador usou as sangrias para pagar essas despesas. Positivo = empresa deve ao coordenador; negativo = as sangrias superam os pagamentos registrados. Pagamentos marcados como "Caixa" ou "Empresa" saem do cenário.</li>
+    <li><b>Saldo cenário</b> = (pagamentos feitos pelo coordenador + a confirmar) − sangrias até 05/10/2026 (total R$ 46.010; as posteriores não abatem), supondo que o coordenador usou as sangrias para pagar essas despesas. Positivo = empresa deve ao coordenador; negativo = as sangrias superam os pagamentos registrados. Pagamentos marcados como "Caixa" ou "Empresa" saem do cenário.</li>
     <li>Esta aba é preliminar: será conciliada com a planilha anterior à revisão 2.0.</li></ul></div>`;
   return h;
 }
