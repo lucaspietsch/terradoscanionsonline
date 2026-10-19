@@ -840,7 +840,7 @@ function sheetMenu() {
     <button class="mi" data-m="print"><span class="e">🖨️</span><span>Imprimir / salvar como PDF<small>da tela atual</small></span></button>
     <button class="mi" data-m="theme"><span class="e">🌓</span><span>Tema: ${th === 'auto' ? 'automático' : th === 'dark' ? 'escuro' : 'claro'}<small>toque para alternar</small></span></button>
     <button class="mi" data-m="install"><span class="e">📲</span><span>Instalar no celular<small>adicionar à tela inicial</small></span></button>
-    ${S.rev !== REV ? `<button class="mi" data-m="upgrade"><span class="e">🆕</span><span>Atualizar dados<small>inclui o caixa de 04 a 07/10 · baixa um backup dos seus dados atuais antes</small></span></button>` : ''}
+    ${S.rev !== REV ? `<button class="mi" data-m="upgrade"><span class="e">🆕</span><span>Atualizar dados<small>inclui o caixa até 14/10 · baixa um backup dos seus dados atuais antes</small></span></button>` : ''}
     <button class="mi" data-m="reset"><span class="e">♻️</span><span style="color:var(--red)">Restaurar dados originais<small>descarta as alterações (${S.edits || 0} salvas)</small></span></button>
   </div><div class="foot">Controle de Caixa · Revisão ${LABEL} · dados até 14/10/2026<br>As alterações ficam salvas apenas neste aparelho.</div>`;
   openSheet({title:'Menu', body, noFooter:true, onOpen(el) {
@@ -989,8 +989,8 @@ addEventListener('scroll', hideTip, {passive:true});
 
 function upgradeData(manual) {
   if (S.edits > 0) {
-    const msg = manual ? `Atualizar os dados (inclui o caixa de 04 a 07/10)? Um backup (.json) dos seus dados atuais será baixado antes.`
-      : `Há dados novos (caixa de 04 a 07/10). Você tem ${S.edits} alteração(ões) salvas neste aparelho.\n\nOK = baixar um backup delas e carregar os dados atualizados.\nCancelar = continuar com seus dados atuais (dá para atualizar depois pelo Menu).`;
+    const msg = manual ? `Atualizar os dados (inclui o caixa até 14/10)? Um backup (.json) dos seus dados atuais será baixado antes.`
+      : `Há dados novos (caixa até 14/10). Você tem ${S.edits} alteração(ões) salvas neste aparelho.\n\nOK = baixar um backup delas e carregar os dados atualizados.\nCancelar = continuar com seus dados atuais (dá para atualizar depois pelo Menu).`;
     if (!confirm(msg)) return;
     exportJSON();
   }
