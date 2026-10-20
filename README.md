@@ -1,963 +1,201 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terra dos Cânions Online - Guia Completo de Turismo na Região</title>
-    <meta name="description" content="Descubra a Terra dos Cânions com guias credenciados, hospedagem local, restaurantes e tudo que você precisa para uma experiência inesquecível na natureza.">
-    <meta name="keywords" content="Terra dos Cânions, turismo, cânions, guias de turismo, hospedagem, trilhas, natureza, Cambará do Sul">
-    <meta name="author" content="Terra dos Cânions Online">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Terra dos Cânions Online - Guia Completo de Turismo">
-    <meta property="og:description" content="Descubra a Terra dos Cânions com guias credenciados, hospedagem local e restaurantes.">
-    <meta property="og:type" content="website">
-    
-    <style>
-        /* Reset e variáveis */
-        :root {
-            --primary-color: #2c5530;
-            --secondary-color: #4a7c59;
-            --accent-color: #e0f7e9;
-            --text-color: #333;
-            --light-color: #f8f9fa;
-            --dark-color: #1a3c23;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--light-color);
-            overflow-x: hidden;
-        }
-        
-        /* Tipografia responsiva */
-        h1 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            line-height: 1.2;
-        }
-        
-        h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-        }
-        
-        h3 {
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-        }
-        
-        p {
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
-        }
-        
-        /* Layout */
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        /* Header e Navegação */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .logo {
-            text-align: center;
-        }
-        
-        .logo h1 {
-            background: linear-gradient(45deg, #ffffff, var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-            letter-spacing: 1px;
-            position: relative;
-            margin-bottom: 0.5rem;
-        }
-        
-        .logo h1::after {
-            content: "";
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ffffff, transparent);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            padding: 0.5rem;
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-        
-        nav a:hover,
-        nav a:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            outline: none;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 4rem 0;
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-        }
-        
-        .hero-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: var(--text-color);
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 700px;
-            margin: 0 auto;
-            box-shadow: var(--shadow);
-        }
-        
-        .hero-card h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-        }
-        
-        /* Seções */
-        section {
-            padding: 3rem 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--primary-color);
-            position: relative;
-        }
-        
-        .section-title::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
-        }
-        
-        /* Cards */
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        
-        .card h3 {
-            color: var(--primary-color);
-            margin-bottom: 0.8rem;
-        }
-        
-        .card p {
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-        
-        /* Botões */
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-            text-align: center;
-            display: inline-block;
-            text-decoration: none;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .btn-primary:hover,
-        .btn-primary:focus {
-            background-color: var(--secondary-color);
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-        }
-        
-        .btn-secondary:hover,
-        .btn-secondary:focus {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .btn-small {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            max-width: 700px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-        
-        .modal-title {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            padding-right: 2rem;
-        }
-        
-        .guide-list {
-            list-style-type: none;
-        }
-        
-        .guide-list li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        .guide-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .guide-info {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        /* Formulário */
-        .form {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--primary-color);
-        }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 2px rgba(74, 124, 89, 0.2);
-        }
-        
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .submit-row {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        @media (min-width: 768px) {
-            .submit-row {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-        
-        .success-message {
-            color: var(--secondary-color);
-            font-style: italic;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 2rem;
-        }
-        
-        /* Media Queries para responsividade */
-        @media (min-width: 768px) {
-            .header-content {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-            
-            .logo {
-                text-align: left;
-            }
-            
-            nav ul {
-                justify-content: flex-end;
-            }
-            
-            .hero {
-                min-height: 70vh;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .card {
-                padding: 1rem;
-            }
-            
-            .form {
-                padding: 1.5rem;
-            }
-            
-            section {
-                padding: 2rem 0;
-            }
-            
-            .modal-content {
-                padding: 1.5rem;
-            }
-            
-            .guide-list li {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .guide-info {
-                margin-bottom: 0.5rem;
-            }
-        }
-        
-        /* Acessibilidade */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-        
-        /* Animações simples */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.8s ease forwards;
-        }
-    </style>
-</head>
-<body>
-    <header role="banner">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <h1>Terra dos Cânions Online</h1>
-                    <span class="sr-only">Portal completo de turismo na região dos cânions</span>
-                </div>
-                <nav role="navigation" aria-label="Menu principal">
-                    <ul>
-                        <li><a href="#inicio">Início</a></li>
-                        <li><a href="#servicos">Serviços</a></li>
-                        <li><a href="#contato">Contato</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
+# Cambará Ornamentais — e-commerce
 
-    <main role="main">
-        <section id="inicio" class="hero" aria-labelledby="hero-heading">
-            <div class="container">
-                <div class="hero-card fade-in">
-                    <h2 id="hero-heading">Natureza, cultura e lazer</h2>
-                    <p>Além de informações sobre Cambará do Sul você pode ter contato direto com guias, agências, hotéis, restaurantes e muito mais!</p>
-                </div>
-            </div>
-        </section>
+Loja virtual de **vasos de cimento feitos à mão**. Next.js 15 (App Router) + TypeScript, Tailwind + shadcn/ui, Supabase (Auth, Storage, PostgreSQL) com Prisma, Mercado Pago (Pix, cartão até 3x sem juros e boleto), Melhor Envio (frete) e Resend (e-mails).
 
-        <section id="servicos" aria-labelledby="servicos-heading">
-            <div class="container">
-                <h2 id="servicos-heading" class="section-title">Serviços disponíveis</h2>
+> **Modo demonstração:** sem `DATABASE_URL` o site sobe com o catálogo estático (os 10 vasos), cálculo de frete por tabela, carrinho e telas de checkout — mas pedidos, pagamento, login e painel admin ficam desativados. Dá para navegar e avaliar o visual antes de configurar qualquer serviço.
 
-                <div class="cards">
-                    <article class="card fade-in">
-                        <h3>Guias de Turismo</h3>
-                        <p>Guias credenciados para acompanhá-lo nas trilhas e aventuras.</p>
-                        <button class="btn btn-primary modal-btn" data-modal="guias-modal">Ver Guias</button>
-                    </article>
+## Sumário
 
-                    <article class="card fade-in">
-                        <h3>Agências Locais</h3>
-                        <p>Agências de turismo especializadas na região dos cânions.</p>
-                        <button class="btn btn-primary modal-btn" data-modal="agencias-modal">Ver Agências</button>
-                    </article>
+1. [Rodando localmente](#1-rodando-localmente)
+2. [Supabase](#2-supabase)
+3. [Banco de dados, seed e usuário admin](#3-banco-de-dados-seed-e-usuário-admin)
+4. [Mercado Pago (sandbox e produção)](#4-mercado-pago-sandbox-e-produção)
+5. [Melhor Envio (frete)](#5-melhor-envio-frete)
+6. [Resend, Analytics e demais variáveis](#6-resend-analytics-e-demais-variáveis)
+7. [Deploy na Vercel](#7-deploy-na-vercel)
+8. [Regras de negócio](#8-regras-de-negócio)
+9. [Testes](#9-testes)
+10. [Trocando fotos e dados provisórios](#10-trocando-fotos-e-dados-provisórios)
+11. [Estrutura do projeto](#11-estrutura-do-projeto)
+12. [Segurança e limitações conhecidas](#12-segurança-e-limitações-conhecidas)
 
-                    <article class="card fade-in">
-                        <h3>Hospedagem</h3>
-                        <p>Pousadas locais para uma estadia confortável e acolhedora.</p>
-                        <button class="btn btn-primary modal-btn" data-modal="hospedagem-modal">Ver Opções</button>
-                    </article>
+---
 
-                    <article class="card fade-in">
-                        <h3>Gastronomia</h3>
-                        <p>Restaurantes, lanchonetes e serviço de delivery.</p>
-                        <button class="btn btn-primary modal-btn" data-modal="gastronomia-modal">Ver Opções</button>
-                    </article>
+## 1. Rodando localmente
 
-                    <article class="card fade-in">
-                        <h3>Parques e Áreas de Visitação</h3>
-                        <p>Conheça os parques e áreas de visitação disponíveis.</p>
-                        <button class="btn btn-primary modal-btn" data-modal="parques-modal">Ver Parques</button>
-                    </article>
+Requisitos: **Node 20.12+** e npm.
 
-                    <article class="card fade-in">
-                        <h3>Academias</h3>
-                        <p>Opções para manter sua rotina de exercícios durante a viagem.</p>
-                        <a href="#contato" class="btn btn-secondary">Entrar em Contato</a>
-                    </article>
+```bash
+npm install
+cp .env.example .env.local      # preencha aos poucos — tudo é opcional para o modo demonstração
+npm run dev                     # http://localhost:3000
+```
 
-                    <article class="card fade-in">
-                        <h3>Serviços Públicos</h3>
-                        <p>Informações sobre serviços públicos da região.</p>
-                        <a href="#contato" class="btn btn-secondary">Entrar em Contato</a>
-                    </article>
+Scripts úteis:
 
-                    <article class="card fade-in">
-                        <h3>SOS</h3>
-                        <p>Serviços de emergência e auxílio ao turista.</p>
-                        <button class="btn btn-primary modal-btn" data-modal="sos-modal">Ver Serviços SOS</button>
-                    </article>
-                </div>
-            </div>
-        </section>
+| Comando | O que faz |
+|---|---|
+| `npm run dev` / `build` / `start` | Next.js |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Testes (regra de frete, totais, webhook; integração com banco opcional) |
+| `npm run db:push` | Cria/atualiza as tabelas a partir do `prisma/schema.prisma` |
+| `npm run db:migrate` / `db:deploy` | Migrations versionadas (dev / produção) |
+| `npm run db:seed` | Cria categorias, acabamentos, os 10 produtos, estoque e configurações padrão |
+| `npm run admin:create` | Cria o usuário administrador inicial |
+| `npm run assets:placeholders` | Regenera as imagens provisórias em `public/images` |
+| `npm run assets:brand` | Regenera favicon, ícone do app e imagem Open Graph (1200×630) |
 
-        <!-- Modal para Guias de Turismo -->
-        <div id="guias-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn">&times;</button>
-                <h2 class="modal-title">Guias de Turismo Disponíveis</h2>
-                <ul class="guide-list">
-                    <li>
-                        <div class="guide-info">
-                            <strong>Lucas Pietsch</strong> - experiência com Ecoturismo desde 2013
-                        </div>
-                        <button class="btn btn-primary btn-small contact-guide" data-guide="Lucas Pietsch">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Ana Silva</strong> - guia especializada em trilhas e escalada
-                        </div>
-                        <button class="btn btn-primary btn-small contact-guide" data-guide="Ana Silva">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Carlos Mendes</strong> - conhecedor da flora e fauna local
-                        </div>
-                        <button class="btn btn-primary btn-small contact-guide" data-guide="Carlos Mendes">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Mariana Oliveira</strong> - guia para grupos familiares
-                        </div>
-                        <button class="btn btn-primary btn-small contact-guide" data-guide="Mariana Oliveira">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Roberto Santos</strong> - especialista em turismo de aventura
-                        </div>
-                        <button class="btn btn-primary btn-small contact-guide" data-guide="Roberto Santos">Entrar em contato</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+## 2. Supabase
 
-        <!-- Modal para Agências Locais -->
-        <div id="agencias-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn">&times;</button>
-                <h2 class="modal-title">Agências Locais</h2>
-                <ul class="guide-list">
-                    <li>
-                        <div class="guide-info">
-                            <strong>Cânion Tur</strong> - pacotes completos para aventuras
-                        </div>
-                        <button class="btn btn-primary btn-small contact-agency" data-agency="Cânion Tur">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>EcoSerra Viagens</strong> - turismo ecológico e sustentável
-                        </div>
-                        <button class="btn btn-primary btn-small contact-agency" data-agency="EcoSerra Viagens">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Aventura Gaúcha</strong> - experiências autênticas na região
-                        </div>
-                        <button class="btn btn-primary btn-small contact-agency" data-agency="Aventura Gaúcha">Entrar em contato</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+1. Crie um projeto em [supabase.com](https://supabase.com) (região **São Paulo**, de preferência).
+2. **Settings → API:** copie `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`, `anon public` → `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `service_role` → `SUPABASE_SERVICE_ROLE_KEY` (**segredo**, só servidor).
+3. **Settings → Database → Connection string:**
+   - `DATABASE_URL` = *Transaction pooler* (porta 6543, com `?pgbouncer=true&connection_limit=1`) — usado pelo app.
+   - `DIRECT_URL` = conexão direta/session (porta 5432) — usada por `prisma db push/migrate`.
+4. **Authentication → Providers:** mantenha *Email* ligado. Para login com Google, ative *Google* e cadastre o Client ID/Secret do Google Cloud (URI de redirecionamento: `https://SEU-PROJETO.supabase.co/auth/v1/callback`).
+5. **Authentication → URL Configuration:** *Site URL* = sua URL pública; em *Redirect URLs* adicione `https://seudominio.com.br/auth/callback` e `http://localhost:3000/auth/callback`.
+6. **Row Level Security + Storage:** depois do passo 3 (tabelas criadas), cole o conteúdo de [`prisma/rls.sql`](prisma/rls.sql) no *SQL Editor* e execute. Ele liga RLS em todas as tabelas (por padrão nada é exposto via API pública), libera leitura do catálogo e dos dados do próprio usuário, e cria o bucket público `products` para as fotos.
 
-        <!-- Modal para Hospedagem -->
-        <div id="hospedagem-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn">&times;</button>
-                <h2 class="modal-title">Opções de Hospedagem</h2>
-                <ul class="guide-list">
-                    <li>
-                        <div class="guide-info">
-                            <strong>Pousada Cânion Verde</strong> - vista privilegiada e café colonial
-                        </div>
-                        <button class="btn btn-primary btn-small contact-lodging" data-lodging="Pousada Cânion Verde">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Hotel Serra Azul</strong> - conforto no centro da cidade
-                        </div>
-                        <button class="btn btn-primary btn-small contact-lodging" data-lodging="Hotel Serra Azul">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Chalé das Araucárias</strong> - experiência rústica na natureza
-                        </div>
-                        <button class="btn btn-primary btn-small contact-lodging" data-lodging="Chalé das Araucárias">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Hostel Aventura</strong> - opção econômica para mochileiros
-                        </div>
-                        <button class="btn btn-primary btn-small contact-lodging" data-lodging="Hostel Aventura">Entrar em contato</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+> O Prisma conecta como `postgres` (ignora RLS); as políticas protegem o acesso direto pela chave `anon`. Toda escrita sensível passa pelo servidor.
 
-        <!-- Modal para Gastronomia -->
-        <div id="gastronomia-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn">&times;</button>
-                <h2 class="modal-title">Opções Gastronômicas</h2>
-                <ul class="guide-list">
-                    <li>
-                        <div class="guide-info">
-                            <strong>Restaurante Sabor Serrano</strong> - pratos típicos da região
-                        </div>
-                        <button class="btn btn-primary btn-small contact-gastronomy" data-gastronomy="Restaurante Sabor Serrano">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Café do Cânion</strong> - lanches rápidos e café colonial
-                        </div>
-                        <button class="btn btn-primary btn-small contact-gastronomy" data-gastronomy="Café do Cânion">Entrar em contato</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Pizzaria Montanha</strong> - pizzas artesanais e delivery
-                        </div>
-                        <button class="btn btn-primary btn-small contact-gastronomy" data-gastronomy="Pizzaria Montanha">Entrar em contato</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+## 3. Banco de dados, seed e usuário admin
 
-        <!-- Modal para Parques -->
-        <div id="parques-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn">&times;</button>
-                <h2 class="modal-title">Parques e Áreas de Visitação</h2>
-                <ul class="guide-list">
-                    <li>
-                        <div class="guide-info">
-                            <strong>Parque Nacional de Aparados da Serra</strong> - cânion Itaimbezinho
-                        </div>
-                        <button class="btn btn-primary btn-small contact-park" data-park="Parque Nacional de Aparados da Serra">Mais informações</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Parque Nacional da Serra Geral</strong> - cânion Fortaleza
-                        </div>
-                        <button class="btn btn-primary btn-small contact-park" data-park="Parque Nacional da Serra Geral">Mais informações</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Parque do Caracol</strong> - cascata e mirantes
-                        </div>
-                        <button class="btn btn-primary btn-small contact-park" data-park="Parque do Caracol">Mais informações</button>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Vale da Lageana</strong> - trilhas e cachoeiras
-                        </div>
-                        <button class="btn btn-primary btn-small contact-park" data-park="Vale da Lageana">Mais informações</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+```bash
+npm run db:push        # ou: npm run db:migrate -- --name init  (para versionar migrations)
+npm run db:seed        # 10 produtos, 4 acabamentos, 4 categorias, estoque inicial
+```
 
-        <!-- Modal para SOS -->
-        <div id="sos-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn">&times;</button>
-                <h2 class="modal-title">Serviços de Emergência</h2>
-                <ul class="guide-list">
-                    <li>
-                        <div class="guide-info">
-                            <strong>Resgate Montanhismo</strong> - (54) 99988-7766
-                        </div>
-                        <a href="tel:54999887766" class="btn btn-primary btn-small">Ligar</a>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Hospital Regional</strong> - (54) 3251-1234
-                        </div>
-                        <a href="tel:5432511234" class="btn btn-primary btn-small">Ligar</a>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Polícia Turística</strong> - 190
-                        </div>
-                        <a href="tel:190" class="btn btn-primary btn-small">Ligar</a>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Bombeiros</strong> - 193
-                        </div>
-                        <a href="tel:193" class="btn btn-primary btn-small">Ligar</a>
-                    </li>
-                    <li>
-                        <div class="guide-info">
-                            <strong>Defesa Civil</strong> - 199
-                        </div>
-                        <a href="tel:199" class="btn btn-primary btn-small">Ligar</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+Crie o administrador (usa a service role; defina `ADMIN_EMAIL`/`ADMIN_PASSWORD` no `.env.local` ou passe como argumentos):
 
-        <section id="contato" aria-labelledby="contato-heading">
-            <div class="container">
-                <h2 id="contato-heading" class="section-title">Entre em contato</h2>
-                <form class="form fade-in" action="#" method="post">
-                    <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
-                    </div>
+```bash
+npm run admin:create -- voce@seudominio.com.br 'uma-senha-forte-com-12+'
+```
 
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-                    </div>
+O script cria o usuário no Supabase Auth com `app_metadata.role = "admin"` (lida pelo middleware) e grava `User.role = ADMIN` no banco (conferido de novo em cada rota `/api/admin/*`). Depois entre em `/entrar` e acesse **`/admin`**.
 
-                    <div class="form-group">
-                        <label for="servico">Serviço de Interesse</label>
-                        <select id="servico" name="servico" required>
-                            <option value="">Selecione um serviço</option>
-                            <option value="guias">Guias de Turismo</option>
-                            <option value="agencias">Agências Locais</option>
-                            <option value="hospedagem">Hospedagem</option>
-                            <option value="gastronomia">Gastronomia</option>
-                            <option value="parques">Parques e Áreas de Visitação</option>
-                            <option value="academias">Academias</option>
-                            <option value="servicos-publicos">Serviços Públicos</option>
-                            <option value="sos">SOS</option>
-                        </select>
-                    </div>
+O seed **não sobrescreve** o estoque já ajustado pelo admin ao rodar de novo.
 
-                    <div class="form-group">
-                        <label for="contato-especifico">Contato Específico (se aplicável)</label>
-                        <input type="text" id="contato-especifico" name="contato-especifico" placeholder="Ex: Lucas Pietsch, Pousada Cânion Verde, etc.">
-                    </div>
+## 4. Mercado Pago (sandbox e produção)
 
-                    <div class="form-group">
-                        <label for="mensagem">Mensagem</label>
-                        <textarea id="mensagem" name="mensagem" placeholder="Como podemos ajudar?" required></textarea>
-                    </div>
+Integração **Checkout Transparente** (sem redirecionar o cliente). O cartão é tokenizado no navegador pelo SDK do Mercado Pago — o número **nunca passa pelo nosso servidor**.
 
-                    <div class="submit-row">
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                        <span class="success-message">Retornaremos o contato em breve.</span>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </main>
+### Sandbox (testes)
 
-    <footer role="contentinfo">
-        <div class="container">
-            <p>&copy; 2023 Terra dos Cânions Online. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+1. Em [mercadopago.com.br/developers](https://www.mercadopago.com.br/developers) crie uma aplicação (produto: *Checkout API / Pagamentos online*).
+2. Em **Credenciais de teste**, copie `Access Token` (`TEST-...`) → `MERCADOPAGO_ACCESS_TOKEN` e `Public Key` → `NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY`.
+3. **Webhooks:** em *Suas integrações → Webhooks → Modo de teste*, configure a URL `https://SEU-DOMINIO/api/webhooks/mercadopago` com o evento **Pagamentos**. Copie a **chave secreta** para `MERCADOPAGO_WEBHOOK_SECRET`.
+   - Em desenvolvimento local use um túnel (ex.: `ngrok http 3000`) e defina `NEXT_PUBLIC_APP_URL` com a URL do túnel — o `notification_url` de cada pagamento usa esse valor.
+4. Cartões de teste: <https://www.mercadopago.com.br/developers/pt/docs/checkout-api/integration-test/test-cards> (use o titular `APRO` para aprovar, `OTHE` para recusar e CPF de teste `12345678909`).
+5. Para Pix e boleto no sandbox, use um *comprador de teste* e o simulador do painel.
 
-    <script>
-        // Funcionalidade dos modais
-        document.addEventListener('DOMContentLoaded', function() {
-            // Abrir modal
-            const modalBtns = document.querySelectorAll('.modal-btn');
-            const modals = document.querySelectorAll('.modal');
-            const closeBtns = document.querySelectorAll('.close-btn');
-            
-            modalBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const modalId = this.getAttribute('data-modal');
-                    document.getElementById(modalId).style.display = 'flex';
-                });
-            });
-            
-            // Fechar modal com botão X
-            closeBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.closest('.modal').style.display = 'none';
-                });
-            });
-            
-            // Fechar modal clicando fora
-            modals.forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        this.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Fechar modal com tecla ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    modals.forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                }
-            });
-            
-            // Correção do link Início
-            document.querySelector('a[href="#inicio"]').addEventListener('click', function(e) {
-                e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-            
-            // Botões de contato individual
-            document.querySelectorAll('.contact-guide').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const guideName = this.getAttribute('data-guide');
-                    document.getElementById('servico').value = 'guias';
-                    document.getElementById('contato-especifico').value = guideName;
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                    document.getElementById('contato').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            document.querySelectorAll('.contact-agency').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const agencyName = this.getAttribute('data-agency');
-                    document.getElementById('servico').value = 'agencias';
-                    document.getElementById('contato-especifico').value = agencyName;
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                    document.getElementById('contato').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            document.querySelectorAll('.contact-lodging').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const lodgingName = this.getAttribute('data-lodging');
-                    document.getElementById('servico').value = 'hospedagem';
-                    document.getElementById('contato-especifico').value = lodgingName;
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                    document.getElementById('contato').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            document.querySelectorAll('.contact-gastronomy').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const gastronomyName = this.getAttribute('data-gastronomy');
-                    document.getElementById('servico').value = 'gastronomia';
-                    document.getElementById('contato-especifico').value = gastronomyName;
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                    document.getElementById('contato').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            document.querySelectorAll('.contact-park').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const parkName = this.getAttribute('data-park');
-                    document.getElementById('servico').value = 'parques';
-                    document.getElementById('contato-especifico').value = parkName;
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                    document.getElementById('contato').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            // Animações de entrada
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                    }
-                });
-            }, observerOptions);
-            
-            document.querySelectorAll('.card, .form').forEach(el => {
-                observer.observe(el);
-            });
-        });
-    </script>
-</body>
-</html>
+### Produção
+
+1. Ative as **credenciais de produção** (exige conta verificada) e troque `MERCADOPAGO_ACCESS_TOKEN` (`APP_USR-...`) e `NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY`.
+2. Repita o cadastro do webhook em *Modo de produção* e atualize `MERCADOPAGO_WEBHOOK_SECRET`.
+3. **Parcelamento sem juros (até 3x):** o site limita a 3 parcelas, mas **quem decide quem paga os juros é a configuração da sua conta** — em *Seu negócio → Custos → Oferecer parcelamento sem juros* ative até 3x (a loja absorve a taxa). Sem isso, o cliente é cobrado com juros mesmo o site anunciando "sem juros".
+4. Pix expira em 30 min; boleto em 3 dias (ajustável em `lib/server/mercadopago.ts`).
+
+### Como o webhook funciona
+
+`POST /api/webhooks/mercadopago` → valida a assinatura `x-signature` (HMAC-SHA256 com a chave secreta) → **não confia no corpo**: busca o pagamento na API do MP → confere o valor → aplica o status de forma **idempotente** (tabela `PaymentEvent`, uma linha por pagamento+status). Aprovado: pedido vira *Pago*, estoque é baixado (uma única vez) e o cliente recebe e-mail.
+
+## 5. Melhor Envio (frete)
+
+1. Crie conta em [melhorenvio.com.br](https://melhorenvio.com.br) (sandbox: [sandbox.melhorenvio.com.br](https://sandbox.melhorenvio.com.br)).
+2. *Configurações → Tokens de acesso* → gere um token com permissão `shipping-calculate` → `MELHOR_ENVIO_TOKEN`. Use `MELHOR_ENVIO_ENV=sandbox` ou `production`.
+3. Defina o **CEP de origem** (`ORIGIN_CEP` ou no admin → Configurações) e, se quiser, os serviços em `MELHOR_ENVIO_SERVICES` (padrão `1,2,3,4` = PAC, SEDEX, Jadlog .Package, Jadlog .Com).
+
+Cálculo: peso e dimensões dos itens são somados numa única caixa (**+10% no peso** para embalagem reforçada; peças empilhadas na altura). **Sem token, ou se a API falhar/demorar (7 s), cai automaticamente na tabela fixa por região** (`lib/shipping.ts`: PAC e SEDEX por faixa de CEP × peso). Ajuste os valores da tabela ao seu contrato real.
+
+## 6. Resend, Analytics e demais variáveis
+
+- **Resend:** crie a API key, verifique seu domínio e defina `RESEND_API_KEY` e `EMAIL_FROM`. Sem a chave, os e-mails são apenas registrados no log (não quebram o checkout). Enviados: pedido recebido, pagamento aprovado e pedido enviado (com rastreio).
+- **GA4 / Meta Pixel:** `NEXT_PUBLIC_GA4_ID` e `NEXT_PUBLIC_META_PIXEL_ID`. Só carregam **depois** do consentimento no banner de cookies (LGPD). Eventos: `view_item`, `add_to_cart`, `begin_checkout`, `purchase`.
+- **Dados da loja** (WhatsApp, Instagram, CNPJ, e-mail, endereço de retirada, mapa): variáveis `NEXT_PUBLIC_*` no `.env.example`. WhatsApp, Instagram, CEP de origem, e-mail e a faixa de anúncio também podem ser mudados no **admin → Configurações**, sem novo deploy.
+- **Upstash (opcional):** habilita rate limiting compartilhado entre as instâncias serverless.
+
+Todas as variáveis estão documentadas em [`.env.example`](.env.example).
+
+## 7. Deploy na Vercel
+
+1. Suba o repositório no GitHub e importe em [vercel.com/new](https://vercel.com/new) (framework: Next.js; o *build command* padrão `npm run build` já roda `prisma generate`).
+2. Cadastre **todas** as variáveis do `.env.example` em *Settings → Environment Variables* (marque `NEXT_PUBLIC_APP_URL` com a URL final, `https://...`).
+3. Rode `db:push`/`db:migrate` e `db:seed` apontando para o banco de produção (da sua máquina, com o `.env` de produção) e crie o admin (`npm run admin:create`).
+4. Cadastre o domínio e atualize: **Supabase** (Site URL e Redirect URLs), **Mercado Pago** (webhook de produção) e **Resend** (domínio).
+5. Faça um pedido de teste real de baixo valor (Pix) e confirme: webhook chegou, pedido virou *Pago*, estoque baixou, e-mail enviado.
+
+Notas:
+- Páginas de produto usam **ISR** (`revalidate = 1h`); salvar produto/configuração no admin chama `revalidatePath` e atualiza a vitrine na hora.
+- O CSP em `next.config.mjs` já libera Mercado Pago, Supabase, ViaCEP, GA4 e Meta; se usar outro serviço de terceiros, inclua-o lá.
+
+## 8. Regras de negócio
+
+- **Todos os valores são inteiros em centavos** (`3500` = R$ 35,00). `formatBRL()` só na exibição.
+- **Frete grátis: `subtotal > R$ 160,00`** (estrito — exatamente R$ 160,00 **não** ganha). Limite configurável no admin (`free_shipping_threshold`, em centavos; padrão `16000`). O subtotal considerado é o dos **produtos antes de cupom**.
+  - Acima do limite, a opção de transportadora **mais barata** vira "Grátis"; as demais mostram o valor normal. "Retirar no local" é sempre R$ 0.
+  - A barra *"Faltam R$ XX,XX para você ganhar frete grátis"* mostra o mínimo necessário para **passar** do limite (com subtotal = R$ 160,00 faltam R$ 0,01).
+- **Nada vindo do navegador é confiável:** o carrinho envia só `productId`, `finishId` e quantidade. `/api/checkout` recalcula no servidor preço, estoque, frete (nova cotação; a opção escolhida precisa existir na cotação), cupom e total — e só então cria o pedido e o pagamento.
+- **Estoque:** validado no checkout e **baixado quando o pagamento é aprovado** (webhook), com `GREATEST(estoque - n, 0)` para não ficar negativo. Cancelamento pelo admin devolve o estoque.
+- **Cupons:** % ou valor fixo, validade, uso máximo, subtotal mínimo. O uso é contado ao criar o pedido (com incremento condicional contra corrida) e devolvido se o pagamento falhar/for recusado.
+- **Pedido:** número sequencial legível (`CB-0001`). Convidados acompanham pelo link com `token` secreto (enviado por e-mail); usuários logados veem em `/conta`.
+- **Status:** Aguardando pagamento → Pago → Em produção → Enviado → Entregue / Cancelado. "Enviado" exige código de rastreio (retirada no local dispensa) e dispara e-mail.
+
+## 9. Testes
+
+```bash
+npm test
+```
+
+- `tests/shipping.test.ts` — frete grátis **abaixo de 160, exatamente 160 e acima de 160**, opção mais barata, retirada, limite configurável, barra de progresso, pacote (+10%) e tabela por região.
+- `tests/totals.test.ts` — subtotal/frete/desconto/total, cupons, formatação em BRL e numeração.
+- `tests/webhook-signature.test.ts` — validação do `x-signature` do Mercado Pago.
+- `tests/orders.integration.test.ts` — fluxo completo contra PostgreSQL real (checkout, recálculo no servidor, estoque, cupons, falha do MP, webhook idempotente, admin). **Só roda** com `TEST_DATABASE_URL` (um banco descartável, já com `db push` + `db:seed`); o Mercado Pago e o Resend são simulados:
+
+```bash
+TEST_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/cambara_test npm test
+```
+
+## 10. Trocando fotos e dados provisórios
+
+- **Imagens provisórias:** `public/images/**` são ilustrações geradas por script (`npm run assets:placeholders`) só para o site não ficar vazio. Troque por fotos reais de duas formas: (a) substitua os arquivos mantendo o mesmo nome (`products/<slug>-1..4.webp` = vazio, com planta, em ambiente, com régua); ou (b) **admin → Produtos → editar → Enviar fotos** (vão para o Supabase Storage). Escreva um `alt` descritivo para cada foto.
+- **Depoimentos:** a seção começa **vazia** e some da home até você cadastrar depoimentos reais (admin → Configurações).
+- **Textos legais** (privacidade, termos, trocas) são um ponto de partida — revise com seu contador/advogado.
+- Marcadores do briefing que viram variáveis: CEP de origem (`ORIGIN_CEP`), endereço de retirada, Instagram, WhatsApp e CNPJ.
+
+## 11. Estrutura do projeto
+
+```
+app/
+  (loja)/            vitrine: home, /vasos, /vasos/[slug], /carrinho, /checkout, /pedido/[n], /conta, institucionais
+  admin/             painel (dashboard, produtos, pedidos, cupons, configurações)
+  api/               rotas: products, shipping/quote, coupon, checkout, webhooks/mercadopago, newsletter, contact, cart, wishlist, account, admin/*
+  auth/callback/     retorno do login (e-mail/OAuth)
+components/          ui/ (shadcn customizado), brand/, layout/, home/, shop/, checkout/, admin/, account/
+lib/
+  shipping.ts        regras PURAS de frete (grátis, pacote, tabela por região)
+  totals.ts          cupons, totais, numeração de pedido
+  money.ts           centavos ⇄ BRL
+  server/            pedidos, Mercado Pago, Melhor Envio, cotação, e-mail, auth, rate limit  (server-only)
+  data/              acesso a dados (Prisma ou catálogo estático no modo demonstração)
+  catalog/seed-data  os 10 produtos — fonte única do seed e do modo demonstração
+prisma/              schema.prisma, seed.ts, rls.sql
+scripts/             create-admin, geradores de imagens/ícones
+tests/               vitest
+types/               DTOs compartilhados
+middleware.ts        sessão Supabase + proteção de /conta, /admin e /api/admin
+```
+
+Identidade visual: tokens em `tailwind.config.ts` (Musgo, Sálvia, Concreto, Névoa, Branco Pedra, Sombra), fontes Fraunces (títulos) e Jost (texto) self-hosted via `next/font`, logomarca em `components/brand/logo.tsx` (SVG exatamente como no briefing).
+
+## 12. Segurança e limitações conhecidas
+
+**O que está implementado:** validação Zod no servidor em toda entrada; preço/frete/total sempre recalculados no backend; webhook com assinatura + idempotência + conferência de valor; checagem de `Origin` (CSRF) em toda rota mutável autenticada por cookie; rate limiting nas rotas públicas de escrita; honeypot no formulário de contato; headers de segurança (CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy); sessões e senhas só pelo Supabase Auth; RLS (`prisma/rls.sql`); nenhum segredo no cliente; banner de cookies com consentimento antes de GA4/Meta.
+
+**Ressalvas honestas:**
+
+- O CSP usa `'unsafe-inline'` em scripts/estilos: um CSP com *nonce* obrigaria renderização dinâmica de todas as páginas e desligaria o ISR. Troque se preferir segurança máxima a cache estático.
+- Sem Upstash, o rate limit é por instância (não compartilhado entre funções serverless).
+- A tokenização de cartão usa `mp.createCardToken` do SDK v2. Para o nível mais alto de proteção PCI (SAQ A) o Mercado Pago recomenda **Secure Fields**; migrar é uma troca localizada em `components/checkout/card-form.tsx`.
+- Cotação com muitos itens grandes pode ultrapassar os limites de dimensão dos Correios numa única caixa; nesse caso o Melhor Envio devolve erro e o site cai na tabela fixa (considere dividir o pedido em volumes).
+- Sentry é opcional e não vem configurado (`npx @sentry/wizard@latest -i nextjs` resolve). Hoje os erros vão para `console.error` (logs da Vercel).
+- Lighthouse: medido localmente (mobile, throttling simulado) com Acessibilidade/Boas práticas/SEO em 100 e Performance entre ~88 e 98 conforme a página e a máquina; confirme na URL final da Vercel.

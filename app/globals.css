@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --musgo: #2f3e2c;
+    --nevoa: #eceae5;
+    --sombra: #232a21;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-nevoa font-sans text-base font-light text-sombra antialiased;
+    font-feature-settings: "kern", "liga";
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif font-light tracking-tight text-sombra;
+  }
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-musgo;
+  }
+  .on-dark :focus-visible,
+  [data-dark] :focus-visible {
+    @apply outline-pedra;
+  }
+  ::selection {
+    background: #8a9a7b;
+    color: #fff;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-xs font-normal uppercase tracking-label text-secundario;
+  }
+  .section-y {
+    @apply py-20 md:py-28;
+  }
+  .h1-display {
+    @apply font-serif text-[2.75rem] font-light leading-[1.05] md:text-6xl;
+  }
+  .h2-section {
+    @apply font-serif text-3xl font-light leading-tight md:text-[2.5rem];
+  }
+  .prose-cb {
+    @apply space-y-4 text-[1.0625rem] leading-relaxed text-sombra/90;
+  }
+  .prose-cb h2 {
+    @apply mt-10 font-serif text-2xl font-light;
+  }
+  .prose-cb h3 {
+    @apply mt-6 font-serif text-xl font-light;
+  }
+  .prose-cb ul {
+    @apply list-disc space-y-1 pl-6;
+  }
+  .prose-cb a {
+    @apply text-musgo underline underline-offset-4 hover:text-salvia;
+  }
+  .field-input {
+    @apply h-11 w-full rounded border border-concreto bg-pedra px-3.5 text-[0.9375rem] text-sombra placeholder:text-secundario/70 transition-colors focus-visible:border-musgo focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-musgo disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-erro;
+  }
+}
+
+/* Fotos de produto: textura de concreto discreta no estado de carregamento */
+.img-skeleton {
+  background: linear-gradient(110deg, #e3e0d9 8%, #ecebe6 18%, #e3e0d9 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position-x: -200%; }
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }

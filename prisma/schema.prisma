@@ -1,0 +1,313 @@
+// Cambará Ornamentais — modelo de dados.
+// Todos os valores monetários são inteiros em CENTAVOS.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // Supabase: use a URL do pooler (porta 6543, ?pgbouncer=true) em `url` e a conexão direta em `directUrl` (migrations).
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  AWAITING_PAYMENT
+  PAID
+  IN_PRODUCTION
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
+}
+
+enum DeliveryMethod {
+  SHIPPING
+  PICKUP
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  BOLETO
+}
+
+model User {
+  /// Mesmo id do usuário no Supabase Auth (auth.users.id)
+  id        String   @id @db.Uuid
+  name      String?
+  email     String   @unique
+  phone     String?
+  cpf       String?
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  addresses Address[]
+  orders    Order[]
+  cart      Cart?
+  wishlist  WishlistItem[]
+}
+
+model Address {
+  id           String   @id @default(cuid())
+  userId       String   @db.Uuid
+  label        String?
+  recipient    String?
+  cep          String
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String   @db.Char(2)
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  imageUrl  String?
+  imageAlt  String?
+  order     Int       @default(0)
+  products  Product[]
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  shortDescription String
+  longDescription  String
+  priceCents       Int
+  heightCm         Float
+  /// Largura — ou diâmetro, quando `round` = true
+  widthCm          Float
+  depthCm          Float?
+  /// Peça redonda: mostrar medidas como "A × Ø D"
+  round            Boolean  @default(true)
+  weightGrams      Int
+  hasDrainage      Boolean  @default(true)
+  featured         Boolean  @default(true)
+  active           Boolean  @default(true)
+  /// "Mais vendido" | "Novo" | null
+  badge            String?
+  plants           String[]
+  sortOrder        Int      @default(0)
+  categoryId       String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  category Category         @relation(fields: [categoryId], references: [id])
+  images   ProductImage[]
+  variants ProductVariant[]
+  wishedBy WishlistItem[]
+
+  @@index([categoryId])
+  @@index([active, featured])
+}
+
+model ProductImage {
+  id        String @id @default(cuid())
+  productId String
+  url       String
+  alt       String
+  order     Int    @default(0)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Finish {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  hex   String
+
+  variants ProductVariant[]
+}
+
+model ProductVariant {
+  id        String @id @default(cuid())
+  productId String
+  finishId  String
+  stock     Int    @default(0)
+  sku       String @unique
+
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  finish    Finish     @relation(fields: [finishId], references: [id])
+  cartItems CartItem[]
+
+  @@unique([productId, finishId])
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+  userId    String   @unique @db.Uuid
+  updatedAt DateTime @updatedAt
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+}
+
+model CartItem {
+  id        String @id @default(cuid())
+  cartId    String
+  variantId String
+  quantity  Int
+
+  cart    Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, variantId])
+}
+
+model WishlistItem {
+  userId    String   @db.Uuid
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+}
+
+model Coupon {
+  id               String       @id @default(cuid())
+  code             String       @unique
+  type             DiscountType
+  /// PERCENT: 1–100 · FIXED: centavos
+  value            Int
+  startsAt         DateTime?
+  expiresAt        DateTime?
+  maxUses          Int?
+  usedCount        Int          @default(0)
+  minSubtotalCents Int?
+  active           Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+
+  orders Order[]
+}
+
+model Order {
+  id    String @id @default(cuid())
+  /// Sequencial legível: número exibido = CB-0001 (ver lib/totals.ts → formatOrderNumber)
+  seq   Int    @unique @default(autoincrement())
+  /// Segredo para o convidado acompanhar o pedido sem login
+  accessToken String @unique @default(cuid())
+
+  userId     String? @db.Uuid
+  guestEmail String?
+  customerName  String
+  customerEmail String
+  customerPhone String?
+  customerCpf   String?
+
+  status OrderStatus @default(AWAITING_PAYMENT)
+
+  subtotalCents Int
+  shippingCents Int
+  discountCents Int @default(0)
+  totalCents    Int
+
+  deliveryMethod  DeliveryMethod
+  shippingService String
+  shippingDays    Int?
+  trackingCode    String?
+
+  couponId   String?
+  couponCode String?
+
+  paymentId      String?       @unique
+  paymentMethod  PaymentMethod
+  paymentStatus  String?
+  installments   Int?
+  pixQrCode      String?
+  pixQrCodeBase64 String?
+  pixExpiresAt   DateTime?
+  boletoUrl      String?
+
+  /// Snapshot do endereço no momento da compra
+  shippingAddress Json
+  stockDeducted   Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  paidAt    DateTime?
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  coupon Coupon? @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  items  OrderItem[]
+
+  @@index([status, createdAt])
+  @@index([userId])
+}
+
+model OrderItem {
+  id            String @id @default(cuid())
+  orderId       String
+  variantId     String?
+  productName   String
+  finishName    String
+  unitPriceCents Int
+  quantity      Int
+  imageUrl      String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+/// Idempotência do webhook: cada (pagamento, status) é processado uma única vez.
+model PaymentEvent {
+  id         String   @id @default(cuid())
+  externalId String   @unique
+  createdAt  DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  author    String
+  location  String?
+  text      String
+  published Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
