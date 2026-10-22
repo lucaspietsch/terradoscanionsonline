@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { FinishSelector, QuantityInput } from "@/components/shop/finish-selector
 import { Price } from "@/components/shop/price";
 import { ShippingCalculator } from "@/components/shop/shipping-calculator";
 import { WishlistButton } from "@/components/shop/wishlist-button";
+import { WhatsAppOrderButton } from "@/components/shop/whatsapp-order-button";
 import { useSiteConfig } from "@/components/site-config";
 import { track } from "@/lib/analytics";
 import { toCartItem } from "@/lib/cart-helpers";
@@ -16,7 +16,6 @@ import { ARTISANAL_NOTICE, whatsappUrl } from "@/lib/site";
 import type { ProductDTO } from "@/types";
 
 export function ProductPurchase({ product }: { product: ProductDTO }) {
-  const router = useRouter();
   const add = useCart((s) => s.add);
   const { whatsapp } = useSiteConfig();
 
@@ -66,18 +65,16 @@ export function ProductPurchase({ product }: { product: ProductDTO }) {
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button size="lg" className="flex-1" onClick={() => addToCart(true)} disabled={out}>Adicionar ao carrinho</Button>
-          <Button
+          <WhatsAppOrderButton
             size="lg"
             variant="secondary"
             className="flex-1"
             disabled={out}
-            onClick={() => {
-              addToCart(false);
-              router.push("/checkout");
-            }}
+            lines={finish ? [{ name: product.name, finishName: finish.name, quantity, unitPriceCents: product.priceCents }] : []}
+            onSent={() => track("begin_checkout", { currency: "BRL", value: (product.priceCents * quantity) / 100 })}
           >
-            Comprar agora
-          </Button>
+            Comprar pelo WhatsApp
+          </WhatsAppOrderButton>
         </div>
 
         <Button asChild variant="ghost" className="w-full">

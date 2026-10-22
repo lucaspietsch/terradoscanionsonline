@@ -4,6 +4,12 @@ Loja virtual de **vasos de cimento feitos à mão**. Next.js 15 (App Router) + T
 
 > **Modo demonstração:** sem `DATABASE_URL` o site sobe com o catálogo estático (os 10 vasos), cálculo de frete por tabela, carrinho e telas de checkout — mas pedidos, pagamento, login e painel admin ficam desativados. Dá para navegar e avaliar o visual antes de configurar qualquer serviço.
 
+## Modo atual: pedido pelo WhatsApp
+
+Nesta primeira fase a compra é finalizada pelo **WhatsApp da loja (+55 54 99919-7178)**: no carrinho, no mini-carrinho e na página do produto ("Comprar pelo WhatsApp") o botão abre uma conversa com a mensagem já pronta — itens, quantidades, acabamento, valores, frete (quando calculado), cupom, total e CEP. O número vem de `NEXT_PUBLIC_WHATSAPP` (padrão já definido) e pode ser trocado no admin → Configurações. O pagamento online (Pix/cartão/boleto) só aparece quando banco + Mercado Pago estiverem configurados.
+
+O catálogo tem 14 produtos: os 10 vasos originais e a linha **Ripples DIY** (aromaterapia): *Kit 3 Vasos* (R$ 64,90) e os vasos *Redondo*, *Alto* e *Gota* (R$ 24,90 cada). As medidas do Redondo (8,6 × Ø8,2 cm) e do Alto (13,8 × Ø6,9 cm) vêm das fotos do fornecedor; **medidas do Gota, pesos e estoques são estimativas** — ajuste no admin. As fotos da linha são tratadas por `npm run assets:aromaterapia` a partir de `assets/aromaterapia/` (originais de 220 px: troque por fotos maiores quando tiver).
+
 ## Sumário
 
 1. [Rodando localmente](#1-rodando-localmente)

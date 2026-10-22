@@ -37,6 +37,8 @@ export interface SeedProduct {
   images: { url: string; alt: string }[];
   stockPerFinish: number;
   sortOrder: number;
+  /** Slugs dos acabamentos oferecidos. Omitido = todos. */
+  finishes?: string[];
 }
 
 export const SEED_FINISHES: SeedFinish[] = [
@@ -51,6 +53,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
   { name: "Médios", slug: "medios", imageUrl: "/images/categorias/medios.webp", imageAlt: "Vaso médio de cimento com zamioculca ao lado de uma janela", order: 2 },
   { name: "Grandes", slug: "grandes", imageUrl: "/images/categorias/grandes.webp", imageAlt: "Vaso grande de cimento com costela-de-adão em canto de sala", order: 3 },
   { name: "Jardineiras", slug: "jardineiras", imageUrl: "/images/categorias/jardineiras.webp", imageAlt: "Jardineira retangular de cimento com temperos sobre uma bancada", order: 4 },
+  { name: "Aromaterapia", slug: "aromaterapia", imageUrl: "/images/categorias/aromaterapia.webp", imageAlt: "Três vasos de concreto com relevo de anéis, em tons de areia, com espigas secas", order: 5 },
 ];
 
 const FEITO_A_MAO =
@@ -144,12 +147,68 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     longDescription: `Ocupa o peitoril, a bancada ou a varanda com uma faixa de verde. A Jardineira Mata comporta várias mudas lado a lado, do manjericão às folhagens pendentes. ${FEITO_A_MAO}`,
     images: img("jardineira-mata", "Jardineira Mata"),
   },
+  // ---- Linha Ripples DIY (aromaterapia) ----
+  // Medidas do Redondo e do Alto vêm das fotos do fornecedor; as do Gota e os pesos são ESTIMATIVAS — ajuste no admin.
+  {
+    name: "Kit 3 Vasos Ripples DIY", slug: "kit-3-vasos-ripples-diy", category: "aromaterapia", priceCents: 6490,
+    heightCm: 13.8, widthCm: 25, depthCm: 9, round: false, weightGrams: 1500, hasDrainage: false, badge: "Novo",
+    plants: ["Aromaterapia", "Flores secas", "Ramos e espigas"], sortOrder: 11, stockPerFinish: 10,
+    finishes: ["areia", "grafite", "branco-pedra"],
+    shortDescription: "Kit com 3 vasos de concreto para aromaterapia, com relevo de anéis.",
+    longDescription: `O Kit 3 Vasos Ripples DIY reúne os três formatos da linha — redondo (8,6 cm de altura), gota e alto (13,8 cm) — em concreto com relevo de anéis concêntricos. São vasos decorativos, sem furo de drenagem, pensados para aromaterapia e para flores e espigas secas. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Kit com três vasos Ripples DIY de concreto em tom areia, com relevo de anéis e espigas secas" },
+      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Kit com três vasos Ripples DIY de concreto em grafite, um deles segurado na mão" },
+      { url: "/images/products/aromaterapia-kit-branco.webp", alt: "Kit com três vasos Ripples DIY de concreto brancos sobre uma tábua de madeira, com ramos secos" },
+    ],
+  },
+  {
+    name: "Vaso Ripples DIY Redondo", slug: "vaso-ripples-diy-redondo", category: "aromaterapia", priceCents: 2490,
+    heightCm: 8.6, widthCm: 8.2, depthCm: 8.2, round: true, weightGrams: 450, hasDrainage: false, badge: null,
+    plants: ["Aromaterapia", "Flores secas"], sortOrder: 12, stockPerFinish: 10,
+    finishes: ["areia", "grafite", "branco-pedra"],
+    shortDescription: "Vaso de concreto para aromaterapia, formato redondo (8,6 × Ø8,2 cm).",
+    longDescription: `O modelo redondo da linha Ripples DIY: pequeno, com relevo de anéis e boca estreita. Decorativo e sem furo de drenagem, combina com aromaterapia (varetas e óleos essenciais) e com flores secas. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/aromaterapia-redondo-1.webp", alt: "Vaso Ripples DIY redondo de concreto branco com relevo de anéis, vista frontal" },
+      { url: "/images/products/aromaterapia-redondo-2.webp", alt: "Vaso Ripples DIY redondo com as medidas: 8,6 cm de altura e 8,2 cm de largura" },
+      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Vasos Ripples DIY em tom areia, com o modelo redondo à direita" },
+      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Vasos Ripples DIY em grafite, com o modelo redondo à esquerda" },
+    ],
+  },
+  {
+    name: "Vaso Ripples DIY Alto", slug: "vaso-ripples-diy-alto", category: "aromaterapia", priceCents: 2490,
+    heightCm: 13.8, widthCm: 6.9, depthCm: 6.9, round: true, weightGrams: 550, hasDrainage: false, badge: null,
+    plants: ["Aromaterapia", "Flores secas", "Espigas"], sortOrder: 13, stockPerFinish: 10,
+    finishes: ["areia", "grafite", "branco-pedra"],
+    shortDescription: "Vaso de concreto para aromaterapia, formato alto (13,8 × Ø6,9 cm).",
+    longDescription: `O modelo alto da linha Ripples DIY: silhueta esguia com relevo de anéis, ótima para espigas e ramos secos ou para um difusor de varetas. Decorativo, sem furo de drenagem. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/aromaterapia-alto-1.webp", alt: "Vaso Ripples DIY alto de concreto branco com relevo de anéis, vista frontal" },
+      { url: "/images/products/aromaterapia-alto-2.webp", alt: "Vaso Ripples DIY alto com as medidas: 13,8 cm de altura e 6,9 cm de largura" },
+      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Vasos Ripples DIY em tom areia, com o modelo alto ao centro" },
+      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Vasos Ripples DIY em grafite, com o modelo alto ao centro" },
+    ],
+  },
+  {
+    name: "Vaso Ripples DIY Gota", slug: "vaso-ripples-diy-gota", category: "aromaterapia", priceCents: 2490,
+    heightCm: 11.5, widthCm: 8, depthCm: 8, round: true, weightGrams: 500, hasDrainage: false, badge: null,
+    plants: ["Aromaterapia", "Flores secas", "Ramos"], sortOrder: 14, stockPerFinish: 10,
+    finishes: ["areia", "grafite", "branco-pedra"],
+    shortDescription: "Vaso de concreto para aromaterapia, formato gota (medidas aproximadas).",
+    longDescription: `O modelo gota da linha Ripples DIY: base larga e boca estreita, com relevo de anéis. Decorativo, sem furo de drenagem; bom para aromaterapia e flores secas. Medidas aproximadas — confirme pelo WhatsApp. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Vasos Ripples DIY em tom areia, com o modelo gota à esquerda" },
+      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Vasos Ripples DIY em grafite, com o modelo gota à direita" },
+      { url: "/images/products/aromaterapia-kit-branco.webp", alt: "Vasos Ripples DIY brancos, com o modelo gota à direita" },
+    ],
+  },
 ];
 
 export const FAQ = [
   {
     q: "O vaso tem furo de drenagem?",
-    a: "Sim. Todos os vasos saem com furo de drenagem para evitar o acúmulo de água e o apodrecimento das raízes. Recomendamos usar um pratinho ou cachepô quando o vaso ficar sobre móveis.",
+    a: "Os vasos e jardineiras de plantio saem com furo de drenagem, para evitar água acumulada e raízes apodrecidas; use um pratinho ou cachepô sobre móveis. Os vasos Ripples DIY (aromaterapia e flores secas) são decorativos e não têm furo — não plante diretamente neles.",
   },
   {
     q: "Pode ficar ao sol e na chuva?",

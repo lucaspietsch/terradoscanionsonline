@@ -36,7 +36,7 @@ const staticProducts: ProductDTO[] = SEED_PRODUCTS.map((p) => {
     createdAt: new Date(2025, 0, p.sortOrder).toISOString(),
     category: { id: cat.id, name: cat.name, slug: cat.slug },
     images: p.images.map((i, order) => ({ ...i, order })),
-    variants: staticFinishes.map((finish) => ({
+    variants: (p.finishes ? p.finishes.flatMap((slug) => staticFinishes.filter((f) => f.slug === slug)) : staticFinishes).map((finish) => ({
       id: `${p.slug}:${finish.slug}`,
       finish,
       stock: p.stockPerFinish,

@@ -5,14 +5,17 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/
 import { Button } from "@/components/ui/button";
 import { CartLine } from "@/components/shop/cart-line";
 import { FreeShippingBar } from "@/components/shop/free-shipping-bar";
+import { WhatsAppOrderButton } from "@/components/shop/whatsapp-order-button";
 import { useSiteConfig } from "@/components/site-config";
 import { selectSubtotal, useCart } from "@/lib/cart-store";
 import { formatBRL } from "@/lib/money";
+import { toMsgLine } from "@/lib/cart-helpers";
 
 export function CartDrawer() {
   const { items, isOpen, setOpen } = useCart();
   const subtotal = useCart(selectSubtotal);
-  const { freeShippingThresholdCents } = useSiteConfig();
+  const { freeShippingThresholdCents, checkoutEnabled, } = useSiteConfig();
+  const cep = useCart((s) => s.cep);
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -48,10 +51,15 @@ export function CartDrawer() {
                 <span className="text-sm text-secundario">Subtotal (+ frete)</span>
                 <span className="font-serif text-2xl font-light">{formatBRL(subtotal)}</span>
               </div>
-              <Button asChild size="lg" className="w-full" onClick={() => setOpen(false)}>
-                <Link href="/checkout">Finalizar compra</Link>
-              </Button>
-              <Button asChild variant="secondary" className="w-full" onClick={() => setOpen(false)}>
+              <WhatsAppOrderButton size="lg" className="w-full" lines={items.map(toMsgLine)} options={{ cep }}>
+                Enviar pedido pelo WhatsApp
+              </WhatsAppOrderButton>
+              {checkoutEnabled && (
+                <Button asChild variant="secondary" className="w-full" onClick={() => setOpen(false)}>
+                  <Link href="/checkout">Pagar online</Link>
+                </Button>
+              )}
+              <Button asChild variant="ghost" className="w-full" onClick={() => setOpen(false)}>
                 <Link href="/carrinho">Ver carrinho e calcular frete</Link>
               </Button>
             </div>

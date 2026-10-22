@@ -8,7 +8,7 @@ export const site = {
   description:
     "Vasos de cimento artesanais feitos à mão no Brasil. Peças únicas para trazer o jardim para dentro de casa.",
   url: (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, ""),
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "5500000000000", // [SEU WHATSAPP com DDD], só dígitos com 55
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "5554999197178", // +55 54 99919-7178 (pedidos), só dígitos com 55
   instagramHandle: process.env.NEXT_PUBLIC_INSTAGRAM ?? "cambaraornamentais", // [SEU @]
   cnpj: process.env.NEXT_PUBLIC_CNPJ ?? "00.000.000/0000-00", // [SEU CNPJ]
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contato@cambaraornamentais.com.br",
@@ -28,8 +28,8 @@ export function whatsappUrl(message?: string, number: string = site.whatsapp) {
 }
 
 export const navLinks = [
-  { href: "/vasos", label: "Vasos" },
-  { href: "/vasos?categoria=jardineiras", label: "Jardineiras" },
+  { href: "/vasos#produtos", label: "Vasos" },
+  { href: "/vasos?categoria=jardineiras#produtos", label: "Jardineiras" },
   { href: "/sobre", label: "Sobre" },
   { href: "/cuidados", label: "Cuidados" },
   { href: "/contato", label: "Contato" },

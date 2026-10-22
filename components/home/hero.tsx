@@ -22,7 +22,7 @@ export function Hero() {
         </p>
         <div className="mt-10 flex flex-wrap gap-4">
           <Button asChild size="lg" variant="light">
-            <Link href="/vasos">Ver coleção</Link>
+            <Link href="/vasos#produtos">Ver coleção</Link>
           </Button>
           <Button asChild size="lg" variant="outlineLight">
             <Link href="/sobre">Conheça nossa história</Link>

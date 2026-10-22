@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Select } from "@/components/ui/input";
 import { CardForm, emptyCard, tokenizeCard, validateCard, type CardData } from "@/components/checkout/card-form";
 import { OrderSummary } from "@/components/checkout/order-summary";
+import { WhatsAppOrderButton } from "@/components/shop/whatsapp-order-button";
+import { toMsgLine } from "@/lib/cart-helpers";
 import { PaymentInstructions, type PaymentView } from "@/components/checkout/payment-instructions";
 import { useSiteConfig } from "@/components/site-config";
 import { track } from "@/lib/analytics";
@@ -200,6 +202,25 @@ export function CheckoutFlow() {
       <div className="container py-28 text-center">
         <h1 className="font-serif text-4xl font-light">Seu carrinho está vazio</h1>
         <Button asChild size="lg" className="mt-8"><Link href="/vasos">Ver vasos</Link></Button>
+      </div>
+    );
+  }
+
+  if (!checkoutEnabled) {
+    return (
+      <div className="container py-12 md:py-20">
+        <h1 className="font-serif text-4xl font-light md:text-5xl">Finalizar pedido</h1>
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+          <section aria-labelledby="zap" className="max-w-xl">
+            <h2 id="zap" className="font-serif text-2xl font-light">Pedido pelo WhatsApp</h2>
+            <p className="mt-4 leading-relaxed text-secundario">
+              Por enquanto a compra é finalizada pelo WhatsApp: enviamos para a Cambará os produtos e valores do seu carrinho já preenchidos, e combinamos por lá o frete, o pagamento e a entrega (ou retirada).
+            </p>
+            <WhatsAppOrderButton size="lg" className="mt-8" lines={items.map(toMsgLine)} options={{ cep: savedCep }}>Enviar pedido pelo WhatsApp</WhatsAppOrderButton>
+            <p className="mt-4 text-sm text-secundario">Quer calcular o frete antes? <Link href="/carrinho" className="text-musgo underline underline-offset-4">Volte ao carrinho</Link>.</p>
+          </section>
+          <OrderSummary items={items} totals={totals} shippingLabel="A combinar" coupon={coupon} />
+        </div>
       </div>
     );
   }

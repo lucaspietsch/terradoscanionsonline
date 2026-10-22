@@ -7,9 +7,12 @@ import { CartLine } from "@/components/shop/cart-line";
 import { CouponForm } from "@/components/shop/coupon-form";
 import { FreeShippingBar } from "@/components/shop/free-shipping-bar";
 import { ShippingCalculator } from "@/components/shop/shipping-calculator";
+import { WhatsAppOrderButton } from "@/components/shop/whatsapp-order-button";
+import { toMsgLine } from "@/lib/cart-helpers";
 import { useSiteConfig } from "@/components/site-config";
 import { selectSubtotal, toLineInputs, useCart } from "@/lib/cart-store";
 import { useHydrated } from "@/lib/hooks";
+import { onlyDigits } from "@/lib/utils";
 import { formatBRL } from "@/lib/money";
 import { computeTotals } from "@/lib/totals";
 import { useCoupon } from "@/lib/use-coupon";
@@ -20,6 +23,7 @@ export function CartPage() {
   const items = useCart((s) => s.items);
   const subtotal = useCart(selectSubtotal);
   const { freeShippingThresholdCents, checkoutEnabled } = useSiteConfig();
+  const cep = useCart((s) => s.cep);
   const coupon = useCoupon();
   const [shipping, setShipping] = useState<ShippingOption | null>(null);
 
@@ -67,9 +71,24 @@ export function CartPage() {
               <dd className="font-serif text-3xl font-light">{formatBRL(totals.totalCents)}</dd>
             </div>
           </dl>
-          <Button asChild size="lg" className="w-full"><Link href="/checkout">Finalizar compra</Link></Button>
-          {!checkoutEnabled && <p className="text-xs text-secundario">Modo demonstração: o checkout está desativado até configurar banco de dados e Mercado Pago.</p>}
-          <p className="text-center text-xs text-secundario">Os valores são conferidos novamente no servidor antes do pagamento.</p>
+          <WhatsAppOrderButton
+            size="lg"
+            className="w-full"
+            lines={items.map(toMsgLine)}
+            options={{
+              cep: onlyDigits(cep),
+              shipping: shipping ? { label: shipping.kind === "PICKUP" ? shipping.name : `${shipping.carrier} ${shipping.name}`, priceCents: shipping.priceCents } : null,
+              discountCents: coupon.discountCents,
+              couponCode: coupon.code,
+            }}
+          >
+            Enviar pedido pelo WhatsApp
+          </WhatsAppOrderButton>
+          {checkoutEnabled ? (
+            <Button asChild variant="secondary" size="lg" className="w-full"><Link href="/checkout">Pagar online</Link></Button>
+          ) : (
+            <p className="text-center text-xs text-secundario">Por enquanto o pedido é finalizado pelo WhatsApp: enviamos os produtos e valores já preenchidos e combinamos pagamento e entrega por lá.</p>
+          )}
         </aside>
       </div>
     </div>

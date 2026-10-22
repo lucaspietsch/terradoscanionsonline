@@ -10,6 +10,7 @@
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 7rem; /* header fixo */
     -webkit-text-size-adjust: 100%;
   }
   body {

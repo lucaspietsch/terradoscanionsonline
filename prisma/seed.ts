@@ -52,6 +52,7 @@ async function main() {
     });
 
     for (const [finishSlug, finishId] of finishes) {
+      if (p.finishes && !p.finishes.includes(finishSlug)) continue;
       await prisma.productVariant.upsert({
         where: { productId_finishId: { productId: product.id, finishId } },
         create: { productId: product.id, finishId, stock: p.stockPerFinish, sku: `${p.slug}-${finishSlug}`.toUpperCase() },

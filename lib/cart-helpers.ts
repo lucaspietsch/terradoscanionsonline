@@ -21,3 +21,8 @@ export function toCartItem(
     imageAlt: img?.alt ?? product.name,
   };
 }
+
+/** Linha do carrinho no formato da mensagem de pedido (WhatsApp). */
+export function toMsgLine(i: CartItem) {
+  return { name: i.name, finishName: i.finishName, quantity: i.quantity, unitPriceCents: i.unitPriceCents };
+}

@@ -40,9 +40,11 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
       <header className="mb-10 max-w-2xl">
         <p className="eyebrow">Coleção</p>
         <h1 className="h1-display mt-3 !text-5xl md:!text-6xl">{current ? current.name : "Vasos de cimento"}</h1>
-        <p className="mt-4 text-lg text-secundario">Peças feitas à mão, com furo de drenagem, em quatro acabamentos.</p>
+        <p className="mt-4 text-lg text-secundario">Peças de concreto feitas à mão, em vários formatos e acabamentos.</p>
       </header>
-      <CatalogBrowser products={products} categories={categories} finishes={finishes} initial={initial} />
+      <div id="produtos">
+        <CatalogBrowser products={products} categories={categories} finishes={finishes} initial={initial} />
+      </div>
     </div>
   );
 }

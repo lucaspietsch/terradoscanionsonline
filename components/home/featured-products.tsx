@@ -14,7 +14,7 @@ export function FeaturedProducts({ products }: { products: ProductCardDTO[] }) {
             <h2 id="feat-title" className="h2-section mt-3">Vasos feitos um a um</h2>
           </div>
           <Button asChild variant="secondary">
-            <Link href="/vasos">Ver todos</Link>
+            <Link href="/vasos#produtos">Ver todos</Link>
           </Button>
         </Reveal>
         <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">

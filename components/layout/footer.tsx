@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Barcode, CreditCard, Instagram, Mail, MessageCircle, QrCode } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { instagramUrl, site, whatsappUrl } from "@/lib/site";
+import { hasDatabase } from "@/lib/db";
+import { env } from "@/lib/env";
 import type { SiteSettings } from "@/types";
 
 export function Footer({ settings }: { settings: SiteSettings }) {
@@ -20,11 +22,12 @@ export function Footer({ settings }: { settings: SiteSettings }) {
         <nav aria-label="Loja" className={col}>
           <p className="eyebrow !text-salvia-clara">Loja</p>
           <ul className="space-y-2.5">
-            <li><Link className={link} href="/vasos">Todos os vasos</Link></li>
-            <li><Link className={link} href="/vasos?categoria=pequenos">Pequenos</Link></li>
-            <li><Link className={link} href="/vasos?categoria=medios">Médios</Link></li>
-            <li><Link className={link} href="/vasos?categoria=grandes">Grandes</Link></li>
-            <li><Link className={link} href="/vasos?categoria=jardineiras">Jardineiras</Link></li>
+            <li><Link className={link} href="/vasos#produtos">Todos os vasos</Link></li>
+            <li><Link className={link} href="/vasos?categoria=pequenos#produtos">Pequenos</Link></li>
+            <li><Link className={link} href="/vasos?categoria=medios#produtos">Médios</Link></li>
+            <li><Link className={link} href="/vasos?categoria=grandes#produtos">Grandes</Link></li>
+            <li><Link className={link} href="/vasos?categoria=jardineiras#produtos">Jardineiras</Link></li>
+            <li><Link className={link} href="/vasos?categoria=aromaterapia#produtos">Aromaterapia</Link></li>
           </ul>
         </nav>
 
@@ -60,11 +63,15 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             </li>
           </ul>
           <p className="eyebrow !text-salvia-clara pt-4">Formas de pagamento</p>
-          <ul className="flex flex-wrap gap-2 text-xs text-nevoa/85">
-            <li className="inline-flex items-center gap-1.5 rounded border border-nevoa/25 px-2.5 py-1.5"><QrCode className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Pix</li>
-            <li className="inline-flex items-center gap-1.5 rounded border border-nevoa/25 px-2.5 py-1.5"><CreditCard className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Cartão até {settings.maxInstallments}x sem juros</li>
-            <li className="inline-flex items-center gap-1.5 rounded border border-nevoa/25 px-2.5 py-1.5"><Barcode className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Boleto</li>
-          </ul>
+          {hasDatabase && env.hasMercadoPago ? (
+            <ul className="flex flex-wrap gap-2 text-xs text-nevoa/85">
+              <li className="inline-flex items-center gap-1.5 rounded border border-nevoa/25 px-2.5 py-1.5"><QrCode className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Pix</li>
+              <li className="inline-flex items-center gap-1.5 rounded border border-nevoa/25 px-2.5 py-1.5"><CreditCard className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Cartão até {settings.maxInstallments}x sem juros</li>
+              <li className="inline-flex items-center gap-1.5 rounded border border-nevoa/25 px-2.5 py-1.5"><Barcode className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Boleto</li>
+            </ul>
+          ) : (
+            <p className="max-w-[16rem] text-sm leading-relaxed text-nevoa/75">Pedido finalizado pelo WhatsApp: combinamos pagamento e entrega por lá.</p>
+          )}
         </div>
       </div>
       <div className="border-t border-nevoa/15">
