@@ -67,6 +67,10 @@ async function main() {
         update: soon ? { comingSoon: true, imageUrl: soon.url, stock: 0 } : {},
       });
     }
+    // opções "em breve" que saíram do catálogo (ex.: premium que virou produto próprio)
+    await prisma.productVariant.deleteMany({
+      where: { productId: product.id, comingSoon: true, finish: { slug: { notIn: Object.keys(p.comingSoonFinishes ?? {}) } } },
+    });
   }
 
   const defaults: Record<string, string> = {

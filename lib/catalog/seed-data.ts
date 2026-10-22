@@ -263,17 +263,30 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     finishes: ["cimento-natural", "branco-pedra"],
     comingSoonFinishes: {
       "verde": { url: "/images/products/listrado-luxuoso-verde.webp", alt: "Ilustração: vaso listrado luxuoso na cor verde" },
-      "preto-dourado": { url: "/images/products/listrado-luxuoso-preto-dourado.webp", alt: "Ilustração: vaso listrado luxuoso preto com folha de ouro (versão premium)" },
-      "vermelho-dourado": { url: "/images/products/listrado-luxuoso-vermelho-dourado.webp", alt: "Ilustração: vaso listrado luxuoso vermelho com folha de ouro (versão premium)" },
-      "marmore-dourado": { url: "/images/products/listrado-luxuoso-marmore.webp", alt: "Ilustração: vaso listrado luxuoso em mármore com folha de ouro (versão premium)" },
     },
     shortDescription: "Vaso de concreto com relevo listrado vertical (12,7 × Ø10,4 cm).",
-    longDescription: `Vaso de concreto com listras verticais em relevo e formato de gota, de boca larga. Fica bonito sozinho, com flores e ramos secos. Em breve, também em verde e em versões premium com folha de ouro — preto e dourado, vermelho e dourado e mármore; as fotos dessas opções são ilustrações de como vão ficar. Vendido apenas o vaso: as flores e os objetos que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    longDescription: `Vaso de concreto com listras verticais em relevo e formato de gota, de boca larga. Fica bonito sozinho, com flores e ramos secos. Em breve, também em verde; a foto dessa opção é uma ilustração de como vai ficar. Veja também o Listrado Luxuoso Premium, com folha de ouro. Vendido apenas o vaso: as flores e os objetos que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/listrado-cinza.webp", alt: "Vaso de concreto listrado em cinza com flores secas, ao lado de uma vela, sobre uma bandeja de madeira" },
       { url: "/images/products/listrado-branco-1.webp", alt: "Vaso de concreto listrado branco com relevo de listras verticais, vista frontal" },
       { url: "/images/products/listrado-branco-2.webp", alt: "Vaso de concreto listrado branco com as medidas: 12,7 cm de altura e 10,4 cm de largura" },
       { url: "/images/products/listrado-luxuoso-verde.webp", alt: "Ilustração: vaso listrado luxuoso na cor verde" },
+    ],
+  },
+  // ---- Listrado Luxuoso Premium (folha de ouro): R$ 59,90, tudo "em breve" com imagens ILUSTRATIVAS (scripts/process-listrado-cores.py) ----
+  {
+    name: "Vaso de Concreto Listrado Luxuoso Premium", slug: "vaso-concreto-listrado-luxuoso-premium", category: "medios", priceCents: 5990,
+    heightCm: 12.7, widthCm: 10.4, depthCm: 10.4, round: true, weightGrams: 0, hasDrainage: false, badge: "Em breve",
+    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 1, stockPerFinish: 10,
+    finishes: [],
+    comingSoonFinishes: {
+      "preto-dourado": { url: "/images/products/listrado-luxuoso-preto-dourado.webp", alt: "Ilustração: vaso listrado luxuoso preto com folha de ouro (versão premium)" },
+      "vermelho-dourado": { url: "/images/products/listrado-luxuoso-vermelho-dourado.webp", alt: "Ilustração: vaso listrado luxuoso vermelho com folha de ouro (versão premium)" },
+      "marmore-dourado": { url: "/images/products/listrado-luxuoso-marmore.webp", alt: "Ilustração: vaso listrado luxuoso em mármore com folha de ouro (versão premium)" },
+    },
+    shortDescription: "Versão premium do Listrado, com folha de ouro (12,7 × Ø10,4 cm). Em breve.",
+    longDescription: `Versão premium do Vaso de Concreto Listrado Luxuoso, com acabamento em folha de ouro, nas cores preto e dourado, vermelho e dourado e mármore. Ainda não foi produzido: as fotos são ilustrações de como vai ficar e o vaso só poderá ser comprado quando for lançado — chame no WhatsApp para ser avisado. Vendido apenas o vaso: as flores e os objetos das fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    images: [
       { url: "/images/products/listrado-luxuoso-preto-dourado.webp", alt: "Ilustração: vaso listrado luxuoso preto com folha de ouro (versão premium)" },
       { url: "/images/products/listrado-luxuoso-vermelho-dourado.webp", alt: "Ilustração: vaso listrado luxuoso vermelho com folha de ouro (versão premium)" },
       { url: "/images/products/listrado-luxuoso-marmore.webp", alt: "Ilustração: vaso listrado luxuoso em mármore com folha de ouro (versão premium)" },

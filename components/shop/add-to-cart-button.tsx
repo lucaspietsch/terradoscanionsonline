@@ -21,7 +21,7 @@ export function AddToCartButton({ product }: { product: ProductCardDTO }) {
         track("add_to_cart", { currency: "BRL", value: product.priceCents / 100, items: [{ item_id: product.id, item_name: product.name, price: product.priceCents / 100, quantity: 1 }] });
       }}
     >
-      {product.inStock ? "Adicionar" : "Esgotado"}
+      {product.inStock ? "Adicionar" : product.finishes.length > 0 && product.finishes.every((f) => f.comingSoon) ? "Em breve" : "Esgotado"}
     </Button>
   );
 }
