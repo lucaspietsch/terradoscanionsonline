@@ -61,7 +61,8 @@ export function installStaticApi() {
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
     const raw = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     const url = new URL(raw, window.location.href);
-    if (url.origin !== window.location.origin || !url.pathname.startsWith("/api/")) return original(input, init);
+    // compara protocolo+host (funciona também em file://, onde origin é "null")
+    if (url.protocol !== window.location.protocol || url.host !== window.location.host || !url.pathname.startsWith("/api/")) return original(input, init);
 
     const path = url.pathname.replace(/\/$/, "");
     let body: Record<string, unknown> = {};

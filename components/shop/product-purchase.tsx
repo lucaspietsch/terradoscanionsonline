@@ -26,7 +26,7 @@ export function ProductPurchase({ product }: { product: ProductDTO }) {
   const finish = finishes.find((f) => f.id === finishId);
   const out = !finish || finish.stock <= 0;
   const [pageUrl, setPageUrl] = useState("");
-  useEffect(() => setPageUrl(window.location.href), []);
+  useEffect(() => setPageUrl(window.location.protocol.startsWith("http") ? window.location.href : ""), []);
 
   useEffect(() => {
     track("view_item", { currency: "BRL", value: product.priceCents / 100, items: [{ item_id: product.id, item_name: product.name, price: product.priceCents / 100 }] });

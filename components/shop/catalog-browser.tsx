@@ -8,6 +8,7 @@ import { Select } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SIZE_BINS, filterAndSort, type SortKey } from "@/lib/catalog/filter";
 import { formatBRL } from "@/lib/money";
+import { replaceQuery } from "@/lib/url-state";
 import { cn } from "@/lib/utils";
 import type { CategoryDTO, FinishDTO, ProductCardDTO } from "@/types";
 
@@ -40,8 +41,7 @@ export function CatalogBrowser({ products, categories, finishes, initial }: { pr
       if (next.tamanho) q.set("tamanho", next.tamanho);
       if (next.acabamento) q.set("acabamento", next.acabamento);
       if (next.ordem !== "relevancia") q.set("ordem", next.ordem);
-      const qs = q.toString();
-      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+      replaceQuery(q.toString());
       return next;
     });
   }, []);

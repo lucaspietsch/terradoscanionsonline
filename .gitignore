@@ -12,3 +12,6 @@ coverage
 
 .static-build
 dist-static
+
+.single-build
+dist-single

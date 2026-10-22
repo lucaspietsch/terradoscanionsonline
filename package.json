@@ -18,6 +18,7 @@
     "admin:create": "tsx scripts/create-admin.ts",
     "assets:placeholders": "node scripts/generate-placeholders.mjs",
     "build:static": "node scripts/build-static.mjs",
+    "build:single": "node scripts/build-single-html.mjs",
     "assets:brand": "node scripts/generate-brand-assets.mjs",
     "assets:aromaterapia": "node scripts/process-aromaterapia.mjs",
     "assets:floral": "node scripts/process-floral.mjs",
