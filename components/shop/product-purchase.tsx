@@ -12,7 +12,7 @@ import { useSiteConfig } from "@/components/site-config";
 import { track } from "@/lib/analytics";
 import { toCartItem } from "@/lib/cart-helpers";
 import { useCart } from "@/lib/cart-store";
-import { ARTISANAL_NOTICE, whatsappUrl } from "@/lib/site";
+import { ARTISANAL_NOTICE, SOLD_ONLY_VASES_NOTICE, whatsappUrl } from "@/lib/site";
 import type { ProductDTO } from "@/types";
 
 export function ProductPurchase({ product }: { product: ProductDTO }) {
@@ -90,6 +90,7 @@ export function ProductPurchase({ product }: { product: ProductDTO }) {
       </div>
 
       <p className="mt-8 rounded border border-concreto bg-pedra p-4 text-sm leading-relaxed text-secundario">{ARTISANAL_NOTICE}</p>
+      <p className="mt-3 rounded border border-concreto bg-pedra p-4 text-sm leading-relaxed text-secundario">{SOLD_ONLY_VASES_NOTICE}</p>
     </div>
   );
 }

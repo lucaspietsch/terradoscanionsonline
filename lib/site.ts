@@ -37,3 +37,6 @@ export const navLinks = [
 
 export const ARTISANAL_NOTICE =
   "Por ser artesanal, cada peça pode ter pequenas variações de cor e textura — é o que a torna única.";
+
+export const SOLD_ONLY_VASES_NOTICE =
+  "Vendemos apenas os vasos: plantas e outros objetos que aparecem nas fotos não acompanham o produto.";

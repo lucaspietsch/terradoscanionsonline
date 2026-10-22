@@ -20,7 +20,8 @@
     "assets:brand": "node scripts/generate-brand-assets.mjs",
     "assets:aromaterapia": "node scripts/process-aromaterapia.mjs",
     "assets:floral": "node scripts/process-floral.mjs",
-    "assets:lavanda": "node scripts/process-lavanda.mjs"
+    "assets:lavanda": "node scripts/process-lavanda.mjs",
+    "assets:redondos": "node scripts/process-redondos.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.2.0",

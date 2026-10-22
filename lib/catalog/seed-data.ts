@@ -215,7 +215,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 15, stockPerFinish: 10,
     finishes: ["branco-pedra"],
     shortDescription: "Vaso de concreto com flores em relevo 3D, de tema florestal.",
-    longDescription: `Vaso redondo de concreto coberto por flores em alto-relevo, com tema florestal. Pequeno e delicado, fica bem em bancadas, mesas de cabeceira e banheiros, com folhagens pequenas como samambaia e hera ou com flores secas. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Nas fotos o vaso aparece com uma plantinha de acompanhamento — confirme pelo WhatsApp se ela vai junto no seu pedido. ${FEITO_A_MAO}`,
+    longDescription: `Vaso redondo de concreto coberto por flores em alto-relevo, com tema florestal. Pequeno e delicado, fica bem em bancadas, mesas de cabeceira e banheiros, com folhagens pequenas como samambaia e hera ou com flores secas. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/floral-1.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, sobre uma bandeja ao lado de vela e sabonete líquido" },
       { url: "/images/products/floral-3.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, em fundo claro" },
@@ -230,7 +230,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     plants: ["Lavanda seca", "Samambaia", "Hera"], sortOrder: 16, stockPerFinish: 10,
     finishes: ["lavanda"],
     shortDescription: "Vaso de concreto lilás com relevo 3D de folhas, de tema jardim.",
-    longDescription: `Vaso redondo de concreto na cor lavanda, com relevo 3D de folhas em tema jardim. Pequeno e delicado, combina com bancadas, criados-mudos e mesas de apoio, com folhagens pequenas como samambaia e hera ou com lavanda seca. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Nas fotos o vaso aparece com uma plantinha de acompanhamento — confirme pelo WhatsApp se ela vai junto no seu pedido. ${FEITO_A_MAO}`,
+    longDescription: `Vaso redondo de concreto na cor lavanda, com relevo 3D de folhas em tema jardim. Pequeno e delicado, combina com bancadas, criados-mudos e mesas de apoio, com folhagens pequenas como samambaia e hera ou com lavanda seca. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/lavanda-2.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e uma plantinha de samambaia e hera, sobre uma mesa clara" },
       { url: "/images/products/lavanda-4.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e ramos de lavanda seca" },
@@ -239,12 +239,75 @@ export const SEED_PRODUCTS: SeedProduct[] = [
       { url: "/images/products/lavanda-1.webp", alt: "Vaso de concreto lavanda com plantinha sobre uma cama, ao lado de almofadas lilás" },
     ],
   },
+  // ---- Vasos Redondos Luxuosos ----
+  // Medidas lidas da imagem de medidas do fornecedor (largura × altura): 7,7 × 5,3 · 8,6 × 5,5 · 10 × 6,2 cm.
+  // Pesos e estoques são ESTIMATIVAS — ajuste no admin. O tamanho "Grande" assume o preço R$ 29,90.
+  {
+    name: "Vaso de Concreto Redondo Luxuoso Pequeno", slug: "vaso-concreto-redondo-luxuoso-pequeno", category: "pequenos", priceCents: 2590,
+    heightCm: 5.3, widthCm: 7.7, depthCm: 7.7, round: true, weightGrams: 400, hasDrainage: false, badge: null,
+    plants: ["Suculentas", "Cactos", "Flores secas"], sortOrder: 17, stockPerFinish: 10,
+    finishes: ["branco-pedra"],
+    shortDescription: "Vaso de concreto redondo, tamanho pequeno (7,7 × 5,3 cm).",
+    longDescription: `O menor da linha Redondo Luxuoso: esfera achatada de concreto liso, com boca larga. Bom para suculentas e cactos pequenos, velas ou como decoração sozinho. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
+      { url: "/images/products/redondo-medidas-pequeno.webp", alt: "Ilustração do vaso redondo pequeno com as medidas: 7,7 cm de largura e 5,3 cm de altura" },
+      { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco em uma bandeja; o pequeno é o da esquerda" },
+      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco lado a lado sobre uma mureta; o pequeno é o da direita" },
+    ],
+  },
+  {
+    name: "Vaso de Concreto Redondo Luxuoso Médio", slug: "vaso-concreto-redondo-luxuoso-medio", category: "pequenos", priceCents: 2790,
+    heightCm: 5.5, widthCm: 8.6, depthCm: 8.6, round: true, weightGrams: 500, hasDrainage: false, badge: null,
+    plants: ["Suculentas", "Cactos", "Flores secas"], sortOrder: 18, stockPerFinish: 10,
+    finishes: ["branco-pedra"],
+    shortDescription: "Vaso de concreto redondo, tamanho médio (8,6 × 5,5 cm).",
+    longDescription: `O tamanho médio da linha Redondo Luxuoso: esfera achatada de concreto liso, com boca larga. Combina com suculentas, arranjos pequenos e velas. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
+      { url: "/images/products/redondo-medidas-medio.webp", alt: "Ilustração do vaso redondo médio com as medidas: 8,6 cm de largura e 5,5 cm de altura" },
+      { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco em uma bandeja; o médio é o do centro" },
+      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco lado a lado sobre uma mureta; o médio é o do centro" },
+    ],
+  },
+  {
+    name: "Vaso de Concreto Redondo Luxuoso Grande", slug: "vaso-concreto-redondo-luxuoso-grande", category: "pequenos", priceCents: 2990,
+    heightCm: 6.2, widthCm: 10, depthCm: 10, round: true, weightGrams: 650, hasDrainage: false, badge: null,
+    plants: ["Suculentas", "Cactos", "Flores secas"], sortOrder: 19, stockPerFinish: 10,
+    finishes: ["branco-pedra"],
+    shortDescription: "Vaso de concreto redondo, tamanho grande (10 × 6,2 cm).",
+    longDescription: `O maior da linha Redondo Luxuoso: esfera achatada de concreto liso, com boca larga, que acomoda arranjos de suculentas e velas maiores. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
+      { url: "/images/products/redondo-medidas-grande.webp", alt: "Ilustração do vaso redondo grande com as medidas: 10 cm de largura e 6,2 cm de altura" },
+      { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco em uma bandeja; o grande é o da direita" },
+      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco lado a lado sobre uma mureta; o grande é o da esquerda" },
+    ],
+  },
+  {
+    name: "Kit 3 Vasos de Concreto Redondos Luxuosos", slug: "kit-3-vasos-concreto-redondos-luxuosos", category: "pequenos", priceCents: 7490,
+    heightCm: 6.2, widthCm: 26.3, depthCm: 10, round: false, weightGrams: 1550, hasDrainage: false, badge: "Novo",
+    plants: ["Suculentas", "Cactos", "Flores secas"], sortOrder: 20, stockPerFinish: 10,
+    finishes: ["branco-pedra"],
+    shortDescription: "Kit com 3 vasos redondos de concreto, nos três tamanhos da linha.",
+    longDescription: `O Kit 3 Vasos de Concreto Redondos Luxuosos reúne os três tamanhos da linha — pequeno (7,7 × 5,3 cm), médio (8,6 × 5,5 cm) e grande (10 × 6,2 cm) — em esfera achatada de concreto liso. Fica lindo em fileira sobre uma bandeja ou bancada. Vendido apenas os vasos: as plantas que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco de tamanhos diferentes sobre uma bandeja, com suculentas" },
+      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco de tamanhos diferentes lado a lado sobre uma mureta" },
+      { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
+      { url: "/images/products/redondo-medidas-kit.webp", alt: "Ilustração dos três vasos redondos do kit com as medidas: 7,7 × 5,3, 8,6 × 5,5 e 10 × 6,2 cm" },
+    ],
+  },
 ];
 
 export const FAQ = [
   {
     q: "O vaso tem furo de drenagem?",
     a: "Os vasos e jardineiras de plantio saem com furo de drenagem, para evitar água acumulada e raízes apodrecidas; use um pratinho ou cachepô sobre móveis. Os vasos Ripples (aromaterapia e flores secas) são decorativos e não têm furo — não plante diretamente neles.",
+  },
+  {
+    q: "O vaso acompanha planta?",
+    a: "Não. Vendemos apenas os vasos. As plantas e os objetos que aparecem nas fotos são para ilustrar o uso e não acompanham o produto.",
   },
   {
     q: "Pode ficar ao sol e na chuva?",
