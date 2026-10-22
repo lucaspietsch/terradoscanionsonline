@@ -62,9 +62,9 @@ async function main() {
       if (!soon && !(p.finishes ?? BASE_FINISH_SLUGS).includes(finishSlug)) continue;
       await prisma.productVariant.upsert({
         where: { productId_finishId: { productId: product.id, finishId } },
-        create: { productId: product.id, finishId, stock: soon ? 0 : p.stockPerFinish, sku: `${p.slug}-${finishSlug}`.toUpperCase(), comingSoon: Boolean(soon), imageUrl: soon?.url ?? null },
+        create: { productId: product.id, finishId, stock: soon ? 0 : p.stockPerFinish, sku: `${p.slug}-${finishSlug}`.toUpperCase(), comingSoon: Boolean(soon), imageUrl: soon?.url ?? p.finishImages?.[finishSlug] ?? null },
         // não sobrescreve estoque já ajustado pelo admin; "em breve" e foto seguem o catálogo
-        update: soon ? { comingSoon: true, imageUrl: soon.url, stock: 0 } : {},
+        update: soon ? { comingSoon: true, imageUrl: soon.url, stock: 0 } : { imageUrl: p.finishImages?.[finishSlug] ?? null },
       });
     }
     // opções "em breve" que saíram do catálogo (ex.: premium que virou produto próprio)

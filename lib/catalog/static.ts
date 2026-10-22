@@ -44,7 +44,7 @@ export const staticProducts: ProductDTO[] = SEED_PRODUCTS.map((p) => {
           stock: soon ? 0 : p.stockPerFinish,
           sku: `${p.slug}-${finish.slug}`.toUpperCase(),
           comingSoon: Boolean(soon),
-          imageUrl: soon?.url ?? null,
+          imageUrl: soon?.url ?? p.finishImages?.[finish.slug] ?? null,
         };
       }),
   };
