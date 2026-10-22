@@ -43,7 +43,8 @@ import { dimensionsLabel, toCard } from "@/lib/catalog/format";
 import { staticCategories, staticFinishes, staticProducts } from "@/lib/catalog/static";
 import { formatBRL } from "@/lib/money";
 import { DEFAULT_FREE_SHIPPING_THRESHOLD_CENTS } from "@/lib/shipping";
-import { instagramUrl, site, whatsappUrl } from "@/lib/site";
+import { WhatsAppLink } from "@/components/shop/whatsapp-link";
+import { instagramUrl, site } from "@/lib/site";
 import type { SiteSettings } from "@/types";
 
 installStaticApi();
@@ -195,7 +196,7 @@ function Contato() {
   return (
     <PageShell eyebrow="Contato" title="Vamos conversar" intro="Dúvidas sobre tamanhos, prazos ou encomendas? Fale com a gente pelo WhatsApp — é o canal mais rápido.">
       <p>
-        <Button asChild size="lg"><a href={whatsappUrl("Olá! Vim pelo site da Cambará Ornamentais.", settings.whatsapp)} target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a></Button>
+        <Button asChild size="lg"><WhatsAppLink number={settings.whatsapp} message="Olá! Vim pelo site da Cambará Ornamentais.">Chamar no WhatsApp</WhatsAppLink></Button>
       </p>
       <p>Instagram: <a href={instagramUrl(settings.instagram)} target="_blank" rel="noopener noreferrer">@{settings.instagram}</a></p>
       <p>E-mail: <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a></p>

@@ -3,7 +3,8 @@ import { Clock, Instagram, Mail, MapPin, MessageCircle } from "lucide-react";
 import { ContactForm } from "@/components/home/contact-form";
 import { Button } from "@/components/ui/button";
 import { getSettings } from "@/lib/data/settings";
-import { instagramUrl, site, whatsappUrl } from "@/lib/site";
+import { WhatsAppLink } from "@/components/shop/whatsapp-link";
+import { instagramUrl, site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Contato", description: "Fale com a Cambará Ornamentais por formulário, WhatsApp ou e-mail.", alternates: { canonical: "/contato" } };
 export const revalidate = 300;
@@ -24,7 +25,7 @@ export default async function Page() {
         <section aria-labelledby="canais-title" className="space-y-8">
           <h2 id="canais-title" className="font-serif text-2xl font-light">Outros canais</h2>
           <ul className="space-y-5">
-            <li className="flex gap-4"><MessageCircle className="mt-1 h-5 w-5 text-musgo" strokeWidth={1.5} aria-hidden /><div><p>WhatsApp</p><Button asChild variant="link"><a href={whatsappUrl("Olá! Vim pelo site da Cambará Ornamentais.", s.whatsapp)} target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a></Button></div></li>
+            <li className="flex gap-4"><MessageCircle className="mt-1 h-5 w-5 text-musgo" strokeWidth={1.5} aria-hidden /><div><p>WhatsApp</p><Button asChild variant="link"><WhatsAppLink number={s.whatsapp} message="Olá! Vim pelo site da Cambará Ornamentais.">Chamar no WhatsApp</WhatsAppLink></Button></div></li>
             <li className="flex gap-4"><Mail className="mt-1 h-5 w-5 text-musgo" strokeWidth={1.5} aria-hidden /><div><p>E-mail</p><a className="text-secundario underline underline-offset-4 hover:text-musgo" href={`mailto:${s.contactEmail}`}>{s.contactEmail}</a></div></li>
             <li className="flex gap-4"><Instagram className="mt-1 h-5 w-5 text-musgo" strokeWidth={1.5} aria-hidden /><div><p>Instagram</p><a className="text-secundario underline underline-offset-4 hover:text-musgo" href={instagramUrl(s.instagram)} target="_blank" rel="noopener noreferrer">@{s.instagram.replace(/^@/, "")}</a></div></li>
             {s.pickupEnabled && <li className="flex gap-4"><MapPin className="mt-1 h-5 w-5 text-musgo" strokeWidth={1.5} aria-hidden /><div><p>Retirada no local</p><p className="text-secundario">{s.pickupAddress}</p><p className="text-sm text-secundario">Combine o horário antes pelo WhatsApp.</p></div></li>}

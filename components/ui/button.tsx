@@ -9,13 +9,13 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-musgo text-pedra hover:bg-musgo-claro",
-        secondary: "border border-musgo bg-transparent text-musgo hover:bg-musgo hover:text-pedra",
-        ghost: "text-musgo hover:bg-musgo/10",
-        light: "bg-pedra text-musgo hover:bg-white",
-        outlineLight: "border border-pedra/80 text-pedra hover:bg-pedra hover:text-musgo",
+        primary: "no-underline bg-musgo text-pedra hover:bg-musgo-claro",
+        secondary: "no-underline border border-musgo bg-transparent text-musgo hover:bg-musgo hover:text-pedra",
+        ghost: "no-underline text-musgo hover:bg-musgo/10",
+        light: "no-underline bg-pedra text-musgo hover:bg-white",
+        outlineLight: "no-underline border border-pedra/80 text-pedra hover:bg-pedra hover:text-musgo",
         link: "h-auto px-0 text-musgo underline underline-offset-4 hover:text-salvia",
-        danger: "border border-erro text-erro hover:bg-erro hover:text-pedra",
+        danger: "no-underline border border-erro text-erro hover:bg-erro hover:text-pedra",
       },
       size: {
         default: "h-11 px-6",

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Barcode, CreditCard, Instagram, Mail, MessageCircle, QrCode } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
-import { instagramUrl, site, whatsappUrl } from "@/lib/site";
+import { WhatsAppLink } from "@/components/shop/whatsapp-link";
+import { instagramUrl, site } from "@/lib/site";
 import { hasDatabase } from "@/lib/db";
 import { env } from "@/lib/env";
 import type { SiteSettings } from "@/types";
@@ -45,9 +46,9 @@ export function Footer({ settings }: { settings: SiteSettings }) {
           <p className="eyebrow !text-salvia-clara">Fale com a gente</p>
           <ul className="space-y-2.5">
             <li>
-              <a className={`${link} inline-flex items-center gap-2`} href={whatsappUrl(undefined, settings.whatsapp)} target="_blank" rel="noopener noreferrer">
+              <WhatsAppLink className={`${link} inline-flex items-center gap-2`} number={settings.whatsapp}>
                 <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden /> WhatsApp
-              </a>
+              </WhatsAppLink>
             </li>
             <li>
               <a className={`${link} inline-flex items-center gap-2`} href={instagramUrl(settings.instagram)} target="_blank" rel="noopener noreferrer">

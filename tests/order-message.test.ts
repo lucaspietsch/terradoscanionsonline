@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildOrderMessage } from "@/lib/order-message";
-import { whatsappUrl } from "@/lib/site";
+import { whatsappUrl, whatsappWebUrl } from "@/lib/site";
 
 const LIMIT = 16000;
 const kit = { name: "Kit 3 Vasos Ripples", finishName: "Areia", quantity: 1, unitPriceCents: 6490 };
@@ -31,5 +31,10 @@ describe("mensagem de pedido para o WhatsApp", () => {
     const url = whatsappUrl("Olá *teste*\nlinha 2", "5554999197178");
     expect(url.startsWith("https://wa.me/5554999197178?text=")).toBe(true);
     expect(decodeURIComponent(url.split("text=")[1])).toBe("Olá *teste*\nlinha 2");
+  });
+
+  it("monta o link do WhatsApp Web com número só com dígitos e mensagem codificada", () => {
+    const url = whatsappWebUrl("Olá & tudo bem?", "+55 (54) 99919-7178");
+    expect(url).toBe("https://web.whatsapp.com/send?phone=5554999197178&text=Ol%C3%A1%20%26%20tudo%20bem%3F");
   });
 });

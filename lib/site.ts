@@ -27,6 +27,12 @@ export function whatsappUrl(message?: string, number: string = site.whatsapp) {
   return `https://wa.me/${number.replace(/\D/g, "")}${q}`;
 }
 
+/** WhatsApp Web (computador): abre direto a conversa com a mensagem. */
+export function whatsappWebUrl(message?: string, number: string = site.whatsapp) {
+  const q = message ? `&text=${encodeURIComponent(message)}` : "";
+  return `https://web.whatsapp.com/send?phone=${number.replace(/\D/g, "")}${q}`;
+}
+
 export const navLinks = [
   { href: "/vasos#produtos", label: "Vasos" },
   { href: "/sobre", label: "Sobre" },

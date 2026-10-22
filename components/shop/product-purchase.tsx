@@ -12,7 +12,8 @@ import { useSiteConfig } from "@/components/site-config";
 import { track } from "@/lib/analytics";
 import { toCartItem } from "@/lib/cart-helpers";
 import { useCart } from "@/lib/cart-store";
-import { ARTISANAL_NOTICE, SOLD_ONLY_VASES_NOTICE, whatsappUrl } from "@/lib/site";
+import { WhatsAppLink } from "@/components/shop/whatsapp-link";
+import { ARTISANAL_NOTICE, SOLD_ONLY_VASES_NOTICE } from "@/lib/site";
 import type { ProductDTO } from "@/types";
 
 export function ProductPurchase({ product, finishId, onFinishChange }: { product: ProductDTO; finishId: string; onFinishChange: (id: string) => void }) {
@@ -38,12 +39,10 @@ export function ProductPurchase({ product, finishId, onFinishChange }: { product
     track("add_to_cart", { currency: "BRL", value: (product.priceCents * quantity) / 100, items: [{ item_id: product.id, item_name: product.name, price: product.priceCents / 100, quantity }] });
   }
 
-  const wa = whatsappUrl(
+  const waMessage =
     soon
       ? `Olá! Tenho interesse no ${product.name} na opção "${finish?.name}" (em breve). Pode me avisar quando estiver disponível? ${pageUrl}`
-      : `Olá! Tenho uma dúvida sobre o ${product.name} (${finish?.name ?? ""}) que vi no site: ${pageUrl}`,
-    whatsapp,
-  );
+      : `Olá! Tenho uma dúvida sobre o ${product.name} (${finish?.name ?? ""}) que vi no site: ${pageUrl}`;
 
   return (
     <div>
@@ -83,9 +82,9 @@ export function ProductPurchase({ product, finishId, onFinishChange }: { product
         </div>
 
         <Button asChild variant="ghost" className="w-full">
-          <a href={wa} target="_blank" rel="noopener noreferrer">
+          <WhatsAppLink number={whatsapp} message={waMessage}>
             <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden /> {soon ? "Avise-me quando chegar (WhatsApp)" : "Tirar dúvidas no WhatsApp"}
-          </a>
+          </WhatsAppLink>
         </Button>
         <WishlistButton productId={product.id} />
       </div>
