@@ -3,14 +3,14 @@ import { buildOrderMessage } from "@/lib/order-message";
 import { whatsappUrl } from "@/lib/site";
 
 const LIMIT = 16000;
-const kit = { name: "Kit 3 Vasos Ripples DIY", finishName: "Areia", quantity: 1, unitPriceCents: 6490 };
-const redondo = { name: "Vaso Ripples DIY Redondo", finishName: "Grafite", quantity: 2, unitPriceCents: 2490 };
+const kit = { name: "Kit 3 Vasos Ripples", finishName: "Areia", quantity: 1, unitPriceCents: 6490 };
+const redondo = { name: "Vaso Ripples Redondo", finishName: "Grafite", quantity: 2, unitPriceCents: 2490 };
 
 describe("mensagem de pedido para o WhatsApp", () => {
   it("lista itens, valores por item, subtotal e total dos produtos", () => {
     const m = buildOrderMessage([kit, redondo], { thresholdCents: LIMIT });
-    expect(m).toContain("• 1x Kit 3 Vasos Ripples DIY (Areia) — R$ 64,90 cada = R$ 64,90");
-    expect(m).toContain("• 2x Vaso Ripples DIY Redondo (Grafite) — R$ 24,90 cada = R$ 49,80");
+    expect(m).toContain("• 1x Kit 3 Vasos Ripples (Areia) — R$ 64,90 cada = R$ 64,90");
+    expect(m).toContain("• 2x Vaso Ripples Redondo (Grafite) — R$ 24,90 cada = R$ 49,80");
     expect(m).toContain("Subtotal: R$ 114,70");
     expect(m).toContain("*Total dos produtos: R$ 114,70* (+ frete)");
     expect(m).toContain("Frete: a combinar");
