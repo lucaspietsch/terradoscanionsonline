@@ -298,6 +298,37 @@ export const SEED_PRODUCTS: SeedProduct[] = [
       { url: "/images/products/redondo-medidas-kit.webp", alt: "Ilustração dos três vasos redondos do kit com as medidas: 7,7 × 5,3, 8,6 × 5,5 e 10 × 6,2 cm" },
     ],
   },
+  // ---- Vasos Listrados Luxuosos ----
+  // Medidas lidas das imagens do fornecedor. PESO: weightGrams = 0 significa "a informar" (o peso das imagens é do molde):
+  // pese a peça pronta e atualize no admin (Produtos → editar). Até lá o frete usa o peso mínimo da cotação.
+  {
+    name: "Vaso de Concreto Listrado Luxuoso", slug: "vaso-concreto-listrado-luxuoso", category: "medios", priceCents: 4990,
+    heightCm: 12.7, widthCm: 10.4, depthCm: 10.4, round: true, weightGrams: 0, hasDrainage: false, badge: "Novo",
+    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 21, stockPerFinish: 10,
+    finishes: ["cimento-natural", "branco-pedra"],
+    shortDescription: "Vaso de concreto com relevo listrado vertical (12,7 × Ø10,4 cm).",
+    longDescription: `Vaso de concreto com listras verticais em relevo e formato de gota, de boca larga. Fica bonito sozinho ou em dupla com a Ampulheta Listrada, com flores e ramos secos. Vendido apenas o vaso: as flores e os objetos que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/listrado-cinza.webp", alt: "Vaso de concreto listrado em cinza com flores secas, ao lado de uma vela, sobre uma bandeja de madeira" },
+      { url: "/images/products/listrado-branco-1.webp", alt: "Vaso de concreto listrado branco com relevo de listras verticais, vista frontal" },
+      { url: "/images/products/listrado-branco-2.webp", alt: "Vaso de concreto listrado branco com as medidas: 12,7 cm de altura e 10,4 cm de largura" },
+      { url: "/images/products/listrados-par-branco.webp", alt: "Vaso listrado (à direita) e vaso ampulheta listrado (à esquerda), brancos, com flores secas sobre um livro" },
+    ],
+  },
+  {
+    name: "Vaso de Concreto Ampulheta Listrada Luxuoso", slug: "vaso-concreto-ampulheta-listrada-luxuoso", category: "medios", priceCents: 4990,
+    heightCm: 15.1, widthCm: 10.7, depthCm: 10.7, round: true, weightGrams: 0, hasDrainage: false, badge: "Novo",
+    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 22, stockPerFinish: 10,
+    finishes: ["cimento-natural", "branco-pedra"],
+    shortDescription: "Vaso de concreto em formato de ampulheta, com listras em relevo (15,1 × Ø10,7 cm).",
+    longDescription: `Vaso de concreto em formato de ampulheta, com listras verticais que ondulam na parte mais larga. Uma peça de destaque para aparadores e mesas, com flores e ramos secos. Vendido apenas o vaso: as flores e os objetos que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/ampulheta-cinza.webp", alt: "Vaso de concreto ampulheta listrado em cinza com flores secas, ao lado de uma vela, sobre uma bandeja de madeira" },
+      { url: "/images/products/ampulheta-branca-1.webp", alt: "Vaso de concreto ampulheta listrado branco, vista frontal" },
+      { url: "/images/products/ampulheta-branca-2.webp", alt: "Vaso de concreto ampulheta listrado branco com as medidas: 15,1 cm de altura e 10,7 cm de largura" },
+      { url: "/images/products/listrados-par-branco.webp", alt: "Vaso ampulheta listrado (à esquerda) e vaso listrado (à direita), brancos, com flores secas sobre um livro" },
+    ],
+  },
 ];
 
 export const FAQ = [

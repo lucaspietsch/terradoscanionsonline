@@ -109,7 +109,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <dt className="text-secundario">{product.round ? "Altura × diâmetro" : "Altura × largura × profundidade"}</dt>
                 <dd>{dimensionsLabel(product)}</dd>
                 <dt className="text-secundario">Peso aproximado</dt>
-                <dd>{(product.weightGrams / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} kg</dd>
+                <dd>{product.weightGrams > 0 ? `${(product.weightGrams / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 2 })} kg` : "A informar"}</dd>
                 <dt className="text-secundario">Furo de drenagem</dt>
                 <dd>{product.hasDrainage ? "Sim" : "Não"}</dd>
               </dl>

@@ -101,6 +101,15 @@ describe("pacote: peso + 10% de embalagem reforçada", () => {
   });
 });
 
+describe("peso ainda não informado (weightGrams = 0)", () => {
+  it("não quebra o pacote nem a cotação: usa o mínimo de 1 kg na tabela", () => {
+    const pkg = buildPackage([{ quantity: 2, weightGrams: 0, heightCm: 12.7, widthCm: 10.4, depthCm: 10.4 }]);
+    expect(pkg.weightGrams).toBe(0);
+    const pac = fallbackTableOptions("80010000", "80010000", pkg).find((o) => o.id === "table:pac")!;
+    expect(pac.priceCents).toBeGreaterThan(0);
+  });
+});
+
 describe("tabela fixa por região (fallback)", () => {
   it("identifica região pelo CEP", () => {
     expect(regionFromCep("01310-100")).toBe("SE");
