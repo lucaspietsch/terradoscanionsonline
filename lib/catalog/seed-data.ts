@@ -91,10 +91,11 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     shortDescription: "Kit com 3 vasos de concreto para aromaterapia, com relevo de anéis.",
     longDescription: `O Kit 3 Vasos Ripples reúne os três formatos da linha — redondo (8,6 cm de altura), gota e alto (13,8 cm) — em concreto com relevo de anéis concêntricos. São vasos decorativos, sem furo de drenagem, pensados para aromaterapia e para flores e espigas secas. ${FEITO_A_MAO}`,
     images: [
-      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Kit com três vasos Ripples de concreto em tom areia, com relevo de anéis e espigas secas" },
-      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Kit com três vasos Ripples de concreto em grafite, um deles segurado na mão" },
-      { url: "/images/products/aromaterapia-kit-branco.webp", alt: "Kit com três vasos Ripples de concreto brancos sobre uma tábua de madeira, com ramos secos" },
+      { url: "/images/products/aromaterapia-1.webp", alt: "Três vasos Ripples brancos de concreto, com relevo de anéis e ramos secos, sobre uma tábua de madeira" },
+      { url: "/images/products/aromaterapia-2.webp", alt: "Três vasos Ripples de concreto em tom areia, com relevo de anéis e espigas secas, sobre uma mesa branca" },
+      { url: "/images/products/aromaterapia-3.webp", alt: "Três vasos Ripples de concreto em grafite, com relevo de anéis, um deles segurado na mão" },
     ],
+    finishImages: { "branco-pedra": "/images/products/aromaterapia-1.webp", "areia": "/images/products/aromaterapia-2.webp", "grafite": "/images/products/aromaterapia-3.webp" },
   },
   {
     name: "Vaso Ripples Redondo", slug: "vaso-ripples-redondo", category: "aromaterapia", priceCents: 2490,
@@ -104,11 +105,11 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     shortDescription: "Vaso de concreto para aromaterapia, formato redondo (8,6 × Ø8,2 cm).",
     longDescription: `O modelo redondo da linha Ripples: pequeno, com relevo de anéis e boca estreita. Decorativo e sem furo de drenagem, combina com aromaterapia (varetas e óleos essenciais) e com flores secas. ${FEITO_A_MAO}`,
     images: [
-      { url: "/images/products/aromaterapia-redondo-1.webp", alt: "Vaso Ripples redondo de concreto branco com relevo de anéis, vista frontal" },
-      { url: "/images/products/aromaterapia-redondo-2.webp", alt: "Vaso Ripples redondo com as medidas: 8,6 cm de altura e 8,2 cm de largura" },
-      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Vasos Ripples em tom areia, com o modelo redondo à direita" },
-      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Vasos Ripples em grafite, com o modelo redondo à esquerda" },
+      { url: "/images/products/aromaterapia-1.webp", alt: "Três vasos Ripples brancos de concreto, com relevo de anéis e ramos secos, sobre uma tábua de madeira" },
+      { url: "/images/products/aromaterapia-2.webp", alt: "Três vasos Ripples de concreto em tom areia, com relevo de anéis e espigas secas, sobre uma mesa branca" },
+      { url: "/images/products/aromaterapia-3.webp", alt: "Três vasos Ripples de concreto em grafite, com relevo de anéis, um deles segurado na mão" },
     ],
+    finishImages: { "branco-pedra": "/images/products/aromaterapia-1.webp", "areia": "/images/products/aromaterapia-2.webp", "grafite": "/images/products/aromaterapia-3.webp" },
   },
   {
     name: "Vaso Ripples Alto", slug: "vaso-ripples-alto", category: "aromaterapia", priceCents: 2490,
@@ -118,11 +119,11 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     shortDescription: "Vaso de concreto para aromaterapia, formato alto (13,8 × Ø6,9 cm).",
     longDescription: `O modelo alto da linha Ripples: silhueta esguia com relevo de anéis, ótima para espigas e ramos secos ou para um difusor de varetas. Decorativo, sem furo de drenagem. ${FEITO_A_MAO}`,
     images: [
-      { url: "/images/products/aromaterapia-alto-1.webp", alt: "Vaso Ripples alto de concreto branco com relevo de anéis, vista frontal" },
-      { url: "/images/products/aromaterapia-alto-2.webp", alt: "Vaso Ripples alto com as medidas: 13,8 cm de altura e 6,9 cm de largura" },
-      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Vasos Ripples em tom areia, com o modelo alto ao centro" },
-      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Vasos Ripples em grafite, com o modelo alto ao centro" },
+      { url: "/images/products/aromaterapia-1.webp", alt: "Três vasos Ripples brancos de concreto, com relevo de anéis e ramos secos, sobre uma tábua de madeira" },
+      { url: "/images/products/aromaterapia-2.webp", alt: "Três vasos Ripples de concreto em tom areia, com relevo de anéis e espigas secas, sobre uma mesa branca" },
+      { url: "/images/products/aromaterapia-3.webp", alt: "Três vasos Ripples de concreto em grafite, com relevo de anéis, um deles segurado na mão" },
     ],
+    finishImages: { "branco-pedra": "/images/products/aromaterapia-1.webp", "areia": "/images/products/aromaterapia-2.webp", "grafite": "/images/products/aromaterapia-3.webp" },
   },
   {
     name: "Vaso Ripples Gota", slug: "vaso-ripples-gota", category: "aromaterapia", priceCents: 2490,
@@ -132,10 +133,11 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     shortDescription: "Vaso de concreto para aromaterapia, formato gota (medidas aproximadas).",
     longDescription: `O modelo gota da linha Ripples: base larga e boca estreita, com relevo de anéis. Decorativo, sem furo de drenagem; bom para aromaterapia e flores secas. Medidas aproximadas — confirme pelo WhatsApp. ${FEITO_A_MAO}`,
     images: [
-      { url: "/images/products/aromaterapia-kit-areia.webp", alt: "Vasos Ripples em tom areia, com o modelo gota à esquerda" },
-      { url: "/images/products/aromaterapia-kit-grafite.webp", alt: "Vasos Ripples em grafite, com o modelo gota à direita" },
-      { url: "/images/products/aromaterapia-kit-branco.webp", alt: "Vasos Ripples brancos, com o modelo gota à direita" },
+      { url: "/images/products/aromaterapia-1.webp", alt: "Três vasos Ripples brancos de concreto, com relevo de anéis e ramos secos, sobre uma tábua de madeira" },
+      { url: "/images/products/aromaterapia-2.webp", alt: "Três vasos Ripples de concreto em tom areia, com relevo de anéis e espigas secas, sobre uma mesa branca" },
+      { url: "/images/products/aromaterapia-3.webp", alt: "Três vasos Ripples de concreto em grafite, com relevo de anéis, um deles segurado na mão" },
     ],
+    finishImages: { "branco-pedra": "/images/products/aromaterapia-1.webp", "areia": "/images/products/aromaterapia-2.webp", "grafite": "/images/products/aromaterapia-3.webp" },
   },
   // ---- Vaso Floral (relevo 3D) ----
   // Medidas (8,0 × Ø8,5 cm) vêm da foto do fornecedor; peso e estoque são ESTIMATIVAS — ajuste no admin.
