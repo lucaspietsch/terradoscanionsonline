@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Link from "next/link";
 import { installStaticApi } from "@/lib/static-api";
-import { parseHash, useSearchParams } from "next/navigation";
+import { parseHash, useSearchParams } from "./shim-navigation";
 
 import { SiteConfigProvider } from "@/components/site-config";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
