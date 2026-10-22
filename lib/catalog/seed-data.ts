@@ -51,6 +51,7 @@ export const SEED_FINISHES: SeedFinish[] = [
   { name: "Areia", slug: "areia", hex: "#CDBFA6" },
   { name: "Branco Pedra", slug: "branco-pedra", hex: "#E6E3DB" },
   { name: "Lavanda", slug: "lavanda", hex: "#A89CC4" },
+  { name: "Branco Pedra + Lavanda", slug: "branco-lavanda", hex: "#E6E3DB", hex2: "#A89CC4" }, // Kit Floral + Lavanda
   // Cores do Vaso Floral Luxo (ainda não produzidas — "em breve"). hex = vaso/pétala, hex2 = miolo/bordas.
   { name: "Rosa nas flores com branco", slug: "rosa-flores-branco", hex: "#E58FB0", hex2: "#F4F1EA" },
   { name: "Roxo nas flores com branco", slug: "roxo-flores-branco", hex: "#8E5DB5", hex2: "#F4F1EA" },
@@ -78,7 +79,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Kit 3 Vasos Ripples", slug: "kit-3-vasos-ripples", category: "aromaterapia", priceCents: 6490,
     heightCm: 13.8, widthCm: 25, depthCm: 9, round: false, weightGrams: 1500, hasDrainage: false, badge: "Novo",
-    plants: ["Aromaterapia", "Flores secas", "Ramos e espigas"], sortOrder: 11, stockPerFinish: 10,
+    plants: ["Aromaterapia", "Flores secas", "Ramos e espigas"], sortOrder: 31, stockPerFinish: 10,
     finishes: ["areia", "grafite", "branco-pedra"],
     shortDescription: "Kit com 3 vasos de concreto para aromaterapia, com relevo de anéis.",
     longDescription: `O Kit 3 Vasos Ripples reúne os três formatos da linha — redondo (8,6 cm de altura), gota e alto (13,8 cm) — em concreto com relevo de anéis concêntricos. São vasos decorativos, sem furo de drenagem, pensados para aromaterapia e para flores e espigas secas. ${FEITO_A_MAO}`,
@@ -91,7 +92,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Vaso Ripples Redondo", slug: "vaso-ripples-redondo", category: "aromaterapia", priceCents: 2490,
     heightCm: 8.6, widthCm: 8.2, depthCm: 8.2, round: true, weightGrams: 450, hasDrainage: false, badge: null,
-    plants: ["Aromaterapia", "Flores secas"], sortOrder: 12, stockPerFinish: 10,
+    plants: ["Aromaterapia", "Flores secas"], sortOrder: 32, stockPerFinish: 10,
     finishes: ["areia", "grafite", "branco-pedra"],
     shortDescription: "Vaso de concreto para aromaterapia, formato redondo (8,6 × Ø8,2 cm).",
     longDescription: `O modelo redondo da linha Ripples: pequeno, com relevo de anéis e boca estreita. Decorativo e sem furo de drenagem, combina com aromaterapia (varetas e óleos essenciais) e com flores secas. ${FEITO_A_MAO}`,
@@ -105,7 +106,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Vaso Ripples Alto", slug: "vaso-ripples-alto", category: "aromaterapia", priceCents: 2490,
     heightCm: 13.8, widthCm: 6.9, depthCm: 6.9, round: true, weightGrams: 550, hasDrainage: false, badge: null,
-    plants: ["Aromaterapia", "Flores secas", "Espigas"], sortOrder: 13, stockPerFinish: 10,
+    plants: ["Aromaterapia", "Flores secas", "Espigas"], sortOrder: 33, stockPerFinish: 10,
     finishes: ["areia", "grafite", "branco-pedra"],
     shortDescription: "Vaso de concreto para aromaterapia, formato alto (13,8 × Ø6,9 cm).",
     longDescription: `O modelo alto da linha Ripples: silhueta esguia com relevo de anéis, ótima para espigas e ramos secos ou para um difusor de varetas. Decorativo, sem furo de drenagem. ${FEITO_A_MAO}`,
@@ -119,7 +120,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Vaso Ripples Gota", slug: "vaso-ripples-gota", category: "aromaterapia", priceCents: 2490,
     heightCm: 11.5, widthCm: 8, depthCm: 8, round: true, weightGrams: 500, hasDrainage: false, badge: null,
-    plants: ["Aromaterapia", "Flores secas", "Ramos"], sortOrder: 14, stockPerFinish: 10,
+    plants: ["Aromaterapia", "Flores secas", "Ramos"], sortOrder: 34, stockPerFinish: 10,
     finishes: ["areia", "grafite", "branco-pedra"],
     shortDescription: "Vaso de concreto para aromaterapia, formato gota (medidas aproximadas).",
     longDescription: `O modelo gota da linha Ripples: base larga e boca estreita, com relevo de anéis. Decorativo, sem furo de drenagem; bom para aromaterapia e flores secas. Medidas aproximadas — confirme pelo WhatsApp. ${FEITO_A_MAO}`,
@@ -174,6 +175,22 @@ export const SEED_PRODUCTS: SeedProduct[] = [
       { url: "/images/products/lavanda-4.webp", alt: "Vaso de concreto lilás com ramos de lavanda e as medidas: 7,6 cm de altura por 8 cm de largura" },
       { url: "/images/products/lavanda-3.webp", alt: "Vaso de concreto roxo com margaridas e as medidas: 7,6 cm de altura por 8 cm de largura" },
       { url: "/images/products/lavanda-5.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e íris roxas, sobre mesa com renda" },
+    ],
+  },
+  // ---- Kit Floral + Lavanda: 2 vasos, preço = 2 × R$ 45,90 com 2% de desconto (R$ 91,80 → R$ 89,96) ----
+  // Peso = soma das estimativas dos dois vasos — ajuste no admin.
+  {
+    name: "Kit 2 Vasos Relevo 3D: Floral e Lavanda", slug: "kit-2-vasos-floral-lavanda-relevo-3d", category: "pequenos", priceCents: 8996,
+    heightCm: 8, widthCm: 17, depthCm: 8.5, round: false, weightGrams: 1150, hasDrainage: false, badge: "Oferta",
+    plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 17, stockPerFinish: 10,
+    finishes: ["branco-lavanda"],
+    shortDescription: "Dois vasos de concreto com relevo 3D — Floral (branco) e Lavanda — com 2% de desconto.",
+    longDescription: `Kit com dois vasos de concreto com relevo 3D: o Vaso Floral Luxo (branco, 8 × Ø8,5 cm) e o Vaso de Concreto Lavanda (lilás, 7,6 × Ø8 cm). Juntos saem por R$ 89,96 — 2% a menos do que comprar os dois separados (R$ 45,90 cada). Ficam lindos lado a lado em bancadas, aparadores e mesas de cabeceira. Vendido apenas os vasos: as plantas que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/kit-floral-lavanda.webp", alt: "Kit com dois vasos de concreto com relevo 3D lado a lado: o Floral branco e o Lavanda lilás" },
+      { url: "/images/products/floral-luxo-1.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, sobre uma bandeja ao lado de vela e sabonete líquido" },
+      { url: "/images/products/lavanda-1.webp", alt: "Mão segurando o vaso de concreto lavanda com relevo 3D de folhas e íris roxas" },
+      { url: "/images/products/lavanda-2.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e íris roxas, sobre uma pedra no jardim" },
     ],
   },
   // ---- Vasos Redondos Luxuosos ----

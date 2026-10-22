@@ -120,7 +120,7 @@ export function ProductForm({ initial, categories, finishes }: { initial: Produc
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="h-4 w-4 accent-musgo" checked={v.hasDrainage} onChange={(e) => set("hasDrainage", e.target.checked)} /> Possui furo de drenagem</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="h-4 w-4 accent-musgo" checked={v.featured} onChange={(e) => set("featured", e.target.checked)} /> Destaque na home</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="h-4 w-4 accent-musgo" checked={v.active} onChange={(e) => set("active", e.target.checked)} /> Ativo (visível na loja)</label>
-        <Field label="Selo" htmlFor="pf-badge"><Select id="pf-badge" value={v.badge ?? ""} onChange={(e) => set("badge", e.target.value || null)}><option value="">Nenhum</option><option>Novo</option><option>Mais vendido</option></Select></Field>
+        <Field label="Selo" htmlFor="pf-badge"><Select id="pf-badge" value={v.badge ?? ""} onChange={(e) => set("badge", e.target.value || null)}><option value="">Nenhum</option><option>Novo</option><option>Oferta</option><option>Mais vendido</option></Select></Field>
         <Field label="Ordem" htmlFor="pf-order"><Input id="pf-order" type="number" value={v.sortOrder} onChange={(e) => set("sortOrder", Number(e.target.value))} /></Field>
       </section>
 
