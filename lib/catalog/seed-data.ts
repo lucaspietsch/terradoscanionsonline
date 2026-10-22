@@ -51,6 +51,11 @@ export const SEED_FINISHES: SeedFinish[] = [
   { name: "Areia", slug: "areia", hex: "#CDBFA6" },
   { name: "Branco Pedra", slug: "branco-pedra", hex: "#E6E3DB" },
   { name: "Lavanda", slug: "lavanda", hex: "#A89CC4" },
+  // Cores do Vaso Listrado Luxuoso (ainda não produzidas — "em breve"). As versões premium levam folha de ouro (hex2 = dourado).
+  { name: "Verde", slug: "verde", hex: "#4B5A2A" },
+  { name: "Preto e dourado (premium, com folha de ouro)", slug: "preto-dourado", hex: "#17171A", hex2: "#C39A2B" },
+  { name: "Vermelho e dourado (premium, com folha de ouro)", slug: "vermelho-dourado", hex: "#9E1620", hex2: "#C39A2B" },
+  { name: "Mármore (premium, com folha de ouro)", slug: "marmore-dourado", hex: "#E9E6E0", hex2: "#C39A2B" },
   { name: "Branco Pedra + Lavanda", slug: "branco-lavanda", hex: "#E6E3DB", hex2: "#A89CC4" }, // Kit Floral + Lavanda
   // Cores do Vaso Floral Luxo (ainda não produzidas — "em breve"). hex = vaso/pétala, hex2 = miolo/bordas.
   { name: "Rosa nas flores com branco", slug: "rosa-flores-branco", hex: "#E58FB0", hex2: "#F4F1EA" },
@@ -256,12 +261,22 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     heightCm: 12.7, widthCm: 10.4, depthCm: 10.4, round: true, weightGrams: 0, hasDrainage: false, badge: "Novo",
     plants: ["Flores secas", "Ramos e espigas"], sortOrder: 21, stockPerFinish: 10,
     finishes: ["cimento-natural", "branco-pedra"],
+    comingSoonFinishes: {
+      "verde": { url: "/images/products/listrado-luxuoso-verde.webp", alt: "Ilustração: vaso listrado luxuoso na cor verde" },
+      "preto-dourado": { url: "/images/products/listrado-luxuoso-preto-dourado.webp", alt: "Ilustração: vaso listrado luxuoso preto com folha de ouro (versão premium)" },
+      "vermelho-dourado": { url: "/images/products/listrado-luxuoso-vermelho-dourado.webp", alt: "Ilustração: vaso listrado luxuoso vermelho com folha de ouro (versão premium)" },
+      "marmore-dourado": { url: "/images/products/listrado-luxuoso-marmore.webp", alt: "Ilustração: vaso listrado luxuoso em mármore com folha de ouro (versão premium)" },
+    },
     shortDescription: "Vaso de concreto com relevo listrado vertical (12,7 × Ø10,4 cm).",
-    longDescription: `Vaso de concreto com listras verticais em relevo e formato de gota, de boca larga. Fica bonito sozinho, com flores e ramos secos. Vendido apenas o vaso: as flores e os objetos que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    longDescription: `Vaso de concreto com listras verticais em relevo e formato de gota, de boca larga. Fica bonito sozinho, com flores e ramos secos. Em breve, também em verde e em versões premium com folha de ouro — preto e dourado, vermelho e dourado e mármore; as fotos dessas opções são ilustrações de como vão ficar. Vendido apenas o vaso: as flores e os objetos que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/listrado-cinza.webp", alt: "Vaso de concreto listrado em cinza com flores secas, ao lado de uma vela, sobre uma bandeja de madeira" },
       { url: "/images/products/listrado-branco-1.webp", alt: "Vaso de concreto listrado branco com relevo de listras verticais, vista frontal" },
       { url: "/images/products/listrado-branco-2.webp", alt: "Vaso de concreto listrado branco com as medidas: 12,7 cm de altura e 10,4 cm de largura" },
+      { url: "/images/products/listrado-luxuoso-verde.webp", alt: "Ilustração: vaso listrado luxuoso na cor verde" },
+      { url: "/images/products/listrado-luxuoso-preto-dourado.webp", alt: "Ilustração: vaso listrado luxuoso preto com folha de ouro (versão premium)" },
+      { url: "/images/products/listrado-luxuoso-vermelho-dourado.webp", alt: "Ilustração: vaso listrado luxuoso vermelho com folha de ouro (versão premium)" },
+      { url: "/images/products/listrado-luxuoso-marmore.webp", alt: "Ilustração: vaso listrado luxuoso em mármore com folha de ouro (versão premium)" },
     ],
   },
 ];
