@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iXisTudo — O verdadeiro Xis Gaúcho</title>
+  <meta name="description" content="Xis gaúcho prensado, bem recheado e com maionese caseira, entregue na sua porta em todo o Rio Grande do Sul.">
+  <meta name="theme-color" content="#c81d25">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍔%3C/text%3E%3C/svg%3E">
+  <script>
+    // Aplica o tema antes da renderização para evitar "flash" de tema errado.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('ixistudo:tema'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') {
+        t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ícones (sprite SVG) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></g></symbol>
+      <symbol id="i-cart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></g></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></g></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M5 12h14"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></symbol>
+      <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></g></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#cardapio">Pular para o cardápio</a>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a class="logo" href="#" aria-label="iXisTudo — início">
+        <span class="logo-mark" aria-hidden="true">🍔</span>
+        <span class="logo-text">iXis<span>Tudo</span></span>
+      </a>
+
+      <!-- Município com autocomplete (combobox acessível) -->
+      <div class="city-search">
+        <svg class="icon city-icon" aria-hidden="true"><use href="#i-pin"/></svg>
+        <input type="text" id="input-municipio" role="combobox" aria-label="Município de entrega"
+               aria-autocomplete="list" aria-expanded="false" aria-controls="autocomplete-list"
+               placeholder="Seu município (RS)…" autocomplete="off" spellcheck="false">
+        <ul id="autocomplete-list" class="autocomplete" role="listbox" aria-label="Municípios" hidden></ul>
+      </div>
+
+      <div class="nav-actions">
+        <button type="button" id="btn-theme" class="icon-btn" aria-label="Alternar tema claro/escuro">
+          <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+
+        <div id="user-area"></div>
+
+        <button type="button" id="btn-cart" class="btn btn-primary btn-cart" aria-haspopup="dialog">
+          <svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg>
+          <span class="btn-cart-label">Carrinho</span>
+          <span id="cart-badge" class="badge" aria-live="polite" hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Tradição gaúcha</p>
+        <h1>O autêntico Xis Gaúcho, entregue na sua porta</h1>
+        <p class="hero-sub">Prensado, bem recheado e com a maionese caseira que você respeita.</p>
+        <ul class="hero-chips" aria-label="Diferenciais">
+          <li>🧀 Bem recheado</li>
+          <li>🥫 Maionese caseira</li>
+          <li>🛵 Entrega no RS</li>
+        </ul>
+        <a class="btn btn-accent btn-lg" href="#cardapio">Ver cardápio</a>
+      </div>
+    </section>
+
+    <section id="cardapio" class="container" aria-labelledby="titulo-cardapio">
+      <div class="section-head">
+        <h2 id="titulo-cardapio">Cardápio de Xis</h2>
+        <label class="menu-search">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <span class="sr-only">Buscar no cardápio</span>
+          <input type="search" id="input-busca" placeholder="Buscar (ex.: bacon, frango)…" autocomplete="off">
+        </label>
+      </div>
+      <div class="menu-grid" id="menu-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="ano"></span> iXisTudo — feito com carinho no Rio Grande do Sul.</p>
+  </footer>
+
+  <!-- Carrinho / pedidos (gaveta lateral) -->
+  <dialog id="cart-modal" class="drawer" aria-labelledby="cart-title">
+    <div class="drawer-inner">
+      <header class="dialog-head">
+        <h2 id="cart-title">Seu pedido</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Carrinho e pedidos">
+        <button type="button" role="tab" class="tab" id="tab-cart-view" aria-controls="cart-view" aria-selected="true">Meu carrinho</button>
+        <button type="button" role="tab" class="tab" id="tab-orders-view" aria-controls="orders-view" aria-selected="false" tabindex="-1">Meus pedidos</button>
+      </div>
+
+      <section id="cart-view" role="tabpanel" aria-labelledby="tab-cart-view" class="panel">
+        <div id="cart-items" class="panel-scroll"></div>
+        <div class="cart-summary">
+          <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">R$ 0,00</span></div>
+          <div class="summary-line"><span>Taxa de entrega</span><span id="cart-delivery">R$ 0,00</span></div>
+          <div class="summary-line"><span>Entrega em</span><span id="cart-city" class="muted">—</span></div>
+          <div class="summary-line total"><span>Total</span><span id="cart-total">R$ 0,00</span></div>
+          <button type="button" id="btn-checkout" class="btn btn-primary btn-lg full-width" disabled>Finalizar pedido</button>
+        </div>
+      </section>
+
+      <section id="orders-view" role="tabpanel" aria-labelledby="tab-orders-view" class="panel" hidden>
+        <div id="orders-history" class="panel-scroll"></div>
+      </section>
+    </div>
+  </dialog>
+
+  <!-- Login / cadastro -->
+  <dialog id="auth-modal" class="modal" aria-labelledby="auth-title">
+    <div class="modal-inner">
+      <header class="dialog-head">
+        <h2 id="auth-title">Bem-vindo ao iXisTudo</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Acesso">
+        <button type="button" role="tab" class="tab" id="tab-login-btn" aria-controls="form-login" aria-selected="true">Entrar</button>
+        <button type="button" role="tab" class="tab" id="tab-register-btn" aria-controls="form-register" aria-selected="false" tabindex="-1">Criar conta</button>
+      </div>
+
+      <form id="form-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login-btn">
+        <div class="field">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Sua senha" autocomplete="current-password" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg full-width">Entrar</button>
+      </form>
+
+      <form id="form-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register-btn" hidden>
+        <div class="field">
+          <label for="reg-name">Nome completo</label>
+          <input type="text" id="reg-name" placeholder="Ex.: Mateus Silva" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="reg-email">E-mail</label>
+          <input type="email" id="reg-email" placeholder="seu@email.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="reg-phone">Telefone / WhatsApp</label>
+          <input type="tel" id="reg-phone" placeholder="(51) 99999-9999" autocomplete="tel" inputmode="tel" pattern="\(\d{2}\) \d{4,5}-\d{4}" title="Use o formato (51) 99999-9999" required>
+        </div>
+        <div class="field">
+          <label for="reg-password">Senha</label>
+          <input type="password" id="reg-password" placeholder="Mínimo de 6 caracteres" autocomplete="new-password" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg full-width">Cadastrar</button>
+      </form>
+    </div>
+  </dialog>
+
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+  <script src="municipios-rs.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
