@@ -52,13 +52,21 @@ suite("fluxo de pedidos (PostgreSQL)", () => {
     process.env.MERCADOPAGO_ACCESS_TOKEN = "TEST-token";
     orders = await import("@/lib/server/orders");
     prisma = (await import("@/lib/db")).prisma;
-    const [cambara, semente, natural, grafite] = await Promise.all([
-      prisma.product.findUniqueOrThrow({ where: { slug: "vaso-cambara" } }),
-      prisma.product.findUniqueOrThrow({ where: { slug: "vaso-semente" } }),
+    const [natural, grafite, category] = await Promise.all([
       prisma.finish.findUniqueOrThrow({ where: { slug: "cimento-natural" } }),
       prisma.finish.findUniqueOrThrow({ where: { slug: "grafite" } }),
+      prisma.category.findFirstOrThrow(),
     ]);
-    ids = { cambara: cambara.id, semente: semente.id, natural: natural.id, grafite: grafite.id };
+    // produto de teste próprio (R$ 80,00): os testes não dependem do catálogo real
+    await prisma.product.deleteMany({ where: { slug: "produto-teste-80" } });
+    const fixture = await prisma.product.create({
+      data: {
+        name: "Produto de teste", slug: "produto-teste-80", shortDescription: "x", longDescription: "x", priceCents: 8000,
+        heightCm: 35, widthCm: 22, depthCm: 22, weightGrams: 7500, categoryId: category.id,
+        variants: { create: [{ finishId: natural.id, stock: 10, sku: "TESTE-80-NAT" }, { finishId: grafite.id, stock: 10, sku: "TESTE-80-GRA" }] },
+      },
+    });
+    ids = { cambara: fixture.id, semente: fixture.id, natural: natural.id, grafite: grafite.id };
   });
 
   beforeEach(async () => {
@@ -74,6 +82,7 @@ suite("fluxo de pedidos (PostgreSQL)", () => {
   });
 
   afterAll(async () => {
+    await prisma.product.deleteMany({ where: { slug: "produto-teste-80" } });
     await prisma.$disconnect();
   });
 

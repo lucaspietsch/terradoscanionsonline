@@ -6,11 +6,17 @@
  */
 import "../scripts/load-env";
 import { PrismaClient } from "@prisma/client";
+import { REMOVED_CATEGORY_SLUGS, REMOVED_PRODUCT_SLUGS } from "../lib/catalog/removed";
 import { BASE_FINISH_SLUGS, SEED_CATEGORIES, SEED_FINISHES, SEED_PRODUCTS } from "../lib/catalog/seed-data";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  // retira os exemplos antigos (só os slugs conhecidos — produtos criados no admin nunca são tocados)
+  const del = await prisma.product.deleteMany({ where: { slug: { in: REMOVED_PRODUCT_SLUGS } } });
+  const delCat = await prisma.category.deleteMany({ where: { slug: { in: REMOVED_CATEGORY_SLUGS }, products: { none: {} } } });
+  if (del.count || delCat.count) console.log(`Removidos: ${del.count} produto(s) e ${delCat.count} categoria(s) de exemplo.`);
+
   const finishes = new Map<string, string>();
   for (const f of SEED_FINISHES) {
     const row = await prisma.finish.upsert({ where: { slug: f.slug }, create: f, update: { name: f.name, hex: f.hex } });

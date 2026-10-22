@@ -14,7 +14,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const title = cat ? `${cat.name} — vasos de cimento` : "Vasos de cimento";
   return {
     title,
-    description: "Vasos e jardineiras de cimento feitos à mão: pequenos (R$ 35), médios (R$ 50), grandes e jardineiras (R$ 80). Frete grátis acima de R$ 160.",
+    description: "Vasos de concreto feitos à mão a partir de R$ 24,90, em vários formatos e acabamentos. Frete grátis acima de R$ 160.",
     // filtros combinados não geram páginas indexáveis; só a categoria tem canonical própria
     alternates: { canonical: cat ? `/vasos?categoria=${cat.slug}` : "/vasos" },
   };

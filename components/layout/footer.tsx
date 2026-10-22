@@ -25,8 +25,6 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             <li><Link className={link} href="/vasos#produtos">Todos os vasos</Link></li>
             <li><Link className={link} href="/vasos?categoria=pequenos#produtos">Pequenos</Link></li>
             <li><Link className={link} href="/vasos?categoria=medios#produtos">Médios</Link></li>
-            <li><Link className={link} href="/vasos?categoria=grandes#produtos">Grandes</Link></li>
-            <li><Link className={link} href="/vasos?categoria=jardineiras#produtos">Jardineiras</Link></li>
             <li><Link className={link} href="/vasos?categoria=aromaterapia#produtos">Aromaterapia</Link></li>
           </ul>
         </nav>

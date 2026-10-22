@@ -30,7 +30,6 @@ import { Categories } from "@/components/home/categories";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { About } from "@/components/home/about";
 import { BuildGarden } from "@/components/home/build-garden";
-import { InstagramGallery } from "@/components/home/instagram-gallery";
 import { FaqSection } from "@/components/home/faq";
 import { PageShell } from "@/components/layout/page-shell";
 
@@ -73,7 +72,6 @@ function Home() {
       <FeaturedProducts products={cards} />
       <About />
       <BuildGarden products={cards} />
-      <InstagramGallery handle={settings.instagram} />
       <FaqSection thresholdLabel={thresholdLabel} />
     </>
   );

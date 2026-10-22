@@ -26,7 +26,7 @@ export default function Page() {
       <h2>Uso interno e externo</h2>
       <p>Os vasos aguentam sol e chuva, mas o ideal é protegê-los de alagamentos prolongados. Em climas frios, evite deixar água parada dentro do vaso, pois ela pode congelar e trincar a peça.</p>
       <h2>Drenagem e móveis</h2>
-      <p>Todos os vasos têm furo de drenagem. Sobre móveis de madeira, use um pratinho ou cachepô: a água que escorre pode deixar marcas. Em pisos claros, uma base protetora evita manchas.</p>
+      <p>Se o seu vaso tem furo de drenagem (veja na ficha do produto), use um pratinho ou cachepô: a água que escorre pode deixar marcas em móveis de madeira e pisos claros. Vasos sem furo são decorativos — para plantas vivas, use-os como cachepô de um vaso com furo.</p>
       <h2>Cuidando da planta</h2>
       <ul>
         <li>Coloque uma camada de argila expandida ou pedrinhas no fundo antes do substrato.</li>

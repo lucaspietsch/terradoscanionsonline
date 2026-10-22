@@ -29,7 +29,6 @@ export function whatsappUrl(message?: string, number: string = site.whatsapp) {
 
 export const navLinks = [
   { href: "/vasos#produtos", label: "Vasos" },
-  { href: "/vasos?categoria=jardineiras#produtos", label: "Jardineiras" },
   { href: "/sobre", label: "Sobre" },
   { href: "/cuidados", label: "Cuidados" },
   { href: "/contato", label: "Contato" },

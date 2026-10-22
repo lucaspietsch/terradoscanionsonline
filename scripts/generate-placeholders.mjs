@@ -1,5 +1,5 @@
 /**
- * Gera ilustrações placeholder (WebP) para produtos, categorias, hero, sobre e galeria.
+ * Gera ilustrações provisórias (WebP) para o hero e a seção "Sobre" (as fotos de produto são reais).
  * São provisórias: troque pelas fotos reais (mesmos nomes de arquivo, ou envie pelo admin).
  *
  *   npm run assets:placeholders
@@ -469,16 +469,9 @@ async function save(rel, svg) {
 }
 
 const jobs = [];
-for (const spec of P) {
-  jobs.push(save(`products/${spec.slug}-1.webp`, shotEmpty(spec)));
-  jobs.push(save(`products/${spec.slug}-2.webp`, shotPlant(spec)));
-  jobs.push(save(`products/${spec.slug}-3.webp`, shotRoom(spec)));
-  jobs.push(save(`products/${spec.slug}-4.webp`, shotScale(spec)));
-}
+// Fotos de produto e categorias agora são REAIS (veja scripts/process-*.mjs); aqui só restam as imagens editoriais provisórias.
 jobs.push(save("hero.webp", heroScene()));
-for (const c of ["pequenos", "medios", "grandes", "jardineiras"]) jobs.push(save(`categorias/${c}.webp`, categoryScene(c)));
 jobs.push(save("sobre-1.webp", aboutScene(1)));
 jobs.push(save("sobre-2.webp", aboutScene(2)));
-for (let i = 1; i <= 6; i++) jobs.push(save(`galeria/${i}.webp`, gallerySquare(i)));
 await Promise.all(jobs);
 console.log(`ok: ${jobs.length} imagens em public/images`);

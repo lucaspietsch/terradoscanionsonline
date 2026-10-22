@@ -7,7 +7,7 @@ export function Hero() {
     <section className="relative isolate flex min-h-[calc(100svh-108px)] items-end overflow-hidden bg-sombra md:items-center" data-dark>
       <Image
         src="/images/hero.webp"
-        alt="Sala com luz natural, vasos de cimento com espada-de-são-jorge, costela-de-adão e zamioculca ao lado de uma janela"
+        alt="Ilustração de uma sala com luz natural e vasos de cimento com plantas ao lado de uma janela"
         fill
         priority
         sizes="100vw"

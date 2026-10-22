@@ -7,8 +7,7 @@ export interface Combo {
 }
 
 export const COMBOS: Combo[] = [
-  { id: "trio-mesa", name: "Trio de mesa", description: "Três peças pequenas em alturas e formas diferentes, para bancadas e prateleiras.", slugs: ["vaso-semente", "vaso-broto", "vaso-cuia"] },
-  { id: "dupla-sala", name: "Dupla de sala", description: "Uma bola grande e um cilindro alto para compor um canto inteiro.", slugs: ["vaso-lua", "vaso-cambara"] },
-  { id: "estante-verde", name: "Estante verde", description: "Três médios com texturas diferentes para aparadores e estantes.", slugs: ["vaso-seixo", "vaso-ipe", "vaso-ripado"] },
-  { id: "bancada-temperos", name: "Bancada de temperos", description: "Jardineira para ervas, com um mini vaso para a muda do dia.", slugs: ["jardineira-mata", "vaso-broto"] },
+  { id: "dupla-listrada", name: "Dupla listrada", description: "O Listrado e a Ampulheta Listrada juntos: alturas e formas diferentes, mesma textura.", slugs: ["vaso-concreto-listrado-luxuoso", "vaso-concreto-ampulheta-listrada-luxuoso"] },
+  { id: "dupla-relevo", name: "Dupla relevo 3D", description: "Os vasos Floral e Lavanda lado a lado, para uma bancada delicada.", slugs: ["vaso-concreto-floral-relevo-3d", "vaso-concreto-lavanda-relevo-3d"] },
+  { id: "colecao-bancada", name: "Coleção de bancada", description: "Os dois kits de três vasos para montar uma fileira completa.", slugs: ["kit-3-vasos-concreto-redondos-luxuosos", "kit-3-vasos-ripples"] },
 ];

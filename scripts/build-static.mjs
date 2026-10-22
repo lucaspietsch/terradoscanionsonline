@@ -92,7 +92,7 @@ import { getCategories, getFinishes, getProductCards } from "@/lib/data/catalog"
 
 export const metadata: Metadata = {
   title: "Vasos de cimento",
-  description: "Vasos e jardineiras de concreto feitos à mão. Frete grátis acima de R$ 160.",
+  description: "Vasos de concreto feitos à mão a partir de R$ 24,90. Frete grátis acima de R$ 160.",
   alternates: { canonical: "/vasos/" },
 };
 

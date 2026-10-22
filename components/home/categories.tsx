@@ -13,7 +13,7 @@ export function Categories({ categories, products }: { categories: CategoryDTO[]
           <p className="eyebrow">Coleção</p>
           <h2 id="cat-title" className="h2-section mt-3">Para cada canto da casa</h2>
         </Reveal>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c, i) => {
             const prices = products.filter((p) => p.categorySlug === c.slug).map((p) => p.priceCents);
             const min = prices.length ? Math.min(...prices) : null;

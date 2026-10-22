@@ -1,10 +1,9 @@
-import { Droplets, Hand, Leaf, Package, Sparkles } from "lucide-react";
+import { Hand, Leaf, Package, Sparkles } from "lucide-react";
 
 export function FeaturesMarquee({ thresholdLabel }: { thresholdLabel: string }) {
   const items = [
     { icon: Hand, text: "Feito à mão" },
     { icon: Sparkles, text: "Peças únicas" },
-    { icon: Droplets, text: "Furo de drenagem" },
     { icon: Package, text: "Embalagem reforçada" },
     { icon: Leaf, text: `Frete grátis acima de ${thresholdLabel}` },
   ];

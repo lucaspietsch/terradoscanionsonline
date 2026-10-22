@@ -20,8 +20,8 @@ export default function Page() {
       <h2>Feito à mão, do começo ao fim</h2>
       <p>Cada vaso é preparado em pequenas quantidades: misturamos o cimento, moldamos, desmoldamos com cuidado e deixamos curar sem pressa. Só depois vêm o lixamento, o acabamento e a conferência final — peça por peça.</p>
       <p>Por isso não existem dois vasos idênticos. Os poros, as pequenas marcas e as variações de tom são o jeito do cimento mostrar que foi feito por gente, e não por uma máquina.</p>
-      <h2>Para plantas viverem bem</h2>
-      <p>Todos os nossos vasos têm furo de drenagem e foram pensados para plantas de verdade: das suculentas às espadas-de-são-jorge, passando por costela-de-adão, zamioculca e jiboia. Em cada produto indicamos as plantas que combinam com o tamanho.</p>
+      <h2>Para decorar com natureza</h2>
+      <p>Nossos vasos foram pensados para acolher flores secas, folhagens e arranjos, e para compor a casa com formas simples e acabamentos naturais. Em cada produto indicamos o que combina com o tamanho e se o vaso tem furo de drenagem.</p>
       <h2>Um jeito calmo de decorar</h2>
       <p>Acreditamos em casas com mais respiro. Poucas peças, bem escolhidas, e muita luz natural. Nosso desejo é que entrar na sua sala seja como entrar num jardim interno bonito e silencioso.</p>
       <div className="flex flex-wrap gap-4 pt-4">

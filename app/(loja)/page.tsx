@@ -5,7 +5,6 @@ import { FaqSection } from "@/components/home/faq";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { FeaturesMarquee } from "@/components/home/features-marquee";
 import { Hero } from "@/components/home/hero";
-import { InstagramGallery } from "@/components/home/instagram-gallery";
 import { Newsletter } from "@/components/home/newsletter";
 import { Testimonials } from "@/components/home/testimonials";
 import { getCategories, getProductCards } from "@/lib/data/catalog";
@@ -27,7 +26,6 @@ export default async function HomePage() {
       <FeaturedProducts products={featured} />
       <About />
       <BuildGarden products={products} />
-      <InstagramGallery handle={settings.instagram} />
       <Testimonials items={testimonials} />
       <FaqSection thresholdLabel={thresholdLabel} />
       <Newsletter />
