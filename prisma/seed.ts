@@ -6,7 +6,7 @@
  */
 import "../scripts/load-env";
 import { PrismaClient } from "@prisma/client";
-import { SEED_CATEGORIES, SEED_FINISHES, SEED_PRODUCTS } from "../lib/catalog/seed-data";
+import { BASE_FINISH_SLUGS, SEED_CATEGORIES, SEED_FINISHES, SEED_PRODUCTS } from "../lib/catalog/seed-data";
 
 const prisma = new PrismaClient();
 
@@ -52,7 +52,7 @@ async function main() {
     });
 
     for (const [finishSlug, finishId] of finishes) {
-      if (p.finishes && !p.finishes.includes(finishSlug)) continue;
+      if (!(p.finishes ?? BASE_FINISH_SLUGS).includes(finishSlug)) continue;
       await prisma.productVariant.upsert({
         where: { productId_finishId: { productId: product.id, finishId } },
         create: { productId: product.id, finishId, stock: p.stockPerFinish, sku: `${p.slug}-${finishSlug}`.toUpperCase() },

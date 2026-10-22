@@ -37,7 +37,7 @@ export interface SeedProduct {
   images: { url: string; alt: string }[];
   stockPerFinish: number;
   sortOrder: number;
-  /** Slugs dos acabamentos oferecidos. Omitido = todos. */
+  /** Slugs dos acabamentos oferecidos. Omitido = BASE_FINISH_SLUGS. */
   finishes?: string[];
 }
 
@@ -46,7 +46,11 @@ export const SEED_FINISHES: SeedFinish[] = [
   { name: "Grafite", slug: "grafite", hex: "#4B4F4A" },
   { name: "Areia", slug: "areia", hex: "#CDBFA6" },
   { name: "Branco Pedra", slug: "branco-pedra", hex: "#E6E3DB" },
+  { name: "Lavanda", slug: "lavanda", hex: "#A89CC4" },
 ];
+
+/** Acabamentos dos vasos originais; produtos sem `finishes` próprio usam estes. */
+export const BASE_FINISH_SLUGS = ["cimento-natural", "grafite", "areia", "branco-pedra"];
 
 export const SEED_CATEGORIES: SeedCategory[] = [
   { name: "Pequenos", slug: "pequenos", imageUrl: "/images/categorias/pequenos.webp", imageAlt: "Três vasos pequenos de cimento com suculentas sobre uma bancada clara", order: 1 },
@@ -211,11 +215,28 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 15, stockPerFinish: 10,
     finishes: ["branco-pedra"],
     shortDescription: "Vaso de concreto com flores em relevo 3D, de tema florestal.",
-    longDescription: `Vaso redondo de concreto coberto por flores em alto-relevo, com tema florestal. Pequeno e delicado, fica bem em bancadas, mesas de cabeceira e banheiros, com folhagens pequenas como samambaia e hera ou com flores secas. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. ${FEITO_A_MAO}`,
+    longDescription: `Vaso redondo de concreto coberto por flores em alto-relevo, com tema florestal. Pequeno e delicado, fica bem em bancadas, mesas de cabeceira e banheiros, com folhagens pequenas como samambaia e hera ou com flores secas. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Nas fotos o vaso aparece com uma plantinha de acompanhamento — confirme pelo WhatsApp se ela vai junto no seu pedido. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/floral-1.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, sobre uma bandeja ao lado de vela e sabonete líquido" },
       { url: "/images/products/floral-3.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, em fundo claro" },
       { url: "/images/products/floral-2.webp", alt: "Vaso de concreto branco com flores em relevo 3D dentro de uma caixa de presente com papel de seda" },
+    ],
+  },
+  // ---- Vaso Lavanda (relevo 3D, tema jardim) ----
+  // Medidas (7,6 × Ø8,0 cm) vêm da foto do fornecedor; peso e estoque são ESTIMATIVAS — ajuste no admin.
+  {
+    name: "Vaso de Concreto Lavanda Relevo 3D", slug: "vaso-concreto-lavanda-relevo-3d", category: "pequenos", priceCents: 4590,
+    heightCm: 7.6, widthCm: 8, depthCm: 8, round: true, weightGrams: 550, hasDrainage: false, badge: "Novo",
+    plants: ["Lavanda seca", "Samambaia", "Hera"], sortOrder: 16, stockPerFinish: 10,
+    finishes: ["lavanda"],
+    shortDescription: "Vaso de concreto lilás com relevo 3D de folhas, de tema jardim.",
+    longDescription: `Vaso redondo de concreto na cor lavanda, com relevo 3D de folhas em tema jardim. Pequeno e delicado, combina com bancadas, criados-mudos e mesas de apoio, com folhagens pequenas como samambaia e hera ou com lavanda seca. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Nas fotos o vaso aparece com uma plantinha de acompanhamento — confirme pelo WhatsApp se ela vai junto no seu pedido. ${FEITO_A_MAO}`,
+    images: [
+      { url: "/images/products/lavanda-2.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e uma plantinha de samambaia e hera, sobre uma mesa clara" },
+      { url: "/images/products/lavanda-4.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e ramos de lavanda seca" },
+      { url: "/images/products/lavanda-5.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e plantinha, em primeiro plano" },
+      { url: "/images/products/lavanda-3.webp", alt: "Vaso de concreto lavanda com plantinha dentro de uma caixa de presente com palha" },
+      { url: "/images/products/lavanda-1.webp", alt: "Vaso de concreto lavanda com plantinha sobre uma cama, ao lado de almofadas lilás" },
     ],
   },
 ];

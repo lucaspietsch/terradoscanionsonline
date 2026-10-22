@@ -1,5 +1,5 @@
 import { hasDatabase, prisma } from "@/lib/db";
-import { SEED_CATEGORIES, SEED_FINISHES, SEED_PRODUCTS } from "@/lib/catalog/seed-data";
+import { BASE_FINISH_SLUGS, SEED_CATEGORIES, SEED_FINISHES, SEED_PRODUCTS } from "@/lib/catalog/seed-data";
 import { toCard } from "@/lib/catalog/format";
 import type { CartLineInput, CategoryDTO, FinishDTO, ProductCardDTO, ProductDTO, ResolvedLine } from "@/types";
 
@@ -36,7 +36,7 @@ const staticProducts: ProductDTO[] = SEED_PRODUCTS.map((p) => {
     createdAt: new Date(2025, 0, p.sortOrder).toISOString(),
     category: { id: cat.id, name: cat.name, slug: cat.slug },
     images: p.images.map((i, order) => ({ ...i, order })),
-    variants: (p.finishes ? p.finishes.flatMap((slug) => staticFinishes.filter((f) => f.slug === slug)) : staticFinishes).map((finish) => ({
+    variants: (p.finishes ?? BASE_FINISH_SLUGS).flatMap((slug) => staticFinishes.filter((f) => f.slug === slug)).map((finish) => ({
       id: `${p.slug}:${finish.slug}`,
       finish,
       stock: p.stockPerFinish,
