@@ -9,6 +9,8 @@ export interface SeedFinish {
   name: string;
   slug: string;
   hex: string;
+  /** segunda cor: o seletor mostra o círculo dividido ao meio */
+  hex2?: string;
 }
 
 export interface SeedCategory {
@@ -39,6 +41,8 @@ export interface SeedProduct {
   sortOrder: number;
   /** Slugs dos acabamentos oferecidos. Omitido = BASE_FINISH_SLUGS. */
   finishes?: string[];
+  /** opções ainda não produzidas ("em breve"): slug do acabamento → foto ilustrativa. Não podem ser compradas. */
+  comingSoonFinishes?: Record<string, { url: string; alt: string }>;
 }
 
 export const SEED_FINISHES: SeedFinish[] = [
@@ -47,6 +51,13 @@ export const SEED_FINISHES: SeedFinish[] = [
   { name: "Areia", slug: "areia", hex: "#CDBFA6" },
   { name: "Branco Pedra", slug: "branco-pedra", hex: "#E6E3DB" },
   { name: "Lavanda", slug: "lavanda", hex: "#A89CC4" },
+  // Cores do Vaso Floral Luxo (ainda não produzidas — "em breve"). hex = vaso/pétala, hex2 = miolo/bordas.
+  { name: "Rosa nas flores com branco", slug: "rosa-flores-branco", hex: "#E58FB0", hex2: "#F4F1EA" },
+  { name: "Roxo nas flores com branco", slug: "roxo-flores-branco", hex: "#8E5DB5", hex2: "#F4F1EA" },
+  { name: "Amarelo nas flores com branco", slug: "amarelo-flores-branco", hex: "#F2C230", hex2: "#F4F1EA" },
+  { name: "Verde no vaso, branco dentro da pétala e roxo nas bordas", slug: "verde-branco-roxo", hex: "#4F7D4B", hex2: "#7B4AA8" },
+  { name: "Preto fosco no vaso e vermelho vibrante nas pétalas", slug: "preto-vermelho", hex: "#1C1C1C", hex2: "#D3202A" },
+  { name: "Branco com sombreado cinza no vaso e vermelho vibrante nas pétalas", slug: "branco-cinza-vermelho", hex: "#D9D6D1", hex2: "#D3202A" },
 ];
 
 /** Acabamentos dos vasos originais; produtos sem `finishes` próprio usam estes. */
@@ -120,17 +131,32 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   },
   // ---- Vaso Floral (relevo 3D) ----
   // Medidas (8,0 × Ø8,5 cm) vêm da foto do fornecedor; peso e estoque são ESTIMATIVAS — ajuste no admin.
+  // As cores "em breve" usam fotos ILUSTRATIVAS (scripts/process-floral-cores.py): troque pelas fotos reais quando produzir.
   {
-    name: "Vaso de Concreto Floral Relevo 3D", slug: "vaso-concreto-floral-relevo-3d", category: "pequenos", priceCents: 4590,
+    name: "Vaso Floral Luxo - Relevo em 3D", slug: "vaso-floral-luxo-relevo-3d", category: "pequenos", priceCents: 4590,
     heightCm: 8, widthCm: 8.5, depthCm: 8.5, round: true, weightGrams: 600, hasDrainage: false, badge: "Novo",
     plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 15, stockPerFinish: 10,
     finishes: ["branco-pedra"],
-    shortDescription: "Vaso de concreto com flores em relevo 3D, de tema florestal.",
-    longDescription: `Vaso redondo de concreto coberto por flores em alto-relevo, com tema florestal. Pequeno e delicado, fica bem em bancadas, mesas de cabeceira e banheiros, com folhagens pequenas como samambaia e hera ou com flores secas. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
+    comingSoonFinishes: {
+      "rosa-flores-branco": { url: "/images/products/floral-luxo-rosa.webp", alt: "Ilustração: vaso floral com as flores pintadas de rosa, com o miolo branco" },
+      "roxo-flores-branco": { url: "/images/products/floral-luxo-roxo.webp", alt: "Ilustração: vaso floral com as flores pintadas de roxo, com o miolo branco" },
+      "amarelo-flores-branco": { url: "/images/products/floral-luxo-amarelo.webp", alt: "Ilustração: vaso floral com as flores pintadas de amarelo, com o miolo branco" },
+      "verde-branco-roxo": { url: "/images/products/floral-luxo-verde-roxo.webp", alt: "Ilustração: vaso floral verde, com pétalas brancas por dentro e roxas nas bordas" },
+      "preto-vermelho": { url: "/images/products/floral-luxo-preto-vermelho.webp", alt: "Ilustração: vaso floral preto fosco com pétalas vermelho vibrante" },
+      "branco-cinza-vermelho": { url: "/images/products/floral-luxo-branco-vermelho.webp", alt: "Ilustração: vaso floral branco com sombreado cinza e pétalas vermelho vibrante" },
+    },
+    shortDescription: "Vaso de Concreto (Leve)",
+    longDescription: `Vaso redondo de concreto leve coberto por flores em alto-relevo 3D. Pequeno e delicado, fica bem em bancadas, mesas de cabeceira e banheiros, com folhagens pequenas como samambaia e hera ou com flores secas. Pode ser presenteado: uma das fotos mostra o vaso em caixa de presente. Além do branco, vêm aí novas cores pintadas à mão, principalmente nas flores — as opções marcadas como "em breve" ainda não foram produzidas e as fotos delas são ilustrações de como vão ficar. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
     images: [
-      { url: "/images/products/floral-1.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, sobre uma bandeja ao lado de vela e sabonete líquido" },
-      { url: "/images/products/floral-3.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, em fundo claro" },
-      { url: "/images/products/floral-2.webp", alt: "Vaso de concreto branco com flores em relevo 3D dentro de uma caixa de presente com papel de seda" },
+      { url: "/images/products/floral-luxo-1.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, sobre uma bandeja ao lado de vela e sabonete líquido" },
+      { url: "/images/products/floral-luxo-3.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, em fundo claro" },
+      { url: "/images/products/floral-luxo-2.webp", alt: "Vaso de concreto branco com flores em relevo 3D dentro de uma caixa de presente com papel de seda" },
+      { url: "/images/products/floral-luxo-rosa.webp", alt: "Ilustração: vaso floral com as flores pintadas de rosa, com o miolo branco" },
+      { url: "/images/products/floral-luxo-roxo.webp", alt: "Ilustração: vaso floral com as flores pintadas de roxo, com o miolo branco" },
+      { url: "/images/products/floral-luxo-amarelo.webp", alt: "Ilustração: vaso floral com as flores pintadas de amarelo, com o miolo branco" },
+      { url: "/images/products/floral-luxo-verde-roxo.webp", alt: "Ilustração: vaso floral verde, com pétalas brancas por dentro e roxas nas bordas" },
+      { url: "/images/products/floral-luxo-preto-vermelho.webp", alt: "Ilustração: vaso floral preto fosco com pétalas vermelho vibrante" },
+      { url: "/images/products/floral-luxo-branco-vermelho.webp", alt: "Ilustração: vaso floral branco com sombreado cinza e pétalas vermelho vibrante" },
     ],
   },
   // ---- Vaso Lavanda (relevo 3D, tema jardim) ----

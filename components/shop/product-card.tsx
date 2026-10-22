@@ -43,15 +43,16 @@ export function ProductCard({ product, priority = false, headingLevel: Heading =
             </Link>
           </Heading>
           <ul className="mt-1.5 flex shrink-0 -space-x-1" aria-label="Acabamentos disponíveis">
-            {product.finishes.map((f) => (
+            {product.finishes.filter((f) => !f.comingSoon).map((f) => (
               <li key={f.id}>
-                <FinishDot hex={f.hex} className="h-3.5 w-3.5 ring-2 ring-nevoa" />
+                <FinishDot hex={f.hex} hex2={f.hex2} className="h-3.5 w-3.5 ring-2 ring-nevoa" />
                 <span className="sr-only">{f.name}</span>
               </li>
             ))}
           </ul>
         </div>
         <p className="mt-0.5 text-sm text-secundario">{dimensionsLabel(product)}</p>
+        {product.finishes.some((f) => f.comingSoon) && <p className="mt-0.5 text-xs text-secundario">+ {product.finishes.filter((f) => f.comingSoon).length} cores em breve</p>}
         <Price cents={product.priceCents} className="mt-2" />
         <div className="mt-4 flex-1" />
         <AddToCartButton product={product} />

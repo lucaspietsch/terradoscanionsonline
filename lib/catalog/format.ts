@@ -17,9 +17,11 @@ export function toCard(p: ProductDTO): ProductCardDTO {
     slug: v.finish.slug,
     name: v.finish.name,
     hex: v.finish.hex,
+    hex2: v.finish.hex2 ?? null,
     stock: v.stock,
+    comingSoon: v.comingSoon,
   }));
-  const firstInStock = finishes.find((f) => f.stock > 0);
+  const firstInStock = finishes.find((f) => f.stock > 0 && !f.comingSoon);
   return {
     id: p.id,
     slug: p.slug,
@@ -37,7 +39,7 @@ export function toCard(p: ProductDTO): ProductCardDTO {
     categoryName: p.category.name,
     images: p.images.slice(0, 2),
     finishes,
-    defaultFinishId: (firstInStock ?? finishes[0])?.id ?? null,
+    defaultFinishId: (firstInStock ?? finishes.find((f) => !f.comingSoon) ?? finishes[0])?.id ?? null,
     inStock: Boolean(firstInStock),
   };
 }

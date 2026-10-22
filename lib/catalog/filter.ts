@@ -28,7 +28,7 @@ export function filterAndSort(products: ProductCardDTO[], f: CatalogFilters): Pr
       const bin = SIZE_BINS.find((b) => b.value === f.tamanho);
       if (bin && !bin.test(p.heightCm)) return false;
     }
-    if (f.acabamento && !p.finishes.some((x) => x.slug === f.acabamento)) return false;
+    if (f.acabamento && !p.finishes.some((x) => x.slug === f.acabamento && !x.comingSoon)) return false;
     if (f.q) {
       const q = norm(f.q);
       if (!norm(`${p.name} ${p.categoryName}`).includes(q)) return false;

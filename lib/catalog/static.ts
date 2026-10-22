@@ -2,7 +2,7 @@
 import { BASE_FINISH_SLUGS, SEED_CATEGORIES, SEED_FINISHES, SEED_PRODUCTS } from "@/lib/catalog/seed-data";
 import type { CategoryDTO, FinishDTO, ProductDTO } from "@/types";
 
-export const staticFinishes: FinishDTO[] = SEED_FINISHES.map((f) => ({ id: f.slug, ...f }));
+export const staticFinishes: FinishDTO[] = SEED_FINISHES.map((f) => ({ id: f.slug, ...f, hex2: f.hex2 ?? null }));
 export const staticCategories: CategoryDTO[] = SEED_CATEGORIES.map((c) => ({
   id: c.slug,
   name: c.name,
@@ -34,12 +34,19 @@ export const staticProducts: ProductDTO[] = SEED_PRODUCTS.map((p) => {
     createdAt: new Date(2025, 0, p.sortOrder).toISOString(),
     category: { id: cat.id, name: cat.name, slug: cat.slug },
     images: p.images.map((i, order) => ({ ...i, order })),
-    variants: (p.finishes ?? BASE_FINISH_SLUGS).flatMap((slug) => staticFinishes.filter((f) => f.slug === slug)).map((finish) => ({
-      id: `${p.slug}:${finish.slug}`,
-      finish,
-      stock: p.stockPerFinish,
-      sku: `${p.slug}-${finish.slug}`.toUpperCase(),
-    })),
+    variants: [...(p.finishes ?? BASE_FINISH_SLUGS), ...Object.keys(p.comingSoonFinishes ?? {})]
+      .flatMap((slug) => staticFinishes.filter((f) => f.slug === slug))
+      .map((finish) => {
+        const soon = p.comingSoonFinishes?.[finish.slug];
+        return {
+          id: `${p.slug}:${finish.slug}`,
+          finish,
+          stock: soon ? 0 : p.stockPerFinish,
+          sku: `${p.slug}-${finish.slug}`.toUpperCase(),
+          comingSoon: Boolean(soon),
+          imageUrl: soon?.url ?? null,
+        };
+      }),
   };
 });
 

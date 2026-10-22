@@ -38,7 +38,9 @@ function mapProduct(p: DbProduct): ProductDTO {
       id: v.id,
       stock: v.stock,
       sku: v.sku,
-      finish: { id: v.finish.id, name: v.finish.name, slug: v.finish.slug, hex: v.finish.hex },
+      comingSoon: v.comingSoon,
+      imageUrl: v.imageUrl,
+      finish: { id: v.finish.id, name: v.finish.name, slug: v.finish.slug, hex: v.finish.hex, hex2: v.finish.hex2 },
     })),
   };
 }
@@ -113,7 +115,9 @@ export async function resolveCartLines(
       problems.push("Um dos itens do carrinho não está mais disponível.");
       continue;
     }
-    if (variant.stock < input.quantity) {
+    if (variant.comingSoon) {
+      problems.push(`${product.name} (${variant.finish.name}) ainda não está disponível — em breve.`);
+    } else if (variant.stock < input.quantity) {
       problems.push(
         variant.stock > 0
           ? `${product.name} (${variant.finish.name}): só temos ${variant.stock} em estoque.`

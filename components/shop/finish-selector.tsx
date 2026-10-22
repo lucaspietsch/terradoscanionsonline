@@ -5,7 +5,9 @@ interface Finish {
   id: string;
   name: string;
   hex: string;
+  hex2?: string | null;
   stock: number;
+  comingSoon?: boolean;
 }
 
 export { FinishDot } from "@/components/shop/finish-dot";
@@ -15,28 +17,31 @@ export function FinishSelector({ finishes, value, onChange }: { finishes: Finish
   return (
     <fieldset>
       <legend className="eyebrow mb-3">
-        Acabamento: <span className="normal-case tracking-normal text-sombra">{selected?.name}</span>
+        Acabamento: <span className="normal-case tracking-normal text-sombra">{selected?.name}{selected?.comingSoon ? " (em breve)" : ""}</span>
       </legend>
       <div className="flex flex-wrap gap-3" role="radiogroup" aria-label="Acabamento">
         {finishes.map((f) => {
           const active = f.id === value;
-          const out = f.stock <= 0;
+          const soon = Boolean(f.comingSoon);
+          const out = f.stock <= 0 && !soon;
+          const label = `${f.name}${soon ? " (em breve)" : out ? " (esgotado)" : ""}`;
           return (
             <button
               key={f.id}
               type="button"
               role="radio"
               aria-checked={active}
-              aria-label={`${f.name}${out ? " (esgotado)" : ""}`}
-              title={`${f.name}${out ? " — esgotado" : ""}`}
+              aria-label={label}
+              title={label}
               onClick={() => onChange(f.id)}
               className={cn(
                 "relative flex h-11 w-11 items-center justify-center rounded-full border transition-all",
                 active ? "border-musgo ring-1 ring-musgo ring-offset-2 ring-offset-nevoa" : "border-concreto hover:border-musgo",
                 out && "opacity-50",
+                soon && "border-dashed",
               )}
             >
-              <span className="h-7 w-7 rounded-full border border-sombra/15" style={{ backgroundColor: f.hex }} />
+              <span className="h-7 w-7 rounded-full border border-sombra/15" style={{ background: f.hex2 ? `linear-gradient(135deg, ${f.hex} 50%, ${f.hex2} 50%)` : f.hex }} />
               {out && <span aria-hidden className="absolute h-px w-9 rotate-45 bg-sombra/60" />}
             </button>
           );

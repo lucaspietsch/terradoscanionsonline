@@ -27,8 +27,8 @@ export async function saveProduct(id: string | null, input: ProductInput): Promi
         keep.push(v.finishId);
         await tx.productVariant.upsert({
           where: { productId_finishId: { productId: product.id, finishId: v.finishId } },
-          create: { productId: product.id, finishId: v.finishId, stock: v.stock, sku: `${product.slug}-${finish.slug}`.toUpperCase() },
-          update: { stock: v.stock },
+          create: { productId: product.id, finishId: v.finishId, stock: v.stock, sku: `${product.slug}-${finish.slug}`.toUpperCase(), comingSoon: v.comingSoon, imageUrl: v.imageUrl },
+          update: { stock: v.stock, comingSoon: v.comingSoon, imageUrl: v.imageUrl },
         });
       }
       await tx.productVariant.deleteMany({ where: { productId: product.id, finishId: { notIn: keep } } });

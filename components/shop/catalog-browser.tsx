@@ -83,8 +83,8 @@ export function CatalogBrowser({ products, categories, finishes, initial }: { pr
       </FilterGroup>
       <FilterGroup title="Acabamento">
         <RadioRow checked={!state.acabamento} onClick={() => update({ acabamento: null })} label="Todos" />
-        {finishes.map((f) => (
-          <RadioRow key={f.id} checked={state.acabamento === f.slug} onClick={() => update({ acabamento: f.slug })} label={f.name} adornment={<FinishDot hex={f.hex} />} />
+        {finishes.filter((f) => products.some((p) => p.finishes.some((x) => x.slug === f.slug && !x.comingSoon))).map((f) => (
+          <RadioRow key={f.id} checked={state.acabamento === f.slug} onClick={() => update({ acabamento: f.slug })} label={f.name} adornment={<FinishDot hex={f.hex} hex2={f.hex2} />} />
         ))}
       </FilterGroup>
       {activeCount > 0 && (

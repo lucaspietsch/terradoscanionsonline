@@ -10,7 +10,7 @@ import { centsToInput, parseBRLToCents } from "@/lib/money";
 import { slugify } from "@/lib/utils";
 import type { ProductFormValues } from "@/lib/admin/product-defaults";
 
-interface Opt { id: string; name: string }
+interface Opt { id: string; name: string; slug?: string }
 const num = (v: string) => (v === "" ? 0 : Number(v.replace(",", ".")));
 
 export function ProductForm({ initial, categories, finishes }: { initial: ProductFormValues; categories: Opt[]; finishes: Opt[] }) {
@@ -57,7 +57,9 @@ export function ProductForm({ initial, categories, finishes }: { initial: Produc
       priceCents: parseBRLToCents(price), heightCm: v.heightCm, widthCm: v.widthCm, depthCm: v.depthCm, round: v.round,
       weightGrams: Math.round(v.weightGrams), hasDrainage: v.hasDrainage, featured: v.featured, active: v.active,
       badge: v.badge || null, plants: plants.split(",").map((p) => p.trim()).filter(Boolean), sortOrder: Math.round(v.sortOrder),
-      variants: finishes.map((f) => ({ finishId: f.id, stock: Math.max(0, Math.round(v.stocks[f.id] ?? 0)) })),
+      variants: finishes
+        .filter((f) => v.options[f.id] || (v.stocks[f.id] ?? 0) > 0)
+        .map((f) => ({ finishId: f.id, stock: v.options[f.id]?.comingSoon ? 0 : Math.max(0, Math.round(v.stocks[f.id] ?? 0)), comingSoon: v.options[f.id]?.comingSoon ?? false, imageUrl: v.options[f.id]?.imageUrl ?? null })),
       images: v.images,
     };
     const res = await fetch(v.id ? `/api/admin/products/${v.id}` : "/api/admin/products", { method: v.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -102,7 +104,14 @@ export function ProductForm({ initial, categories, finishes }: { initial: Produc
         <h2 className="mb-3 font-serif text-xl font-light">Estoque por acabamento</h2>
         <div className="grid gap-4 sm:grid-cols-4">
           {finishes.map((f) => (
-            <Field key={f.id} label={f.name} htmlFor={`pf-s-${f.id}`}><Input id={`pf-s-${f.id}`} type="number" min={0} value={v.stocks[f.id] ?? 0} onChange={(e) => set("stocks", { ...v.stocks, [f.id]: Number(e.target.value) })} /></Field>
+            <div key={f.id}>
+              <Field label={f.name} htmlFor={`pf-s-${f.id}`}><Input id={`pf-s-${f.id}`} type="number" min={0} disabled={v.options[f.id]?.comingSoon} value={v.stocks[f.id] ?? 0} onChange={(e) => set("stocks", { ...v.stocks, [f.id]: Number(e.target.value), })} /></Field>
+              {v.options[f.id] && (
+                <label className="mt-1.5 flex items-center gap-2 text-xs text-secundario">
+                  <input type="checkbox" className="h-3.5 w-3.5 accent-musgo" checked={v.options[f.id].comingSoon} onChange={(e) => set("options", { ...v.options, [f.id]: { ...v.options[f.id], comingSoon: e.target.checked } })} /> Em breve (não vendável)
+                </label>
+              )}
+            </div>
           ))}
         </div>
       </section>

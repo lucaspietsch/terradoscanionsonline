@@ -20,9 +20,17 @@ export function WhatsAppOrderButton({
 } & Omit<ButtonProps, "asChild" | "onClick">) {
   const { whatsapp, freeShippingThresholdCents } = useSiteConfig();
   const href = whatsappUrl(buildOrderMessage(lines, { ...options, thresholdCents: freeShippingThresholdCents }), whatsapp);
+  if (lines.length === 0 || props.disabled) {
+    // um <a> não pode ficar desativado: sem itens (ou opção indisponível) vira um botão inerte
+    return (
+      <Button {...props} disabled>
+        <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden /> {children}
+      </Button>
+    );
+  }
   return (
-    <Button asChild {...props} disabled={lines.length === 0}>
-      <a href={href} target="_blank" rel="noopener noreferrer" onClick={onSent} aria-disabled={lines.length === 0}>
+    <Button asChild {...props}>
+      <a href={href} target="_blank" rel="noopener noreferrer" onClick={onSent}>
         <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden /> {children}
       </a>
     </Button>

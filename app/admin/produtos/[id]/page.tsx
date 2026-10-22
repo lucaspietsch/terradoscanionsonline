@@ -23,6 +23,7 @@ export default async function EditProduct({ params }: { params: Promise<{ id: st
           priceCents: p.priceCents, heightCm: p.heightCm, widthCm: p.widthCm, depthCm: p.depthCm, round: p.round, weightGrams: p.weightGrams,
           hasDrainage: p.hasDrainage, featured: p.featured, active: p.active, badge: p.badge, plants: p.plants, sortOrder: p.sortOrder,
           stocks: Object.fromEntries(finishes.map((f) => [f.id, p.variants.find((v) => v.finish.id === f.id)?.stock ?? 0])),
+          options: Object.fromEntries(p.variants.map((v) => [v.finish.id, { comingSoon: v.comingSoon, imageUrl: v.imageUrl }])),
           images: p.images.map((i) => ({ url: i.url, alt: i.alt })),
         }}
       />

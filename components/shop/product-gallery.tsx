@@ -1,13 +1,18 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import type { ProductImageDTO } from "@/types";
 
-export function ProductGallery({ images, name }: { images: ProductImageDTO[]; name: string }) {
+export function ProductGallery({ images, name, focusUrl = null }: { images: ProductImageDTO[]; name: string; focusUrl?: string | null }) {
   const [index, setIndex] = useState(0);
+  // ao escolher uma cor, mostra a foto dela; sem foto própria, volta para a capa
+  useEffect(() => {
+    const i = images.findIndex((img) => img.url === focusUrl);
+    setIndex(i >= 0 ? i : 0);
+  }, [focusUrl, images]);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
   const [open, setOpen] = useState(false);
   const current = images[index] ?? images[0];
@@ -53,6 +58,9 @@ export function ProductGallery({ images, name }: { images: ProductImageDTO[]; na
             className="object-cover transition-transform duration-200 ease-out"
             style={zoom ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
           />
+          {current.alt.startsWith("Ilustração") && (
+            <span className="absolute left-3 top-3 rounded bg-sombra/75 px-2.5 py-1 text-xs text-pedra">Imagem ilustrativa — em breve</span>
+          )}
           <button
             type="button"
             onClick={(e) => {

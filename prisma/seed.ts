@@ -1,5 +1,5 @@
 /**
- * Popula categorias, acabamentos, os 10 produtos (com estoque por acabamento) e configurações padrão.
+ * Popula categorias, acabamentos, os produtos (com estoque por acabamento) e configurações padrão.
  * Idempotente: pode rodar várias vezes (atualiza por slug).
  *
  *   npm run db:seed
@@ -19,7 +19,7 @@ async function main() {
 
   const finishes = new Map<string, string>();
   for (const f of SEED_FINISHES) {
-    const row = await prisma.finish.upsert({ where: { slug: f.slug }, create: f, update: { name: f.name, hex: f.hex } });
+    const row = await prisma.finish.upsert({ where: { slug: f.slug }, create: { name: f.name, slug: f.slug, hex: f.hex, hex2: f.hex2 ?? null }, update: { name: f.name, hex: f.hex, hex2: f.hex2 ?? null } });
     finishes.set(f.slug, row.id);
   }
 
@@ -58,11 +58,13 @@ async function main() {
     });
 
     for (const [finishSlug, finishId] of finishes) {
-      if (!(p.finishes ?? BASE_FINISH_SLUGS).includes(finishSlug)) continue;
+      const soon = p.comingSoonFinishes?.[finishSlug];
+      if (!soon && !(p.finishes ?? BASE_FINISH_SLUGS).includes(finishSlug)) continue;
       await prisma.productVariant.upsert({
         where: { productId_finishId: { productId: product.id, finishId } },
-        create: { productId: product.id, finishId, stock: p.stockPerFinish, sku: `${p.slug}-${finishSlug}`.toUpperCase() },
-        update: {}, // não sobrescreve estoque já ajustado pelo admin
+        create: { productId: product.id, finishId, stock: soon ? 0 : p.stockPerFinish, sku: `${p.slug}-${finishSlug}`.toUpperCase(), comingSoon: Boolean(soon), imageUrl: soon?.url ?? null },
+        // não sobrescreve estoque já ajustado pelo admin; "em breve" e foto seguem o catálogo
+        update: soon ? { comingSoon: true, imageUrl: soon.url, stock: 0 } : {},
       });
     }
   }

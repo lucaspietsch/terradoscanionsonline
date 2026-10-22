@@ -3,6 +3,7 @@ export interface FinishDTO {
   name: string;
   slug: string;
   hex: string;
+  hex2?: string | null;
 }
 
 export interface ProductImageDTO {
@@ -16,6 +17,8 @@ export interface VariantDTO {
   finish: FinishDTO;
   stock: number;
   sku: string;
+  comingSoon: boolean;
+  imageUrl: string | null;
 }
 
 export interface CategoryDTO {
@@ -91,7 +94,7 @@ export interface ProductCardDTO {
   categorySlug: string;
   categoryName: string;
   images: ProductImageDTO[];
-  finishes: { id: string; slug: string; name: string; hex: string; stock: number }[];
+  finishes: { id: string; slug: string; name: string; hex: string; hex2?: string | null; stock: number; comingSoon: boolean }[];
   defaultFinishId: string | null;
   inStock: boolean;
 }

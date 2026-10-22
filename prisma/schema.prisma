@@ -140,6 +140,7 @@ model Finish {
   name  String @unique
   slug  String @unique
   hex   String
+  hex2  String? // segunda cor (acabamentos bicolores: o seletor mostra o círculo dividido)
 
   variants ProductVariant[]
 }
@@ -150,6 +151,8 @@ model ProductVariant {
   finishId  String
   stock     Int    @default(0)
   sku       String @unique
+  comingSoon Boolean @default(false) // opção ainda não produzida: aparece como "em breve" e não pode ser comprada
+  imageUrl  String? // foto (ou ilustração) que a galeria mostra ao escolher esta opção
 
   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   finish    Finish     @relation(fields: [finishId], references: [id])

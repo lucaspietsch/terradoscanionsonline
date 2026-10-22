@@ -19,8 +19,7 @@ import { CartPage } from "@/components/shop/cart-page";
 import { CheckoutFlow } from "@/components/checkout/checkout-flow";
 import { CatalogBrowser, type CatalogState } from "@/components/shop/catalog-browser";
 import { ProductCard } from "@/components/shop/product-card";
-import { ProductGallery } from "@/components/shop/product-gallery";
-import { ProductPurchase } from "@/components/shop/product-purchase";
+import { ProductView } from "@/components/shop/product-view";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 
@@ -123,8 +122,7 @@ function ProductPage({ slug }: { slug: string }) {
         </ol>
       </nav>
       <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
-        <ProductGallery key={product.slug} images={product.images} name={product.name} />
-        <ProductPurchase key={product.slug} product={product} />
+        <ProductView key={product.slug} product={product} />
       </div>
 
       <section className="mx-auto mt-20 max-w-3xl" aria-labelledby="detalhes">

@@ -15,16 +15,15 @@ import { useCart } from "@/lib/cart-store";
 import { ARTISANAL_NOTICE, SOLD_ONLY_VASES_NOTICE, whatsappUrl } from "@/lib/site";
 import type { ProductDTO } from "@/types";
 
-export function ProductPurchase({ product }: { product: ProductDTO }) {
+export function ProductPurchase({ product, finishId, onFinishChange }: { product: ProductDTO; finishId: string; onFinishChange: (id: string) => void }) {
   const add = useCart((s) => s.add);
   const { whatsapp } = useSiteConfig();
 
-  const finishes = useMemo(() => product.variants.map((v) => ({ id: v.finish.id, name: v.finish.name, hex: v.finish.hex, stock: v.stock })), [product]);
-  const firstAvailable = finishes.find((f) => f.stock > 0) ?? finishes[0];
-  const [finishId, setFinishId] = useState(firstAvailable?.id ?? "");
+  const finishes = useMemo(() => product.variants.map((v) => ({ id: v.finish.id, name: v.finish.name, hex: v.finish.hex, hex2: v.finish.hex2, stock: v.stock, comingSoon: v.comingSoon })), [product]);
   const [quantity, setQuantity] = useState(1);
   const finish = finishes.find((f) => f.id === finishId);
-  const out = !finish || finish.stock <= 0;
+  const soon = Boolean(finish?.comingSoon);
+  const out = !finish || soon || finish.stock <= 0;
   const [pageUrl, setPageUrl] = useState("");
   useEffect(() => setPageUrl(window.location.protocol.startsWith("http") ? window.location.href : ""), []);
 
@@ -39,7 +38,12 @@ export function ProductPurchase({ product }: { product: ProductDTO }) {
     track("add_to_cart", { currency: "BRL", value: (product.priceCents * quantity) / 100, items: [{ item_id: product.id, item_name: product.name, price: product.priceCents / 100, quantity }] });
   }
 
-  const wa = whatsappUrl(`Olá! Tenho uma dúvida sobre o ${product.name} (${finish?.name ?? ""}) que vi no site: ${pageUrl}`, whatsapp);
+  const wa = whatsappUrl(
+    soon
+      ? `Olá! Tenho interesse no ${product.name} na opção "${finish?.name}" (em breve). Pode me avisar quando estiver disponível? ${pageUrl}`
+      : `Olá! Tenho uma dúvida sobre o ${product.name} (${finish?.name ?? ""}) que vi no site: ${pageUrl}`,
+    whatsapp,
+  );
 
   return (
     <div>
@@ -53,18 +57,19 @@ export function ProductPurchase({ product }: { product: ProductDTO }) {
       <Price cents={product.priceCents} size="lg" className="mt-6" />
 
       <div className="mt-8 space-y-7 border-t border-concreto pt-8">
-        <FinishSelector finishes={finishes} value={finishId} onChange={(id) => { setFinishId(id); setQuantity(1); }} />
+        <FinishSelector finishes={finishes} value={finishId} onChange={(id) => { onFinishChange(id); setQuantity(1); }} />
         <div>
           <p className="eyebrow mb-3">Quantidade</p>
           <div className="flex items-center gap-4">
             <QuantityInput value={quantity} onChange={setQuantity} max={Math.max(1, finish?.stock ?? 1)} />
             {finish && finish.stock > 0 && finish.stock <= 5 && <p className="text-sm text-secundario">Restam {finish.stock} em {finish.name}</p>}
-            {out && <p className="text-sm text-erro">Este acabamento está esgotado</p>}
+            {soon && <p className="text-sm text-secundario">Esta cor ainda não foi produzida — em breve. A foto é uma ilustração de como vai ficar.</p>}
+            {out && !soon && <p className="text-sm text-erro">Este acabamento está esgotado</p>}
           </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Button size="lg" className="flex-1" onClick={() => addToCart(true)} disabled={out}>Adicionar ao carrinho</Button>
+          <Button size="lg" className="flex-1" onClick={() => addToCart(true)} disabled={out}>{soon ? "Em breve" : "Adicionar ao carrinho"}</Button>
           <WhatsAppOrderButton
             size="lg"
             variant="secondary"
@@ -79,7 +84,7 @@ export function ProductPurchase({ product }: { product: ProductDTO }) {
 
         <Button asChild variant="ghost" className="w-full">
           <a href={wa} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden /> Tirar dúvidas no WhatsApp
+            <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden /> {soon ? "Avise-me quando chegar (WhatsApp)" : "Tirar dúvidas no WhatsApp"}
           </a>
         </Button>
         <WishlistButton productId={product.id} />

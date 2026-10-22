@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ProductCard } from "@/components/shop/product-card";
-import { ProductGallery } from "@/components/shop/product-gallery";
-import { ProductPurchase } from "@/components/shop/product-purchase";
+import { ProductView } from "@/components/shop/product-view";
 import { dimensionsLabel, toCard } from "@/lib/catalog/format";
 import { getProductBySlug, getProducts, getRelatedProducts } from "@/lib/data/catalog";
 import { getSettings } from "@/lib/data/settings";
@@ -91,8 +90,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
-        <ProductGallery images={product.images} name={product.name} />
-        <ProductPurchase product={product} />
+        <ProductView product={product} />
       </div>
 
       <section className="mx-auto mt-20 max-w-3xl" aria-labelledby="detalhes">

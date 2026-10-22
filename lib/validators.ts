@@ -102,7 +102,7 @@ export const productInputSchema = z.object({
   badge: z.string().trim().max(30).nullable(),
   plants: z.array(z.string().trim().min(1).max(60)).max(12),
   sortOrder: z.number().int().min(0).max(9999),
-  variants: z.array(z.object({ finishId: z.string().min(1), stock: z.number().int().min(0).max(100_000) })).max(20),
+  variants: z.array(z.object({ finishId: z.string().min(1), stock: z.number().int().min(0).max(100_000), comingSoon: z.boolean().default(false), imageUrl: z.string().max(500).nullable().default(null) })).max(30),
   images: z.array(z.object({ url: z.string().min(1).max(500), alt: z.string().trim().min(1).max(200) })).max(20),
 });
 export type ProductInput = z.infer<typeof productInputSchema>;
