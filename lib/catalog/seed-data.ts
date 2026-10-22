@@ -143,7 +143,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Vaso Floral Luxo - Relevo em 3D", slug: "vaso-floral-luxo-relevo-3d", category: "pequenos", priceCents: 4590,
     heightCm: 8, widthCm: 8.5, depthCm: 8.5, round: true, weightGrams: 600, hasDrainage: false, badge: "Novo",
-    plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 15, stockPerFinish: 10,
+    plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 2, stockPerFinish: 10,
     finishes: ["branco-pedra"],
     comingSoonFinishes: {
       "rosa-flores-branco": { url: "/images/products/floral-luxo-rosa.webp", alt: "Ilustração: vaso floral com as flores pintadas de rosa, com o miolo branco" },
@@ -170,9 +170,9 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   // ---- Vaso Lavanda (relevo 3D, tema jardim) ----
   // Medidas (7,6 × Ø8,0 cm) vêm da foto do fornecedor; peso e estoque são ESTIMATIVAS — ajuste no admin.
   {
-    name: "Vaso de Concreto Lavanda Relevo 3D", slug: "vaso-concreto-lavanda-relevo-3d", category: "pequenos", priceCents: 4590,
+    name: "Vaso Lavanda Relevo 3D", slug: "vaso-concreto-lavanda-relevo-3d", category: "pequenos", priceCents: 4590,
     heightCm: 7.6, widthCm: 8, depthCm: 8, round: true, weightGrams: 550, hasDrainage: false, badge: "Novo",
-    plants: ["Lavanda seca", "Samambaia", "Hera"], sortOrder: 16, stockPerFinish: 10,
+    plants: ["Lavanda seca", "Samambaia", "Hera"], sortOrder: 3, stockPerFinish: 10,
     finishes: ["lavanda"],
     shortDescription: "Vaso de concreto lilás com relevo 3D de folhas, de tema jardim.",
     longDescription: `Vaso redondo de concreto na cor lavanda, com relevo 3D de folhas em tema jardim. Pequeno e delicado, combina com bancadas, criados-mudos e mesas de apoio, com folhagens pequenas, flores secas ou ramos de lavanda. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
@@ -189,10 +189,10 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Kit 2 Vasos Relevo 3D: Floral e Lavanda", slug: "kit-2-vasos-floral-lavanda-relevo-3d", category: "pequenos", priceCents: 8996,
     heightCm: 8, widthCm: 17, depthCm: 8.5, round: false, weightGrams: 1150, hasDrainage: false, badge: "Oferta",
-    plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 17, stockPerFinish: 10,
+    plants: ["Samambaia", "Folhagens pequenas", "Flores secas"], sortOrder: 1, stockPerFinish: 10,
     finishes: ["branco-lavanda"],
     shortDescription: "Dois vasos de concreto com relevo 3D — Floral (branco) e Lavanda — com 2% de desconto.",
-    longDescription: `Kit com dois vasos de concreto com relevo 3D: o Vaso Floral Luxo (branco, 8 × Ø8,5 cm) e o Vaso de Concreto Lavanda (lilás, 7,6 × Ø8 cm). Juntos saem por R$ 89,96 — 2% a menos do que comprar os dois separados (R$ 45,90 cada). Ficam lindos lado a lado em bancadas, aparadores e mesas de cabeceira. Vendido apenas os vasos: as plantas que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
+    longDescription: `Kit com dois vasos de concreto com relevo 3D: o Vaso Floral Luxo (branco, 8 × Ø8,5 cm) e o Vaso Lavanda (lilás, 7,6 × Ø8 cm). Juntos saem por R$ 89,96 — 2% a menos do que comprar os dois separados (R$ 45,90 cada). Ficam lindos lado a lado em bancadas, aparadores e mesas de cabeceira. Vendido apenas os vasos: as plantas que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/kit-floral-lavanda.webp", alt: "Kit com dois vasos de concreto com relevo 3D lado a lado: o Floral branco e o Lavanda lilás" },
       { url: "/images/products/floral-luxo-1.webp", alt: "Vaso de concreto branco com flores em relevo 3D e samambaia, sobre uma bandeja ao lado de vela e sabonete líquido" },
@@ -261,7 +261,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Vaso de Concreto Listrado Luxuoso", slug: "vaso-concreto-listrado-luxuoso", category: "medios", priceCents: 4990,
     heightCm: 12.7, widthCm: 10.4, depthCm: 10.4, round: true, weightGrams: 0, hasDrainage: false, badge: "Novo",
-    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 21, stockPerFinish: 10,
+    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 5, stockPerFinish: 10,
     finishes: ["branco-pedra", "verde"],
     finishImages: { "branco-pedra": "/images/products/listrado-1.webp", "verde": "/images/products/listrado-2.webp" },
     shortDescription: "Vaso de concreto com relevo listrado vertical (12,7 × Ø10,4 cm).",
@@ -276,7 +276,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
   {
     name: "Vaso de Concreto Listrado Luxuoso Premium", slug: "vaso-concreto-listrado-luxuoso-premium", category: "medios", priceCents: 5990,
     heightCm: 12.7, widthCm: 10.4, depthCm: 10.4, round: true, weightGrams: 0, hasDrainage: false, badge: "Em breve",
-    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 1, stockPerFinish: 10,
+    plants: ["Flores secas", "Ramos e espigas"], sortOrder: 4, stockPerFinish: 10,
     finishes: [],
     comingSoonFinishes: {
       "preto-dourado": { url: "/images/products/listrado-premium-preto-dourado.webp", alt: "Ilustração: vaso listrado luxuoso preto com folha de ouro (versão premium)" },
