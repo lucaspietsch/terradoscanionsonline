@@ -32,7 +32,7 @@ export function ProductGallery({ images, name, focusUrl = null }: { images: Prod
               aria-current={i === index}
               className={cn("relative block h-20 w-20 overflow-hidden rounded border bg-pedra transition-opacity", i === index ? "border-musgo" : "border-transparent opacity-70 hover:opacity-100")}
             >
-              <Image src={img.url} alt={img.alt} fill sizes="80px" className="object-cover" />
+              <Image src={img.url} alt={img.alt} fill sizes="80px" className="object-contain" />
             </button>
           </li>
         ))}
@@ -48,6 +48,7 @@ export function ProductGallery({ images, name, focusUrl = null }: { images: Prod
           onMouseLeave={() => setZoom(null)}
           onClick={() => setOpen(true)}
         >
+          {/* fotos verticais aparecem inteiras e centralizadas (object-contain) */}
           <Image
             key={current.url}
             src={current.url}
@@ -55,7 +56,7 @@ export function ProductGallery({ images, name, focusUrl = null }: { images: Prod
             fill
             priority
             sizes="(min-width: 1024px) 45vw, 100vw"
-            className="object-cover transition-transform duration-200 ease-out"
+            className="object-contain transition-transform duration-200 ease-out"
             style={zoom ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
           />
           {current.alt.startsWith("Ilustração") && (

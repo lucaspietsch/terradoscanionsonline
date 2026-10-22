@@ -64,7 +64,7 @@ export const SEED_FINISHES: SeedFinish[] = [
 export const BASE_FINISH_SLUGS = ["cimento-natural", "grafite", "areia", "branco-pedra"];
 
 export const SEED_CATEGORIES: SeedCategory[] = [
-  { name: "Pequenos", slug: "pequenos", imageUrl: "/images/products/lavanda-2.webp", imageAlt: "Vaso de concreto lavanda com relevo 3D de folhas e uma plantinha, sobre uma mesa clara", order: 1 },
+  { name: "Pequenos", slug: "pequenos", imageUrl: "/images/products/lavanda-1.webp", imageAlt: "Mão segurando um vaso de concreto lavanda com relevo 3D de folhas e íris roxas", order: 1 },
   { name: "Médios", slug: "medios", imageUrl: "/images/products/listrado-cinza.webp", imageAlt: "Vaso de concreto listrado cinza com flores secas, ao lado de uma vela", order: 2 },
   { name: "Aromaterapia", slug: "aromaterapia", imageUrl: "/images/categorias/aromaterapia.webp", imageAlt: "Três vasos de concreto com relevo de anéis, em tons de areia, com espigas secas", order: 3 },
 ];
@@ -167,13 +167,13 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     plants: ["Lavanda seca", "Samambaia", "Hera"], sortOrder: 16, stockPerFinish: 10,
     finishes: ["lavanda"],
     shortDescription: "Vaso de concreto lilás com relevo 3D de folhas, de tema jardim.",
-    longDescription: `Vaso redondo de concreto na cor lavanda, com relevo 3D de folhas em tema jardim. Pequeno e delicado, combina com bancadas, criados-mudos e mesas de apoio, com folhagens pequenas como samambaia e hera ou com lavanda seca. Pode ser presenteado: as fotos mostram o vaso em caixa de presente. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
+    longDescription: `Vaso redondo de concreto na cor lavanda, com relevo 3D de folhas em tema jardim. Pequeno e delicado, combina com bancadas, criados-mudos e mesas de apoio, com folhagens pequenas, flores secas ou ramos de lavanda. Vendido apenas o vaso: a planta que aparece nas fotos não acompanha o produto. ${FEITO_A_MAO}`,
     images: [
-      { url: "/images/products/lavanda-2.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e uma plantinha de samambaia e hera, sobre uma mesa clara" },
-      { url: "/images/products/lavanda-4.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e ramos de lavanda seca" },
-      { url: "/images/products/lavanda-5.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e plantinha, em primeiro plano" },
-      { url: "/images/products/lavanda-3.webp", alt: "Vaso de concreto lavanda com plantinha dentro de uma caixa de presente com palha" },
-      { url: "/images/products/lavanda-1.webp", alt: "Vaso de concreto lavanda com plantinha sobre uma cama, ao lado de almofadas lilás" },
+      { url: "/images/products/lavanda-1.webp", alt: "Mão segurando o vaso de concreto lavanda com relevo 3D de folhas e íris roxas" },
+      { url: "/images/products/lavanda-2.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e íris roxas, sobre uma pedra no jardim" },
+      { url: "/images/products/lavanda-4.webp", alt: "Vaso de concreto lilás com ramos de lavanda e as medidas: 7,6 cm de altura por 8 cm de largura" },
+      { url: "/images/products/lavanda-3.webp", alt: "Vaso de concreto roxo com margaridas e as medidas: 7,6 cm de altura por 8 cm de largura" },
+      { url: "/images/products/lavanda-5.webp", alt: "Vaso de concreto lavanda com relevo 3D de folhas e íris roxas, sobre mesa com renda" },
     ],
   },
   // ---- Vasos Redondos Luxuosos ----

@@ -1,78 +1,56 @@
 /**
- * Prepara as fotos do Vaso de Concreto Lavanda (relevo 3D) a partir de assets/lavanda/*.avif, sem os moldes de silicone:
- *  - fotos com o molde num círculo (canto superior esquerdo): o círculo é apagado e preenchido com o fundo (difusão);
- *  - fotos com o molde ao lado do vaso: recorta só o vaso (e as cotas são deixadas de fora);
- *  - fotos em pé ganham fundo desfocado para virar quadradas.
- * As originais têm só 220 px: troque por fotos maiores quando tiver.
+ * Prepara as fotos do Vaso de Concreto Lavanda (relevo 3D) a partir de assets/lavanda/:
+ *  - fotos com o molde pequeno num círculo (canto superior esquerdo): a logo da Cambará Ornamentais ocupa o lugar do molde;
+ *  - fotos com o molde grande ao lado do vaso: corta o molde fora e fica só o vaso (com medidas, flores, mesa) em formato vertical.
+ * O site mostra as fotos verticais inteiras e centralizadas (fundo desfocado nas laterais — ver ProductGallery).
  *
  *   node scripts/process-lavanda.mjs
  */
 import sharp from "sharp";
-import fs from "node:fs/promises";
 import path from "node:path";
 
 const SRC = path.resolve("assets/lavanda");
 const OUT = path.resolve("public/images/products");
-const SIZE = 1000;
+const H = 1000;
 
-async function load(name) {
-  const { data, info } = await sharp(path.join(SRC, name)).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-  return { data: Buffer.from(data), w: info.width, h: info.height };
-}
-
-/** Apaga uma elipse e preenche por difusão (Laplace) a partir dos pixels ao redor — o fundo dessas fotos é desfocado. */
-function inpaintEllipse(img, cx, cy, rx, ry) {
-  const { data, w, h } = img;
-  const inside = new Uint8Array(w * h);
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) inside[y * w + x] = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1 ? 1 : 0;
-  const px = new Float32Array(w * h * 3);
-  for (let i = 0; i < w * h * 3; i++) px[i] = data[i];
-  // valor inicial: média do anel externo
-  const sum = [0, 0, 0];
-  let n = 0;
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    const d = ((x - cx) / (rx + 6)) ** 2 + ((y - cy) / (ry + 6)) ** 2;
-    if (!inside[y * w + x] && d <= 1) { for (let c = 0; c < 3; c++) sum[c] += px[(y * w + x) * 3 + c]; n++; }
-  }
-  for (let i = 0; i < w * h; i++) if (inside[i]) for (let c = 0; c < 3; c++) px[i * 3 + c] = sum[c] / n;
-  for (let it = 0; it < 1500; it++) {
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      const i = y * w + x;
-      if (!inside[i]) continue;
-      for (let c = 0; c < 3; c++) {
-        const l = px[(y * w + Math.max(0, x - 1)) * 3 + c], r = px[(y * w + Math.min(w - 1, x + 1)) * 3 + c];
-        const u = px[(Math.max(0, y - 1) * w + x) * 3 + c], d = px[(Math.min(h - 1, y + 1) * w + x) * 3 + c];
-        px[i * 3 + c] = (l + r + u + d) / 4;
-      }
-    }
-  }
-  const out = Buffer.alloc(w * h * 3);
-  for (let i = 0; i < w * h * 3; i++) out[i] = Math.max(0, Math.min(255, Math.round(px[i])));
-  return { data: out, w, h };
-}
-
-const raw = (img) => sharp(img.data, { raw: { width: img.w, height: img.h, channels: 3 } });
 const finish = (pipe) => pipe.sharpen({ sigma: 1.0, m1: 0.7, m2: 1.1 }).webp({ quality: 84 }).toBuffer();
+const save = async (name, buf) => sharp(buf).toFile(path.join(OUT, name));
 
-/** Quadrado direto (foto já quadrada). */
-const square = (img) => finish(raw(img).resize(SIZE, SIZE, { kernel: "lanczos3" }));
-
-/** Recorte retrato → quadrado: recorte nítido sobre uma cópia desfocada dele mesmo. */
-async function blurredSquare(img, [x, y, w, h]) {
-  const crop = await raw(img).extract({ left: x, top: y, width: w, height: h }).png().toBuffer();
-  const bg = await sharp(crop).resize(SIZE, SIZE, { fit: "cover" }).blur(28).modulate({ brightness: 1.04 }).toBuffer();
-  const fg = await sharp(crop).resize({ height: SIZE, kernel: "lanczos3" }).sharpen({ sigma: 1.0 }).toBuffer();
-  const meta = await sharp(fg).metadata();
-  return sharp(bg).composite([{ input: fg, left: Math.round((SIZE - meta.width) / 2), top: 0 }]).sharpen({ sigma: 0.6 }).webp({ quality: 84 }).toBuffer();
+/** Selo com a logo, no lugar do molde pequeno. Coordenadas na foto original de 500 px (ampliada 2x). */
+function badge({ cx, cy, rx, ry }) {
+  const s = 2;
+  const symbol = `<path d="M86.9 39.1 A38 38 0 1 0 86.9 92.9" fill="none" stroke="#2F3E2C" stroke-width="11" stroke-linecap="round"/>
+    <path d="M46 113 L74 113" fill="none" stroke="#2F3E2C" stroke-width="5" stroke-linecap="round"/>
+    <path d="M88 37 C 85 24, 91 12, 103 5 C 107 19, 101 31, 88 37 Z" fill="#8A9A7B"/>
+    <path d="M86 37 C 75 30, 71 18, 73 7 C 85 13, 90 25, 86 37 Z" fill="#2F3E2C"/>`;
+  const k = 0.62; // tamanho do símbolo
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${500 * s}" height="${500 * s}" viewBox="0 0 500 500">
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#FBFAF7" stroke="#CFCBC2" stroke-width="1.2"/>
+    <g transform="translate(${cx - 55 * k} ${cy - 70}) scale(${k})">${symbol}</g>
+    <text x="${cx}" y="${cy + 30}" text-anchor="middle" font-family="Jost, Helvetica, Arial, sans-serif" font-weight="300" font-size="19" letter-spacing="0.6" fill="#2F3E2C">Cambará</text>
+    <text x="${cx}" y="${cy + 46}" text-anchor="middle" font-family="Jost, Helvetica, Arial, sans-serif" font-size="6.6" letter-spacing="2.2" fill="#5C6657">ORNAMENTAIS</text>
+  </svg>`;
 }
 
-const save = (name, buf) => fs.writeFile(path.join(OUT, name), buf);
+async function withLogo(file, circle) {
+  const base = await sharp(path.join(SRC, file)).removeAlpha().resize(1000, 1000, { kernel: "lanczos3" }).sharpen({ sigma: 1.0, m1: 0.7, m2: 1.1 }).png().toBuffer();
+  return finish(sharp(base).composite([{ input: Buffer.from(badge(circle)) }]));
+}
 
-// molde num círculo no canto superior esquerdo → apagado
-await save("lavanda-1.webp", await square(inpaintEllipse(await load("ambiente-sofa.avif"), 39, 56, 34, 47)));
-await save("lavanda-2.webp", await square(inpaintEllipse(await load("ambiente-mesa.avif"), 35, 50, 35, 48)));
-await save("lavanda-3.webp", await square(inpaintEllipse(await load("caixa-presente.avif"), 38, 50, 34, 47)));
-// molde ao lado do vaso (e cotas) → só o vaso
-await save("lavanda-4.webp", await blurredSquare(await load("molde-e-medidas.avif"), [114, 36, 84, 130]));
-await save("lavanda-5.webp", await blurredSquare(await load("com-molde-ao-lado.avif"), [104, 25, 116, 190]));
+/** Recorte vertical (só o vaso) ampliado para 1000 px de altura. */
+async function vertical(file, rect, { clean } = {}) {
+  let img = sharp(path.join(SRC, file)).removeAlpha();
+  if (clean) img = sharp(await img.composite(clean.map((c) => ({ input: { create: { width: c.w, height: c.h, channels: 3, background: c.color } }, left: c.x, top: c.y }))).png().toBuffer());
+  const [left, top, width, height] = rect;
+  return finish(img.extract({ left, top, width, height }).resize({ height: H, kernel: "lanczos3" }));
+}
+
+const CIRCLE = { cx: 65, cy: 70, rx: 56, ry: 64 };
+await save("lavanda-1.webp", await withLogo("maos.webp", CIRCLE));
+await save("lavanda-2.webp", await withLogo("jardim-ambiente.webp", CIRCLE));
+// ponta da seta da medida do molde (9,1 cm) apagada com o fundo branco
+await save("lavanda-3.webp", await vertical("molde-medidas-margaridas.webp", [238, 0, 262, 500], { clean: [{ x: 200, y: 150, w: 42, h: 14, color: { r: 255, g: 255, b: 255 } }, { x: 200, y: 250, w: 46, h: 220, color: { r: 255, g: 255, b: 255 } }] }));
+// ícone de lupa do site de origem (canto superior direito) coberto com o fundo
+await save("lavanda-4.webp", await vertical("molde-medidas-roxo.png", [262, 0, 260, 507], { clean: [{ x: 486, y: 0, w: 30, h: 28, color: { r: 244, g: 242, b: 240 } }] }));
+await save("lavanda-5.webp", await vertical("mesa-renda.webp", [240, 0, 260, 500]));
 console.log("ok");
