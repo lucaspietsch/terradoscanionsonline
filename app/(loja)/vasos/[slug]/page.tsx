@@ -141,7 +141,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <AccordionContent>
               <ul className="list-disc space-y-1.5 pl-5 text-base text-sombra/85">
                 <li>Todos os preços são + frete; compras com subtotal acima de {thresholdLabel} têm a opção de frete mais econômica grátis.</li>
-                <li>Embalagem reforçada para o transporte. Você também pode retirar no local sem custo.</li>
+                <li>Embalagem personalizada para o transporte. Você também pode retirar no local sem custo.</li>
                 <li>7 dias para desistir da compra e troca em caso de dano no transporte.</li>
               </ul>
               <Link href="/trocas-e-devolucoes" className="mt-3 inline-block text-musgo underline underline-offset-4">Trocas e devoluções</Link>

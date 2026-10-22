@@ -4,7 +4,7 @@ export function FeaturesMarquee({ thresholdLabel }: { thresholdLabel: string }) 
   const items = [
     { icon: Hand, text: "Feito à mão" },
     { icon: Sparkles, text: "Peças únicas" },
-    { icon: Package, text: "Embalagem reforçada" },
+    { icon: Package, text: "Embalagem personalizada" },
     { icon: Leaf, text: `Frete grátis acima de ${thresholdLabel}` },
   ];
   const row = (hidden: boolean) => (

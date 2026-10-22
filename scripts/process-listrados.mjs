@@ -1,9 +1,9 @@
 /**
- * Fotos dos vasos Listrado e Ampulheta Listrada (Luxuosos), a partir de assets/listrados/*.avif, sem moldes:
+ * Fotos do vaso Listrado Luxuoso, a partir de assets/listrados/*.avif, sem moldes:
  *  - fotos com o molde ao lado: recorta só o vaso, tira o fundo escuro e põe sobre o fundo claro da loja;
  *  - foto "com medidas": mesma imagem com as cotas (que estavam escritas nos moldes);
  *  - fotos em pé: ganham fundo desfocado para ficarem quadradas.
- * Medidas: Listrado 12,7 × Ø10,4 cm · Ampulheta 15,1 × Ø10,7 cm. As originais têm só 220 px.
+ * Medidas: 12,7 × Ø10,4 cm. As originais têm só 220 px.
  *
  *   node scripts/process-listrados.mjs
  */
@@ -26,16 +26,10 @@ async function blurredSquare(name) {
 
 // --- fotos em pé (sem molde) ---
 await save(path.join(OUT, "listrado-cinza.webp"), await blurredSquare("listrado-cinza.avif"));
-await save(path.join(OUT, "ampulheta-cinza.webp"), await blurredSquare("ampulheta-cinza.avif"));
-await save(path.join(OUT, "listrados-par-branco.webp"), await blurredSquare("par-branco.avif"));
 
 // --- vasos recortados (lado direito das fotos de molde) ---
-const ampulheta = crop(await load("ampulheta-com-molde.avif"), 90, 48, 74, 100);
 const listrado = crop(await load("listrado-com-molde.avif"), 90, 52, 72, 100);
-const mAmp = matteByBrightness(ampulheta, 110, 3);
 const mLis = matteByBrightness(listrado, 110, 3);
-await save(path.join(OUT, "ampulheta-branca-1.webp"), await cutoutShot(ampulheta, mAmp, 560));
-await save(path.join(OUT, "ampulheta-branca-2.webp"), await cutoutShot(ampulheta, mAmp, 560, { hText: "15,1 cm", wText: "10,7 cm" }));
 await save(path.join(OUT, "listrado-branco-1.webp"), await cutoutShot(listrado, mLis, 470));
 await save(path.join(OUT, "listrado-branco-2.webp"), await cutoutShot(listrado, mLis, 470, { hText: "12,7 cm", wText: "10,4 cm" }));
 console.log("ok");
