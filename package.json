@@ -17,6 +17,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "admin:create": "tsx scripts/create-admin.ts",
     "assets:placeholders": "node scripts/generate-placeholders.mjs",
+    "build:static": "node scripts/build-static.mjs",
     "assets:brand": "node scripts/generate-brand-assets.mjs",
     "assets:aromaterapia": "node scripts/process-aromaterapia.mjs",
     "assets:floral": "node scripts/process-floral.mjs",

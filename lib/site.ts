@@ -13,7 +13,7 @@ export const site = {
   cnpj: process.env.NEXT_PUBLIC_CNPJ ?? "00.000.000/0000-00", // [SEU CNPJ]
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contato@cambaraornamentais.com.br",
   pickupAddress: process.env.NEXT_PUBLIC_PICKUP_ADDRESS ?? "[SEU ENDEREÇO], [SUA CIDADE]",
-  originCep: process.env.ORIGIN_CEP ?? "00000000", // [SEU CEP DE ORIGEM]
+  originCep: process.env.ORIGIN_CEP ?? process.env.NEXT_PUBLIC_ORIGIN_CEP ?? "00000000", // [SEU CEP DE ORIGEM] (NEXT_PUBLIC_ só na versão estática)
   ga4Id: process.env.NEXT_PUBLIC_GA4_ID ?? "",
   metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "",
   mapEmbedUrl: process.env.NEXT_PUBLIC_MAP_EMBED_URL ?? "",

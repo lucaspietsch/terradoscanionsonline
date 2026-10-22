@@ -1,0 +1,29 @@
+CAMBARÁ ORNAMENTAIS — SITE ESTÁTICO
+====================================
+Esta pasta É o site pronto (abre pelo arquivo index.html). Não precisa de servidor, banco de dados nem instalar nada.
+
+O que funciona: catálogo (22 produtos), filtros, páginas de produto, carrinho, cálculo de frete por CEP (tabela por região),
+frete grátis acima de R$ 160, retirada no local e PEDIDO PELO WHATSAPP (+55 54 99919-7178) com produtos e valores já preenchidos.
+O que NÃO existe nesta versão: login, painel admin, pagamento online, newsletter e formulário de contato (use o WhatsApp).
+
+IMPORTANTE: o site precisa ficar na RAIZ do endereço (https://seusite.com.br/), não numa subpasta (https://seusite.com.br/loja/).
+Abrir o index.html com duplo clique no computador NÃO funciona direito (o navegador bloqueia os arquivos locais): publique em uma hospedagem.
+
+COMO PUBLICAR (escolha uma)
+---------------------------
+1) Netlify (mais fácil, grátis): entre em https://app.netlify.com/drop e ARRASTE esta pasta inteira para a página. Pronto, ele dá um link.
+2) Vercel: https://vercel.com/new → "Deploy" de uma pasta (ou instale a CLI e rode, dentro desta pasta:  npx vercel --prod ) 
+   Framework: "Other". Não precisa de build nem de pasta de saída.
+3) GitHub Pages: suba o CONTEÚDO desta pasta na raiz de um repositório chamado SEU-USUARIO.github.io (Settings → Pages → Deploy from branch).
+4) Hospedagem comum (Hostinger, Locaweb, cPanel...): envie TODO o conteúdo desta pasta para a pasta public_html (ou www).
+
+DEPOIS DE PUBLICAR (opcional, melhora o compartilhamento em redes sociais e o Google)
+------------------------------------------------------------------------------------
+Rode no seu computador, dentro desta pasta, com o Node instalado:
+    node trocar-dominio.mjs https://www.seudominio.com.br
+e publique de novo. Isso troca o endereço provisório (localhost) nos metadados, no sitemap.xml e na imagem de compartilhamento.
+
+MUDAR PREÇOS, FOTOS, WHATSAPP, PESOS
+------------------------------------
+Estão no código-fonte (projeto Next.js, em https://github.com/lucaspietsch/terradoscanionsonline, branch claude/loving-sagan-f9csqr):
+edite lib/catalog/seed-data.ts e rode:   npm install && npm run build:static   → gera uma nova pasta dist-static.
