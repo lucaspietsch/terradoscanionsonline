@@ -190,7 +190,6 @@ export const SEED_PRODUCTS: SeedProduct[] = [
       { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
       { url: "/images/products/redondo-medidas-pequeno.webp", alt: "Ilustração do vaso redondo pequeno com as medidas: 7,7 cm de largura e 5,3 cm de altura" },
       { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco em uma bandeja; o pequeno é o da esquerda" },
-      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco lado a lado sobre uma mureta; o pequeno é o da direita" },
     ],
   },
   {
@@ -204,7 +203,6 @@ export const SEED_PRODUCTS: SeedProduct[] = [
       { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
       { url: "/images/products/redondo-medidas-medio.webp", alt: "Ilustração do vaso redondo médio com as medidas: 8,6 cm de largura e 5,5 cm de altura" },
       { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco em uma bandeja; o médio é o do centro" },
-      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco lado a lado sobre uma mureta; o médio é o do centro" },
     ],
   },
   {
@@ -218,7 +216,6 @@ export const SEED_PRODUCTS: SeedProduct[] = [
       { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
       { url: "/images/products/redondo-medidas-grande.webp", alt: "Ilustração do vaso redondo grande com as medidas: 10 cm de largura e 6,2 cm de altura" },
       { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco em uma bandeja; o grande é o da direita" },
-      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco lado a lado sobre uma mureta; o grande é o da esquerda" },
     ],
   },
   {
@@ -230,7 +227,6 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     longDescription: `O Kit 3 Vasos de Concreto Redondos Luxuosos reúne os três tamanhos da linha — pequeno (7,7 × 5,3 cm), médio (8,6 × 5,5 cm) e grande (10 × 6,2 cm) — em esfera achatada de concreto liso. Fica lindo em fileira sobre uma bandeja ou bancada. Vendido apenas os vasos: as plantas que aparecem nas fotos não acompanham o produto. ${FEITO_A_MAO}`,
     images: [
       { url: "/images/products/redondo-trio-suculentas.webp", alt: "Três vasos redondos de concreto branco de tamanhos diferentes sobre uma bandeja, com suculentas" },
-      { url: "/images/products/redondo-trio-concreto.webp", alt: "Três vasos redondos de concreto branco de tamanhos diferentes lado a lado sobre uma mureta" },
       { url: "/images/products/redondo-mao.webp", alt: "Vaso redondo de concreto branco segurado na mão, para dar noção de tamanho" },
       { url: "/images/products/redondo-medidas-kit.webp", alt: "Ilustração dos três vasos redondos do kit com as medidas: 7,7 × 5,3, 8,6 × 5,5 e 10 × 6,2 cm" },
     ],

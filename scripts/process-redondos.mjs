@@ -62,8 +62,6 @@ await save("redondo-trio-suculentas.webp", await webp(sharp(succ).extract({ left
 const mao = await eraseCircle(await fs.readFile(path.join(SRC, "mao-com-molde.avif")), 836, 836, 176);
 await save("redondo-mao.webp", await webp(sharp(mao).extract({ left: 0, top: 0, width: SIZE, height: 940 }).extend({ bottom: 60, extendWith: "mirror" })));
 
-await save("redondo-trio-concreto.webp", await webp(sharp(path.join(SRC, "trio-concreto.avif")).resize(SIZE, SIZE, { kernel: "lanczos3" })));
-
 // --- ilustrações com as medidas ---
 const SIZES = { grande: { w: 10, h: 6.2 }, medio: { w: 8.6, h: 5.5 }, pequeno: { w: 7.7, h: 5.3 } };
 const fmt = (n) => String(n).replace(".", ",");
