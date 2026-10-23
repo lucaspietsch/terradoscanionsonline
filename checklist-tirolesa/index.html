@@ -266,27 +266,27 @@ const FOLHAS = [
 const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
 const DADOS = {
   "2026-07": {
-    status:"parcial", ultimoDia:31,
+    status:"ok", ultimoDia:31,
     folgas:[7,14,21,28], semOperacao:[], inclSemOp:[29], copiados:[31],
     semFolha:["trm"],
-    nota:"Julho: o PDF é de 30/07 e o dia 31 estava em branco, então copiei o dia 30 (marcado como copiado). Dias em branco numa folha aparecem como SEM OPERAÇÃO. Novos formulários (rev. 02/03). A partir de 16/07 o novo Trolley entra em operação (itens 9, 18, 19, 20 e 21 não se aplicam).",
+    nota:"Julho: o PDF é de 30/07 e o dia 31 estava em branco, então copiei o dia 30 (marcado como copiado). Dia 29 (chuva): sem operação em todas as folhas. Dias em branco numa folha aparecem como SEM OPERAÇÃO. Novos formulários (rev. 02/03). A partir de 16/07 o novo Trolley entra em operação (itens 9, 18, 19, 20 e 21 não se aplicam).",
     incl:{
       1:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:02","Lucas P"],
       2:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"7:52","Lucas P"],
       3:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"7:55","Lucas P"],
-      4:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:25","Lucas P","cabo 2 parece 4.0 (li 1.0)"],
+      4:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:25","Lucas P"],
       5:[1.0,0.9,1.0,0.9,0.9,1.0,0.00,"7:47","Lucas P"],
       6:[1.0,0.9,1.0,1.0,1.0,1.0,0.05,"7:53","Lucas P"],
       8:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"7:50","Lucas P"],
       9:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"7:47","Lucas P"],
       10:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"8:15","Lucas P"],
-      11:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"9:00","Lucas P","hora parece 9:00 (ou 4:00)"],
+      11:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"9:00","Lucas P"],
       12:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:30","Lucas P"],
-      13:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:24","Lucas P","assinatura diferente das outras"],
+      13:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:24","Lucas K"],
       15:[1.0,1.0,1.0,1.0,1.0,0.9,0.00,"7:55","Lucas P"],
       16:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"7:50","Lucas P"],
       17:[1.0,0.9,0.9,1.0,0.9,1.0,0.05,"8:35","Lucas P"],
-      18:[1.0,0.9,0.9,1.0,0.9,1.0,0.05,"8:10","Lucas P","assinatura diferente das outras"],
+      18:[1.0,0.9,0.9,1.0,0.9,1.0,0.05,"8:10","Lucas K"],
       19:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"7:50","Lucas P"],
       20:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"7:50","Lucas P"],
       22:[1.0,1.0,1.0,0.9,1.0,1.0,0.00,"8:23","Lucas P"],
@@ -307,14 +307,15 @@ const DADOS = {
           {d:"16/07/2026", item:0, txt:"Novo Trolley em operação."}
         ] },
       rec:{ form:"122", n:30, NAtodos:[17],
-        NC:{10:[...R(17,20),...R(22,27),29,30,31],16:R(1,5),26:[11,12,13,15,16]},
+        semOp:[29],
+        NC:{10:[...R(17,20),...R(22,27),30,31],16:R(1,5),26:[11,12,13,15,16]},
         resp:"Lucas R. Pietsch (Líder)",
         obs:[
           {d:"04/07/2026", item:16, txt:"16 - Alguns clipes sem pintar (não impeditivo)", prazo:"07/07/2026", resp:"Lucas R. P.", real:"06/07/2026"},
           {d:"17/07/2026", item:26, txt:"26 - Molas das vias não estão retornando totalmente (não impeditivo)", prazo:"25/07/2026", resp:"Lucas R. P.", real:"16/07/2026"},
           {d:"12/07/2026", item:28, txt:"28 - Limpeza dos cabos: OK; mas precisa de lubrificação", prazo:"22/07/2026", resp:"Lucas R. P.", real:"16/07/2026"}
         ] },
-      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      cadr:{ n:20, semOp:[29], resp:"Lucas R. Pietsch (Líder)", obs:[] },
       lan:{ n:26, semOp:[20,29], resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] },
       cadl:{ n:20, semOp:[20,29], resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
     }
