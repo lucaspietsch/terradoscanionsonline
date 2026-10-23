@@ -39,7 +39,7 @@
     </defs>
   </svg>
 
-  <a class="skip-link" href="#cardapio">Pular para o cardápio</a>
+  <a class="skip-link" href="#app" data-skip>Pular para o conteúdo</a>
 
   <header class="navbar">
     <div class="navbar-inner">
@@ -74,33 +74,7 @@
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-inner">
-        <p class="eyebrow">Tradição gaúcha</p>
-        <h1>O autêntico Xis Gaúcho, entregue na sua porta</h1>
-        <p class="hero-sub">Prensado, bem recheado e com a maionese caseira que você respeita.</p>
-        <ul class="hero-chips" aria-label="Diferenciais">
-          <li>🧀 Bem recheado</li>
-          <li>🥫 Maionese caseira</li>
-          <li>🛵 Entrega no RS</li>
-        </ul>
-        <a class="btn btn-accent btn-lg" href="#cardapio">Ver cardápio</a>
-      </div>
-    </section>
-
-    <section id="cardapio" class="container" aria-labelledby="titulo-cardapio">
-      <div class="section-head">
-        <h2 id="titulo-cardapio">Cardápio de Xis</h2>
-        <label class="menu-search">
-          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
-          <span class="sr-only">Buscar no cardápio</span>
-          <input type="search" id="input-busca" placeholder="Buscar (ex.: bacon, frango)…" autocomplete="off">
-        </label>
-      </div>
-      <div class="menu-grid" id="menu-grid" aria-live="polite"></div>
-    </section>
-  </main>
+  <main id="app" tabindex="-1"></main>
 
   <footer class="footer">
     <p>© <span id="ano"></span> iXisTudo — feito com carinho no Rio Grande do Sul.</p>
@@ -124,7 +98,7 @@
         <div class="cart-summary">
           <div class="summary-line"><span>Subtotal</span><span id="cart-subtotal">R$ 0,00</span></div>
           <div class="summary-line"><span>Taxa de entrega</span><span id="cart-delivery">R$ 0,00</span></div>
-          <div class="summary-line"><span>Entrega em</span><span id="cart-city" class="muted">—</span></div>
+          <div class="summary-line"><span>Pedido em</span><span id="cart-city" class="muted cart-store">—</span></div>
           <div class="summary-line total"><span>Total</span><span id="cart-total">R$ 0,00</span></div>
           <button type="button" id="btn-checkout" class="btn btn-primary btn-lg full-width" disabled>Finalizar pedido</button>
         </div>
@@ -180,6 +154,21 @@
         </div>
         <button type="submit" class="btn btn-primary btn-lg full-width">Cadastrar</button>
       </form>
+    </div>
+  </dialog>
+
+  <!-- Troca de empreendimento no carrinho -->
+  <dialog id="swap-modal" class="modal" aria-labelledby="swap-title">
+    <div class="modal-inner">
+      <header class="dialog-head">
+        <h2 id="swap-title">Iniciar novo pedido?</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+      <p id="swap-text" class="swap-text"></p>
+      <div class="swap-actions">
+        <button type="button" class="btn btn-ghost" data-close>Manter o carrinho</button>
+        <button type="button" class="btn btn-primary" data-action="swap-confirm">Limpar e continuar</button>
+      </div>
     </div>
   </dialog>
 

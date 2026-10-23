@@ -15,6 +15,26 @@
   const TAXA_ENTREGA = 7.00;
   const MAX_SUGESTOES = 8;
 
+  // Municípios do Oeste/Fronteira Oeste ainda sem empreendimentos cadastrados.
+  const EM_BREVE = new Set([
+    "Alegrete", "Uruguaiana", "Itaqui", "São Borja", "Santiago",
+    "Sant'Ana do Livramento", "Rosário do Sul"
+  ]);
+
+  // Municípios maiores têm mais empreendimentos cadastrados.
+  const GRANDES = ["Porto Alegre", "Caxias do Sul", "Canoas", "Pelotas", "Santa Maria", "Passo Fundo", "Novo Hamburgo", "Gravataí"];
+
+  // Nomes fictícios usados para gerar os empreendimentos de cada município.
+  const NOMES_XIS = [
+    "Xis do Canyon", "Xis do Gordo", "Xis do Baixinho", "Xis da Laura", "Xis do Zé", "Xis da Vovó",
+    "Xis do Chimarrão", "Xis do Gaúcho", "Xis do Pampa", "Xis da Esquina", "Xis do Mateus", "Xis da Praça",
+    "Xis do Tchê", "Xis da Maria", "Xis do Galpão", "Xis do Peão", "Xis da Serra", "Xis do Alemão",
+    "Xis do Italiano", "Xis do Tio Beto", "Xis da Dona Neusa", "Xis do Pedrão", "Xis do Barão", "Xis da Chapa",
+    "Xis do Bigode", "Xis do Fogão", "Xis da Prensa", "Xis do Capitão", "Xis do Rancho", "Xis do Vovô",
+    "Xis da Gurizada", "Xis do Cuca", "Xis do Kiko", "Xis da Bia", "Xis do Careca", "Xis do Churrasqueiro",
+    "Xis do Lampião", "Xis da Estação", "Xis do Bolicho", "Xis da Tia Ná"
+  ];
+
   // Etapas do pedido, em minutos desde a criação (simulação — não há backend).
   const ETAPAS = [
     { rotulo: "Recebido", ate: 2 },
@@ -24,7 +44,7 @@
   ];
 
   const KEYS = {
-    carrinho: "ixistudo:carrinho",
+    carrinho: "ixistudo:carrinho:v2",
     pedidos: "pedidos_ixistudo",
     usuario: "usuario_ixistudo",
     municipio: "ixistudo:municipio",
@@ -41,6 +61,7 @@
   const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ESC[c]);
   const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const slug = (s) => norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
   function ler(chave, padrao) {
     try {
@@ -56,20 +77,86 @@
   const capitalizar = (s) => s.trim().split(/\s+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
   /* ======================================================================
+     EMPREENDIMENTOS (gerados de forma determinística por município)
+     ====================================================================== */
+  const cidadePorSlug = new Map(MUNICIPIOS_RS.map((m) => [slug(m), m]));
+
+  // PRNG com semente: o mesmo município sempre gera os mesmos empreendimentos.
+  function semente(str) {
+    let h = 1779033703 ^ str.length;
+    for (let i = 0; i < str.length; i++) {
+      h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+      h = (h << 13) | (h >>> 19);
+    }
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return (h ^ (h >>> 16)) >>> 0;
+  }
+  function prng(a) {
+    return () => {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const cacheEmpreendimentos = new Map();
+  function empreendimentosDe(cidade) {
+    if (cacheEmpreendimentos.has(cidade)) return cacheEmpreendimentos.get(cidade);
+    let lista = [];
+    if (!EM_BREVE.has(cidade)) {
+      const rnd = prng(semente(cidade));
+      const nomes = [...NOMES_XIS];
+      for (let i = nomes.length - 1; i > 0; i--) { // embaralha (Fisher–Yates)
+        const j = Math.floor(rnd() * (i + 1));
+        [nomes[i], nomes[j]] = [nomes[j], nomes[i]];
+      }
+      const qtd = GRANDES.includes(cidade) ? 6 + Math.floor(rnd() * 3) : 2 + Math.floor(rnd() * 4);
+      lista = nomes.slice(0, qtd).map((nome) => {
+        const min = 20 + Math.floor(rnd() * 5) * 5;
+        return {
+          id: `${slug(cidade)}/${slug(nome)}`,
+          nome, cidade,
+          nota: (4.2 + rnd() * 0.8).toFixed(1).replace(".", ","),
+          tempo: `${min}–${min + 15} min`,
+          img: produtos[Math.floor(rnd() * produtos.length)].img
+        };
+      });
+    }
+    cacheEmpreendimentos.set(cidade, lista);
+    return lista;
+  }
+
+  function lojaPorId(id) {
+    if (typeof id !== "string") return null;
+    const cidade = cidadePorSlug.get(id.split("/")[0]);
+    return cidade ? empreendimentosDe(cidade).find((l) => l.id === id) || null : null;
+  }
+
+  /* ======================================================================
      ESTADO
      ====================================================================== */
+  const carrinhoSalvo = ler(KEYS.carrinho, null);
   const estado = {
-    // [{ id, qtd }] — preços sempre vêm do catálogo
-    carrinho: (ler(KEYS.carrinho, []) || []).filter((i) => i && produtoPorId(i.id) && i.qtd > 0),
+    // { lojaId, itens: [{ id, qtd }] } — preços sempre vêm do catálogo
+    carrinho: {
+      lojaId: lojaPorId(carrinhoSalvo?.lojaId) ? carrinhoSalvo.lojaId : null,
+      itens: lojaPorId(carrinhoSalvo?.lojaId)
+        ? (carrinhoSalvo.itens || []).filter((i) => i && produtoPorId(i.id) && i.qtd > 0)
+        : []
+    },
     pedidos: ler(KEYS.pedidos, []) || [],
     usuario: ler(KEYS.usuario, null),
-    municipio: ler(KEYS.municipio, "") || "",
-    busca: ""
+    municipio: cidadePorSlug.has(slug(ler(KEYS.municipio, "") || "")) ? ler(KEYS.municipio, "") : "",
+    lojaAtual: null, // empreendimento aberto na tela
+    busca: "",
+    pendente: null   // item aguardando confirmação de troca de empreendimento
   };
 
   const totais = () => {
-    const subtotal = estado.carrinho.reduce((s, i) => s + produtoPorId(i.id).preco * i.qtd, 0);
-    const entrega = estado.carrinho.length ? TAXA_ENTREGA : 0;
+    const subtotal = estado.carrinho.itens.reduce((s, i) => s + produtoPorId(i.id).preco * i.qtd, 0);
+    const entrega = estado.carrinho.itens.length ? TAXA_ENTREGA : 0;
     return { subtotal, entrega, total: subtotal + entrega };
   };
 
@@ -88,10 +175,158 @@
   }
 
   /* ======================================================================
-     CARDÁPIO
+     ROTAS (hash): #/  ·  #/municipio/<slug>  ·  #/loja/<cidade>/<loja>
      ====================================================================== */
+  const app = () => $("#app");
+
+  function definirMunicipio(cidade) {
+    estado.municipio = cidade;
+    gravar(KEYS.municipio, cidade);
+    $("#input-municipio").value = cidade;
+  }
+
+  function irParaMunicipio(cidade) {
+    const alvo = `#/municipio/${slug(cidade)}`;
+    if (location.hash === alvo) rotear(); else location.hash = alvo;
+  }
+
+  let primeiraRota = true;
+  function rotear() {
+    const partes = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean).map(decodeURIComponent);
+    estado.busca = "";
+    estado.lojaAtual = null;
+    let titulo = "iXisTudo — O verdadeiro Xis Gaúcho";
+
+    if (partes[0] === "municipio" && cidadePorSlug.has(partes[1])) {
+      const cidade = cidadePorSlug.get(partes[1]);
+      definirMunicipio(cidade);
+      renderizarMunicipio(cidade);
+      titulo = `Xis em ${cidade} — iXisTudo`;
+    } else if (partes[0] === "loja" && lojaPorId(`${partes[1]}/${partes[2]}`)) {
+      const loja = lojaPorId(`${partes[1]}/${partes[2]}`);
+      definirMunicipio(loja.cidade);
+      estado.lojaAtual = loja;
+      renderizarLoja(loja);
+      titulo = `${loja.nome} — ${loja.cidade} — iXisTudo`;
+    } else {
+      renderizarInicio();
+    }
+
+    document.title = titulo;
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (!primeiraRota) app().focus({ preventScroll: true });
+    primeiraRota = false;
+  }
+
+  /* ======================================================================
+     TELAS
+     ====================================================================== */
+  function renderizarInicio() {
+    const destaques = GRANDES.map((c) =>
+      `<li><a class="chip" href="#/municipio/${slug(c)}">${esc(c)}</a></li>`).join("");
+    app().innerHTML = `
+      <section class="hero">
+        <div class="hero-inner">
+          <p class="eyebrow">Tradição gaúcha</p>
+          <h1>O autêntico Xis Gaúcho, entregue na sua porta</h1>
+          <p class="hero-sub">Escolha seu município, veja os xis-burgers da sua cidade e peça direto do empreendimento mais perto de você.</p>
+          <ul class="hero-chips" aria-label="Diferenciais">
+            <li>🧀 Bem recheado</li>
+            <li>🥫 Maionese caseira</li>
+            <li>🛵 Entrega no RS</li>
+          </ul>
+          <button type="button" class="btn btn-accent btn-lg" data-action="focar-municipio">Escolher meu município</button>
+        </div>
+      </section>
+      <section class="container" aria-labelledby="titulo-destaques">
+        <div class="section-head"><h2 id="titulo-destaques">Municípios em destaque</h2></div>
+        <ul class="chips">${destaques}</ul>
+        <p class="hint">Não achou o seu? Digite o nome do município na barra de busca lá em cima.</p>
+      </section>`;
+  }
+
+  function renderizarMunicipio(cidade) {
+    const lojas = empreendimentosDe(cidade);
+
+    if (!lojas.length) {
+      app().innerHTML = `
+        <section class="container">
+          <nav class="crumb" aria-label="Navegação"><a href="#/">← Início</a></nav>
+          <div class="coming-soon">
+            <div class="coming-emoji" aria-hidden="true">🚧</div>
+            <p class="eyebrow">${esc(cidade)}</p>
+            <h1>Em breve…</h1>
+            <p>Ainda não temos empreendimentos cadastrados em ${esc(cidade)}, mas estamos chegando por aí!</p>
+            <button type="button" class="btn btn-primary" data-action="focar-municipio">Escolher outro município</button>
+          </div>
+        </section>`;
+      return;
+    }
+
+    app().innerHTML = `
+      <section class="container">
+        <nav class="crumb" aria-label="Navegação"><a href="#/">← Início</a></nav>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">${esc(cidade)}</p>
+            <h1 class="page-title">Empreendimentos em ${esc(cidade)}</h1>
+            <p class="muted">${lojas.length} ${lojas.length === 1 ? "empreendimento cadastrado" : "empreendimentos cadastrados"}</p>
+          </div>
+        </div>
+        <div class="store-grid">
+          ${lojas.map((l) => `
+            <a class="store-card" href="#/loja/${l.id}">
+              <div class="card-media">
+                <img src="${esc(l.img)}" alt="" loading="lazy" width="600" height="338">
+                <span class="img-fallback" aria-hidden="true">🍔</span>
+              </div>
+              <div class="card-body">
+                <h2 class="card-title">${esc(l.nome)}</h2>
+                <p class="store-meta">
+                  <span class="rating" aria-label="Nota ${l.nota}">★ ${l.nota}</span>
+                  <span>${l.tempo}</span>
+                  <span>Entrega ${brl.format(TAXA_ENTREGA)}</span>
+                </p>
+              </div>
+            </a>`).join("")}
+        </div>
+      </section>`;
+  }
+
+  function renderizarLoja(loja) {
+    app().innerHTML = `
+      <section class="container">
+        <nav class="crumb" aria-label="Navegação">
+          <a href="#/municipio/${slug(loja.cidade)}">← Empreendimentos em ${esc(loja.cidade)}</a>
+        </nav>
+        <header class="store-hero">
+          <div class="store-hero-avatar" aria-hidden="true">🍔</div>
+          <div>
+            <h1 class="page-title">${esc(loja.nome)}</h1>
+            <p class="store-meta">
+              <span class="rating" aria-label="Nota ${loja.nota}">★ ${loja.nota}</span>
+              <span>${esc(loja.cidade)}</span>
+              <span>${loja.tempo}</span>
+              <span>Entrega ${brl.format(TAXA_ENTREGA)}</span>
+            </p>
+          </div>
+        </header>
+        <div class="section-head">
+          <h2 id="titulo-cardapio">Cardápio de Xis</h2>
+          <label class="menu-search">
+            <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <span class="sr-only">Buscar no cardápio</span>
+            <input type="search" id="input-busca" placeholder="Buscar (ex.: bacon, frango)…" autocomplete="off">
+          </label>
+        </div>
+        <div class="menu-grid" id="menu-grid" aria-live="polite"></div>
+      </section>`;
+    renderizarCardapio();
+  }
+
   function renderizarCardapio() {
     const grid = $("#menu-grid");
+    if (!grid) return;
     const q = norm(estado.busca.trim());
     const lista = q ? produtos.filter((p) => norm(p.nome + " " + p.desc).includes(q)) : produtos;
 
@@ -126,25 +361,54 @@
   function salvarCarrinho() { gravar(KEYS.carrinho, estado.carrinho); }
 
   function adicionar(id) {
-    const item = estado.carrinho.find((i) => i.id === id);
-    if (item) item.qtd++; else estado.carrinho.push({ id, qtd: 1 });
+    const loja = estado.lojaAtual;
+    if (!loja) return;
+
+    // Um carrinho só aceita itens de um empreendimento por vez.
+    if (estado.carrinho.itens.length && estado.carrinho.lojaId !== loja.id) {
+      const atual = lojaPorId(estado.carrinho.lojaId);
+      estado.pendente = { id, loja };
+      $("#swap-text").textContent =
+        `Seu carrinho tem itens de “${atual ? atual.nome : "outro empreendimento"}”. ` +
+        `Para pedir de “${loja.nome}”, é preciso esvaziar o carrinho atual.`;
+      abrirDialogo($("#swap-modal"));
+      return;
+    }
+    inserir(id, loja);
+  }
+
+  function inserir(id, loja) {
+    estado.carrinho.lojaId = loja.id;
+    const item = estado.carrinho.itens.find((i) => i.id === id);
+    if (item) item.qtd++; else estado.carrinho.itens.push({ id, qtd: 1 });
     salvarCarrinho();
     renderizarCarrinho(true);
     toast(`${produtoPorId(id).nome} adicionado`);
   }
 
+  function confirmarTroca() {
+    const { id, loja } = estado.pendente || {};
+    estado.pendente = null;
+    fecharDialogo($("#swap-modal"));
+    if (!loja) return;
+    estado.carrinho.itens = [];
+    inserir(id, loja);
+  }
+
   function alterarQtd(id, delta) {
-    const item = estado.carrinho.find((i) => i.id === id);
+    const item = estado.carrinho.itens.find((i) => i.id === id);
     if (!item) return;
     item.qtd += delta;
-    if (item.qtd <= 0) estado.carrinho = estado.carrinho.filter((i) => i.id !== id);
+    if (item.qtd <= 0) estado.carrinho.itens = estado.carrinho.itens.filter((i) => i.id !== id);
+    if (!estado.carrinho.itens.length) estado.carrinho.lojaId = null;
     salvarCarrinho();
     renderizarCarrinho();
   }
 
   function renderizarCarrinho(animar = false) {
+    const itens = estado.carrinho.itens;
     const badge = $("#cart-badge");
-    const totalItens = estado.carrinho.reduce((s, i) => s + i.qtd, 0);
+    const totalItens = itens.reduce((s, i) => s + i.qtd, 0);
     badge.textContent = totalItens;
     badge.hidden = totalItens === 0;
     $("#btn-cart").setAttribute("aria-label", `Carrinho, ${totalItens} ${totalItens === 1 ? "item" : "itens"}`);
@@ -155,10 +419,10 @@
     }
 
     const container = $("#cart-items");
-    if (!estado.carrinho.length) {
+    if (!itens.length) {
       container.innerHTML = `<p class="empty-msg">Seu carrinho está vazio.<br>Escolha um xis no cardápio 🍔</p>`;
     } else {
-      container.innerHTML = estado.carrinho.map((i) => {
+      container.innerHTML = itens.map((i) => {
         const p = produtoPorId(i.id);
         return `
           <div class="cart-item">
@@ -180,10 +444,13 @@
     $("#cart-subtotal").textContent = brl.format(t.subtotal);
     $("#cart-delivery").textContent = brl.format(t.entrega);
     $("#cart-total").textContent = brl.format(t.total);
-    const cidade = $("#cart-city");
-    cidade.textContent = estado.municipio || "Escolha seu município";
-    cidade.classList.toggle("muted", !estado.municipio);
-    $("#btn-checkout").disabled = !estado.carrinho.length;
+    const loja = lojaPorId(estado.carrinho.lojaId);
+    const linha = $("#cart-city");
+    linha.innerHTML = loja
+      ? `<a href="#/loja/${loja.id}" data-close-cart>${esc(loja.nome)}</a> · ${esc(loja.cidade)}`
+      : "—";
+    linha.classList.toggle("muted", !loja);
+    $("#btn-checkout").disabled = !itens.length;
   }
 
   /* ======================================================================
@@ -212,6 +479,7 @@
       return `
         <article class="order-card">
           <div class="order-head"><span>Pedido #${numero}</span><time>${esc(quando)}</time></div>
+          ${ped.loja ? `<div class="order-store">${esc(ped.loja)}</div>` : ""}
           <div class="order-items">${ped.itens.map((i) => `${i.qtd}× ${esc(i.nome)}`).join(", ")}</div>
           <div class="order-total">Total: ${brl.format(ped.total)}</div>
           ${ped.municipio ? `<div class="order-city">Entrega em ${esc(ped.municipio)}</div>` : ""}
@@ -222,14 +490,10 @@
   }
 
   function finalizarPedido() {
-    if (!estado.carrinho.length) return toast("Adicione ao menos um xis ao carrinho.", "error");
+    const itens = estado.carrinho.itens;
+    const loja = lojaPorId(estado.carrinho.lojaId);
+    if (!itens.length || !loja) return toast("Adicione ao menos um xis ao carrinho.", "error");
 
-    if (!estado.municipio) {
-      fecharDialogo($("#cart-modal"));
-      toast("Escolha seu município para calcular a entrega.", "error");
-      $("#input-municipio").focus();
-      return;
-    }
     if (!estado.usuario) {
       toast("Entre na sua conta para finalizar o pedido.", "error");
       abrirDialogo($("#auth-modal"));
@@ -241,13 +505,14 @@
     estado.pedidos.unshift({
       numero: ultimo + 1,
       criadoEm: Date.now(),
-      municipio: estado.municipio,
-      itens: estado.carrinho.map((i) => ({ id: i.id, nome: produtoPorId(i.id).nome, qtd: i.qtd, preco: produtoPorId(i.id).preco })),
+      loja: loja.nome,
+      municipio: loja.cidade,
+      itens: itens.map((i) => ({ id: i.id, nome: produtoPorId(i.id).nome, qtd: i.qtd, preco: produtoPorId(i.id).preco })),
       total: t.total
     });
     gravar(KEYS.pedidos, estado.pedidos);
 
-    estado.carrinho = [];
+    estado.carrinho = { lojaId: null, itens: [] };
     salvarCarrinho();
     renderizarCarrinho();
     mostrarAba("pedidos");
@@ -278,15 +543,17 @@
   }
 
   function configurarDialogos() {
-    // Abrir
     $("#btn-cart").addEventListener("click", () => abrirDialogo($("#cart-modal")));
 
     document.querySelectorAll("dialog").forEach((d) => {
       // Fechar pelo botão "×" ou clicando no fundo (backdrop)
       d.addEventListener("click", (e) => {
         if (e.target === d || e.target.closest("[data-close]")) d.close();
+        // Link do carrinho para o empreendimento: fecha a gaveta e segue o link
+        if (e.target.closest("[data-close-cart]")) d.close();
       });
     });
+    $("#swap-modal").addEventListener("close", () => { estado.pendente = null; });
 
     // Abas (clique + setas do teclado)
     document.querySelectorAll('[role="tablist"]').forEach((lista) => {
@@ -429,12 +696,10 @@
     }
 
     function escolher(nome) {
-      estado.municipio = nome;
-      gravar(KEYS.municipio, nome);
       input.value = nome;
       fechar();
-      renderizarCarrinho();
-      toast(`Entregando em ${nome} 🛵`);
+      input.blur();
+      irParaMunicipio(nome); // abre a página de empreendimentos do município
     }
 
     input.addEventListener("input", renderizar);
@@ -492,14 +757,21 @@
   document.addEventListener("DOMContentLoaded", () => {
     $("#ano").textContent = new Date().getFullYear();
 
-    // Delegação de eventos: cardápio e carrinho
+    // Delegação de eventos
     document.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-action][data-id]");
+      if (e.target.closest("[data-skip]")) { // o link "pular" não pode alterar o hash das rotas
+        e.preventDefault();
+        return app().focus();
+      }
+      const btn = e.target.closest("[data-action]");
       if (!btn) return;
+      const acao = btn.dataset.action;
       const id = Number(btn.dataset.id);
-      if (btn.dataset.action === "add") adicionar(id);
-      else if (btn.dataset.action === "mais") alterarQtd(id, 1);
-      else if (btn.dataset.action === "menos") alterarQtd(id, -1);
+      if (acao === "add") adicionar(id);
+      else if (acao === "mais") alterarQtd(id, 1);
+      else if (acao === "menos") alterarQtd(id, -1);
+      else if (acao === "swap-confirm") confirmarTroca();
+      else if (acao === "focar-municipio") { window.scrollTo({ top: 0, behavior: "smooth" }); $("#input-municipio").focus(); }
     });
 
     // Imagem quebrada → mostra o emoji de fallback (o evento "error" não propaga, então usa captura)
@@ -509,17 +781,19 @@
       if (e.target.closest(".cart-thumb")) e.target.hidden = true;
     }, true);
 
-    $("#input-busca").addEventListener("input", (e) => {
+    document.addEventListener("input", (e) => {
+      if (e.target.id !== "input-busca") return;
       estado.busca = e.target.value;
       renderizarCardapio();
     });
 
-    renderizarCardapio();
     renderizarCarrinho();
     renderizarUsuario();
     configurarAutocomplete();
     configurarDialogos();
     configurarAuth();
     configurarTema();
+    window.addEventListener("hashchange", rotear);
+    rotear();
   });
 })();

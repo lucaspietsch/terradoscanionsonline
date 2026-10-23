@@ -256,6 +256,69 @@ button { cursor: pointer; }
   text-align: center; color: var(--muted); font-size: .9rem;
 }
 
+
+/* ---------- Páginas: início, município, empreendimento ---------- */
+main:focus { outline: none; }
+.page-title { font-size: clamp(1.5rem, 3.4vw, 2.1rem); letter-spacing: -.02em; line-height: 1.15; }
+.container .eyebrow { color: var(--brand-text); margin-bottom: 6px; }
+
+.crumb { margin-bottom: 18px; }
+.crumb a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; }
+.crumb a:hover { color: var(--text); text-decoration: underline; }
+
+.chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-block; padding: 9px 18px; border-radius: 999px; text-decoration: none; font-weight: 700;
+  background: var(--surface); color: var(--text); border: 1.5px solid var(--border);
+  transition: background-color .15s, border-color .15s, transform .15s var(--ease);
+}
+.chip:hover { border-color: var(--brand); color: var(--brand-text); transform: translateY(-2px); }
+.hint { margin-top: 18px; color: var(--muted); }
+
+.store-grid {
+  display: grid; gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+.store-card {
+  display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.store-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.store-card:hover .card-media img { transform: scale(1.05); }
+.store-card .card-media { aspect-ratio: 16 / 9; }
+
+.store-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); font-size: .9rem; }
+.store-meta span:not(:first-child)::before { content: "·"; margin-right: 14px; color: var(--border); }
+.store-meta .rating { color: var(--text); font-weight: 800; }
+.store-meta .rating::before { content: none !important; }
+
+.store-hero {
+  display: flex; align-items: center; gap: 16px; padding: 20px; margin-bottom: 32px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.store-hero-avatar {
+  width: 68px; height: 68px; flex: none; display: grid; place-items: center; font-size: 2.2rem;
+  border-radius: 20px; background: linear-gradient(135deg, var(--accent), var(--brand));
+}
+.store-hero .store-meta { margin-top: 6px; }
+
+.coming-soon {
+  max-width: 520px; margin: 24px auto; padding: 44px 28px; text-align: center; display: grid; justify-items: center; gap: 12px;
+  background: var(--surface); border: 1.5px dashed var(--border); border-radius: var(--radius);
+}
+.coming-soon h1 { font-size: clamp(2rem, 6vw, 2.8rem); letter-spacing: -.03em; }
+.coming-soon p { color: var(--muted); }
+.coming-soon .btn { margin-top: 10px; }
+.coming-emoji { font-size: 3.2rem; }
+
+.cart-store a { color: inherit; font-weight: 700; }
+.cart-store { text-align: right; }
+.order-store { font-weight: 700; margin-bottom: 2px; }
+
+.swap-text { color: var(--muted); margin-bottom: 20px; }
+.swap-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
 /* ---------- Diálogos ---------- */
 dialog {
   border: 0; padding: 0; color: var(--text); background: var(--surface);
@@ -374,6 +437,8 @@ dialog::backdrop { background: rgb(15 8 5 / .55); backdrop-filter: blur(3px); an
   .nav-actions { gap: 4px; margin-left: 0; }
   .btn-cart-label, .user-logged .greeting { display: none; }
   .user-logged .user-name { max-width: 56px; }
+  #user-area [data-action="login"] span { display: none; }
+  #user-area [data-action="login"] { padding: 10px; }
   .container { padding: 32px 16px 48px; }
   .hero-inner { padding-inline: 16px; }
 }
