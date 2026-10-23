@@ -40,8 +40,10 @@ export async function staffRoutes(api, { db, orders, audit, rl }) {
       .get(pid);
     const coupons = db.prepare('SELECT code, label, kind, value, used_count, max_uses, active FROM coupons WHERE partner_id = ?').all(pid);
     const qrs = db.prepare('SELECT code, label, location, scans FROM qr_codes WHERE partner_id = ?').all(pid);
+    const pc = db.prepare('SELECT COUNT(*) AS total, COALESCE(SUM(published), 0) AS pub FROM partner_products WHERE partner_id = ?').get(pid);
     return {
       partner: {
+        slug: partner.slug, userName: req.session.user.name, productCount: pc.total, publishedProducts: pc.pub,
         name: partner.name, category: partner.category, plan: partner.plan, freeUntil: partner.free_until,
         tagline: partner.tagline, description: partner.description, whatsapp: partner.whatsapp, phone: partner.phone,
         website: partner.website, instagram: partner.instagram, address: partner.address, published: Boolean(partner.published),

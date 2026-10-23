@@ -37,9 +37,21 @@ function loginView(needTotp = false, prev = {}) {
     field('E-mail', input('le', { type: 'email', autocomplete: 'username', required: true, value: prev.email || '' }), 'le'),
     field('Senha', input('lp', { type: 'password', autocomplete: 'current-password', required: true, value: prev.password || '' }), 'lp'),
     needTotp ? field('Código do autenticador (6 dígitos)', input('lt', { inputmode: 'numeric', autocomplete: 'one-time-code', pattern: '\\d{6}', maxlength: 6, required: true }), 'lt') : null,
-    err, h('button', { class: 'btn btn-primary btn-block' }, needTotp ? 'Confirmar' : 'Entrar'));
+    err, h('button', { class: 'btn btn-primary btn-block' }, needTotp ? 'Confirmar' : 'Entrar'),
+    needTotp ? null : h('p', { class: 'center small' }, h('a', { href: '#', onclick: (e) => { e.preventDefault(); forgotView(val('le')); } }, 'Esqueci minha senha')));
   clear(app).append(form);
   $(needTotp ? '#lt' : '#le').focus();
+}
+
+function forgotView(email = '') {
+  const out = h('div', { 'aria-live': 'polite' });
+  clear(app).append(h('form', { class: 'card login stack', onsubmit: async (e) => {
+    e.preventDefault(); clear(out);
+    try { const r = await api('/auth/forgot', { method: 'POST', body: { email: val('fe') } }); out.append(h('div', { class: 'alert alert-ok' }, r.message)); } catch (ex) { out.append(h('div', { class: 'alert alert-error' }, ex.message)); }
+  } }, h('h1', {}, 'Esqueci a senha'), h('p', { class: 'muted' }, 'Informe o e-mail do seu acesso. Se o envio por e-mail estiver ativo, você recebe um link para criar uma nova senha.'),
+    field('E-mail', input('fe', { type: 'email', autocomplete: 'username', required: true, value: email }), 'fe'), out,
+    h('button', { class: 'btn btn-primary btn-block' }, 'Enviar link'), h('p', { class: 'center small' }, h('a', { href: '#', onclick: (e) => { e.preventDefault(); loginView(); } }, 'Voltar ao login'))));
+  $('#fe').focus();
 }
 
 // ---------------- Shell ----------------
@@ -248,7 +260,8 @@ const KIND_LABEL = { hospedagem: 'Hospedagem', passeio: 'Passeio', refeicao: 'Ga
 const ATTR_OPTIONS = [['aparados-da-serra', 'Aparados da Serra'], ['serra-geral', 'Serra Geral'], ['parque-estadual-do-tainhas', 'Parque Estadual do Tainhas'], ['cascata-velha-ouro-verde', 'Cascata Velha — Ouro Verde'], ['costao-do-cambara', 'Costão do Cambará']];
 const parsePrice = (v) => (v.trim() === '' ? null : Math.round(Number(v.replace(',', '.')) * 100));
 
-function productsPanel(ep) {
+function productsPanel(ep, onChange) {
+  if (onChange) { const raw = ep; ep = { list: raw.list, create: async (b) => { const r = await raw.create(b); onChange(); return r; }, update: async (id, b) => { const r = await raw.update(id, b); onChange(); return r; }, remove: async (id) => { const r = await raw.remove(id); onChange(); return r; } }; }
   const box = h('div', { class: 'stack' });
   const msg = h('div');
   let editing = null;
@@ -290,6 +303,37 @@ const partnerProducts = {
   update: (id, b) => api(`/partner/products/${id}`, { method: 'PATCH', body: b }), remove: (id) => api(`/partner/products/${id}`, { method: 'DELETE' }),
 };
 
+
+// ---------------- Convite de acesso dos parceiros ----------------
+async function copyText(text, btn) {
+  try { await navigator.clipboard.writeText(text); btn.textContent = 'Copiado!'; } catch { btn.textContent = 'Selecione e copie'; }
+  setTimeout(() => { btn.textContent = btn.dataset.label; }, 2200);
+}
+function inviteDialog(p, after) {
+  const body = clear($('#dlg-body'));
+  const out = h('div', { class: 'stack' });
+  const copyBtn = (label, getText) => { const b = h('button', { class: 'btn btn-dark btn-small', type: 'button', 'data-label': label, onclick: () => copyText(getText(), b) }, label); return b; };
+  body.append(h('h2', {}, `Acesso de ${p.name}`),
+    h('p', { class: 'muted' }, p.access_users ? 'Este parceiro já tem login. Gerar um novo link serve para redefinir a senha (se for o mesmo e-mail).' : 'Informe o e-mail e o nome de quem vai cuidar da página. O parceiro cria a própria senha: você nunca vê nem define a senha dele.'),
+    h('form', { class: 'stack', onsubmit: async (e) => {
+      e.preventDefault(); clear(out);
+      try {
+        const r = await api(`/admin/partners/${p.id}/invite`, { method: 'POST', body: { email: val('iv-mail'), name: val('iv-name') } });
+        const wa = r.partnerWhatsapp ? `https://wa.me/${r.partnerWhatsapp.replace(/\D/g, '').replace(/^(?!55)(\d{10,11})$/, '55$1')}?text=${encodeURIComponent(r.message)}` : `https://wa.me/?text=${encodeURIComponent(r.message)}`;
+        out.append(h('div', { class: 'alert alert-ok' }, `${r.purpose === 'reset' ? 'Link de redefinição' : 'Convite'} gerado — vale até ${fmtDT(r.expiresAt)}, uso único.${r.emailed ? ' Também enviado por e-mail.' : ''}`),
+          field('Link (trate como uma senha)', h('input', { id: 'iv-url', readonly: true, value: r.url, onfocus: (ev) => ev.target.select() }), 'iv-url'),
+          field('Mensagem pronta para enviar', h('textarea', { id: 'iv-msg', rows: 4, readonly: true }, r.message), 'iv-msg'),
+          h('div', { class: 'actions' }, copyBtn('Copiar link', () => r.url), copyBtn('Copiar mensagem', () => r.message),
+            h('a', { class: 'btn btn-wa btn-small', href: wa, target: '_blank', rel: 'noopener noreferrer' }, 'Abrir no WhatsApp')));
+        out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        after?.();
+      } catch (ex) { fail(out)(ex); }
+    } },
+      h('div', { class: 'inline-form' }, field('Nome do responsável', input('iv-name', { required: true, maxlength: 100, autocomplete: 'off' }), 'iv-name'), field('E-mail de acesso', input('iv-mail', { type: 'email', required: true, maxlength: 160, autocomplete: 'off' }), 'iv-mail')),
+      h('button', { class: 'btn btn-primary btn-small' }, p.access_users ? 'Gerar link de redefinição' : 'Gerar convite')), out);
+  dlg.showModal();
+}
+
 // ---------------- Parceiros ----------------
 async function partners(root) {
   const rows = await api('/admin/partners');
@@ -316,12 +360,16 @@ async function partners(root) {
     dlg.showModal();
   };
   root.append(h('h1', {}, 'Parceiros'), msg,
-    h('p', { class: 'muted' }, 'Os 15 parceiros fundadores já estão cadastrados. Complete o perfil, defina até quando têm cortesia e crie um login para eles em “Usuários”.'),
+    h('p', { class: 'muted' }, 'Os 15 parceiros fundadores já estão cadastrados. Clique em “Convidar” para gerar o link de acesso: cada parceiro cria a própria senha e preenche a própria página e produtos. Clique na linha para editar plano, cortesia e dados.'),
     h('form', { class: 'card inline-form', onsubmit: async (e) => { e.preventDefault(); try { await api('/admin/partners', { method: 'POST', body: { slug: val('n-slug'), name: val('n-name'), category: val('n-cat') } }); go('partners'); } catch (ex) { fail(msg)(ex); } } },
       field('Nome', input('n-name', { required: true }), 'n-name'), field('Endereço curto (slug)', input('n-slug', { required: true, pattern: '[a-z0-9-]+' }), 'n-slug'),
       field('Categoria', h('select', { id: 'n-cat' }, Object.entries(CATEGORY).map(([k, v]) => h('option', { value: k }, v))), 'n-cat'), h('button', { class: 'btn btn-dark btn-small' }, 'Adicionar parceiro')),
     table([{ label: 'Parceiro', key: 'name' }, { label: 'Categoria', render: (p) => CATEGORY[p.category] }, { label: 'Plano', key: 'plan' }, { label: 'Cortesia até', render: (p) => p.free_until ?? '—' },
-      { label: 'Contato', render: (p) => (p.whatsapp || p.phone || p.website ? 'ok' : 'faltando') }, { label: 'Publicado', render: (p) => (p.published ? 'sim' : 'não') }], rows, { onRow: edit }));
+      { label: 'Produtos', num: true, render: (p) => String(p.published_products) },
+      { label: 'Contato', render: (p) => (p.whatsapp || p.phone || p.website ? 'ok' : 'faltando') },
+      { label: 'Acesso', render: (p) => (p.access_users ? 'ativo' : p.pending_invite_until ? `convite até ${new Date(p.pending_invite_until).toLocaleDateString('pt-BR')}` : 'sem login') },
+      { label: '', render: (p) => h('button', { class: `btn btn-small ${p.access_users ? 'btn-ghost' : 'btn-primary'}`, type: 'button', onclick: (ev) => { ev.stopPropagation(); inviteDialog(p, () => {}); } }, p.access_users ? 'Redefinir senha' : p.pending_invite_until ? 'Novo link' : 'Convidar') },
+      { label: 'Publicado', render: (p) => (p.published ? 'sim' : 'não') }], rows, { onRow: edit }));
 }
 
 // ---------------- Check-in ----------------
@@ -408,26 +456,60 @@ async function audit(root) {
 
 // ---------------- Painel do parceiro ----------------
 async function mine(root) {
-  const d = await api('/partner/me');
-  const p = d.partner;
+  let d = await api('/partner/me');
+  const p = () => d.partner;
   const msg = h('div');
-  const f = (k, label, extra = {}) => field(label, input(`m-${k}`, { value: p[k] ?? '', ...extra }), `m-${k}`);
-  root.append(h('h1', {}, p.name), msg,
-    h('div', { class: 'cards4' }, h('div', { class: 'card stat' }, h('b', {}, String(d.stats.tickets)), h('span', {}, 'Ingressos vendidos com seu cupom/placa')),
-      h('div', { class: 'card stat' }, h('b', {}, String(d.stats.paidOrders)), h('span', {}, 'Pedidos pagos')), h('div', { class: 'card stat' }, h('b', {}, brl(d.stats.revenueCents)), h('span', {}, 'Valor vendido')),
-      h('div', { class: 'card stat' }, h('b', {}, p.freeUntil ?? 'sem prazo'), h('span', {}, `Plano ${p.plan}${p.freeUntil ? ' — cortesia até' : ''}`))),
-    h('h2', { class: 'sec' }, 'Seus cupons e placas'),
-    table([{ label: 'Cupom', key: 'code' }, { label: 'Descrição', key: 'label' }, { label: 'Usos', num: true, key: 'used_count' }], d.coupons),
-    table([{ label: 'Placa', key: 'label' }, { label: 'Local', key: 'location' }, { label: 'Leituras', num: true, key: 'scans' }], d.qrs),
-    h('h2', { class: 'sec' }, 'Sua vitrine no site'),
+  // O texto padrão do cadastro inicial ("perfil em breve") não vira valor do campo: o parceiro escreve o dele.
+  const f = (k, label, extra = {}) => field(label, input(`m-${k}`, { value: k === 'tagline' && /em breve/i.test(p().tagline || '') ? '' : (p()[k] ?? ''), ...extra }), `m-${k}`);
+  const steps = [
+    ['Frase de destaque', () => (p().tagline || '').length > 0 && !/em breve/i.test(p().tagline), '#sec-vitrine'],
+    ['Descrição do seu negócio', () => (p().description || '').trim().length >= 40, '#sec-vitrine'],
+    ['WhatsApp para os clientes falarem com você', () => Boolean(p().whatsapp), '#sec-vitrine'],
+    ['Endereço', () => Boolean(p().address), '#sec-vitrine'],
+    ['Pelo menos 1 produto publicado', () => p().publishedProducts > 0, '#sec-produtos'],
+  ];
+  const jump = (sel) => (ev) => { ev.preventDefault(); $(sel)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  const pwMsg = h('div');
+  const checklist = h('div');
+  const drawChecklist = () => {
+    const done = steps.filter(([, ok]) => ok()).length;
+    clear(checklist).append(h('div', { class: 'card stack' },
+      h('div', { class: 'actions' }, h('div', {}, h('h2', {}, done === steps.length ? 'Sua página está completa 🎉' : 'Deixe sua página pronta'),
+        h('p', { class: 'muted' }, done === steps.length ? 'Tudo preenchido. Mantenha preços e descrições em dia.' : `${done} de ${steps.length} passos concluídos. Páginas completas passam mais confiança e recebem mais mensagens.`)),
+        h('a', { class: 'btn btn-primary btn-small', href: `/parceiros/${p().slug}`, target: '_blank', rel: 'noopener' }, 'Ver minha página no site')),
+      h('progress', { max: steps.length, value: done, 'aria-label': 'Progresso da página' }),
+      h('ul', { class: 'info-list' }, steps.map(([label, ok, target]) => h('li', {}, ok() ? h('span', { class: 'badge badge-ok' }, '✓') : h('span', { class: 'badge badge-pending' }, '•'),
+        h('a', { href: target, onclick: jump(target) }, label))))));
+  };
+  const refresh = async () => { try { d = await api('/partner/me'); drawChecklist(); } catch { /* mantém o estado atual */ } };
+  drawChecklist();
+
+  root.append(h('h1', {}, `Olá, ${p().userName.split(' ')[0]}!`), msg,
+    checklist,
+    h('h2', { class: 'sec', id: 'sec-vitrine' }, 'Dados da sua página'),
     h('form', { class: 'card stack', onsubmit: async (e) => {
       e.preventDefault();
-      try { await api('/partner/me', { method: 'PATCH', body: { tagline: val('m-tagline'), description: val('m-description'), whatsapp: val('m-whatsapp'), phone: val('m-phone'), website: val('m-website'), instagram: val('m-instagram'), address: val('m-address') } }); flash(msg, 'Vitrine atualizada.'); } catch (ex) { fail(msg)(ex); }
-    } }, f('tagline', 'Frase de destaque', { maxlength: 140 }), field('Descrição', h('textarea', { id: 'm-description', rows: 5, maxlength: 1500 }, p.description), 'm-description'),
-      h('div', { class: 'row' }, f('whatsapp', 'WhatsApp (com DDD)'), f('phone', 'Telefone')), h('div', { class: 'row' }, f('website', 'Site (https://…)'), f('instagram', 'Instagram')), f('address', 'Endereço'),
-      h('button', { class: 'btn btn-primary' }, 'Salvar')),
-    h('h2', { class: 'sec' }, 'Seus produtos e serviços'),
-    h('p', { class: 'muted' }, 'Aparecem na sua página e no catálogo do site. Use preço de referência (ou deixe vazio para "Consulte").'), productsPanel(partnerProducts));
+      try { await api('/partner/me', { method: 'PATCH', body: { tagline: val('m-tagline'), description: val('m-description'), whatsapp: val('m-whatsapp'), phone: val('m-phone'), website: val('m-website'), instagram: val('m-instagram'), address: val('m-address') } }); await refresh(); flash(msg, 'Página atualizada.'); } catch (ex) { fail(msg)(ex); }
+    } }, f('tagline', 'Frase de destaque (aparece no card)', { maxlength: 140, placeholder: 'Ex.: Chalés aconchegantes com vista para o cânion' }), field('Descrição', h('textarea', { id: 'm-description', rows: 5, maxlength: 1500 }, p.description), 'm-description'),
+      h('div', { class: 'row' }, f('whatsapp', 'WhatsApp (com DDD)', { inputmode: 'tel', placeholder: '(54) 99999-9999' }), f('phone', 'Telefone fixo (opcional)')), h('div', { class: 'row' }, f('website', 'Site (https://…)'), f('instagram', 'Instagram (@usuario)')), f('address', 'Endereço'),
+      h('p', { class: 'hint' }, 'Nome, categoria e plano são definidos pela administração do portal.'), h('button', { class: 'btn btn-primary' }, 'Salvar')),
+    h('h2', { class: 'sec', id: 'sec-produtos' }, 'Seus produtos e serviços'),
+    h('p', { class: 'muted' }, 'Aparecem na sua página e no catálogo do site. Use um preço de referência (ou deixe vazio para mostrar “Consulte”). Itens em “Rascunho” não aparecem para o público.'), productsPanel(partnerProducts, refresh),
+    h('h2', { class: 'sec' }, 'Resultados'),
+    h('div', { class: 'cards4' }, h('div', { class: 'card stat' }, h('b', {}, String(d.stats.tickets)), h('span', {}, 'Ingressos da tirolesa vendidos com seu cupom/placa')),
+      h('div', { class: 'card stat' }, h('b', {}, String(d.stats.paidOrders)), h('span', {}, 'Pedidos pagos')), h('div', { class: 'card stat' }, h('b', {}, brl(d.stats.revenueCents)), h('span', {}, 'Valor vendido')),
+      h('div', { class: 'card stat' }, h('b', {}, p().freeUntil ?? 'sem prazo'), h('span', {}, `Plano ${p().plan}${p().freeUntil ? ' — cortesia até' : ''}`))),
+    d.coupons.length ? table([{ label: 'Cupom', key: 'code' }, { label: 'Descrição', key: 'label' }, { label: 'Usos', num: true, key: 'used_count' }], d.coupons) : '',
+    d.qrs.length ? table([{ label: 'Placa', key: 'label' }, { label: 'Local', key: 'location' }, { label: 'Leituras', num: true, key: 'scans' }], d.qrs) : '',
+    h('h2', { class: 'sec' }, 'Minha conta'),
+    h('form', { class: 'card stack', onsubmit: async (e) => {
+      e.preventDefault(); clear(pwMsg);
+      if (val('pw-new') !== val('pw-new2')) { flash(pwMsg, 'As duas senhas novas não são iguais.', false); return; }
+      try { await api('/auth/change-password', { method: 'POST', body: { current: val('pw-cur'), next: val('pw-new') } }); e.target.reset(); flash(pwMsg, 'Senha alterada. Os outros aparelhos foram desconectados.'); } catch (ex) { fail(pwMsg)(ex); }
+    } }, h('h3', {}, 'Trocar senha'), pwMsg,
+      h('div', { class: 'inline-form' }, field('Senha atual', input('pw-cur', { type: 'password', autocomplete: 'current-password', required: true }), 'pw-cur'),
+        field('Nova senha (12+ caracteres)', input('pw-new', { type: 'password', autocomplete: 'new-password', required: true, minlength: 12 }), 'pw-new'), field('Repita a nova senha', input('pw-new2', { type: 'password', autocomplete: 'new-password', required: true }), 'pw-new2')),
+      h('button', { class: 'btn btn-dark btn-small' }, 'Alterar senha')));
 }
 
 // ---------------- Boot ----------------

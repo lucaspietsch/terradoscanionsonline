@@ -245,7 +245,7 @@ a.card:hover, .card.linked:hover { transform: translateY(-6px); box-shadow: var(
 .crumbs { display: flex; gap: .5rem; align-items: center; font-size: .85rem; opacity: .9; margin-bottom: 1.2rem; flex-wrap: wrap; }
 .crumbs a { color: #fff; opacity: .85; text-decoration: none; } .crumbs a:hover { opacity: 1; text-decoration: underline; }
 .hero-row { display: flex; gap: 1.3rem; align-items: center; flex-wrap: wrap; }
-.actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+.actions { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
 .subnav { position: sticky; top: var(--header-h); z-index: 30; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
 .subnav .wrap { display: flex; gap: .4rem; padding-block: .7rem; overflow-x: auto; scrollbar-width: none; }
 .two-col { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); }
@@ -361,3 +361,8 @@ details p { margin: .7rem 0 0; color: var(--ink-2); }
 .feature + .grid, .grid + .grid, .wrap > .grid + .feature { margin-top: 1.25rem; }
 #featured .section-head { margin-bottom: 1rem; }
 #featured + .filters { margin-top: 2.2rem; }
+
+.info-list .mark { width: 1.25em; text-align: center; flex: none; font-weight: 800; }
+.info-list li.rule-ok { color: var(--ok); font-weight: 600; }
+.dialog .body { max-height: calc(88vh - 4.5rem); }
+#dlg-body h2 { font-size: 1.6rem; }

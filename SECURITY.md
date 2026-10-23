@@ -16,11 +16,14 @@
 | Abuso/automação | Rate limit por rota (login, pedidos, cotação, reenvio), corpo máx. 64 KB, limite de ingressos por pedido | `app.js`, `routes/` |
 | Adulteração de logs | Auditoria com cadeia HMAC; `GET /api/admin/audit/verify` | `lib/audit.js` |
 | Privacidade / LGPD | Minimização (sem CPF/IP), consentimento com versão do termo, acesso a PII auditado, anonimização após `RETENTION_DAYS` | `services/orders.js` |
+| Acesso dos parceiros | Convite de uso único (token de 256 bits, só o hash fica no banco), validade de 7 dias, consumo atômico, e-mail de outro usuário recusado, redefinição desconecta todas as sessões, "esqueci a senha" com resposta idêntica (sem enumeração) e limite de tentativas; troca de senha exige a atual | `services/invites.js` |
+| Conteúdo escrito por parceiros | Texto puro (DOM via `textContent`), links só `https://`, limites de tamanho/quantidade, o `partner_id` vem da sessão (nunca do corpo), auditoria de alterações | `routes/staff.js`, `routes/catalog.js` |
 | Configuração insegura | Em produção o servidor **recusa subir** sem `MASTER_KEY`, sem `https://` ou com pagamento `mock` | `config.js` |
 
 ## Limitações conhecidas (leia)
 
 - O **bloqueio de conta** protege contra força bruta, mas permite que alguém trave a conta de um admin por 15 min. O rate limit por IP mitiga; considere alertas.
+- **Parceiros entram só com senha** (sem 2FA, ao contrário da equipe interna): a senha forte é exigida, há bloqueio por tentativas e eles não veem dados de clientes, mas considere oferecer 2FA opcional no futuro.
 - **SQLite** = um único servidor. Backup e restauração são responsabilidade sua; guarde a `MASTER_KEY` separada do backup.
 - A **rotação da `MASTER_KEY`** não está automatizada (exige recifrar os campos).
 - O adaptador **Mercado Pago não foi validado contra a API real** neste repositório.

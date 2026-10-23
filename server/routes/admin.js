@@ -20,7 +20,7 @@ function updateRow(db, table, id, body, map) {
 
 const mask = (email) => email.replace(/^(.).*(@.*)$/, '$1•••$2');
 
-export async function adminRoutes(api, { db, config, pii, audit, auth, orders, rl }) {
+export async function adminRoutes(api, { db, config, pii, audit, auth, orders, invites, rl }) {
   const guard = { preHandler: api.requireRole('admin') };
   const actor = (req) => `user:${req.session.user.id}`;
   const log = (req, action, entity, entityId, meta) => audit.write({ actor: actor(req), action, entity, entityId, meta });
@@ -250,7 +250,9 @@ export async function adminRoutes(api, { db, config, pii, audit, auth, orders, r
     sortOrder: 'sort_order', tagline: 'tagline', description: 'description', whatsapp: 'whatsapp', phone: 'phone',
     website: 'website', instagram: 'instagram', address: 'address',
   };
-  api.get('/admin/partners', guard, async () => db.prepare('SELECT * FROM partners ORDER BY sort_order, name').all());
+  api.get('/admin/partners', guard, async () =>
+    db.prepare('SELECT *, (SELECT COUNT(*) FROM partner_products x WHERE x.partner_id = partners.id AND x.published = 1) AS published_products FROM partners ORDER BY sort_order, name').all()
+      .map((p) => ({ ...p, ...(() => { const a = invites.accessSummary(p.id); return { access_users: a.users, pending_invite_until: a.pendingInviteUntil }; })() })));
   api.post('/admin/partners', guard, async (req, reply) => {
     const b = partnerBody.parse(req.body);
     try {

@@ -91,7 +91,28 @@
     if (parts[0] === 'orders' && parts[1]) { const o = orders.find((x) => x.token === decodeURIComponent(parts[1])); if (!o) throw Object.assign(new Error('Pedido não encontrado.'), { status: 404 }); return view(o); }
     if (parts[0] === 'dev' && parts[1] === 'pay') { const o = orders.find((x) => x.token === decodeURIComponent(parts[2])); if (o) { o.status = 'paid'; o.paidAt = new Date().toISOString(); } return ok(); }
     // auth/admin
-    if (p === '/auth/me') return { user: { id: 1, email: 'admin@exemplo.com', name: 'Administrador (exemplo)', role: 'admin', partnerId: null }, csrf: 'demo' };
+    if (p === '/auth/me') {
+      return window.parent.__role === 'partner'
+        ? { user: { id: 2, email: 'carla@exemplo.com', name: 'Carla Mendes (exemplo)', role: 'partner', partnerId: 6 }, csrf: 'demo' }
+        : { user: { id: 1, email: 'admin@exemplo.com', name: 'Administrador (exemplo)', role: 'admin', partnerId: null }, csrf: 'demo' };
+    }
+    if (p === '/partner/me' && method === 'GET') {
+      return {
+        partner: { slug: 'canyons-chalet', userName: 'Carla Mendes (exemplo)', productCount: 2, publishedProducts: 2, name: 'Canyons Chalet', category: 'hospedagem', plan: 'fundador', freeUntil: null,
+          tagline: 'Chalés aconchegantes com vista para o campo', description: 'Texto curto.', whatsapp: '5500000000', phone: '', website: '', instagram: '', address: '', published: true },
+        stats: { paidOrders: 14, tickets: 33, revenueCents: 445500 },
+        coupons: [{ code: 'CANYONS10', label: 'Cupom do Canyons Chalet (exemplo)', kind: 'percent', value: 10, used_count: 33, max_uses: 200, active: 1 }], qrs: [],
+      };
+    }
+    if (parts[0] === 'invites' && parts[1] && parts[1] !== 'accept') return { partnerName: 'Canyons Chalet', email: 'carla@exemplo.com', name: 'Carla Mendes', purpose: 'invite' };
+    if (p === '/invites/accept') return { ok: true };
+    if (p === '/auth/forgot') return { ok: true, message: 'Se este e-mail tiver acesso e o envio por e-mail estiver ativo, você receberá um link. Se não chegar, peça um novo link ao administrador.' };
+    if (p === '/auth/change-password') return { ok: true };
+    if (parts[0] === 'admin' && parts[1] === 'partners' && parts[3] === 'invite' && method === 'POST') {
+      const pa = partners.find((y) => y.id === Number(parts[2])); const url = 'https://seu-dominio.com.br/convite/EXEMPLO-SEM-VALIDADE-0000000000000000000000';
+      return { url, purpose: 'invite', expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(), emailed: false, partnerWhatsapp: pa?.whatsapp || '',
+        message: `Olá, ${body.name.split(' ')[0]}! O ${pa?.name} já está no Terra dos Cânions Online. Crie sua senha neste link (vale por 7 dias, uso único) e preencha seus dados e produtos: ${url}` };
+    }
     if (p === '/auth/logout') return ok();
     if (p === '/admin/stats') return {
       today: { orders: 6, tickets: 14, revenue: 189000 }, last30: { orders: 142, tickets: 331, revenue: 4411500 }, total: { orders: 142, tickets: 331, revenue: 4411500 }, pending: 3,
@@ -115,7 +136,12 @@
     if (p === '/admin/qr' && method === 'GET') return [
       { id: 1, code: 'praca-01', label: 'Placa Praça Central', location: 'Praça central de Cambará do Sul', scans: 812, coupon_code: 'PLACA10', active: 1, url: 'https://seu-dominio.com.br/q/praca-01' },
       { id: 2, code: 'rodoviaria-01', label: 'Placa Rodoviária', location: 'Rodoviária', scans: 455, coupon_code: 'PLACA10', active: 1, url: 'https://seu-dominio.com.br/q/rodoviaria-01' }];
-    if (p === '/admin/partners' && method === 'GET') return partners.map((x) => ({ ...x, free_until: x.freeUntil || null, sort_order: x.id * 10, published: 1, featured: 0 }));
+    if (p === '/admin/partners' && method === 'GET') {
+      return partners.map((x) => ({ ...x, free_until: x.freeUntil || null, sort_order: x.id * 10, published: 1, featured: 0,
+        published_products: products.filter((y) => y.partnerSlug === x.slug).length,
+        access_users: ['canyons-chalet', 'guia-aparados-da-serra'].includes(x.slug) ? 1 : 0,
+        pending_invite_until: x.slug === 'pousada-costao-do-cambara' ? new Date(Date.now() + 5 * 86400000).toISOString() : null }));
+    }
     if (p === '/admin/users' && method === 'GET') return [{ id: 1, email: 'admin@exemplo.com', name: 'Administrador (exemplo)', role: 'admin', partner_id: null, totp_enabled: 1, disabled: 0 }, { id: 2, email: 'porta@exemplo.com', name: 'Equipe da portaria (exemplo)', role: 'checkin', partner_id: null, totp_enabled: 1, disabled: 0 }];
     if (p === '/admin/audit') return [{ id: 3, ts: new Date().toISOString(), actor: 'user:1', action: 'pii.view', entity: 'order', entity_id: 'K4M9X2QA', meta: '{}' }, { id: 2, ts: new Date().toISOString(), actor: 'payment', action: 'payment.paid', entity: 'order', entity_id: 'K4M9X2QA', meta: '{"ref":"demo"}' }, { id: 1, ts: new Date().toISOString(), actor: 'customer', action: 'order.created', entity: 'order', entity_id: 'K4M9X2QA', meta: '{"qty":3}' }];
     if (p === '/admin/audit/verify') return { ok: true };

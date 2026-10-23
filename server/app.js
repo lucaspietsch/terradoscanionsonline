@@ -14,6 +14,8 @@ import { createPii } from './lib/pii.js';
 import { adminRoutes } from './routes/admin.js';
 import { authRoutes } from './routes/auth.js';
 import { catalogRoutes } from './routes/catalog.js';
+import { inviteRoutes } from './routes/invites.js';
+import { createInviteService } from './services/invites.js';
 import { publicRoutes } from './routes/public.js';
 import { staffRoutes } from './routes/staff.js';
 import { createMailer } from './services/mailer.js';
@@ -44,7 +46,8 @@ export async function buildApp({ config = loadConfig(), db = openDb(config.dbPat
 
   // Rate limit por rota (desligado nos testes, exceto quando pedido).
   const rl = (max, timeWindow) => (config.rateLimitDisabled ? {} : { rateLimit: { max, timeWindow } });
-  const ctx = { app, db, config, pii, audit, auth, orders, payments: provider, mailer, rl };
+  const invites = createInviteService({ db, config, auth, audit, mailer });
+  const ctx = { app, db, config, pii, audit, auth, orders, invites, payments: provider, mailer, rl };
 
   // ---------- Segurança ----------
   await app.register(helmet, {
@@ -126,6 +129,7 @@ export async function buildApp({ config = loadConfig(), db = openDb(config.dbPat
     await authRoutes(api, ctx);
     await staffRoutes(api, ctx);
     await catalogRoutes(api, ctx);
+    await inviteRoutes(api, ctx);
     await adminRoutes(api, ctx);
   }, { prefix: '/api' });
   await publicRoutes.redirects(app, ctx); // /q/:code
@@ -144,6 +148,7 @@ export async function buildApp({ config = loadConfig(), db = openDb(config.dbPat
   app.get('/pedido/:token', page('pedido.html'));
   app.get('/parceiros/:slug', page('parceiro.html'));
   app.get('/atrativos/:slug', page('atrativo.html'));
+  app.get('/convite/:token', page('convite.html'));
   app.get('/admin', page('admin/index.html'));
 
   // ---------- Jobs ----------

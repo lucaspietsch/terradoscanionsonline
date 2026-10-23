@@ -64,7 +64,7 @@ new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(fu
 const pageDefs = {
   index: ['index.html', 'js/home.js'], tirolesa: ['tirolesa.html', 'js/tirolesa.js'], atrativos: ['atrativos.html', 'js/attractions.js'], atrativo: ['atrativo.html', 'js/attraction.js'],
   parceiros: ['parceiros.html', 'js/partners.js'], parceiro: ['parceiro.html', 'js/partner.js'], produtos: ['produtos.html', 'js/products.js'], pedido: ['pedido.html', 'js/order.js'],
-  privacidade: ['privacidade.html', 'js/legal.js'], termos: ['termos.html', 'js/legal.js'], admin: ['admin/index.html', 'admin/admin.js'], 404: ['404.html', null],
+  convite: ['convite.html', 'js/convite.js'], privacidade: ['privacidade.html', 'js/legal.js'], termos: ['termos.html', 'js/legal.js'], admin: ['admin/index.html', 'admin/admin.js'], 404: ['404.html', null],
 };
 const pages = {};
 for (const [k, [html, js]] of Object.entries(pageDefs)) {
@@ -103,7 +103,7 @@ const mock = readFileSync(join(ROOT, 'scripts', 'preview', 'mock.js'), 'utf8');
 const json = (o) => JSON.stringify(o).replaceAll('<', '\\u003c');
 
 const TABS = [['Início', '/'], ['Produtos', '/produtos'], ['Tirolesa (via placa QR)', '/q/praca-01'], ['Atrativos', '/atrativos'], ['Página de atrativo', '/atrativos/serra-geral'],
-  ['Parceiros', '/parceiros'], ['Página de parceiro', '/parceiros/canyons-chalet'], ['Meu pedido', '__order'], ['Admin', '/admin'], ['Privacidade', '/privacidade'], ['Termos', '/termos']];
+  ['Parceiros', '/parceiros'], ['Página de parceiro', '/parceiros/canyons-chalet'], ['Meu pedido', '__order'], ['Convite de parceiro', '/convite/exemplo'], ['Painel', '/admin'], ['Privacidade', '/privacidade'], ['Termos', '/termos']];
 
 const parent = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Terra dos Cânions — pré-visualização completa</title>
@@ -115,6 +115,7 @@ const parent = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><m
 .tabs button,.dev button{background:transparent;border:1px solid #34573f;color:#cfe5d7;border-radius:999px;padding:.4rem .8rem;font:inherit;cursor:pointer}
 .tabs button.on,.dev button.on{background:#c85f1c;border-color:#c85f1c;color:#fff;font-weight:700}
 .dev{display:flex;gap:.3rem}
+.role button{border-color:#6b5320;color:#ffe6a8}.role button.on{background:#9a5b00;border-color:#9a5b00;color:#fff}
 .note{background:#3a2c10;color:#ffe6a8;padding:.4rem 1rem;font-size:.82rem}
 .stage{flex:1;min-height:0;display:flex;justify-content:center;align-items:stretch;padding:0;background:#14281e}
 .stage.mobile{padding:14px 0}
@@ -122,8 +123,9 @@ iframe{border:0;background:#fff;width:100%;height:100%}
 .stage.mobile iframe{width:390px;max-width:100%;border-radius:28px;border:8px solid #050d09;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 </style></head><body>
 <div class="bar"><b>Terra dos Cânions · pré-visualização</b><div class="tabs" id="tabs"></div>
-<div class="dev"><button data-m="mobile" class="on">📱 Celular</button><button data-m="desktop">🖥️ Computador</button></div></div>
-<div class="note">Dados 100% fictícios, só para você ver e clicar. Nada é salvo e o pagamento é simulado. O painel Admin abre já logado (no site real exige senha + 2FA).</div>
+<div class="dev"><button data-m="mobile" class="on">📱 Celular</button><button data-m="desktop">🖥️ Computador</button></div>
+<div class="dev role" title="O painel abre com este perfil"><button data-r="admin" class="on">Painel: Admin</button><button data-r="partner">Painel: Parceiro</button></div></div>
+<div class="note">Dados 100% fictícios, só para você ver e clicar. Nada é salvo e o pagamento é simulado. O painel abre já logado — alterne entre “Painel: Admin” e “Painel: Parceiro” para ver as duas visões (no site real exige login).</div>
 <div class="stage mobile" id="stage"><iframe id="f" title="Pré-visualização do site"></iframe></div>
 <script>window.__DATA=${json(data)};window.__ASSETS={img:${json(IMG)},qr:${json(sampleQr)}};window.__PAGES=${json(pages)};window.__ls={};</script>
 <script>${mock}</script>
@@ -132,7 +134,7 @@ iframe{border:0;background:#fff;width:100%;height:100%}
 var TABS=${json(TABS)};
 var f=document.getElementById('f'),tabs=document.getElementById('tabs');
 function pageFor(p){if(p==='/')return'index';if(p==='/tirolesa')return'tirolesa';if(p==='/produtos')return'produtos';if(p==='/atrativos')return'atrativos';if(p.indexOf('/atrativos/')===0)return'atrativo';
-if(p==='/parceiros')return'parceiros';if(p.indexOf('/parceiros/')===0)return'parceiro';if(p.indexOf('/pedido/')===0)return'pedido';if(p==='/privacidade')return'privacidade';if(p==='/termos')return'termos';if(p==='/admin')return'admin';return'404'}
+if(p==='/parceiros')return'parceiros';if(p.indexOf('/parceiros/')===0)return'parceiro';if(p.indexOf('/pedido/')===0)return'pedido';if(p.indexOf('/convite/')===0)return'convite';if(p==='/privacidade')return'privacidade';if(p==='/termos')return'termos';if(p==='/admin')return'admin';return'404'}
 window.__go=function(path){
  if(path.indexOf('/q/')===0){window.__ls.tdc_qr=JSON.stringify({q:path.slice(3),t:Date.now()});path='/tirolesa?q='+path.slice(3)}
  window.__current=path;var p=path.split('?')[0];f.srcdoc=window.__PAGES[pageFor(p)];
@@ -141,7 +143,9 @@ window.__go=function(path){
 TABS.forEach(function(t){var b=document.createElement('button');b.textContent=t[0];b.dataset.p=t[1];b.onclick=function(){
  if(t[1]==='__order'){var o=window.__lastOrder&&window.__lastOrder();if(o)window.__go('/pedido/'+o);else alert('Primeiro faça uma reserva na aba Tirolesa — o pedido aparece aqui.');return}
  window.__go(t[1])};tabs.appendChild(b)});
-document.querySelectorAll('.dev button').forEach(function(b){b.onclick=function(){document.getElementById('stage').className='stage '+b.dataset.m;document.querySelectorAll('.dev button').forEach(function(x){x.classList.toggle('on',x===b)})}});
+document.querySelectorAll('.dev:not(.role) button').forEach(function(b){b.onclick=function(){document.getElementById('stage').className='stage '+b.dataset.m;document.querySelectorAll('.dev:not(.role) button').forEach(function(x){x.classList.toggle('on',x===b)})}});
+window.__role='admin';
+document.querySelectorAll('.role button').forEach(function(b){b.onclick=function(){window.__role=b.dataset.r;document.querySelectorAll('.role button').forEach(function(x){x.classList.toggle('on',x===b)});window.__go('/admin')}});
 window.__go('/');
 })();
 </script></body></html>`;

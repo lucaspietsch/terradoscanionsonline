@@ -14,7 +14,8 @@
     "seed": "node scripts/seed.js",
     "create-admin": "node scripts/create-admin.js",
     "gen-secrets": "node scripts/gen-secrets.js",
-    "preview": "node scripts/preview/build.mjs dist/terra-dos-canions-preview.html"
+    "preview": "node scripts/preview/build.mjs dist/terra-dos-canions-preview.html",
+    "invite-partners": "node scripts/invite-partners.js"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.2",
