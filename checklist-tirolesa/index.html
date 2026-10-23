@@ -85,6 +85,7 @@
   td.NA{color:#7b8068;opacity:.8} td.NA::before{content:"NA"}
   td.F{background:repeating-linear-gradient(115deg,transparent 0 5px,rgba(138,154,59,.3) 5px 7px);color:transparent}
   td.S{background:repeating-linear-gradient(115deg,transparent 0 5px,rgba(224,136,58,.3) 5px 7px)}
+  td.R{background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(150,150,170,.25) 4px 5px)}
   td.nd{color:#555a40} td.nd::before{content:"·"}
   td.cp{opacity:.55} /* dia copiado do anterior */
   tr:hover td:not(.F):not(.S){background-color:rgba(138,154,59,.06)}
@@ -223,6 +224,39 @@ const FOLHAS = [
    Em grade, tudo que não for NC/NA nos dias operados é C.
    ============================================================ */
 const DADOS = {
+  "2026-01": {
+    status:"parcial", ultimoDia:31,
+    folgas:[6,13,20,27], semRegistro:[19], semOperacao:[], copiados:[],
+    semFolha:["tro","cadl"],
+    nota:"Janeiro: a folha do inclinômetro 1/2 (dias 1 a 12) não veio no PDF. Em janeiro havia uma única folha de cadeirinhas e o trolley ainda não tinha checklist próprio. Dia 19 sem registro em nenhuma folha.",
+    incl:{
+      14:[1.0,1.0,1.0,1.0,1.0,1.0,0.2,"","Lucas P"],
+      15:[1.0,0.9,1.1,1.0,1.0,0.9,0.1,"","Lucas P"],
+      16:[1.1,1.0,1.0,1.0,1.0,0.9,0.0,"","Lucas P"],
+      17:[1.0,1.0,1.0,1.1,0.9,1.0,0.0,"","Lucas P"],
+      18:[1.0,1.0,0.9,0.9,1.0,0.9,0.5,"","Gabriel",true],
+      21:[1.1,1.0,1.1,1.0,1.2,0.9,0.1,"","Lucas P"],
+      22:[1.1,0.9,1.0,0.9,1.0,0.9,0.0,"","Lucas P","trolley escrito 9.0 (assumi 0.0)"],
+      23:[1.0,0.9,1.0,1.0,1.0,1.0,0.0,"","Lucas P"],
+      24:[1.0,1.0,1.0,1.1,1.0,0.9,0.0,"","Lucas P"],
+      25:[1.0,1.0,0.9,1.0,0.9,1.0,0.1,"","Lucas P"],
+      26:[1.0,1.0,1.2,1.0,1.0,0.9,0.1,"","Lucas P"],
+      28:[1.0,0.8,0.9,0.8,1.0,0.9,0.1,"","Lucas P"],
+      29:[0.9,1.0,1.0,0.9,1.0,0.9,0.1,"","Lucas P"],
+      30:[1.0,1.0,0.9,1.1,1.0,1.1,0.0,"","Lucas P"],
+      31:[1.0,1.0,1.0,0.9,0.9,0.9,0.0,"","Lucas P"]
+    },
+    grade:{
+      rec:{ n:22, NAtodos:[17], resp:"Gabriel L. C. Krüger (Coordenador)", obs:[] },
+      lan:{ n:22, resp:"Gabriel L. C. Krüger (Coordenador)", obs:[] },
+      cadr:{ n:23, extra:{21:"Malhas rápidas Zips conquista",22:"Bolsas das Zips",23:"Protetores das fitas tubulares"},
+             NC:{11:[1,2]}, resp:"Gabriel L. C. Krüger (Coordenador)",
+             obs:[
+               {d:"01/01/2026", item:11, txt:"11 - Escada necessita ajuste (não impeditivo)"},
+               {d:"02/01/2026", item:11, txt:"11 - Escada necessita ajuste (não impeditivo)"}
+             ] }
+    }
+  },
   "2026-10": {
     status:"parcial", ultimoDia:21,
     folgas:[6,13,20], semOperacao:[], copiados:[],
@@ -327,9 +361,11 @@ function tabelaIncl(d){
     if(r){
       h += `<tr><td class="dia">${rot}</td><td class="hr">${esc(r[7]||"")}</td>`
         + r.slice(0,6).map(v=>`<td class="${classeCabo(v)}">${fmt(v,1)}</td>`).join("")
-        + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">conferir</span>`:""}</td></tr>`;
+        + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">conferir</span> ${esc(r[9]===true?"":r[9])}`:""}</td></tr>`;
     } else if((d.folgas||[]).includes(dia)){
       h += `<tr class="folga"><td class="dia">${rot}</td><td colspan="10">F O L G A</td></tr>`;
+    } else if((d.semRegistro||[]).includes(dia)){
+      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="10">SEM REGISTRO NA FOLHA</td></tr>`;
     } else if((d.semOperacao||[]).includes(dia)){
       h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="10">SEM OPERAÇÃO</td></tr>`;
     } else {
@@ -339,11 +375,13 @@ function tabelaIncl(d){
   return h + "</tbody></table>";
 }
 
+function textoItem(f,dados,it){ return ((dados&&dados.extra)||{})[it] || ITENS[f.form][it-1]; }
 function tabelaGrade(f, d){
-  const itens = ITENS[f.form];
   const dados = (d.grade||{})[f.id];
   const n = diasNoMes(mesSel);
   if(!dados) return vazioFolha(f);
+  const itens = []; const nI = dados.n || ITENS[f.form].length;
+  for(let i=1;i<=nI;i++) itens.push(textoItem(f,dados,i));
   let h = `<table><thead><tr><th class="nm">Item</th>`;
   for(let dia=1; dia<=n; dia++) h += `<th class="${(hojeKey[1]===mesSel&&hojeKey[2]===dia&&hojeKey[0]===ANO)?"hj":""}">${dia}</th>`;
   h += `</tr></thead><tbody>`;
@@ -354,6 +392,7 @@ function tabelaGrade(f, d){
     for(let dia=1; dia<=n; dia++){
       let cl, tit="";
       if((d.folgas||[]).includes(dia)) cl="F";
+      else if((d.semRegistro||[]).includes(dia)) cl="R";
       else if((d.semOperacao||[]).includes(dia)) cl="S";
       else if(dia>d.ultimoDia) cl="nd";
       else if(nc.includes(dia)) cl="NC";
@@ -368,6 +407,8 @@ function tabelaGrade(f, d){
 }
 
 function vazioFolha(f){
+  if((((DADOS[chave(mesSel)]||{}).semFolha)||[]).includes(f.id))
+    return `<div class="vazio"><b>${esc(f.nome)}</b><span>Esta folha não existe em ${MESES[mesSel-1]} (o formulário ainda não era usado neste mês).</span></div>`;
   return `<div class="vazio"><b>${esc(f.nome)}</b><span>Folha ainda não transcrita para ${MESES[mesSel-1]}.</span></div>`;
 }
 
@@ -383,6 +424,7 @@ function folhas_conteudo(){
   const d = DADOS[chave(mesSel)];
   const alvo = $("#conteudo");
   if(!d){ alvo.innerHTML = vazioMes(); legenda(f); return; }
+  if((d.semFolha||[]).includes(f.id)){ alvo.innerHTML = vazioFolha(f); legenda(f); return; }
   let h = d.nota?`<div class="aviso">${esc(d.nota)}</div>`:"";
   if(f.tipo==="incl"){
     h += (d.incl && Object.keys(d.incl).length) ? `<div class="cx">${tabelaIncl(d)}</div>` : vazioFolha(f);
@@ -397,7 +439,7 @@ function folhas_conteudo(){
 
 function abreNC(f,d,it,dia){
   const obs=((d.grade||{})[f.id].obs||[]).filter(o=>o.item===it);
-  $("#caixa").innerHTML = `<h2>Item ${it} · dia ${pad(dia)}/${pad(mesSel)}</h2><p style="margin:0 0 8px;font-size:.85rem">${esc(ITENS[f.form][it-1])}</p>`
+  $("#caixa").innerHTML = `<h2>Item ${it} · dia ${pad(dia)}/${pad(mesSel)}</h2><p style="margin:0 0 8px;font-size:.85rem">${esc(textoItem(f,(d.grade||{})[f.id],it))}</p>`
     + (obs.length? obs.map(o=>`<div class="ob-i"><b>${esc(o.d)}</b> · ${esc(o.txt)}<small>${o.prazo?`Prazo: ${esc(o.prazo)} `:""}${o.resp?`· ${esc(o.resp)} `:""}${o.real?`· corrigido ${esc(o.real)}`:""}</small></div>`).join("") : `<div class="ob-i">Sem observação registrada na folha.</div>`)
     + `<button class="fechar" id="fx">Fechar</button>`;
   $("#janela").classList.add("aberta"); $("#fx").onclick=fecha;
