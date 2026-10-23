@@ -242,6 +242,54 @@ async function qr(root) {
       { label: 'Ativa', render: (r) => h('button', { class: `btn btn-small ${r.active ? 'btn-dark' : 'btn-primary'}`, onclick: async () => { await api(`/admin/qr/${r.id}`, { method: 'PATCH', body: { active: !r.active } }); reload(); } }, r.active ? 'Ativa' : 'Inativa') }], rows));
 }
 
+
+// ---------------- Produtos dos parceiros (usado pelo admin e pelo próprio parceiro) ----------------
+const KIND_LABEL = { hospedagem: 'Hospedagem', passeio: 'Passeio', refeicao: 'Gastronomia', experiencia: 'Experiência', servico: 'Serviço', produto: 'Produto' };
+const ATTR_OPTIONS = [['aparados-da-serra', 'Aparados da Serra'], ['serra-geral', 'Serra Geral'], ['parque-estadual-do-tainhas', 'Parque Estadual do Tainhas'], ['cascata-velha-ouro-verde', 'Cascata Velha — Ouro Verde'], ['costao-do-cambara', 'Costão do Cambará']];
+const parsePrice = (v) => (v.trim() === '' ? null : Math.round(Number(v.replace(',', '.')) * 100));
+
+function productsPanel(ep) {
+  const box = h('div', { class: 'stack' });
+  const msg = h('div');
+  let editing = null;
+  async function render() {
+    let rows;
+    try { rows = await ep.list(); } catch (e) { return fail(clear(box))(e); }
+    const f = editing ? rows.find((r) => r.id === editing) : null;
+    const input2 = (id, v = '', extra = {}) => h('input', { id, value: v, ...extra });
+    const form = h('form', { class: 'card stack', onsubmit: async (e) => {
+      e.preventDefault();
+      const body = { kind: val('pr-kind'), name: val('pr-name'), description: val('pr-desc'), priceCents: parsePrice(val('pr-price')), priceNote: val('pr-note'), attractionSlug: val('pr-attr') || null, published: $('#pr-pub').checked };
+      try { if (editing) await ep.update(editing, body); else await ep.create(body); editing = null; render(); } catch (ex) { fail(msg)(ex); }
+    } },
+      h('h3', {}, editing ? 'Editar produto' : 'Novo produto'),
+      h('div', { class: 'inline-form' },
+        field('Tipo', h('select', { id: 'pr-kind' }, Object.entries(KIND_LABEL).map(([k, v]) => h('option', { value: k, selected: f?.kind === k }, v))), 'pr-kind'),
+        field('Nome', input2('pr-name', f?.name ?? '', { required: true, maxlength: 100 }), 'pr-name'),
+        field('Preço de referência (R$) — vazio = "Consulte"', input2('pr-price', f?.priceCents != null ? (f.priceCents / 100).toFixed(2).replace('.', ',') : '', { inputmode: 'decimal' }), 'pr-price'),
+        field('Unidade (ex.: por noite, por pessoa)', input2('pr-note', f?.priceNote ?? '', { maxlength: 40 }), 'pr-note'),
+        field('Ligado ao atrativo', h('select', { id: 'pr-attr' }, h('option', { value: '' }, '— nenhum —'), ATTR_OPTIONS.map(([k, v]) => h('option', { value: k, selected: f?.attractionSlug === k }, v))), 'pr-attr')),
+      field('Descrição', h('textarea', { id: 'pr-desc', rows: 3, maxlength: 800 }, f?.description ?? ''), 'pr-desc'),
+      h('label', { class: 'check' }, h('input', { id: 'pr-pub', type: 'checkbox', checked: f ? f.published : true }), 'Publicado no site'),
+      h('div', { class: 'actions' }, h('button', { class: 'btn btn-dark btn-small' }, editing ? 'Salvar alterações' : 'Adicionar produto'),
+        editing ? h('button', { class: 'btn btn-ghost btn-small', type: 'button', onclick: () => { editing = null; render(); } }, 'Cancelar') : null));
+    clear(box).append(msg, table([{ label: 'Produto', key: 'name' }, { label: 'Tipo', render: (r) => KIND_LABEL[r.kind] }, { label: 'Preço', render: (r) => (r.priceCents == null ? 'Consulte' : `${brl(r.priceCents)} ${r.priceNote}`) },
+      { label: 'Publicado', render: (r) => h('button', { class: `btn btn-small ${r.published ? 'btn-dark' : 'btn-primary'}`, type: 'button', onclick: async () => { try { await ep.update(r.id, { published: !r.published }); render(); } catch (ex) { fail(msg)(ex); } } }, r.published ? 'Sim' : 'Rascunho') },
+      { label: '', render: (r) => h('div', { class: 'actions' }, h('button', { class: 'btn btn-ghost btn-small', type: 'button', onclick: () => { editing = r.id; render(); } }, 'Editar'),
+        h('button', { class: 'btn btn-ghost btn-small', type: 'button', onclick: async () => { if (confirm(`Remover "${r.name}"?`)) { try { await ep.remove(r.id); render(); } catch (ex) { fail(msg)(ex); } } } }, 'Remover')) }], rows), form);
+  }
+  render();
+  return box;
+}
+const adminProducts = (pid) => ({
+  list: () => api(`/admin/partners/${pid}/products`), create: (b) => api(`/admin/partners/${pid}/products`, { method: 'POST', body: b }),
+  update: (id, b) => api(`/admin/products/${id}`, { method: 'PATCH', body: b }), remove: (id) => api(`/admin/products/${id}`, { method: 'DELETE' }),
+});
+const partnerProducts = {
+  list: () => api('/partner/products'), create: (b) => api('/partner/products', { method: 'POST', body: b }),
+  update: (id, b) => api(`/partner/products/${id}`, { method: 'PATCH', body: b }), remove: (id) => api(`/partner/products/${id}`, { method: 'DELETE' }),
+};
+
 // ---------------- Parceiros ----------------
 async function partners(root) {
   const rows = await api('/admin/partners');
@@ -263,7 +311,8 @@ async function partners(root) {
         h('div', { class: 'row' }, field('Plano', h('select', { id: 'pe-plan' }, ['fundador', 'gratuito', 'pago'].map((x) => h('option', { value: x, selected: x === p.plan }, x))), 'pe-plan'),
           field('Cortesia até', input('pe-free', { type: 'date', value: p.free_until ?? '' }), 'pe-free'), f('sort_order', 'Ordem', { type: 'number' })),
         h('label', { class: 'check' }, input('pe-featured', { type: 'checkbox', checked: Boolean(p.featured) }), 'Destaque'), h('label', { class: 'check' }, input('pe-published', { type: 'checkbox', checked: Boolean(p.published) }), 'Publicado no site'),
-        h('button', { class: 'btn btn-primary' }, 'Salvar')));
+        h('button', { class: 'btn btn-primary' }, 'Salvar')),
+      h('h3', {}, 'Produtos deste parceiro'), productsPanel(adminProducts(p.id)));
     dlg.showModal();
   };
   root.append(h('h1', {}, 'Parceiros'), msg,
@@ -376,7 +425,9 @@ async function mine(root) {
       try { await api('/partner/me', { method: 'PATCH', body: { tagline: val('m-tagline'), description: val('m-description'), whatsapp: val('m-whatsapp'), phone: val('m-phone'), website: val('m-website'), instagram: val('m-instagram'), address: val('m-address') } }); flash(msg, 'Vitrine atualizada.'); } catch (ex) { fail(msg)(ex); }
     } }, f('tagline', 'Frase de destaque', { maxlength: 140 }), field('Descrição', h('textarea', { id: 'm-description', rows: 5, maxlength: 1500 }, p.description), 'm-description'),
       h('div', { class: 'row' }, f('whatsapp', 'WhatsApp (com DDD)'), f('phone', 'Telefone')), h('div', { class: 'row' }, f('website', 'Site (https://…)'), f('instagram', 'Instagram')), f('address', 'Endereço'),
-      h('button', { class: 'btn btn-primary' }, 'Salvar')));
+      h('button', { class: 'btn btn-primary' }, 'Salvar')),
+    h('h2', { class: 'sec' }, 'Seus produtos e serviços'),
+    h('p', { class: 'muted' }, 'Aparecem na sua página e no catálogo do site. Use preço de referência (ou deixe vazio para "Consulte").'), productsPanel(partnerProducts));
 }
 
 // ---------------- Boot ----------------

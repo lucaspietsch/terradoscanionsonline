@@ -5,23 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tirolesa Mais Alta das Américas — Ingressos online | Cambará do Sul</title>
 <meta name="description" content="Compre online o ingresso da Tirolesa Mais Alta das Américas, no Cânion Fortaleza (Cambará do Sul, RS). Pix com aprovação na hora e QR Code no celular.">
-<meta name="theme-color" content="#163a2b">
-<meta property="og:title" content="Tirolesa Mais Alta das Américas — Ingressos online">
-<meta property="og:description" content="720 m de descida sobre o Cânion Fortaleza. Reserve sua data e pague com Pix.">
+<meta name="theme-color" content="#0c261c">
+<meta property="og:title" content="Tirolesa Mais Alta das Américas — Ingressos online | Cambará do Sul">
+<meta property="og:description" content="Compre online o ingresso da Tirolesa Mais Alta das Américas, no Cânion Fortaleza (Cambará do Sul, RS). Pix com aprovação na hora e QR Code no celular.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
+
 <main id="conteudo">
-  <section class="hero">
+  <section class="hero compact" aria-labelledby="h1">
+  <img class="hero-layer sky" src="/img/hero/sky.svg" alt="" width="1600" height="900" fetchpriority="high">
+  <img class="hero-layer far" src="/img/hero/far.svg" alt="" width="1600" height="900">
+  <img class="hero-layer mid" src="/img/hero/mid.svg" alt="" width="1600" height="900">
+  <img class="hero-layer near" src="/img/hero/near.svg" alt="" width="1600" height="900">
+  <img class="hero-layer zip" src="/img/hero/zip.svg" alt="" width="1600" height="900">
     <div class="wrap">
-      <span class="eyebrow">Cânion Fortaleza · Parque Nacional da Serra Geral</span>
-      <h1>Tirolesa Mais Alta das Américas</h1>
-      <p>720 metros de descida a cerca de 750 m do chão. Garanta sua vaga em poucos minutos.</p>
+      <span class="eyebrow"><span class="dot"></span>Cânion Fortaleza · Parque Nacional da Serra Geral</span>
+      <h1 id="h1">Tirolesa Mais Alta das <em>Américas</em></h1>
+      <p class="lead">Mais de 700 metros de descida sobre o cânion. Garanta sua vaga em poucos minutos, direto do celular.</p>
       <div id="promo"></div>
-      <div class="actions"><a class="btn btn-primary" href="#reservar">Escolher data e horário</a></div>
+      <div class="actions"><a class="btn btn-primary" href="#reservar">Escolher data e horário</a><a class="btn btn-glass" href="/atrativos/serra-geral">Sobre o Serra Geral</a></div>
     </div>
   </section>
 
@@ -32,21 +38,21 @@
 
   <section id="reservar" aria-labelledby="r-h">
     <div class="narrow">
-      <h2 id="r-h">Reserve seu ingresso</h2>
+      <div class="section-head reveal"><span class="kicker">Reserva online</span><h2 id="r-h">Reserve seu ingresso</h2></div>
       <div id="booking" class="booking" aria-live="polite"><p class="booking-step muted">Carregando horários…</p></div>
     </div>
   </section>
 
   <section class="section-alt" aria-labelledby="h-h">
-    <div class="narrow">
-      <h2 id="h-h">Como funciona</h2>
+    <div class="wrap">
+      <div class="section-head reveal"><h2 id="h-h">Como funciona</h2></div>
       <ol class="steps" id="how"></ol>
     </div>
   </section>
 
   <section aria-labelledby="f-h">
     <div class="narrow">
-      <h2 id="f-h">Perguntas frequentes</h2>
+      <div class="section-head reveal"><h2 id="f-h">Perguntas frequentes</h2></div>
       <div id="faq"></div>
     </div>
   </section>
@@ -54,12 +60,12 @@
 
 <dialog id="waiver-dialog" class="dialog" aria-labelledby="waiver-title">
   <div class="body"><h2 id="waiver-title">Termo de responsabilidade</h2><div id="waiver-text"></div></div>
-  <form method="dialog" class="foot"><button class="btn btn-dark">Fechar</button></form>
+  <form method="dialog" class="foot"><button class="btn btn-dark btn-small">Fechar</button></form>
 </dialog>
 
 <div class="sticky-cta" id="sticky" hidden>
   <div class="from"><span class="small muted">a partir de</span><b id="sticky-price"></b></div>
-  <a class="btn btn-primary" href="#reservar">Reservar</a>
+  <a class="btn btn-primary btn-small" href="#reservar">Reservar</a>
 </div>
 <script type="module" src="/js/tirolesa.js"></script>
 </body>

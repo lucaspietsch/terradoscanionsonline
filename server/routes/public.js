@@ -10,7 +10,7 @@ import { orderBody, quoteBody, resendBody } from '../schemas.js';
 const partnerPublic = (p) => ({
   slug: p.slug, name: p.name, category: p.category, tagline: p.tagline, description: p.description,
   whatsapp: p.whatsapp, phone: p.phone, website: p.website, instagram: p.instagram, address: p.address,
-  featured: Boolean(p.featured), plan: p.plan,
+  featured: Boolean(p.featured), plan: p.plan, attractionSlug: p.attraction_slug,
 });
 
 export async function publicRoutes(api, { db, config, orders, payments, rl, audit }) {
@@ -120,7 +120,11 @@ export async function publicRoutes(api, { db, config, orders, payments, rl, audi
   api.get('/partners/:slug', async (req) => {
     const p = db.prepare('SELECT * FROM partners WHERE slug = ? AND published = 1').get(req.params.slug);
     if (!p) throw new OrderError('Parceiro não encontrado.', 'not_found', 404);
-    return partnerPublic(p);
+    const products = db
+      .prepare('SELECT id, kind, name, description, price_cents, price_note, attraction_slug FROM partner_products WHERE partner_id = ? AND published = 1 ORDER BY sort_order, name')
+      .all(p.id)
+      .map((r) => ({ id: r.id, kind: r.kind, name: r.name, description: r.description, priceCents: r.price_cents, priceNote: r.price_note, attractionSlug: r.attraction_slug }));
+    return { ...partnerPublic(p), attractionSlug: p.attraction_slug, products };
   });
 
   // ---- Webhook de pagamento ----

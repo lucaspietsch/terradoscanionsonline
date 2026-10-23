@@ -13,6 +13,7 @@ import { createAudit } from './lib/audit.js';
 import { createPii } from './lib/pii.js';
 import { adminRoutes } from './routes/admin.js';
 import { authRoutes } from './routes/auth.js';
+import { catalogRoutes } from './routes/catalog.js';
 import { publicRoutes } from './routes/public.js';
 import { staffRoutes } from './routes/staff.js';
 import { createMailer } from './services/mailer.js';
@@ -124,6 +125,7 @@ export async function buildApp({ config = loadConfig(), db = openDb(config.dbPat
     await publicRoutes(api, ctx);
     await authRoutes(api, ctx);
     await staffRoutes(api, ctx);
+    await catalogRoutes(api, ctx);
     await adminRoutes(api, ctx);
   }, { prefix: '/api' });
   await publicRoutes.redirects(app, ctx); // /q/:code
@@ -141,6 +143,7 @@ export async function buildApp({ config = loadConfig(), db = openDb(config.dbPat
   const page = (name) => (req, reply) => reply.type('text/html; charset=utf-8').sendFile(name);
   app.get('/pedido/:token', page('pedido.html'));
   app.get('/parceiros/:slug', page('parceiro.html'));
+  app.get('/atrativos/:slug', page('atrativo.html'));
   app.get('/admin', page('admin/index.html'));
 
   // ---------- Jobs ----------

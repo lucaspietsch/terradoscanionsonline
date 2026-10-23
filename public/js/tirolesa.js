@@ -1,4 +1,4 @@
-import { $, ApiError, api, boot, brl, clear, currentQr, dayParts, fmtDay, h } from './common.js';
+import { $, ApiError, FACT_ICON, api, boot, brl, clear, currentQr, dayParts, fmtDay, h, icon } from './common.js';
 boot();
 
 const SLUG = 'tirolesa-mais-alta-das-americas';
@@ -9,7 +9,7 @@ let slots = [];
 const state = { day: null, slotId: null, qty: 1, coupon: '', couponApplied: '', participants: [{ name: '', birthDate: '', weightKg: '' }], quote: null, idemKey: null, idemSig: null, busy: false };
 
 function renderStatic() {
-  $('#facts').append(...product.facts.map((f) => h('div', { class: 'fact' }, h('b', {}, f.value), h('span', {}, f.label))));
+  $('#facts').append(...product.facts.map((f) => h('div', { class: 'fact' }, icon(FACT_ICON[f.label] || 'info'), h('b', {}, f.value), h('span', {}, f.label))));
   $('#place').textContent = product.place;
   $('#how').append(...product.howItWorks.map((s) => h('li', {}, s)));
   $('#faq').append(...product.faq.map((f) => h('details', {}, h('summary', {}, f.q), h('p', {}, f.a))));
@@ -25,7 +25,7 @@ async function renderPromo() {
   try {
     const q = await api(`/products/${SLUG}/quote`, { method: 'POST', body: { qty: 1, qr } });
     if (q.discountCents > 0) {
-      $('#promo').append(h('div', { class: 'promo' }, h('span', { 'aria-hidden': 'true' }, '🎟️'),
+      $('#promo').append(h('div', { class: 'promo' }, icon('ticket'),
         h('span', {}, 'Você chegou pela nossa placa: ', h('strong', {}, `${brl(q.discountCents)} de desconto`), ' aplicado automaticamente por ingresso.')));
     }
   } catch { /* sem promoção */ }

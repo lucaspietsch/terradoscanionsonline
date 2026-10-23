@@ -1,4 +1,4 @@
-body.admin { background: var(--mist); }
+body.admin { background: var(--mist); padding-top: 0; }
 .topbar { background: var(--forest-2); color: #fff; position: sticky; top: 0; z-index: 30; }
 .topbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding-block: .5rem; }
 .topbar strong { font-family: var(--display); }

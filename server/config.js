@@ -4,7 +4,6 @@ import { dirname, join } from 'node:path';
 
 const env = process.env;
 const isProd = env.NODE_ENV === 'production';
-const isTest = env.NODE_ENV === 'test';
 
 function int(name, def, { min = -Infinity, max = Infinity } = {}) {
   const raw = env[name];
@@ -61,7 +60,7 @@ export function loadConfig(overrides = {}) {
   if (production && paymentProvider === 'mock') {
     throw new Error('PAYMENT_PROVIDER=mock é proibido em produção.');
   }
-  if (paymentProvider === 'mercadopago' && !(e.MP_ACCESS_TOKEN && e.MP_WEBHOOK_SECRET) && !isTest) {
+  if (paymentProvider === 'mercadopago' && !(e.MP_ACCESS_TOKEN && e.MP_WEBHOOK_SECRET) && nodeEnv !== 'test') {
     throw new Error('MP_ACCESS_TOKEN e MP_WEBHOOK_SECRET são obrigatórios com PAYMENT_PROVIDER=mercadopago.');
   }
 
@@ -96,8 +95,9 @@ export function loadConfig(overrides = {}) {
     requireTotpForStaff: bool('REQUIRE_TOTP', production),
     smtpUrl: e.SMTP_URL || '',
     mailFrom: e.MAIL_FROM || 'Terra dos Cânions Online <nao-responda@localhost>',
-    rateLimitDisabled: isTest && !bool('TEST_RATE_LIMIT', false),
-    logLevel: e.LOG_LEVEL || (isTest ? 'silent' : 'info'),
+    // Em testes o rate limit fica desligado (exceto quando o teste pede TEST_RATE_LIMIT=1).
+    rateLimitDisabled: nodeEnv === 'test' && !['1', 'true'].includes(String(e.TEST_RATE_LIMIT ?? '').toLowerCase()),
+    logLevel: e.LOG_LEVEL || (nodeEnv === 'test' ? 'silent' : 'info'),
     isProd,
   };
 }

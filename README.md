@@ -10,7 +10,8 @@ vitrine de parceiros e painel de gestão. Pensado para o fluxo **QR Code da plac
 | **Venda da tirolesa** | Escolha de data/horário com vagas em tempo real, participantes (nome, nascimento, peso), Pix e cartão, QR Code por ingresso, página do pedido que atualiza sozinha. |
 | **Placas com QR** | Cada placa tem um link curto e estável `/q/<código>` (gera QR leve e fácil de ler). Conta leituras, aplica cupom automático e mostra no painel leituras → vendas → conversão por placa. Dá para trocar cupom/destino sem reimprimir. |
 | **Descontos** | Cupons (% ou R$), desconto automático de grupo, cupom da placa, cupom de parceiro (atribui a venda ao parceiro). **A melhor oferta vence; nada acumula.** |
-| **Parceiros** | Os 15 parceiros fundadores já cadastrados (vitrine + perfil `/parceiros/<slug>`), com plano `fundador`, campo **"cortesia até"** (meses grátis) e login próprio: o parceiro edita a própria vitrine e vê só números agregados das vendas dele. |
+| **Parceiros** | Os 15 parceiros fundadores já cadastrados, com plano `fundador`, campo **"cortesia até"** (meses grátis) e login próprio: o parceiro edita a própria vitrine e vê só números agregados das vendas dele (nunca dados de clientes). |
+| **Páginas de produtos** | Ao clicar num **parceiro** (`/parceiros/<slug>`) abre a página dele com os produtos/serviços (hospedagem, passeios, gastronomia…), filtros por tipo e botão "Pedir informações" no WhatsApp com a mensagem já pronta. Ao clicar num **atrativo** (`/atrativos/<slug>`) abre a página com destaques, dicas, produtos ligados a ele (a Tirolesa aparece no Serra Geral, com compra direta), guias/agências e os outros atrativos. `/produtos` reúne tudo num catálogo. Parceiros e admin cadastram os produtos no painel. |
 | **Atrativos** | Aparados da Serra, Serra Geral, Tainhas, Cascata Velha / Ouro Verde, Costão do Cambará. |
 | **Operação** | Check-in por câmera/leitor de QR (bloqueia reuso, dia errado, QR falsificado), ocupação por horário, cancelamento com estorno, geração de horários em lote. |
 
@@ -21,7 +22,8 @@ npm install
 npm run seed                      # produto, 15 parceiros, horários/cupom/placa de demonstração
 npm run create-admin -- voce@email.com "Seu Nome"   # pede a senha e mostra o QR do 2FA
 npm run dev                       # http://localhost:3000  (pagamento SIMULADO)
-npm test                          # 35 testes
+npm test                          # 41 testes
+npm run preview                   # gera dist/terra-dos-canions-preview.html: um arquivo só, abre com duplo clique (dados fictícios)
 ```
 
 Em desenvolvimento o pagamento é simulado (botão "Simular pagamento aprovado" na página do pedido) e a chave-mestra
@@ -54,7 +56,7 @@ fica em `data/.dev-master-key`. Painel: `/admin`.
 2. **Dados da tirolesa** (`server/content/tirolesa.js`): extensão 720 m, ~750 m de altura, 6 cabos, 40–110 kg etc. vêm de matérias sobre a inauguração (2023). Confirme com o operador; **peso e preço são editáveis no painel**.
 3. **Textos jurídicos** (`public/termos.html`, `public/privacidade.html` e o termo de responsabilidade em `tirolesa.js`) são **rascunhos**: preencha razão social/CNPJ/DPO e passe por advogado. Ao alterar o termo, mude `waiver_version`.
 4. **Mercado Pago**: o adaptador segue a documentação pública, mas **não foi testado contra a API real** aqui (só com simulação). Valide Pix, cartão, webhook e estorno em modo teste.
-5. **Perfis dos parceiros**: só nome/categoria foram cadastrados (não inventei telefone, endereço ou descrição). Preencha pelo painel ou deixe cada parceiro preencher no login dele.
+5. **Perfis e produtos dos parceiros**: só nome/categoria foram cadastrados (não inventei telefone, endereço, descrição, produtos nem preços). No painel, em *Parceiros*, preencha o perfil e os produtos de cada um — ou crie o login do parceiro em *Usuários* para ele mesmo cadastrar. Os produtos de exemplo "(exemplo)" só existem no modo demonstração do `npm run seed`.
 6. **Fotos**: o site usa ilustração SVG (`public/img/canyon.svg`). Coloque fotos reais (com permissão) em `public/img/`.
 7. **E-mail transacional**: configure `SMTP_URL`; sem isso o cliente depende de guardar o link do pedido.
 8. **Informações dos parques** (horários, valores de entrada) foram deliberadamente omitidas: mudam e precisam ser confirmadas com ICMBio/SEMA/gestores.
@@ -63,9 +65,9 @@ fica em `data/.dev-master-key`. Painel: `/admin`.
 
 ```
 server/        API Fastify (app.js, routes/, services/, lib/, migrations/)
-public/        Site e painel (HTML/CSS/JS sem build; CSP estrita)
-scripts/       seed, create-admin, gen-secrets
-test/          35 testes (preços, criptografia, fluxo de pedido, segurança)
+public/        Site e painel (HTML/CSS/JS sem build; CSP estrita; fontes Inter e Fraunces hospedadas aqui)
+scripts/       seed, create-admin, gen-secrets, preview/ (gerador do arquivo de pré-visualização)
+test/          41 testes (preços, criptografia, fluxo de pedido, segurança, catálogo de produtos)
 ```
 
 ## Próximos passos sugeridos

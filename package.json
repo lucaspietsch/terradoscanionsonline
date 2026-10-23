@@ -13,7 +13,8 @@
     "test": "node --test --test-concurrency=1 test/*.test.js",
     "seed": "node scripts/seed.js",
     "create-admin": "node scripts/create-admin.js",
-    "gen-secrets": "node scripts/gen-secrets.js"
+    "gen-secrets": "node scripts/gen-secrets.js",
+    "preview": "node scripts/preview/build.mjs dist/terra-dos-canions-preview.html"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.2",
@@ -25,5 +26,8 @@
     "nodemailer": "^10.0.14",
     "qrcode": "^1.5.4",
     "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

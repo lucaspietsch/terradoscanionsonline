@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { attractions } from './content/attractions.js';
 
 const trimmed = (min, max) => z.string().trim().min(min).max(max);
 const dateStr = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
@@ -162,3 +163,27 @@ export const orderListQuery = z.object({
   q: z.string().trim().max(160).optional(),
   limit: z.coerce.number().int().min(1).max(200).default(50),
 }).strict();
+
+// ---- Produtos dos parceiros ----
+export const PRODUCT_KINDS = ['hospedagem', 'passeio', 'refeicao', 'experiencia', 'servico', 'produto'];
+const attractionSlug = z.enum(attractions.map((a) => a.slug)).nullable();
+const productFields = {
+  kind: z.enum(PRODUCT_KINDS),
+  name: trimmed(2, 100),
+  description: z.string().trim().max(800),
+  priceCents: z.number().int().min(0).max(5_000_000).nullable(),
+  priceNote: z.string().trim().max(40),
+  attractionSlug,
+  published: z.boolean(),
+  sortOrder: z.number().int().min(0).max(10000),
+};
+export const partnerProductBody = z.object({
+  ...productFields,
+  description: productFields.description.default(''),
+  priceCents: productFields.priceCents.default(null),
+  priceNote: productFields.priceNote.default(''),
+  attractionSlug: attractionSlug.default(null),
+  published: productFields.published.default(true),
+  sortOrder: productFields.sortOrder.default(100),
+}).strict();
+export const partnerProductPatch = z.object(productFields).partial().strict();

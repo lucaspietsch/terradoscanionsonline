@@ -39,6 +39,9 @@ export function seed(db, { demo = true } = {}) {
     );
     FOUNDING_PARTNERS.forEach(([slug, name, cat], i) => insP.run(slug, name, cat, (i + 1) * 10));
 
+    // Costão do Cambará: o parque rural e a pousada são o mesmo empreendimento.
+    db.prepare("UPDATE partners SET attraction_slug = 'costao-do-cambara' WHERE slug = 'pousada-costao-do-cambara'").run();
+
     db.prepare("INSERT OR IGNORE INTO discount_rules (id, label, min_qty, percent, active) VALUES (1, 'Desconto de grupo (4+ ingressos)', 4, 10, ?)").run(demo ? 1 : 0);
 
     if (demo) {
@@ -48,6 +51,23 @@ export function seed(db, { demo = true } = {}) {
       for (let i = 1; i <= 60; i++) {
         const day = new Date(start + i * 86400000).toISOString().slice(0, 10);
         for (const t of ['09:00', '10:30', '13:00', '14:30', '16:00']) ins.run(pid, day, t, 18);
+      }
+      // Produtos de EXEMPLO (só no modo demonstração) para você ver as páginas preenchidas. Nomes e valores são fictícios.
+      const demoProducts = [
+        ['canyons-chalet', 'hospedagem', 'Chalé para casal (exemplo)', 'Texto de exemplo: assim aparece a descrição de uma acomodação.', 48000, 'por noite', null, '5500000000'],
+        ['canyons-chalet', 'hospedagem', 'Chalé família (exemplo)', 'Texto de exemplo para uma acomodação maior.', 72000, 'por noite', null, null],
+        ['guia-aparados-da-serra', 'passeio', 'Trilha guiada no Itaimbezinho (exemplo)', 'Texto de exemplo: passeio guiado com saída pela manhã.', 25000, 'por pessoa', 'aparados-da-serra', '5500000000'],
+        ['guia-aparados-da-serra', 'passeio', 'Cachoeira do Tigre Preto (exemplo)', 'Texto de exemplo de um passeio guiado.', null, '', 'serra-geral', null],
+        ['duperau-gastro-pub', 'refeicao', 'Hambúrguer da casa (exemplo)', 'Texto de exemplo de um prato do cardápio.', 4200, 'por prato', null, '5500000000'],
+        ['pousada-costao-do-cambara', 'experiencia', 'Cavalgada das cachoeiras (exemplo)', 'Texto de exemplo: passeio a cavalo pelas cachoeiras da fazenda.', 18000, 'por pessoa', 'costao-do-cambara', '5500000000'],
+      ];
+      const insProd = db.prepare('INSERT INTO partner_products (partner_id, kind, name, description, price_cents, price_note, attraction_slug) SELECT id, ?, ?, ?, ?, ?, ? FROM partners WHERE slug = ?');
+      const setWa = db.prepare("UPDATE partners SET whatsapp = ? WHERE slug = ? AND whatsapp = ''");
+      if (!db.prepare('SELECT 1 FROM partner_products LIMIT 1').get()) {
+        for (const [slug, kind, name, desc, price, note, attr, wa] of demoProducts) {
+          insProd.run(kind, name, desc, price, note, attr, slug);
+          if (wa) setWa.run(wa, slug);
+        }
       }
       db.prepare("INSERT OR IGNORE INTO coupons (code, label, kind, value, partner_id) VALUES ('PLACA10', 'Desconto exclusivo das placas', 'percent', 10, NULL)").run();
       const cid = db.prepare("SELECT id FROM coupons WHERE code = 'PLACA10'").get().id;

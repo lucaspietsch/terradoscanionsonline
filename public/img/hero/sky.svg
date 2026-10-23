@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b2433"/><stop offset=".38" stop-color="#1d4a5c"/><stop offset=".62" stop-color="#4f8a8a"/><stop offset=".78" stop-color="#e8b27c"/><stop offset="1" stop-color="#f6d2a2"/></linearGradient>
+<radialGradient id="s" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff4d6" stop-opacity=".95"/><stop offset=".25" stop-color="#ffd9a0" stop-opacity=".6"/><stop offset="1" stop-color="#ffb877" stop-opacity="0"/></radialGradient>
+<filter id="b"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#g)"/>
+<circle cx="1180" cy="560" r="420" fill="url(#s)"/>
+<circle cx="1180" cy="560" r="44" fill="#fff6e0"/>
+<g fill="#ffffff" opacity=".16" filter="url(#b)"><ellipse cx="340" cy="330" rx="260" ry="26"/><ellipse cx="720" cy="250" rx="320" ry="22"/><ellipse cx="1260" cy="380" rx="240" ry="20"/></g>
+<g fill="#fff" opacity=".7"><circle cx="180" cy="90" r="1.6"/><circle cx="420" cy="150" r="1.2"/><circle cx="640" cy="60" r="1.6"/><circle cx="900" cy="120" r="1.2"/><circle cx="1380" cy="80" r="1.6"/><circle cx="1500" cy="190" r="1.2"/><circle cx="260" cy="230" r="1"/></g>
+</svg>
