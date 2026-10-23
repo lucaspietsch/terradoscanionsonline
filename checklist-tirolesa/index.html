@@ -235,6 +235,63 @@ const FOLHAS = [
    ============================================================ */
 const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
 const DADOS = {
+  "2026-04": {
+    status:"ok", ultimoDia:30,
+    folgas:[7,14,28], semOperacao:[], copiados:[],
+    nota:"Abril: 21/04 (terça, feriado de Tiradentes) teve operação normal, sem folga.",
+    incl:{
+      1:[1.0,0.9,0.9,0.9,1.0,0.9,0.05,"","Lucas P"],
+      2:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      3:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      4:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      5:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      6:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      8:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      9:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      10:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      11:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      12:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      13:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      15:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      16:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      17:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      18:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      19:[1.0,1.0,1.0,1.0,1.0,1.0,0.2,"","Lucas P"],
+      20:[0.9,1.0,0.9,1.0,0.9,1.0,0.2,"","Lucas P"],
+      21:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      22:[0.9,0.9,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      23:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      24:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      25:[1.1,1.0,1.0,1.2,1.0,0.9,0.05,"","Lucas K","cabo 6 escrito 0.09"],
+      26:[1.1,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas K"],
+      27:[1.0,1.0,0.9,1.0,1.0,1.0,0.05,"","Lucas K"],
+      29:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas K"],
+      30:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"tro-sgv", n:23, extra:{23:"O clip de fim de curso está fixado em torque de 64nm?"}, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:24, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Oxidação em cabo de ancoragem",24:"Tecnil danificado cabos 3, 4 e 6"},
+        de:{23:1,24:1},
+        NC:{23:[...R(1,6),...R(8,13),...R(15,20)],24:[...R(1,6),...R(8,13),...R(15,21)]},
+        obs:[
+          {d:"26/03/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3", prazo:"26/04/2026", resp:"Lucas R. P."},
+          {d:"27/03/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6", prazo:"27/04/2026", resp:"Lucas R. P."},
+          {d:"21/04/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3 (não impeditivo)", prazo:"Trimestral", resp:"Lucas R. P."},
+          {d:"21/04/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6 (não impeditivo)", prazo:"Trimestral", resp:"Lucas R. P."}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:24, resp:"Gabriel Krüger (Coordenador)",
+        extra:{23:"Banco",24:"Fechadura porta de entrada"},
+        de:{23:1,24:9},
+        NC:{23:[...R(1,6),...R(8,13),15,16],24:[...R(9,13),...R(15,22)]},
+        obs:[
+          {d:"01/04/2026", item:23, txt:"Item 23: Banco de ferro precisa de conserto", prazo:"01/05/2026", resp:"Gabriel Krüger"},
+          {d:"09/04/2026", item:24, txt:"Item 24: Conserto da fechadura da porta de entrada", prazo:"10/05/2026", resp:"Gabriel Krüger"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador)", obs:[] }
+    }
+  },
   "2026-03": {
     status:"parcial", ultimoDia:31,
     folgas:[3,10,17,24,31], semOperacao:[], copiados:[],
@@ -455,23 +512,25 @@ function vazioMes(){
 
 function tabelaIncl(d){
   const n = diasNoMes(mesSel);
-  let h = `<table class="inc"><thead><tr><th class="nm" style="min-width:64px">Dia</th><th>Hora</th><th>Cabo 1</th><th>Cabo 2</th><th>Cabo 3</th><th>Cabo 4</th><th>Cabo 5</th><th>Cabo 6</th><th>Trolley</th><th>Autor</th><th>Obs.</th></tr></thead><tbody>`;
+  const temHora = Object.values(d.incl).some(r=>r[7]);
+  const nc = temHora ? 10 : 9;
+  let h = `<table class="inc"><thead><tr><th class="nm" style="min-width:64px">Dia</th>${temHora?"<th>Hora</th>":""}<th>Cabo 1</th><th>Cabo 2</th><th>Cabo 3</th><th>Cabo 4</th><th>Cabo 5</th><th>Cabo 6</th><th>Trolley</th><th>Autor</th><th>Obs.</th></tr></thead><tbody>`;
   for(let dia=1; dia<=n; dia++){
     const wd = new Date(ANO,mesSel-1,dia).toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","");
     const rot = `${pad(dia)} <small style="opacity:.6;font-weight:normal">${wd}</small>`;
     const r = d.incl[dia];
     if(r){
-      h += `<tr><td class="dia">${rot}</td><td class="hr">${esc(r[7]||"")}</td>`
+      h += `<tr><td class="dia">${rot}</td>${temHora?`<td class="hr">${esc(r[7]||"")}</td>`:""}`
         + r.slice(0,6).map(v=>`<td class="${classeCabo(v)}">${fmt(v,1)}</td>`).join("")
         + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">conferir</span> ${esc(r[9]===true?"":r[9])}`:""}</td></tr>`;
     } else if((d.folgas||[]).includes(dia)){
-      h += `<tr class="folga"><td class="dia">${rot}</td><td colspan="10">F O L G A</td></tr>`;
+      h += `<tr class="folga"><td class="dia">${rot}</td><td colspan="${nc}">F O L G A</td></tr>`;
     } else if((d.semRegistro||[]).includes(dia)){
-      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="10">SEM REGISTRO NA FOLHA</td></tr>`;
+      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="${nc}">SEM REGISTRO NA FOLHA</td></tr>`;
     } else if((d.semOperacao||[]).includes(dia)){
-      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="10">SEM OPERAÇÃO</td></tr>`;
+      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="${nc}">SEM OPERAÇÃO</td></tr>`;
     } else {
-      h += `<tr><td class="dia">${rot}</td><td colspan="10" class="pend">—</td></tr>`;
+      h += `<tr><td class="dia">${rot}</td><td colspan="${nc}" class="pend">—</td></tr>`;
     }
   }
   return h + "</tbody></table>";
