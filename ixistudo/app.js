@@ -9,16 +9,25 @@
     { id: 2, nome: "Xis Bacon Prensado", desc: "Pão prensado, muita tira de bacon crocante, hambúrguer, queijo duplo, ovo e maionese.", preco: 34.90, tag: "Mais pedido", img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=75" },
     { id: 3, nome: "Xis Coração de Galinha", desc: "Coração temperado na chapa, queijo provolone derretido, presunto, ovo e maionese especial.", preco: 36.90, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=75" },
     { id: 4, nome: "Xis Tudo Especial", desc: "O rei do RS! Carne, bacon, frango, calabresa, queijo, presunto, ovo duplo e salada completa.", preco: 42.00, tag: "Especial", img: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=600&q=75" },
-    { id: 5, nome: "Xis Filé Mignon", desc: "Tiras suculentas de filé mignon, queijo mussarela derretido, ovo, maionese e alface.", preco: 39.90, img: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=75" }
+    { id: 5, nome: "Xis Filé Mignon", desc: "Tiras suculentas de filé mignon, queijo mussarela derretido, ovo, maionese e alface.", preco: 39.90, img: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=75" },
+    { id: 6, nome: "Xis Calabresa", desc: "Calabresa acebolada na chapa, queijo, presunto, ovo, alface, tomate e maionese.", preco: 31.90, img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=75" },
+    { id: 7, nome: "Xis Frango", desc: "Peito de frango grelhado e desfiado, queijo, presunto, ovo, milho e maionese caseira.", preco: 32.90, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=75" },
+    { id: 8, nome: "Xis Vegetariano", desc: "Ovo, queijo, tomate, alface, milho, ervilha, cenoura ralada e maionese. Sem carne.", preco: 26.90, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=75" }
   ];
+
+  // Cada empreendimento oferece de 3 a 5 lanches deste catálogo.
+  const MIN_LANCHES = 3;
+  const MAX_LANCHES = 5;
+  // Todo município com cadastro tem pelo menos 3 empreendimentos.
+  const MIN_EMPREENDIMENTOS = 3;
 
   const TAXA_ENTREGA = 7.00;
   const MAX_SUGESTOES = 8;
 
   // Municípios do Oeste/Fronteira Oeste ainda sem empreendimentos cadastrados.
   const EM_BREVE = new Set([
-    "Alegrete", "Uruguaiana", "Itaqui", "São Borja", "Santiago",
-    "Sant'Ana do Livramento", "Rosário do Sul"
+    "Alegrete", "Uruguaiana", "Itaqui", "São Borja", "Santiago", "Sant'Ana do Livramento",
+    "Rosário do Sul", "Quaraí", "Barra do Quaraí", "Itacurubi", "Maçambará", "Manoel Viana"
   ]);
 
   // Municípios maiores têm mais empreendimentos cadastrados.
@@ -48,8 +57,11 @@
     pedidos: "pedidos_ixistudo",
     usuario: "usuario_ixistudo",
     municipio: "ixistudo:municipio",
-    tema: "ixistudo:tema"
+    tema: "ixistudo:tema",
+    consentimento: "ixistudo:consentimento"
   };
+  const CONSENT_VERSAO = 1;
+  const RAIO_MAX_KM = 120; // além disso, a pessoa provavelmente não está no RS
 
   /* ======================================================================
      UTILITÁRIOS
@@ -112,15 +124,24 @@
         const j = Math.floor(rnd() * (i + 1));
         [nomes[i], nomes[j]] = [nomes[j], nomes[i]];
       }
-      const qtd = GRANDES.includes(cidade) ? 6 + Math.floor(rnd() * 3) : 2 + Math.floor(rnd() * 4);
+      const qtd = GRANDES.includes(cidade)
+        ? 6 + Math.floor(rnd() * 3)
+        : MIN_EMPREENDIMENTOS + Math.floor(rnd() * 3);
       lista = nomes.slice(0, qtd).map((nome) => {
         const min = 20 + Math.floor(rnd() * 5) * 5;
+        const ids = produtos.map((p) => p.id);
+        for (let i = ids.length - 1; i > 0; i--) { // sorteia o cardápio desta loja
+          const j = Math.floor(rnd() * (i + 1));
+          [ids[i], ids[j]] = [ids[j], ids[i]];
+        }
+        const qtdLanches = MIN_LANCHES + Math.floor(rnd() * (MAX_LANCHES - MIN_LANCHES + 1));
         return {
           id: `${slug(cidade)}/${slug(nome)}`,
           nome, cidade,
           nota: (4.2 + rnd() * 0.8).toFixed(1).replace(".", ","),
           tempo: `${min}–${min + 15} min`,
-          img: produtos[Math.floor(rnd() * produtos.length)].img
+          img: produtos[Math.floor(rnd() * produtos.length)].img,
+          menu: ids.slice(0, qtdLanches).sort((a, b) => a - b)
         };
       });
     }
@@ -137,6 +158,10 @@
   /* ======================================================================
      ESTADO
      ====================================================================== */
+  function lerConsentimento() {
+    const c = ler(KEYS.consentimento, null);
+    return c && c.versao === CONSENT_VERSAO ? c : null;
+  }
   const carrinhoSalvo = ler(KEYS.carrinho, null);
   const estado = {
     // { lojaId, itens: [{ id, qtd }] } — preços sempre vêm do catálogo
@@ -149,6 +174,8 @@
     pedidos: ler(KEYS.pedidos, []) || [],
     usuario: ler(KEYS.usuario, null),
     municipio: cidadePorSlug.has(slug(ler(KEYS.municipio, "") || "")) ? ler(KEYS.municipio, "") : "",
+    consent: lerConsentimento(),
+    temaManual: false, // o usuário alternou o tema nesta sessão
     lojaAtual: null, // empreendimento aberto na tela
     busca: "",
     pendente: null   // item aguardando confirmação de troca de empreendimento
@@ -179,9 +206,12 @@
      ====================================================================== */
   const app = () => $("#app");
 
+  // Preferências (tema, município) só são gravadas se a pessoa permitiu.
+  const podeGravarPreferencias = () => estado.consent?.preferencias === true;
+
   function definirMunicipio(cidade) {
     estado.municipio = cidade;
-    gravar(KEYS.municipio, cidade);
+    if (podeGravarPreferencias()) gravar(KEYS.municipio, cidade);
     $("#input-municipio").value = cidade;
   }
 
@@ -197,7 +227,10 @@
     estado.lojaAtual = null;
     let titulo = "iXisTudo — O verdadeiro Xis Gaúcho";
 
-    if (partes[0] === "municipio" && cidadePorSlug.has(partes[1])) {
+    if (partes[0] === "privacidade" || partes[0] === "termos") {
+      app().innerHTML = `<section class="container">${LEGAL[partes[0]]()}</section>`;
+      titulo = (partes[0] === "privacidade" ? "Política de Privacidade" : "Termos de Uso") + " — iXisTudo";
+    } else if (partes[0] === "municipio" && cidadePorSlug.has(partes[1])) {
       const cidade = cidadePorSlug.get(partes[1]);
       definirMunicipio(cidade);
       renderizarMunicipio(cidade);
@@ -235,7 +268,12 @@
             <li>🥫 Maionese caseira</li>
             <li>🛵 Entrega no RS</li>
           </ul>
-          <button type="button" class="btn btn-accent btn-lg" data-action="focar-municipio">Escolher meu município</button>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-accent btn-lg" data-action="focar-municipio">Escolher meu município</button>
+            <button type="button" class="btn btn-glass btn-lg" data-action="usar-localizacao">
+              <svg class="icon" aria-hidden="true"><use href="#i-locate"/></svg> Usar minha localização
+            </button>
+          </div>
         </div>
       </section>
       <section class="container" aria-labelledby="titulo-destaques">
@@ -312,7 +350,7 @@
           </div>
         </header>
         <div class="section-head">
-          <h2 id="titulo-cardapio">Cardápio de Xis</h2>
+          <h2 id="titulo-cardapio">Cardápio <span class="muted count">· ${loja.menu.length} lanches</span></h2>
           <label class="menu-search">
             <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
             <span class="sr-only">Buscar no cardápio</span>
@@ -328,7 +366,8 @@
     const grid = $("#menu-grid");
     if (!grid) return;
     const q = norm(estado.busca.trim());
-    const lista = q ? produtos.filter((p) => norm(p.nome + " " + p.desc).includes(q)) : produtos;
+    const cardapio = estado.lojaAtual ? estado.lojaAtual.menu.map(produtoPorId) : produtos;
+    const lista = q ? cardapio.filter((p) => norm(p.nome + " " + p.desc).includes(q)) : cardapio;
 
     if (!lista.length) {
       grid.innerHTML = `<p class="empty-msg">Nenhum xis encontrado para “${esc(estado.busca)}”.</p>`;
@@ -362,7 +401,7 @@
 
   function adicionar(id) {
     const loja = estado.lojaAtual;
-    if (!loja) return;
+    if (!loja || !loja.menu.includes(id)) return;
 
     // Um carrinho só aceita itens de um empreendimento por vez.
     if (estado.carrinho.itens.length && estado.carrinho.lojaId !== loja.id) {
@@ -551,6 +590,8 @@
         if (e.target === d || e.target.closest("[data-close]")) d.close();
         // Link do carrinho para o empreendimento: fecha a gaveta e segue o link
         if (e.target.closest("[data-close-cart]")) d.close();
+        // Links para páginas legais dentro de um diálogo
+        if (e.target.closest("[data-fechar-dialogo]")) d.close();
       });
     });
     $("#swap-modal").addEventListener("close", () => { estado.pendente = null; });
@@ -585,8 +626,8 @@
   /* ======================================================================
      AUTENTICAÇÃO (simulada — sem backend)
      ====================================================================== */
-  function entrar(nome, email) {
-    estado.usuario = { nome, email };
+  function entrar(nome, email, telefone = "") {
+    estado.usuario = { nome, email, telefone };
     gravar(KEYS.usuario, estado.usuario);
     renderizarUsuario();
     fecharDialogo($("#auth-modal"));
@@ -603,7 +644,7 @@
 
     $("#form-register").addEventListener("submit", (e) => {
       e.preventDefault();
-      entrar(capitalizar($("#reg-name").value), $("#reg-email").value.trim());
+      entrar(capitalizar($("#reg-name").value), $("#reg-email").value.trim(), $("#reg-phone").value.trim());
       e.target.reset();
     });
 
@@ -682,7 +723,7 @@
 
       lista.innerHTML = sugestoes.length
         ? sugestoes.map((nome, i) => `<li role="option" id="mun-${i}" data-nome="${esc(nome)}" aria-selected="false">${destacar(nome, termo)}</li>`).join("")
-        : `<li class="no-result" aria-disabled="true">Município não encontrado</li>`;
+        : `<li class="no-result" aria-disabled="true">Nenhum município do RS encontrado</li>`;
       abrir();
     }
 
@@ -746,9 +787,149 @@
     btn.addEventListener("click", () => {
       const novo = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       aplicar(novo);
+      estado.temaManual = true;
       // Texto puro (sem JSON): o script do <head> lê este valor diretamente.
-      try { localStorage.setItem(KEYS.tema, novo); } catch { /* ignora */ }
+      if (podeGravarPreferencias()) try { localStorage.setItem(KEYS.tema, novo); } catch { /* ignora */ }
     });
+  }
+
+  /* ======================================================================
+     LGPD: CONSENTIMENTO, LOCALIZAÇÃO E DIREITOS DO TITULAR
+     ====================================================================== */
+  function mostrarBanner(visivel) {
+    $("#cookie-banner").hidden = !visivel;
+    document.body.classList.toggle("has-banner", visivel);
+  }
+
+  function abrirPreferenciasCookies() {
+    $("#consent-pref").checked = estado.consent?.preferencias === true;
+    abrirDialogo($("#consent-modal"));
+  }
+
+  function aplicarConsentimento(preferencias) {
+    estado.consent = { versao: CONSENT_VERSAO, necessarios: true, preferencias, data: new Date().toISOString() };
+    gravar(KEYS.consentimento, estado.consent);
+    if (preferencias) {
+      if (estado.municipio) gravar(KEYS.municipio, estado.municipio);
+      if (estado.temaManual) try { localStorage.setItem(KEYS.tema, document.documentElement.dataset.theme); } catch { /* ignora */ }
+    } else {
+      // Revogação: apaga o que dependia do consentimento.
+      try { localStorage.removeItem(KEYS.tema); localStorage.removeItem(KEYS.municipio); } catch { /* ignora */ }
+    }
+    mostrarBanner(false);
+    fecharDialogo($("#consent-modal"));
+    toast(preferencias ? "Preferências permitidas." : "Apenas o armazenamento necessário está ativo.");
+  }
+
+  // --- Localização (consentimento a cada uso; coordenadas nunca são guardadas) ---
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    const rad = (d) => (d * Math.PI) / 180;
+    const a = Math.sin(rad(lat2 - lat1) / 2) ** 2 +
+      Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(rad(lon2 - lon1) / 2) ** 2;
+    return 2 * 6371 * Math.asin(Math.sqrt(a));
+  }
+
+  function municipioMaisProximo(lat, lon) {
+    let melhor = null, menor = Infinity;
+    for (const [nome, la, lo] of MUNICIPIOS_RS_DADOS) {
+      const d = haversineKm(lat, lon, la, lo);
+      if (d < menor) { menor = d; melhor = nome; }
+    }
+    return { nome: melhor, km: menor };
+  }
+
+  function localizar() {
+    if (!("geolocation" in navigator)) {
+      return toast("Seu navegador não oferece localização. Use a busca de município.", "error");
+    }
+    toast("Buscando sua localização…");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { nome, km } = municipioMaisProximo(pos.coords.latitude, pos.coords.longitude);
+        if (km > RAIO_MAX_KM) {
+          return toast("Parece que você está fora do Rio Grande do Sul. Busque um município pela barra de pesquisa.", "error");
+        }
+        irParaMunicipio(nome);
+        toast(`Município mais próximo de você: ${nome}`);
+      },
+      (err) => {
+        toast(err.code === 1
+          ? "Localização negada. Sem problema: busque seu município pela barra de pesquisa."
+          : "Não foi possível obter sua localização. Busque seu município pela barra de pesquisa.", "error");
+      },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 }
+    );
+  }
+
+  // --- Meus dados ---
+  function abrirMeusDados() {
+    const u = estado.usuario;
+    const c = estado.consent;
+    const qtdItens = estado.carrinho.itens.reduce((s, i) => s + i.qtd, 0);
+    const linhas = [
+      ["Conta", u ? `${u.nome} · ${u.email}${u.telefone ? " · " + u.telefone : ""}` : "Nenhuma conta neste navegador"],
+      ["Pedidos", `${estado.pedidos.length} no histórico`],
+      ["Carrinho", `${qtdItens} ${qtdItens === 1 ? "item" : "itens"}`],
+      ["Preferências salvas", [ler(KEYS.municipio, "") && `município ${ler(KEYS.municipio, "")}`,
+        (() => { try { return localStorage.getItem(KEYS.tema) && `tema ${localStorage.getItem(KEYS.tema) === "dark" ? "escuro" : "claro"}`; } catch { return ""; } })()
+      ].filter(Boolean).join(" e ") || "nenhuma"],
+      ["Cookies", c ? `preferências ${c.preferencias ? "permitidas" : "recusadas"} em ${fmtData.format(new Date(c.data))}` : "ainda não respondido"]
+    ];
+    $("#data-summary").innerHTML = linhas.map(([k, v]) => `<li><strong>${esc(k)}:</strong> ${esc(v)}</li>`).join("");
+    resetarBotaoExcluir();
+    abrirDialogo($("#data-modal"));
+  }
+
+  function baixarMeusDados() {
+    const tema = (() => { try { return localStorage.getItem(KEYS.tema); } catch { return null; } })();
+    const dados = {
+      exportadoEm: new Date().toISOString(),
+      origem: "iXisTudo — dados armazenados neste navegador (LGPD, art. 18)",
+      conta: estado.usuario,
+      pedidos: estado.pedidos,
+      carrinho: estado.carrinho,
+      preferencias: { municipio: ler(KEYS.municipio, null), tema },
+      consentimento: estado.consent
+    };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: "meus-dados-ixistudo.json" });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast("Download iniciado.");
+  }
+
+  let confirmaExclusao = 0;
+  function resetarBotaoExcluir() {
+    clearTimeout(confirmaExclusao);
+    confirmaExclusao = 0;
+    $("#btn-excluir-dados").textContent = "Excluir meus dados";
+  }
+
+  function excluirMeusDados() {
+    // Primeiro clique pede confirmação; o segundo (em até 6 s) exclui.
+    if (!confirmaExclusao) {
+      $("#btn-excluir-dados").textContent = "Clique de novo para confirmar";
+      confirmaExclusao = setTimeout(resetarBotaoExcluir, 6000);
+      return;
+    }
+    resetarBotaoExcluir();
+    try { Object.values(KEYS).forEach((k) => localStorage.removeItem(k)); } catch { /* ignora */ }
+    estado.usuario = null;
+    estado.pedidos = [];
+    estado.carrinho = { lojaId: null, itens: [] };
+    estado.municipio = "";
+    estado.consent = null;
+    estado.temaManual = false;
+    $("#input-municipio").value = "";
+    renderizarUsuario();
+    renderizarCarrinho();
+    renderizarHistoricoPedidos();
+    mostrarBanner(true);
+    fecharDialogo($("#data-modal"));
+    toast("Seus dados foram excluídos deste navegador.");
+    if (location.hash === "#/" || !location.hash) rotear(); else location.hash = "#/";
   }
 
   /* ======================================================================
@@ -771,6 +952,15 @@
       else if (acao === "mais") alterarQtd(id, 1);
       else if (acao === "menos") alterarQtd(id, -1);
       else if (acao === "swap-confirm") confirmarTroca();
+      else if (acao === "usar-localizacao") abrirDialogo($("#geo-modal"));
+      else if (acao === "geo-confirmar") { fecharDialogo($("#geo-modal")); localizar(); }
+      else if (acao === "abrir-cookies") abrirPreferenciasCookies();
+      else if (acao === "consent-aceitar") aplicarConsentimento(true);
+      else if (acao === "consent-recusar") aplicarConsentimento(false);
+      else if (acao === "consent-salvar") aplicarConsentimento($("#consent-pref").checked);
+      else if (acao === "abrir-meus-dados") abrirMeusDados();
+      else if (acao === "dados-baixar") baixarMeusDados();
+      else if (acao === "dados-excluir") excluirMeusDados();
       else if (acao === "focar-municipio") { window.scrollTo({ top: 0, behavior: "smooth" }); $("#input-municipio").focus(); }
     });
 
@@ -793,6 +983,7 @@
     configurarDialogos();
     configurarAuth();
     configurarTema();
+    mostrarBanner(!estado.consent);
     window.addEventListener("hashchange", rotear);
     rotear();
   });
