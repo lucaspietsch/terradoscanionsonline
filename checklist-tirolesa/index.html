@@ -102,6 +102,17 @@
   .inc td.pend{opacity:.5}
   .chk{display:inline-block;padding:1px 6px;border-radius:10px;font-size:.66rem;border:1px solid var(--amarelo);color:var(--amarelo)}
 
+  /* zoom e mãozinha */
+  .zbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .zbar button{min-width:36px;height:34px;padding:0 10px;border:1px solid var(--linha);border-radius:8px;background:var(--papel);
+               color:var(--texto);font-weight:bold;letter-spacing:1px}
+  .zbar button:hover{border-color:var(--laranja);color:var(--laranja)}
+  .zbar button.on{background:var(--laranja);border-color:var(--laranja);color:var(--fundo)}
+  .zbar .pct{min-width:54px;text-align:center;font-size:.8rem;color:var(--oliva)}
+  .zbar .dica{font-size:.7rem;opacity:.65;margin-left:auto}
+  .cx.mao{cursor:grab} .cx.mao.arrasta{cursor:grabbing;user-select:none}
+  .cx.mao.arrasta *{pointer-events:none}
+  .cx table{zoom:var(--z,1)}
   .legenda{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.74rem}
   .legenda span{display:inline-flex;align-items:center;gap:6px}
   .legenda i{display:inline-block;width:20px;height:16px;border-radius:3px;border:1px solid var(--linha);text-align:center;font-style:normal;font-size:.6rem;line-height:15px;font-weight:bold}
@@ -269,7 +280,7 @@ const DADOS = {
       9:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       10:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       11:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
-      13:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P","cabo 1 parece 4.9 / 1.9 (assumi 0.9)"],
+      13:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
       14:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       15:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       16:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
@@ -282,8 +293,8 @@ const DADOS = {
       24:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       25:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
       27:[1.0,1.0,0.9,0.9,1.0,1.0,0.05,"","Lucas P"],
-      28:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"","Lucas P","assinatura riscada"],
-      29:[1.0,1.0,0.9,0.9,1.0,1.0,0.05,"","Lucas P","assinatura riscada"],
+      28:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"","Lucas P"],
+      29:[1.0,1.0,0.9,0.9,1.0,1.0,0.05,"","Lucas P"],
       30:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
       31:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"]
     },
@@ -656,6 +667,54 @@ function blocoObs(f, d){
     `<div class="ob-i"><b>${esc(o.d)}</b> · ${esc(o.txt)}<small>${o.prazo?`Prazo: ${esc(o.prazo)} · `:""}${o.resp?`Responsável: ${esc(o.resp)} · `:""}${o.real?`Corrigido em: ${esc(o.real)}`:""}</small></div>`).join("")+`</div>`;
 }
 
+let zoomV = (()=>{ try{ const v=parseFloat(localStorage.getItem("ct:zoom")); if(v>=.5&&v<=3) return v; }catch(e){} return 1; })();
+let maoOn = (()=>{ try{ return localStorage.getItem("ct:mao")!=="0"; }catch(e){ return true; } })();
+const barraZoom = () => `<div class="zbar" id="zbar">
+    <button data-z="-" title="Diminuir (Ctrl + roda do mouse)" aria-label="Diminuir zoom">−</button>
+    <span class="pct" id="zpct">${Math.round(zoomV*100)}%</span>
+    <button data-z="+" title="Aumentar (Ctrl + roda do mouse)" aria-label="Aumentar zoom">+</button>
+    <button data-z="0" title="Voltar a 100%">100%</button>
+    <button data-z="mao" class="${maoOn?"on":""}" title="Arrastar a tabela com o mouse" aria-pressed="${maoOn}">✋ Mão</button>
+    <span class="dica">arraste para mover · Ctrl + roda para zoom</span></div>`;
+function ligaZoom(alvo){
+  const cx = alvo.querySelector(".cx"); if(!cx) return;
+  const tb = cx.querySelector("table");
+  const aplica = (v)=>{
+    zoomV = Math.min(3, Math.max(.5, Math.round(v*100)/100));
+    cx.style.setProperty("--z", zoomV);
+    const pct=$("#zpct"); if(pct) pct.textContent=Math.round(zoomV*100)+"%";
+    try{ localStorage.setItem("ct:zoom",zoomV); }catch(e){}
+  };
+  aplica(zoomV);
+  cx.classList.toggle("mao", maoOn);
+  $("#zbar").onclick = e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.z==="+") aplica(zoomV+.25);
+    else if(b.dataset.z==="-") aplica(zoomV-.25);
+    else if(b.dataset.z==="0") aplica(1);
+    else { maoOn=!maoOn; try{ localStorage.setItem("ct:mao",maoOn?"1":"0"); }catch(e){} b.classList.toggle("on",maoOn); b.setAttribute("aria-pressed",maoOn); cx.classList.toggle("mao",maoOn); }
+  };
+  // Ctrl + roda do mouse (ou pinça no trackpad) = zoom
+  cx.addEventListener("wheel", e=>{ if(!(e.ctrlKey||e.metaKey)) return; e.preventDefault(); aplica(zoomV + (e.deltaY<0?.15:-.15)); }, {passive:false});
+  // mãozinha: arrastar para mover
+  let ini=null, moveu=false;
+  cx.addEventListener("pointerdown", e=>{
+    if(!maoOn || e.pointerType==="touch" || e.button!==0) return;
+    ini={x:e.clientX,y:e.clientY,l:cx.scrollLeft,t:cx.scrollTop}; moveu=false;
+  });
+  window.addEventListener("pointermove", e=>{
+    if(!ini) return;
+    const dx=e.clientX-ini.x, dy=e.clientY-ini.y;
+    if(!moveu && Math.hypot(dx,dy)<5) return;
+    if(!moveu){ moveu=true; cx.classList.add("arrasta"); }
+    cx.scrollLeft=ini.l-dx; cx.scrollTop=ini.t-dy;
+  });
+  const solta=()=>{ if(!ini) return; ini=null; cx.classList.remove("arrasta"); if(moveu) setTimeout(()=>{moveu=false},0); };
+  window.addEventListener("pointerup", solta); window.addEventListener("pointercancel", solta);
+  // não abre a janela do NC se foi um arrasto
+  cx.addEventListener("click", e=>{ if(moveu){ e.stopPropagation(); e.preventDefault(); } }, true);
+}
+
 function folhas_conteudo(){
   const f = FOLHAS.find(x=>x.id===folhaSel)||FOLHAS[0];
   const d = DADOS[chave(mesSel)];
@@ -664,13 +723,14 @@ function folhas_conteudo(){
   if((d.semFolha||[]).includes(f.id) || (f.desde && mesSel<f.desde)){ alvo.innerHTML = vazioFolha(f); legenda(f); return; }
   let h = d.nota?`<div class="aviso">${esc(d.nota)}</div>`:"";
   if(f.tipo==="incl"){
-    h += (d.incl && Object.keys(d.incl).length) ? `<div class="cx">${tabelaIncl(d)}</div>` : vazioFolha(f);
+    h += (d.incl && Object.keys(d.incl).length) ? barraZoom()+`<div class="cx">${tabelaIncl(d)}</div>` : vazioFolha(f);
   } else {
     const t = tabelaGrade(f,d);
-    h += t.startsWith("<table") ? `<div class="cx">${t}</div>${blocoObs(f,d)}` : t;
+    h += t.startsWith("<table") ? barraZoom()+`<div class="cx">${t}</div>${blocoObs(f,d)}` : t;
   }
   alvo.innerHTML = h;
   alvo.querySelectorAll("td.NC").forEach(td=>td.onclick=()=>abreNC(f,d,+td.dataset.it,+td.dataset.d));
+  ligaZoom(alvo);
   legenda(f);
 }
 
