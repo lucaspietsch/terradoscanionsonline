@@ -266,7 +266,7 @@ const FOLHAS = [
 const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
 const DADOS = {
   "2026-06": {
-    status:"parcial", ultimoDia:30,
+    status:"ok", ultimoDia:30,
     folgas:[2,9,16,23], semOperacao:[], copiados:[30],
     semFolha:["trm"],
     nota:"Junho: o PDF é de 29/06 e o dia 30 estava em branco, então copiei o dia 29 (marcado como copiado). O Trolley mensal não consta nos documentos deste mês. De 10 a 15/06 o Trolley novo esteve em teste (itens 3, 14, 15, 17, 19 e 20 não se aplicam).",
@@ -289,7 +289,7 @@ const DADOS = {
       19:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
       20:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
       21:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
-      22:[1.0,1.0,1.6,1.0,1.0,1.0,0.00,"","Lucas P","cabo 3 escrito 1.6"],
+      22:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       24:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
       25:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
       26:[1.0,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
@@ -319,11 +319,11 @@ const DADOS = {
           {d:"11/06/2026", item:26, txt:"26 - Molas retraídas sem lubrificação", prazo:"11/06/2026", resp:"Pietsch"}
         ] },
       cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
-      lan:{ n:22, resp:"Lercan Konting (Líder de Operação)",
+      lan:{ n:22, resp:"Lucas K. (Líder de Operação)",
         obs:[
           {d:"01/06/2026", item:12, txt:"Item 12: Cerca externa do deck encontra-se rompida. Área ainda é isolada por outro portão (NC não impeditivo)", prazo:"10/06/2026"}
         ] },
-      cadl:{ n:20, resp:"Lercan Konting (Líder de Operação)", obs:[] }
+      cadl:{ n:20, resp:"Lucas K. (Líder de Operação)", obs:[] }
     }
   },
   "2026-05": {
