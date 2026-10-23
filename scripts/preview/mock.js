@@ -59,6 +59,7 @@
     const [p, qs] = path.split('?'); const parts = p.split('/').filter(Boolean);
     const q = new URLSearchParams(qs || '');
     const ok = () => ({ ok: true });
+    if (p === '/site') return { heroPhoto: Boolean(window.parent.__ASSETS.img['/img/hero/canyon.jpg']) };
     // público
     if (p === '/attractions') return D.attractions;
     if (p === '/partners') return partners.filter((x) => x.published !== 0);
@@ -71,12 +72,16 @@
       const a = D.attractions.find((y) => y.slug === parts[1]);
       if (!a) throw Object.assign(new Error('Atrativo não encontrado.'), { status: 404 });
       return {
-        ...a, tirolesa: a.slug === 'serra-geral' ? { slug: D.product.slug, name: D.product.name, summary: D.product.summary, priceCents: money.unit } : null,
+        ...a, tirolesa: a.slug === 'canion-fortaleza' ? { slug: D.product.slug, name: D.product.name, summary: D.product.summary, priceCents: money.unit } : null,
         products: products.filter((y) => y.attractionSlug === a.slug).map(withPartner), hosts: partners.filter((y) => y.attractionSlug === a.slug),
         guides: partners.filter((y) => ['guia', 'agencia'].includes(y.category)).slice(0, 6), others: D.attractions.filter((y) => y.slug !== a.slug).map((y) => ({ slug: y.slug, name: y.name, kind: y.kind })),
       };
     }
-    if (p === '/catalog') { const k = q.get('kind'); return { featured: { slug: D.product.slug, name: D.product.name, summary: D.product.summary, priceCents: money.unit, href: '/tirolesa' }, items: products.filter((y) => !k || y.kind === k).map(withPartner) }; }
+    if (p === '/catalog') {
+      const k = q.get('kind');
+      const own = !k || k === 'experiencia' ? [{ id: 'ticket-tirolesa', kind: 'experiencia', name: D.product.name, description: D.product.summary, priceCents: money.unit, priceNote: 'por pessoa', attractionSlug: 'canion-fortaleza', href: '/tirolesa', buy: true }] : [];
+      return { items: [...own, ...products.filter((y) => !k || y.kind === k).map(withPartner)] };
+    }
     if (p === '/partner/products' && method === 'GET') return products.filter((y) => y.partnerSlug === 'canyons-chalet').map((y) => ({ ...bare(y), published: true, sortOrder: 100, partnerId: 6 }));
     if (parts[0] === 'admin' && parts[1] === 'partners' && parts[3] === 'products' && method === 'GET') { const pa = partners.find((y) => y.id === Number(parts[2])); return products.filter((y) => y.partnerSlug === pa?.slug).map((y) => ({ ...bare(y), published: true, sortOrder: 100, partnerId: pa.id })); }
     if (p === `/products/${D.product.slug}`) return { ...D.product, priceCents: money.unit, mockPayments: true };

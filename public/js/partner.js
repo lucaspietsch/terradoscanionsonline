@@ -1,8 +1,9 @@
-import { $, ApiError, CATEGORY, KINDS, api, attractionArt, avatar, boot, clear, h, icon, productCard, showError, waLink } from './common.js';
+import { $, ApiError, ATTRACTION_NAME, CATEGORY, KINDS, api, avatar, boot, clear, h, icon, productCard, share, showError, waLink } from './common.js';
+import { heartButton } from './favorites.js';
 boot();
 const root = $('#conteudo');
 const slug = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() || '');
-const ATTR = { 'aparados-da-serra': 'Parque Nacional de Aparados da Serra', 'serra-geral': 'Parque Nacional da Serra Geral', 'parque-estadual-do-tainhas': 'Parque Estadual do Tainhas', 'cascata-velha-ouro-verde': 'Cascata Velha — Ouro Verde', 'costao-do-cambara': 'Costão do Cambará' };
+const ATTR = ATTRACTION_NAME;
 
 try {
   const p = await api(`/partners/${encodeURIComponent(slug)}`);
@@ -22,7 +23,9 @@ try {
         p.whatsapp ? h('a', { class: 'btn btn-wa', href: waLink(p.whatsapp, msg), target: '_blank', rel: 'noopener noreferrer' }, icon('chat'), 'Chamar no WhatsApp') : null,
         p.phone ? h('a', { class: 'btn btn-glass', href: `tel:+55${p.phone.replace(/^55/, '')}` }, icon('phone'), 'Ligar') : null,
         /^https:\/\//.test(p.website) ? h('a', { class: 'btn btn-glass', href: p.website, target: '_blank', rel: 'noopener noreferrer' }, icon('globe'), 'Site') : null,
-        insta ? h('a', { class: 'btn btn-glass', href: `https://instagram.com/${encodeURIComponent(insta)}`, target: '_blank', rel: 'noopener noreferrer' }, icon('instagram'), 'Instagram') : null)));
+        insta ? h('a', { class: 'btn btn-glass', href: `https://instagram.com/${encodeURIComponent(insta)}`, target: '_blank', rel: 'noopener noreferrer' }, icon('instagram'), 'Instagram') : null,
+        h('button', { class: 'btn btn-glass share-btn', type: 'button', onclick: () => share({ title: p.name, text: p.tagline || '' }) }, icon('share'), 'Compartilhar')),
+      h('div', { class: 'hero-fav' }, heartButton({ key: `p:${p.slug}`, type: 'Parceiro', name: p.name, sub: CATEGORY[p.category], href: `/parceiros/${p.slug}` }))));
 
   // ---- Produtos ----
   const kinds = [...new Set(p.products.map((x) => x.kind))];
@@ -63,4 +66,3 @@ try {
   if (e instanceof ApiError && e.status === 404) clear(root).append(h('div', { class: 'wrap' }, h('div', { class: 'empty' }, h('h2', {}, 'Parceiro não encontrado'), h('a', { class: 'btn btn-dark', href: '/parceiros' }, 'Ver parceiros'))));
   else showError(root, e);
 }
-void attractionArt;

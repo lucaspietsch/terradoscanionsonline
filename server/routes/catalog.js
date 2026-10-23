@@ -25,7 +25,7 @@ export async function catalogRoutes(api, { db, audit, orders, rl }) {
     if (!a) throw new OrderError('Atrativo não encontrado.', 'not_found', 404);
     const products = db.prepare(`${JOIN} WHERE p.attraction_slug = ? AND p.published = 1 AND pa.published = 1 ORDER BY p.sort_order, p.name`).all(a.slug).map(productPublic);
     const hosts = db.prepare('SELECT slug, name, category, tagline FROM partners WHERE attraction_slug = ? AND published = 1').all(a.slug);
-    const tirolesa = a.slug === 'serra-geral' ? orders.getProduct('tirolesa-mais-alta-das-americas') : null;
+    const tirolesa = a.slug === 'canion-fortaleza' ? orders.getProduct('tirolesa-mais-alta-das-americas') : null;
     const guides = db.prepare("SELECT slug, name, category, tagline, whatsapp FROM partners WHERE category IN ('guia','agencia') AND published = 1 ORDER BY sort_order, name LIMIT 6").all();
     const others = attractions.filter((x) => x.slug !== a.slug).map(({ slug, name, kind }) => ({ slug, name, kind }));
     return {
@@ -39,11 +39,13 @@ export async function catalogRoutes(api, { db, audit, orders, rl }) {
   api.get('/catalog', async (req) => {
     const kind = PRODUCT_KINDS.includes(req.query.kind) ? req.query.kind : null;
     const rows = db.prepare(`${JOIN} WHERE p.published = 1 AND pa.published = 1 ${kind ? 'AND p.kind = ?' : ''} ORDER BY pa.featured DESC, pa.sort_order, p.sort_order, p.name`).all(...(kind ? [kind] : []));
-    const t = orders.getProduct('tirolesa-mais-alta-das-americas');
-    return {
-      featured: t ? { slug: t.slug, name: t.name, summary: t.summary, priceCents: t.price_cents, href: '/tirolesa' } : null,
-      items: rows.map(productPublic),
-    };
+    // A Tirolesa é um produto como os outros (vendido aqui mesmo, no atrativo Cânion Fortaleza).
+    const t = !kind || kind === 'experiencia' ? orders.getProduct('tirolesa-mais-alta-das-americas') : null;
+    const own = t ? [{
+      id: `ticket-${t.slug}`, kind: 'experiencia', name: t.name, description: t.summary, priceCents: t.price_cents, priceNote: 'por pessoa',
+      attractionSlug: 'canion-fortaleza', href: '/tirolesa', buy: true,
+    }] : [];
+    return { items: [...own, ...rows.map(productPublic)] };
   });
 
   // ---------- CRUD (admin e parceiro dono) ----------

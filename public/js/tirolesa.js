@@ -1,4 +1,4 @@
-import { $, ApiError, FACT_ICON, api, boot, brl, clear, currentQr, dayParts, fmtDay, h, icon } from './common.js';
+import { $, ApiError, FACT_ICON, api, boot, brl, clear, countUp, currentQr, dayParts, fmtDay, h, icon } from './common.js';
 boot();
 
 const SLUG = 'tirolesa-mais-alta-das-americas';
@@ -106,6 +106,7 @@ function renderPeople() {
 
 // ---------------- Etapa 3: dados, cupom, pagamento ----------------
 const summary = h('div', { class: 'summary', 'aria-live': 'polite' });
+let lastTotal = null;
 const couponMsg = h('p', { class: 'hint', 'aria-live': 'polite' });
 const errorBox = h('div', { 'aria-live': 'assertive' });
 const submitBtn = h('button', { class: 'btn btn-primary btn-block', type: 'submit' }, 'Ir para o pagamento');
@@ -118,7 +119,10 @@ function renderSummary() {
   summary.append(
     h('div', { class: 'line' }, h('span', {}, `${q.qty} × ${brl(q.unitPriceCents)}`), h('span', {}, brl(q.subtotalCents))),
     q.discountCents > 0 ? h('div', { class: 'line disc' }, h('span', {}, q.discountLabel || 'Desconto'), h('span', {}, `− ${brl(q.discountCents)}`)) : null,
-    h('div', { class: 'line total' }, h('span', {}, 'Total'), h('span', {}, brl(q.totalCents))));
+    h('div', { class: 'line total' }, h('span', {}, 'Total'), h('span', { id: 'total-val' }, brl(q.totalCents))));
+  // O valor "gira" do total anterior para o novo (feedback imediato ao mudar quantidade/cupom).
+  if (lastTotal !== null && lastTotal !== q.totalCents) countUp($('#total-val'), q.totalCents, { from: lastTotal, ms: 600, fmt: (n) => brl(Math.round(n)) });
+  lastTotal = q.totalCents;
   submitBtn.textContent = q.totalCents === 0 ? 'Confirmar reserva gratuita' : `Pagar ${brl(q.totalCents)}`;
 }
 
@@ -230,8 +234,8 @@ function renderBooking() {
       dateRow, timeLabel, timeGrid,
       h('div', { class: 'field' }, h('label', {}, 'Quantos ingressos?'),
         h('div', { class: 'stepper' },
-          h('button', { type: 'button', 'aria-label': 'Menos um ingresso', onclick: () => setQty(state.qty - 1) }, '−'), qtyOut,
-          h('button', { type: 'button', 'aria-label': 'Mais um ingresso', onclick: () => setQty(state.qty + 1) }, '+')), qtyHint),
+          h('button', { type: 'button', 'aria-label': 'Menos um ingresso', onclick: () => { navigator.vibrate?.(6); setQty(state.qty - 1); } }, '−'), qtyOut,
+          h('button', { type: 'button', 'aria-label': 'Mais um ingresso', onclick: () => { navigator.vibrate?.(6); setQty(state.qty + 1); } }, '+')), qtyHint),
       product.groupDiscounts.length ? h('p', { class: 'hint' }, product.groupDiscounts.map((g) => `${g.label}: ${g.percent}% de desconto`).join(' · ')) : null),
     h('div', { class: 'booking-step' }, h('h3', {}, h('span', { class: 'num' }, '2'), 'Quem vai voar?'),
       h('p', { class: 'muted small' }, 'Peso e idade são requisitos de segurança. Menores precisam de um adulto responsável no mesmo pedido.'), people),

@@ -12,15 +12,14 @@ página dele: frase de destaque, descrição, WhatsApp, endereço e **produtos/s
 4. Acompanhe a coluna **Acesso**: `sem login` → `convite até dd/mm` → `ativo`. A coluna **Produtos** mostra quantos itens ele já publicou.
 
 **Em lote** (os 15 de uma vez)
+1. Abra a planilha [`docs/parceiros.csv`](parceiros.csv) no Excel ou Google Planilhas (os 15 parceiros já estão lá).
+2. Preencha **email** e **responsavel** de quem você já tiver o contato. Linhas em branco são puladas, então dá para convidar em etapas.
+3. Salve como CSV e rode:
 ```bash
-# parceiros.csv  →  slug,email,Nome do responsável
-canyons-chalet,contato@canyons.example,Ana Souza
-campanario-chales,reservas@campanario.example,João Lima
-
-npm run invite-partners -- parceiros.csv
+npm run invite-partners -- docs/parceiros.csv
 ```
-O comando imprime o link e a mensagem de cada parceiro (para colar no WhatsApp).
-Os `slug` de cada parceiro estão em `scripts/seed.js` (lista `FOUNDING_PARTNERS`).
+O comando imprime o link e a mensagem pronta de cada parceiro (para colar no WhatsApp). Pode rodar de novo
+quando preencher mais linhas: quem já aceitou o convite recebe um link de **redefinição de senha** (não duplica usuário).
 
 **Segurança dos links**
 - Valem **7 dias** e só podem ser usados **uma vez**; gerar um novo invalida o anterior.

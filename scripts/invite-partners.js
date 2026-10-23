@@ -1,7 +1,7 @@
 // Gera os links de acesso de vários parceiros de uma vez.
 //   npm run invite-partners -- parceiros.csv
-// CSV (sem cabeçalho, separado por vírgula):  slug-do-parceiro,email,Nome do responsável
-//   canyons-chalet,contato@canyons.com.br,Ana Souza
+// Planilha: docs/parceiros.csv (colunas parceiro;slug;email;responsavel). Preencha e-mail e responsável de quem já tiver;
+// as linhas em branco são puladas. Aceita ; (Excel em português) ou vírgula.
 // Imprime um link por parceiro (uso único, vale 7 dias) e a mensagem pronta para colar no WhatsApp.
 // Reexecutar para o mesmo parceiro gera um link novo e invalida o anterior.
 import { readFileSync } from 'node:fs';
@@ -22,16 +22,30 @@ const auth = createAuth({ db, config, audit });
 const log = { info() {}, error: console.error, warn() {} };
 const invites = createInviteService({ db, config, auth, audit, mailer: createMailer(config, log) });
 
+// Aceita vírgula ou ponto e vírgula (Excel em português), BOM, aspas e cabeçalho (colunas: slug, email, responsavel).
+const text = readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
+const lines = text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+const sep = (lines[0] || '').includes(';') ? ';' : ',';
+const split = (l) => l.split(sep).map((c) => c.trim().replace(/^"(.*)"$/, '$1'));
+let cols = { slug: 0, email: 1, nome: 2 };
+if (/slug/i.test(lines[0] || '')) {
+  const head = split(lines.shift()).map((c) => c.toLowerCase());
+  cols = { slug: head.indexOf('slug'), email: head.indexOf('email'), nome: head.findIndex((c) => /respons|nome/.test(c)) };
+  if (cols.slug < 0 || cols.email < 0 || cols.nome < 0) { console.error('Cabeçalho precisa ter as colunas: slug, email, responsavel'); process.exit(1); }
+}
+
 let ok = 0;
-for (const [n, raw] of readFileSync(file, 'utf8').split(/\r?\n/).entries()) {
-  const line = raw.trim();
-  if (!line || line.startsWith('#')) continue;
-  const [slug, email, ...rest] = line.split(',').map((s) => s.trim());
-  const name = rest.join(',').trim();
+let skipped = 0;
+for (const [n, line] of lines.entries()) {
+  const c = split(line);
+  const slug = c[cols.slug];
+  const email = c[cols.email];
+  const name = c[cols.nome];
+  if (!email && !name) { skipped++; continue; } // ainda não preenchido
   try {
     const partner = db.prepare('SELECT id FROM partners WHERE slug = ?').get(slug);
     if (!partner) throw new Error(`parceiro "${slug}" não existe`);
-    if (!email || !name) throw new Error('faltam e-mail ou nome');
+    if (!email || !name) throw new Error('faltam e-mail ou nome do responsável');
     const inv = await invites.create({ partnerId: partner.id, email, name, actor: 'cli' });
     ok++;
     console.log(`\n✔ ${inv.partnerName} (${email}) — ${inv.purpose === 'reset' ? 'REDEFINIÇÃO' : 'convite'}, vale até ${new Date(inv.expiresAt).toLocaleDateString('pt-BR')}`);
@@ -41,5 +55,6 @@ for (const [n, raw] of readFileSync(file, 'utf8').split(/\r?\n/).entries()) {
     console.error(`\n✖ linha ${n + 1} (${slug || '?'}): ${e.message}`);
   }
 }
+if (skipped) console.log(`\n${skipped} linha(s) sem e-mail/responsável foram puladas (preencha quando tiver).`);
 console.log(`\n${ok} convite(s) gerado(s). Trate estes links como senhas: envie só ao responsável de cada parceiro.`);
 db.close();

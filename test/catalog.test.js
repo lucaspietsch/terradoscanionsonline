@@ -65,16 +65,19 @@ test('validação de produto: tipo, preço negativo, atrativo inexistente, limit
   await app.close();
 });
 
-test('página do atrativo: Serra Geral traz a Tirolesa; produtos ligados e guias aparecem; Costão tem anfitrião', async () => {
+test('página do atrativo: Cânion Fortaleza traz a Tirolesa como produto; produtos ligados e guias aparecem; Costão tem anfitrião', async () => {
   const { app, ctx, db } = await fresh();
   const { headers } = await partnerSession(app, ctx, db, 'guia-aparados-da-serra', 'guia@example.com');
   await app.inject({ method: 'POST', url: '/api/partner/products', headers, payload: product({ kind: 'passeio', name: 'Trilha guiada no Itaimbezinho', attractionSlug: 'aparados-da-serra', priceNote: 'por pessoa' }) });
 
+  const fort = (await app.inject({ method: 'GET', url: '/api/attractions/canion-fortaleza' })).json();
+  assert.equal(fort.tirolesa.slug, 'tirolesa-mais-alta-das-americas', 'a tirolesa é produto do Cânion Fortaleza');
+  assert.equal(fort.tirolesa.priceCents, 15000);
+  assert.ok(fort.guides.length > 0);
+  assert.equal(fort.others.length, 5);
   const serra = (await app.inject({ method: 'GET', url: '/api/attractions/serra-geral' })).json();
-  assert.equal(serra.tirolesa.slug, 'tirolesa-mais-alta-das-americas');
-  assert.equal(serra.tirolesa.priceCents, 15000);
-  assert.ok(serra.guides.length > 0);
-  assert.ok(serra.others.length === 4);
+  assert.equal(serra.tirolesa, null, 'o parque em si não vende a tirolesa');
+  assert.ok(serra.highlights.includes('Cânion Fortaleza'));
 
   const ap = (await app.inject({ method: 'GET', url: '/api/attractions/aparados-da-serra' })).json();
   assert.equal(ap.tirolesa, null);
@@ -87,18 +90,22 @@ test('página do atrativo: Serra Geral traz a Tirolesa; produtos ligados e guias
   await app.close();
 });
 
-test('catálogo geral: Tirolesa em destaque, filtro por tipo, oculta parceiro despublicado', async () => {
+test('catálogo geral: Tirolesa como item, filtro por tipo, oculta parceiro despublicado', async () => {
   const { app, ctx, db } = await fresh();
   const a = await partnerSession(app, ctx, db, 'canyons-chalet', 'a@example.com');
   const b = await partnerSession(app, ctx, db, 'duperau-gastro-pub', 'b@example.com');
   await app.inject({ method: 'POST', url: '/api/partner/products', headers: a.headers, payload: product() });
   await app.inject({ method: 'POST', url: '/api/partner/products', headers: b.headers, payload: product({ kind: 'refeicao', name: 'Hambúrguer da casa', priceNote: '' }) });
   const all = (await app.inject({ method: 'GET', url: '/api/catalog' })).json();
-  assert.equal(all.featured.href, '/tirolesa');
-  assert.equal(all.items.length, 2);
-  assert.equal((await app.inject({ method: 'GET', url: '/api/catalog?kind=refeicao' })).json().items.length, 1);
+  assert.equal(all.featured, undefined, 'não há mais um "destaque" à parte');
+  assert.equal(all.items[0].href, '/tirolesa', 'a Tirolesa é o primeiro item do catálogo');
+  assert.equal(all.items[0].attractionSlug, 'canion-fortaleza');
+  assert.equal(all.items[0].buy, true);
+  assert.equal(all.items.length, 3);
+  assert.equal((await app.inject({ method: 'GET', url: '/api/catalog?kind=refeicao' })).json().items.length, 1, 'filtro exclui a tirolesa');
+  assert.equal((await app.inject({ method: 'GET', url: '/api/catalog?kind=experiencia' })).json().items[0].href, '/tirolesa');
   db.prepare("UPDATE partners SET published = 0 WHERE slug = 'duperau-gastro-pub'").run();
-  assert.equal((await app.inject({ method: 'GET', url: '/api/catalog' })).json().items.length, 1);
+  assert.equal((await app.inject({ method: 'GET', url: '/api/catalog' })).json().items.length, 2);
   await app.close();
 });
 
@@ -116,5 +123,13 @@ test('admin gerencia produtos de qualquer parceiro e a ação fica na auditoria'
   assert.equal((await app.inject({ method: 'DELETE', url: `/api/admin/products/${c.json().id}`, headers })).statusCode, 200);
   assert.ok(db.prepare("SELECT 1 FROM audit_log WHERE action = 'product.delete'").get());
   assert.equal((await app.inject({ method: 'POST', url: '/api/admin/partners/9999/products', headers, payload: product() })).statusCode, 404);
+  await app.close();
+});
+
+test('/api/site informa se a foto de fundo existe (sem erro 404 no navegador)', async () => {
+  const { app } = await makeApp();
+  const r = await app.inject({ method: 'GET', url: '/api/site' });
+  assert.equal(r.statusCode, 200);
+  assert.equal(typeof r.json().heroPhoto, 'boolean');
   await app.close();
 });

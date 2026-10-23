@@ -7,12 +7,13 @@ vitrine de parceiros e painel de gestão. Pensado para o fluxo **QR Code da plac
 
 | Área | O que faz |
 |---|---|
-| **Venda da tirolesa** | Escolha de data/horário com vagas em tempo real, participantes (nome, nascimento, peso), Pix e cartão, QR Code por ingresso, página do pedido que atualiza sozinha. |
+| **Ingresso da Tirolesa** (produto do atrativo **Cânion Fortaleza**) | Escolha de data/horário com vagas em tempo real, participantes (nome, nascimento, peso), Pix e cartão, QR Code por ingresso, página do pedido que atualiza sozinha. |
 | **Placas com QR** | Cada placa tem um link curto e estável `/q/<código>` (gera QR leve e fácil de ler). Conta leituras, aplica cupom automático e mostra no painel leituras → vendas → conversão por placa. Dá para trocar cupom/destino sem reimprimir. |
 | **Descontos** | Cupons (% ou R$), desconto automático de grupo, cupom da placa, cupom de parceiro (atribui a venda ao parceiro). **A melhor oferta vence; nada acumula.** |
 | **Parceiros** | Os 15 parceiros fundadores já cadastrados, com plano `fundador`, campo **"cortesia até"** (meses grátis) e login próprio criado por **convite de uso único** (o parceiro define a própria senha): ele edita a própria vitrine e produtos, troca a senha, segue um checklist "deixe sua página pronta" e vê só números agregados das vendas dele (nunca dados de clientes). |
 | **Páginas de produtos** | Ao clicar num **parceiro** (`/parceiros/<slug>`) abre a página dele com os produtos/serviços (hospedagem, passeios, gastronomia…), filtros por tipo e botão "Pedir informações" no WhatsApp com a mensagem já pronta. Ao clicar num **atrativo** (`/atrativos/<slug>`) abre a página com destaques, dicas, produtos ligados a ele (a Tirolesa aparece no Serra Geral, com compra direta), guias/agências e os outros atrativos. `/produtos` reúne tudo num catálogo. Parceiros e admin cadastram os produtos no painel. |
-| **Atrativos** | Aparados da Serra, Serra Geral, Tainhas, Cascata Velha / Ouro Verde, Costão do Cambará. |
+| **Atrativos** | Aparados da Serra, Serra Geral, **Cânion Fortaleza** (onde está a Tirolesa), Tainhas, Cascata Velha / Ouro Verde, Costão do Cambará. A Tirolesa aparece como um produto entre os demais (catálogo, página do Cânion Fortaleza e busca); o portal não gira mais em torno dela. As placas com QR continuam podendo abrir direto a venda (`/tirolesa`). |
+| **Experiência de app** | O site **reconhece o aparelho** ao abrir (celular, tablet ou computador): no celular aparece uma barra inferior estilo app; no computador, navegação superior e efeitos de mouse. Busca rápida (`Ctrl/⌘+K` ou `/`), favoritos (❤) guardados no aparelho, tema claro/escuro, compartilhar, contadores animados, horários da Tirolesa "ao vivo", confete ao confirmar o ingresso e **instalável como app (PWA)**. |
 | **Operação** | Check-in por câmera/leitor de QR (bloqueia reuso, dia errado, QR falsificado), ocupação por horário, cancelamento com estorno, geração de horários em lote. |
 
 ## Rodando localmente
@@ -22,12 +23,18 @@ npm install
 npm run seed                      # produto, 15 parceiros, horários/cupom/placa de demonstração
 npm run create-admin -- voce@email.com "Seu Nome"   # pede a senha e mostra o QR do 2FA
 npm run dev                       # http://localhost:3000  (pagamento SIMULADO)
-npm test                          # 48 testes
+npm test                          # 49 testes
 npm run preview                   # gera dist/terra-dos-canions-preview.html: um arquivo só, abre com duplo clique (dados fictícios)
 ```
 
 Em desenvolvimento o pagamento é simulado (botão "Simular pagamento aprovado" na página do pedido) e a chave-mestra
 fica em `data/.dev-master-key`. Painel: `/admin`.
+
+## Identidade visual e foto de fundo
+
+- **Paleta "interior gaúcho"**: verde de araucária e erva-mate, linho/barro claro, **bordô de urucum** como destaque discreto e **dourado de pinhão**. As cores ficam em variáveis no topo de `public/css/site.css` (`--ember` = bordô, `--amber` = dourado, `--forest`, `--moss`…): trocar ali muda o site todo.
+- **Faixa de heranças** (`public/img/patterns/`): grafismo indígena (Kaingang/Guarani), azulejo português, parreira italiana e enxaimel alemão. São padrões **inspirados** no universo geométrico desses povos, desenhados aqui; antes de usar símbolos ou textos específicos em campanhas, vale consultar representantes dos povos Kaingang e Guarani e a prefeitura.
+- **Foto de fundo do topo**: coloque a foto em **`public/img/hero/canyon.jpg`** (paisagem, ao menos 1600 px de largura, JPEG de preferência abaixo de 400 KB). Quando o arquivo existe, ele substitui automaticamente a ilustração em todas as capas; sem o arquivo, a ilustração continua. Garanta o direito de uso da imagem e dê o crédito ao autor.
 
 ## Segurança (resumo — detalhes em [SECURITY.md](SECURITY.md))
 
@@ -60,7 +67,8 @@ fica em `data/.dev-master-key`. Painel: `/admin`.
    **Cada parceiro preenche pelo próprio login**: veja [docs/convite-parceiros.md](docs/convite-parceiros.md) (convite por link de uso único, em lote com `npm run invite-partners`, mensagem pronta de WhatsApp e recuperação de senha).
 6. **Fotos**: o site usa ilustração SVG (`public/img/canyon.svg`). Coloque fotos reais (com permissão) em `public/img/`.
 7. **E-mail transacional**: configure `SMTP_URL`; sem isso o cliente depende de guardar o link do pedido.
-8. **Informações dos parques** (horários, valores de entrada) foram deliberadamente omitidas: mudam e precisam ser confirmadas com ICMBio/SEMA/gestores.
+8. **Foto do topo e textos da seção "Raízes"** (`public/index.html`): a foto ainda precisa ser colocada em `public/img/hero/canyon.jpg`; os textos sobre as heranças são genéricos e devem ser revisados com fontes locais.
+9. **Informações dos parques** (horários, valores de entrada) foram deliberadamente omitidas: mudam e precisam ser confirmadas com ICMBio/SEMA/gestores.
 
 ## Estrutura
 
@@ -69,7 +77,7 @@ server/        API Fastify (app.js, routes/, services/, lib/, migrations/)
 public/        Site e painel (HTML/CSS/JS sem build; CSP estrita; fontes Inter e Fraunces hospedadas aqui)
 scripts/       seed, create-admin, invite-partners, gen-secrets, preview/ (gerador do arquivo de pré-visualização)
 docs/          convite-parceiros.md (passo a passo e mensagem para os parceiros)
-test/          48 testes (preços, criptografia, pedidos, segurança, catálogo de produtos, convites e senhas)
+test/          49 testes (preços, criptografia, pedidos, segurança, catálogo de produtos, convites e senhas)
 ```
 
 ## Próximos passos sugeridos

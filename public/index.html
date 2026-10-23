@@ -3,77 +3,104 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Terra dos Cânions Online — Cambará do Sul e a Tirolesa Mais Alta das Américas</title>
-<meta name="description" content="Guia de Cambará do Sul (RS): atrativos, pousadas, restaurantes e ingressos da Tirolesa Mais Alta das Américas com desconto.">
-<meta name="theme-color" content="#0c261c">
-<meta property="og:title" content="Terra dos Cânions Online — Cambará do Sul e a Tirolesa Mais Alta das Américas">
-<meta property="og:description" content="Guia de Cambará do Sul (RS): atrativos, pousadas, restaurantes e ingressos da Tirolesa Mais Alta das Américas com desconto.">
+<title>Terra dos Cânions Online — Guia de Cambará do Sul (RS)</title>
+<meta name="description" content="Atrativos, pousadas, restaurantes, passeios e experiências em Cambará do Sul, a Terra dos Cânions. Planeje sua viagem e fale direto com os parceiros locais.">
+<meta name="theme-color" content="#12261d">
+<meta property="og:title" content="Terra dos Cânions Online — Guia de Cambará do Sul (RS)">
+<meta property="og:description" content="Atrativos, pousadas, restaurantes, passeios e experiências em Cambará do Sul, a Terra dos Cânions. Planeje sua viagem e fale direto com os parceiros locais.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/img/icon-192.png">
 <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
 
 <main id="conteudo">
   <section class="hero" aria-labelledby="h1">
-  <img class="hero-layer sky" src="/img/hero/sky.svg" alt="" width="1600" height="900" fetchpriority="high">
-  <img class="hero-layer far" src="/img/hero/far.svg" alt="" width="1600" height="900">
-  <img class="hero-layer mid" src="/img/hero/mid.svg" alt="" width="1600" height="900">
-  <img class="hero-layer near" src="/img/hero/near.svg" alt="" width="1600" height="900">
-  <img class="hero-layer zip" src="/img/hero/zip.svg" alt="" width="1600" height="900">
+    <img class="hero-layer sky" src="/img/hero/sky.svg" alt="" width="1600" height="900" fetchpriority="high">
+    <img class="hero-layer far" src="/img/hero/far.svg" alt="" width="1600" height="900">
+    <img class="hero-layer mid" src="/img/hero/mid.svg" alt="" width="1600" height="900">
+    <img class="hero-layer near" src="/img/hero/near.svg" alt="" width="1600" height="900">
     <div class="wrap">
       <span class="eyebrow"><span class="dot"></span>Cambará do Sul · Rio Grande do Sul</span>
-      <h1 id="h1">Voe sobre o <em>cânion</em>. Viva a Terra dos Cânions.</h1>
-      <p class="lead">Compre online o ingresso da Tirolesa Mais Alta das Américas e descubra os melhores lugares para ficar, comer e explorar.</p>
+      <h1 id="h1">Descubra a Terra dos <em>Cânions</em></h1>
+      <p class="lead">Tudo para planejar sua viagem: <span class="rot" id="rot">atrativos</span> reunidos num só lugar, com os parceiros de quem vive na serra.</p>
+      <button class="search-hero" id="hero-search" type="button" aria-label="Buscar no site"><span>Buscar atrativos, pousadas, passeios…</span><kbd>Ctrl K</kbd></button>
       <div class="actions">
-        <a class="btn btn-primary" href="/tirolesa">Comprar ingresso da tirolesa</a>
-        <a class="btn btn-glass" href="/atrativos">Explorar atrativos</a>
+        <a class="btn btn-primary" href="/atrativos">Explorar atrativos</a>
+        <a class="btn btn-glass" href="/produtos">Ver produtos e serviços</a>
       </div>
     </div>
-    <div class="hero-stats" aria-label="Números da tirolesa"><div class="wrap" id="hero-stats"></div></div>
+    <div class="hero-stats" aria-label="O portal em números"><div class="wrap" id="hero-stats"></div></div>
   </section>
 
-  <div class="strip"><div class="wrap"><ul>
-    <li id="s1"></li><li id="s2"></li><li id="s3"></li><li id="s4"></li>
-  </ul></div></div>
+  <div class="marquee" aria-label="Parceiros do portal"><div class="marquee-track" id="marquee"></div></div>
 
-  <section aria-labelledby="t-h">
+  <section aria-labelledby="a-h">
     <div class="wrap">
-      <div class="section-head reveal"><span class="kicker">Destaque</span><h2 id="t-h">A tirolesa mais alta das Américas</h2>
-        <p class="lead">Uma descida sobre o Cânion Fortaleza, dentro do Parque Nacional da Serra Geral. Escolha data e horário, pague com Pix e receba o QR Code no celular.</p></div>
-      <div class="bento" id="bento"></div>
+      <div class="section-head reveal"><span class="kicker">Para explorar</span><h2 id="a-h">Atrativos de Cambará do Sul</h2>
+        <p class="lead">Parques nacionais, cânions, cachoeiras e turismo rural. Abra a página de cada um para ver dicas e o que reservar.</p></div>
+      <div class="attr-scroller" id="home-attractions"></div>
+      <p class="center"><a class="link-arrow" href="/atrativos" id="all-attr"></a></p>
     </div>
   </section>
 
-  <section class="section-alt" aria-labelledby="a-h">
+  <section class="section-dark" aria-labelledby="f-h">
+    <div class="wrap two-col" id="spotlight">
+      <div class="reveal"><span class="kicker">Atrativo em destaque</span><h2 id="f-h">Cânion Fortaleza</h2><p class="lead" id="spot-text"></p>
+        <div class="chips-row" id="spot-tags"></div><p><a class="btn btn-glass" href="/atrativos/canion-fortaleza">Conhecer o atrativo</a></p></div>
+      <div class="stack" id="spot-products"></div>
+    </div>
+  </section>
+
+  <section class="section-alt" aria-labelledby="pr-h">
     <div class="wrap">
-      <div class="section-head reveal"><span class="kicker">Para explorar</span><h2 id="a-h">Atrativos de Cambará do Sul</h2>
-        <p class="lead">Parques nacionais, cachoeiras e turismo rural: abra a página de cada atrativo e veja dicas e o que reservar.</p></div>
-      <div class="grid grid-3" id="home-attractions"></div>
-      <p class="center"><a class="link-arrow" href="/atrativos" id="all-attr"></a></p>
+      <div class="section-head reveal"><span class="kicker">Para reservar</span><h2 id="pr-h">Produtos e experiências</h2>
+        <p class="lead">Passeios, hospedagem, gastronomia e ingressos. Peça informações direto ao parceiro pelo WhatsApp.</p></div>
+      <div class="grid grid-3" id="home-products"></div>
+      <p class="center"><a class="link-arrow" href="/produtos" id="all-products"></a></p>
     </div>
   </section>
 
   <section aria-labelledby="p-h">
     <div class="wrap">
       <div class="section-head reveal"><span class="kicker">Gente da serra</span><h2 id="p-h">Parceiros que fazem a serra acontecer</h2>
-        <p class="lead">Pousadas, restaurantes, guias e agências de quem vive e trabalha em Cambará do Sul. Cada parceiro tem sua página de produtos.</p></div>
+        <p class="lead">Pousadas, restaurantes, guias e agências de Cambará do Sul. Cada parceiro tem sua página de produtos.</p></div>
       <div class="grid grid-3" id="home-partners"></div>
       <p class="center"><a class="link-arrow" href="/parceiros" id="all-partners"></a></p>
     </div>
   </section>
 
-  <section class="section-dark" aria-labelledby="c-h">
+  <section class="section-sand" aria-labelledby="r-h">
     <div class="wrap">
-      <div class="section-head reveal"><span class="kicker">Simples e rápido</span><h2 id="c-h">Como comprar o ingresso</h2></div>
+      <div class="section-head reveal"><span class="kicker">Raízes</span><h2 id="r-h">Uma terra de muitos povos</h2>
+        <p class="lead">O interior gaúcho foi feito de encontros. A hospitalidade daqui tem o sotaque de muitas heranças.</p></div>
+      <div class="roots">
+        <article class="card root lead-card reveal"><div class="root-band root-grafismo" aria-hidden="true"></div>
+          <h3>Povos originários: Kaingang e Guarani</h3>
+          <p>Kaingang e Guarani trazem à cultura gaúcha o grafismo, a cestaria, o pinhão e a erva-mate, heranças que seguem vivas no interior do Rio Grande do Sul. As faixas decorativas deste site são inspiradas nesse universo geométrico.</p></article>
+        <article class="card root reveal"><div class="root-band root-azulejo" aria-hidden="true"></div>
+          <h3>Tropeiros e portugueses</h3><p>Tropeiros de origem portuguesa abriram caminhos pelos Campos de Cima da Serra e deixaram sua marca nas fazendas, nos sabores e nas festas.</p></article>
+        <article class="card root reveal"><div class="root-band root-videira" aria-hidden="true"></div>
+          <h3>Imigração italiana</h3><p>Parreira, vinho, massa feita em casa e mesas fartas de domingo: uma presença forte na serra gaúcha.</p></article>
+        <article class="card root reveal"><div class="root-band root-enxaimel" aria-hidden="true"></div>
+          <h3>Imigração alemã</h3><p>O enxaimel, as cucas, o café colonial e o gosto pelo trabalho em comunidade.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="c-h">
+    <div class="wrap">
+      <div class="section-head reveal"><span class="kicker">Simples</span><h2 id="c-h">Como usar o portal</h2></div>
       <ol class="steps" id="home-steps"></ol>
     </div>
   </section>
 
   <section>
-    <div class="wrap"><div class="cta-band reveal"><h2>Pronto para voar?</h2><p class="lead">Garanta sua vaga agora: as datas de maior procura esgotam primeiro.</p>
-      <p><a class="btn btn-primary" href="/tirolesa">Reservar minha tirolesa</a></p></div></div>
+    <div class="wrap"><div class="cta-band reveal"><h2>Pronto para planejar sua viagem?</h2><p class="lead">Escolha os atrativos, veja os produtos e fale direto com quem recebe você em Cambará do Sul.</p>
+      <p class="actions center-actions"><a class="btn btn-primary" href="/atrativos">Ver atrativos</a><a class="btn btn-glass" href="/produtos">Ver produtos</a></p></div></div>
   </section>
 </main>
 <script type="module" src="/js/home.js"></script>

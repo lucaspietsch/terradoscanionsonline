@@ -1,30 +1,59 @@
-import { $, ATTRACTION_ICON, FACT_ICON, api, attractionArt, boot, brl, h, icon, partnerCard, reveal } from './common.js';
+import {
+  $, api, attractionCard, boot, brl, clear, h, icon, liveSlots, partnerCard, productCard, reduced, reveal, watchCounters,
+} from './common.js';
+import { openSearch } from './search.js';
 boot();
 
-const [product, attractions, partners] = await Promise.all([
-  api('/products/tirolesa-mais-alta-das-americas').catch(() => null),
+const [attractions, partners, catalog, fort] = await Promise.all([
   api('/attractions').catch(() => []),
   api('/partners').catch(() => []),
+  api('/catalog').catch(() => ({ items: [] })),
+  api('/attractions/canion-fortaleza').catch(() => null),
 ]);
 
-const strip = [['bolt', 'Pix com aprovação na hora'], ['qr', 'QR Code no seu celular'], ['clock', `Vagas reservadas por ${product?.holdMinutes ?? 15} min`], ['shield', 'Pagamento seguro']];
-strip.forEach(([ic, text], i) => $(`#s${i + 1}`).append(icon(ic), text));
+// --- Herói: busca, palavra que alterna e números que "sobem" ---
+$('#hero-search').prepend(icon('search'));
+$('#hero-search').addEventListener('click', openSearch);
 
-if (product) {
-  $('#hero-stats').append(...product.facts.slice(0, 4).map((f) => h('div', { class: 'glass hero-stat' }, h('b', {}, f.value), h('span', {}, f.label))));
-  $('#bento').append(
-    reveal(h('div', { class: 'b-main' },
-      h('div', {}, h('span', { class: 'tag tag-founder' }, 'Venda online'), h('h3', {}, product.name), h('p', {}, product.summary)),
-      h('div', {}, h('p', { class: 'small' }, 'a partir de'), h('p', { class: 'price-big' }, h('b', {}, brl(product.priceCents)), ' por pessoa'),
-        h('a', { class: 'btn btn-primary', href: '/tirolesa' }, icon('ticket'), 'Ver datas e preços')))),
-    ...product.facts.map((f, i) => reveal(h('div', { class: 'b-fact' }, icon(FACT_ICON[f.label] || 'info'), h('b', {}, f.value), h('span', {}, f.label)), i + 1)));
-  $('#home-steps').append(...product.howItWorks.map((s, i) => reveal(h('li', {}, s), i)));
+const words = ['atrativos', 'pousadas', 'passeios', 'restaurantes', 'experiências'];
+const rot = $('#rot');
+if (!reduced()) {
+  let i = 0;
+  setInterval(() => {
+    rot.classList.add('out');
+    setTimeout(() => { i = (i + 1) % words.length; rot.textContent = words[i]; rot.classList.remove('out'); }, 360);
+  }, 2600);
+}
+const stat = (n, label) => h('div', { class: 'glass hero-stat' }, h('b', {}, h('span', { class: 'count', 'data-to': String(n) }, '0')), h('span', {}, label));
+$('#hero-stats').append(stat(attractions.length, 'atrativos para conhecer'), stat(partners.length, 'parceiros locais'), stat(catalog.items.length, 'produtos e experiências'));
+rot.classList.add('rot');
+
+// --- Faixa de parceiros (rola sozinha; pausa ao passar o mouse) ---
+const strip = partners.map((p) => h('a', { href: `/parceiros/${p.slug}` }, h('span', { class: 'avatar', 'data-cat': p.category, 'aria-hidden': 'true' }, p.name[0]), p.name));
+$('#marquee').append(...strip, ...strip.map((n) => n.cloneNode(true)));
+
+// --- Atrativos ---
+$('#home-attractions').append(...attractions.map((a, i) => attractionCard(a, i)));
+$('#all-attr').append('Ver todos os atrativos', icon('arrow-right'));
+
+// --- Destaque: Cânion Fortaleza (a Tirolesa é um dos produtos dele) ---
+if (fort) {
+  $('#spot-text').textContent = fort.summary;
+  $('#spot-tags').append(...fort.highlights.map((x) => h('span', { class: 'pill' }, icon('check'), x)));
+  const t = catalog.items.find((x) => x.buy);
+  $('#spot-products').append(...(t ? [productCard(t, { i: 0 })] : []), ...(t ? [liveSlots()] : []));
 }
 
-$('#home-attractions').append(...attractions.map((a, i) => reveal(h('a', { class: 'card', href: `/atrativos/${a.slug}` },
-  attractionArt(a), h('span', { class: 'tag' }, a.kind), h('h3', {}, a.name), h('p', { class: 'muted small' }, a.summary),
-  h('span', { class: 'link-arrow' }, 'Ver página', icon('arrow-right'))), i)));
-$('#all-attr').append('Ver todos os atrativos', icon('arrow-right'));
+// --- Produtos (a Tirolesa aparece como um item, junto dos demais) ---
+$('#home-products').append(...catalog.items.slice(0, 6).map((p, i) => productCard(p, { i })));
+$('#all-products').append(`Ver todos os ${catalog.items.length} produtos`, icon('arrow-right'));
+
+// --- Parceiros ---
 $('#home-partners').append(...partners.slice(0, 6).map((p, i) => partnerCard(p, i)));
 $('#all-partners').append(`Ver os ${partners.length} parceiros`, icon('arrow-right'));
-void ATTRACTION_ICON;
+
+// --- Como usar ---
+const steps = ['Escolha os atrativos que quer conhecer e veja dicas e destaques de cada um.', 'Veja os produtos: passeios, hospedagem, gastronomia e experiências.', 'Fale direto com o parceiro pelo WhatsApp, ou compre o ingresso online quando disponível.', 'Salve seus favoritos (❤) e volte quando quiser: eles ficam neste aparelho.'];
+$('#home-steps').append(...steps.map((s, i) => reveal(h('li', {}, s), i)));
+watchCounters();
+void brl; void clear;

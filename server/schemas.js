@@ -99,7 +99,7 @@ export const qrBody = z.object({
   code: z.string().trim().toLowerCase().regex(/^[a-z0-9-]{3,30}$/),
   label: trimmed(2, 100),
   location: z.string().trim().max(160).default(''),
-  target: z.enum(['/tirolesa', '/', '/atrativos', '/parceiros']).default('/tirolesa'),
+  target: z.enum(['/tirolesa', '/atrativos/canion-fortaleza', '/produtos', '/', '/atrativos', '/parceiros']).default('/tirolesa'),
   couponId: z.number().int().positive().nullable().default(null),
   partnerId: z.number().int().positive().nullable().default(null),
   active: z.boolean().default(true),

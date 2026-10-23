@@ -1,3 +1,6 @@
+import { existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import QRCode from 'qrcode';
 import { z } from 'zod';
 import { blindIndex, normalizeCode } from '../lib/crypto.js';
@@ -13,8 +16,17 @@ const partnerPublic = (p) => ({
   featured: Boolean(p.featured), plan: p.plan, attractionSlug: p.attraction_slug,
 });
 
+const heroPhoto = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'img', 'hero', 'canyon.jpg');
+
 export async function publicRoutes(api, { db, config, orders, payments, rl, audit }) {
   api.get('/health', async () => ({ ok: true }));
+
+  // Recursos opcionais do visual: a foto de fundo (public/img/hero/canyon.jpg) só é usada se o arquivo existir.
+  let siteCache = { at: 0, value: { heroPhoto: false } };
+  api.get('/site', async (req, reply) => {
+    if (Date.now() - siteCache.at > 30_000) siteCache = { at: Date.now(), value: { heroPhoto: existsSync(heroPhoto) } };
+    return reply.header('Cache-Control', 'public, max-age=30').send(siteCache.value);
+  });
 
   api.get('/attractions', async () => attractions);
 

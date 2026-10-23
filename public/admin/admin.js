@@ -241,9 +241,10 @@ async function qr(root) {
     h('p', { class: 'muted' }, 'Cada placa tem um endereço curto e estável (/q/código). Você pode trocar cupom e destino depois sem reimprimir. Baixe o PNG em alta resolução para a gráfica.'),
     h('form', { class: 'card stack', onsubmit: async (e) => {
       e.preventDefault();
-      try { await api('/admin/qr', { method: 'POST', body: { code: val('q-code'), label: val('q-label'), location: val('q-loc'), couponId: val('q-coupon') ? Number(val('q-coupon')) : null, partnerId: val('q-partner') ? Number(val('q-partner')) : null } }); reload(); } catch (ex) { fail(msg)(ex); }
+      try { await api('/admin/qr', { method: 'POST', body: { code: val('q-code'), label: val('q-label'), location: val('q-loc'), target: val('q-target'), couponId: val('q-coupon') ? Number(val('q-coupon')) : null, partnerId: val('q-partner') ? Number(val('q-partner')) : null } }); reload(); } catch (ex) { fail(msg)(ex); }
     } }, h('h3', {}, 'Nova placa'),
       h('div', { class: 'inline-form' }, field('Código curto', input('q-code', { required: true, placeholder: 'praca-01', pattern: '[a-z0-9-]{3,30}' }), 'q-code'), field('Nome da placa', input('q-label', { required: true }), 'q-label'), field('Local', input('q-loc', { placeholder: 'Praça central' }), 'q-loc'),
+        field('Ao ler a placa, abrir…', h('select', { id: 'q-target' }, [['/tirolesa', 'Ingresso da Tirolesa (venda direta)'], ['/atrativos/canion-fortaleza', 'Página do Cânion Fortaleza'], ['/produtos', 'Produtos e serviços'], ['/', 'Início']].map(([v, t]) => h('option', { value: v }, t))), 'q-target'),
         field('Cupom automático', h('select', { id: 'q-coupon' }, h('option', { value: '' }, '— nenhum —'), cs.filter((c) => c.active).map((c) => h('option', { value: c.id }, `${c.code}`))), 'q-coupon'),
         field('Parceiro (atribuição)', h('select', { id: 'q-partner' }, h('option', { value: '' }, '— nenhum —'), partners.map((p) => h('option', { value: p.id }, p.name))), 'q-partner')),
       h('button', { class: 'btn btn-dark btn-small' }, 'Criar placa')),
@@ -257,7 +258,7 @@ async function qr(root) {
 
 // ---------------- Produtos dos parceiros (usado pelo admin e pelo próprio parceiro) ----------------
 const KIND_LABEL = { hospedagem: 'Hospedagem', passeio: 'Passeio', refeicao: 'Gastronomia', experiencia: 'Experiência', servico: 'Serviço', produto: 'Produto' };
-const ATTR_OPTIONS = [['aparados-da-serra', 'Aparados da Serra'], ['serra-geral', 'Serra Geral'], ['parque-estadual-do-tainhas', 'Parque Estadual do Tainhas'], ['cascata-velha-ouro-verde', 'Cascata Velha — Ouro Verde'], ['costao-do-cambara', 'Costão do Cambará']];
+const ATTR_OPTIONS = [['aparados-da-serra', 'Aparados da Serra'], ['serra-geral', 'Serra Geral'], ['canion-fortaleza', 'Cânion Fortaleza'], ['parque-estadual-do-tainhas', 'Parque Estadual do Tainhas'], ['cascata-velha-ouro-verde', 'Cascata Velha — Ouro Verde'], ['costao-do-cambara', 'Costão do Cambará']];
 const parsePrice = (v) => (v.trim() === '' ? null : Math.round(Number(v.replace(',', '.')) * 100));
 
 function productsPanel(ep, onChange) {

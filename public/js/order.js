@@ -1,4 +1,4 @@
-import { $, ApiError, api, boot, brl, clear, fmtDay, h, showError } from './common.js';
+import { $, ApiError, api, boot, brl, clear, confetti, fmtDay, h, showError, toast } from './common.js';
 boot();
 
 const root = $('#order');
@@ -79,13 +79,25 @@ function ended(o) {
   return [head(o), h('div', { class: 'alert alert-warn' }, msg), h('a', { class: 'btn btn-primary', href: '/tirolesa' }, 'Fazer uma nova reserva')];
 }
 
+// Comemora uma vez por pedido (pagamento aprovado agora, ou primeira abertura depois do pagamento).
+function celebrate(o, was) {
+  let done = false;
+  try { done = localStorage.getItem(`tdc_cel_${o.code}`) === '1'; if (!done) localStorage.setItem(`tdc_cel_${o.code}`, '1'); } catch { /* sem storage: só comemora na transição */ if (!was) return; }
+  if (done && !was) return;
+  confetti();
+  navigator.vibrate?.([40, 30, 40]);
+  toast('Pagamento aprovado! Seus ingressos estão prontos.', { type: 'ok', ic: 'check' });
+}
+
 async function load() {
   try {
     const o = await api(`/orders/${encodeURIComponent(token)}`);
     // Só redesenha quando o status muda: evita atrapalhar quem está copiando o código Pix.
     if (shown !== o.status) {
+      const was = shown;
       shown = o.status;
       clear(root).append(...(o.status === 'paid' ? paid(o) : o.status === 'pending' ? pending(o) : ended(o)).filter(Boolean));
+      if (o.status === 'paid') celebrate(o, was);
     }
     clearTimeout(timer);
     if (o.status === 'pending' || o.status === 'expired') timer = setTimeout(load, 4000);
