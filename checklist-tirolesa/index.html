@@ -265,6 +265,67 @@ const FOLHAS = [
    ============================================================ */
 const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
 const DADOS = {
+  "2026-06": {
+    status:"parcial", ultimoDia:30,
+    folgas:[2,9,16,23], semOperacao:[], copiados:[30],
+    semFolha:["trm"],
+    nota:"Junho: o PDF é de 29/06 e o dia 30 estava em branco, então copiei o dia 29 (marcado como copiado). O Trolley mensal não consta nos documentos deste mês. De 10 a 15/06 o Trolley novo esteve em teste (itens 3, 14, 15, 17, 19 e 20 não se aplicam).",
+    incl:{
+      1:[0.9,0.9,1.0,0.9,1.0,0.9,0.00,"","Lucas P"],
+      3:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      4:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      5:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      6:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      7:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      8:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      10:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      11:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      12:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      13:[1.1,1.0,1.0,1.0,1.0,1.0,0.1,"","Lucas P"],
+      14:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      15:[1.0,0.9,1.0,1.0,0.9,1.0,0.1,"","Lucas P"],
+      17:[1.0,1.0,0.9,1.0,0.9,1.0,0.1,"","Lucas P"],
+      18:[0.9,1.0,1.0,1.0,0.9,1.0,0.1,"","Lucas P"],
+      19:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      20:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      21:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      22:[1.0,1.0,1.6,1.0,1.0,1.0,0.00,"","Lucas P","cabo 3 escrito 1.6"],
+      24:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      25:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
+      26:[1.0,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      27:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      28:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"","Lucas P"],
+      29:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
+      30:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P","copiado do dia 29"]
+    },
+    grade:{
+      tro:{ form:"trd3", NA:{3:R(10,15),14:R(10,15),15:R(10,15),17:R(10,15),19:R(10,15),20:R(10,15)}, resp:"Lucas R. Pietsch (Líder)",
+        obs:[
+          {d:"10/06/2026", item:3, txt:"3 - Neste caso, o Trolley novo possui botão de SUBIDA e DESCIDA; se encontra em conformidade", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:14, txt:"14 - Neste caso, o Trolley desce engrenado e não necessita do uso de para-quedas.", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:15, txt:"15 - Neste caso, o freio do Trolley serve como ativador do fim de curso, não necessitando especificamente de frenagem, mas sim a desativação do motor (desligamento).", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:17, txt:"17 - Neste caso, necessita de nova documentação por se tratar de um novo equipamento, de versão atualizada.", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:19, txt:"19 - Não necessita para-quedas", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:20, txt:"20 - Não necessita para-quedas", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"17/06/2026", item:0, txt:"Finalizados testes do novo Trolley; Trolley antigo de volta à operação."}
+        ] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Oxidação em cabo de ancoragem",24:"Tecnil danificado cabos 3, 4 e 6",25:"Manejo de vegetação"},
+        NC:{11:[1,3]},
+        obs:[
+          {d:"31/05/2026", item:11, txt:"11 - Anomalia em polimento da escada (não impeditivo)", prazo:"07/06/2026", resp:"Pietsch"},
+          {d:"21/04/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3 (não impeditivo)", prazo:"Trimestral", resp:"Pietsch"},
+          {d:"21/04/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6 (não impeditivo)", prazo:"Trimestral", resp:"Pietsch"},
+          {d:"11/06/2026", item:26, txt:"26 - Molas retraídas sem lubrificação", prazo:"11/06/2026", resp:"Pietsch"}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:22, resp:"Lercan Konting (Líder de Operação)",
+        obs:[
+          {d:"01/06/2026", item:12, txt:"Item 12: Cerca externa do deck encontra-se rompida. Área ainda é isolada por outro portão (NC não impeditivo)", prazo:"10/06/2026"}
+        ] },
+      cadl:{ n:20, resp:"Lercan Konting (Líder de Operação)", obs:[] }
+    }
+  },
   "2026-05": {
     status:"ok", ultimoDia:31,
     folgas:[5,12,19,26], semOperacao:[], copiados:[],
@@ -606,7 +667,7 @@ function tabelaIncl(d){
     if(r){
       h += `<tr><td class="dia">${rot}</td>${temHora?`<td class="hr">${esc(r[7]||"")}</td>`:""}`
         + r.slice(0,6).map(v=>`<td class="${classeCabo(v)}">${fmt(v,1)}</td>`).join("")
-        + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">conferir</span> ${esc(r[9]===true?"":r[9])}`:""}</td></tr>`;
+        + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">${String(r[9]).startsWith("copiado")?"copiado":"conferir"}</span> ${esc(r[9]===true?"":r[9])}`:""}</td></tr>`;
     } else if((d.folgas||[]).includes(dia)){
       h += `<tr class="folga"><td class="dia">${rot}</td><td colspan="${nc}">F O L G A</td></tr>`;
     } else if((d.semRegistro||[]).includes(dia)){
@@ -656,7 +717,7 @@ function vazioFolha(f){
   if(f.desde && mesSel<f.desde)
     return `<div class="vazio"><b>${esc(f.nome)}</b><span>Esta folha só existe a partir de ${MESES[f.desde-1]} (o formulário ainda não era usado em ${MESES[mesSel-1]}).</span></div>`;
   if((((DADOS[chave(mesSel)]||{}).semFolha)||[]).includes(f.id))
-    return `<div class="vazio"><b>${esc(f.nome)}</b><span>Esta folha não existe em ${MESES[mesSel-1]} (o formulário ainda não era usado neste mês).</span></div>`;
+    return `<div class="vazio"><b>${esc(f.nome)}</b><span>Esta folha não consta nos documentos de ${MESES[mesSel-1]}.</span></div>`;
   return `<div class="vazio"><b>${esc(f.nome)}</b><span>Folha ainda não transcrita para ${MESES[mesSel-1]}.</span></div>`;
 }
 
