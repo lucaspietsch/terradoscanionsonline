@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checklist Tirolesa - SGV</title>
+<meta name="description" content="Checklist diário da Tirolesa Serra Geral Vertical: inclinômetro, trolley, recebimento, lançamento e cadeirinhas, mês a mês.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12130e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2312130e'/%3E%3Cpath d='M8 20L56 36' stroke='%23e0883a' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M20 40l8 8 16-18' stroke='%238a9a3b' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --fundo:#12130e; --papel:#1b1d15; --papel2:#23261b;
+    --texto:#c9d28a; --oliva:#8a9a3b; --laranja:#e0883a;
+    --linha:#3a3f27; --alerta:#ff3b30; --ok:#8fbf4a; --amarelo:#e6b032;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--texto);font-family:var(--mono);padding:14px 12px 48px;min-height:100vh;
+       background:
+         linear-gradient(rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         linear-gradient(90deg,rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         radial-gradient(1000px 500px at 80% -10%,rgba(224,136,58,.12),transparent 60%),
+         var(--fundo)}
+  main{max-width:1100px;margin:0 auto}
+  button{font:inherit;color:inherit;cursor:pointer}
+  h1{font-size:clamp(1.25rem,4.5vw,2.1rem);margin:10px 0 2px;letter-spacing:1px;text-transform:uppercase;
+     color:var(--laranja);text-shadow:0 0 14px rgba(224,136,58,.35)}
+  h1::before{content:"> ";color:var(--oliva)}
+  .sub{margin:0 0 14px;opacity:.8;font-size:.82rem;line-height:1.5}
+
+  /* módulos do sistema integrado */
+  .modulos{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--linha);padding-bottom:10px}
+  .mod{padding:7px 14px;border:1px solid var(--linha);border-radius:8px;background:var(--papel);
+       text-transform:uppercase;letter-spacing:1.5px;font-size:.75rem;color:var(--texto);text-decoration:none}
+  .mod.on{border-color:var(--laranja);color:var(--laranja);box-shadow:0 0 12px rgba(224,136,58,.3)}
+  .mod.off{opacity:.45;cursor:not-allowed}
+  .mod small{opacity:.8;text-transform:none;letter-spacing:0;margin-left:4px}
+
+  /* abas */
+  .abas{display:flex;gap:6px;overflow-x:auto;padding:12px 0 6px;scrollbar-width:thin}
+  .aba{flex:none;padding:7px 12px;border:1px solid var(--linha);border-radius:8px;background:var(--papel);
+       text-transform:uppercase;letter-spacing:1.5px;font-size:.78rem;position:relative}
+  .aba:hover{border-color:var(--laranja)}
+  .aba.on{background:var(--laranja);color:var(--fundo);border-color:var(--laranja);font-weight:bold}
+  .aba:disabled{opacity:.35;cursor:not-allowed}
+  .aba .pt{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:6px;background:var(--linha)}
+  .aba .pt.parcial{background:var(--amarelo)}
+  .aba .pt.ok{background:var(--ok)}
+  .aba.on .pt{box-shadow:0 0 0 1px var(--fundo)}
+  .abas.folhas .aba{font-size:.72rem;letter-spacing:.8px;text-transform:none;border-radius:16px}
+  .abas.folhas .aba.on{background:var(--oliva);border-color:var(--oliva)}
+
+  /* painéis de resumo */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+  .card{background:linear-gradient(160deg,var(--papel2),var(--papel));border:1px solid var(--linha);
+        border-radius:10px;padding:10px 12px}
+  .card .l{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--oliva)}
+  .card .v{font-size:1.5rem;font-weight:bold;color:var(--laranja);margin-top:2px}
+  .card .v.bad{color:var(--alerta)} .card .v.am{color:var(--amarelo)}
+  .card .s{font-size:.72rem;opacity:.75;margin-top:2px}
+
+  .aviso{border:1px dashed var(--amarelo);color:var(--amarelo);background:rgba(230,176,50,.08);
+         border-radius:8px;padding:9px 12px;font-size:.78rem;margin:10px 0;line-height:1.5}
+  .vazio{border:1px dashed var(--linha);border-radius:12px;padding:34px 16px;text-align:center;opacity:.85;margin-top:10px}
+  .vazio b{display:block;color:var(--laranja);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+  .vazio span{font-size:.82rem;line-height:1.6}
+
+  /* tabela / grade */
+  .cx{border:1px solid var(--linha);border-radius:10px;overflow:auto;background:var(--papel);max-height:72vh;margin-top:8px}
+  table{border-collapse:separate;border-spacing:0;font-size:.78rem;width:max-content;min-width:100%}
+  th,td{border-right:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:0;text-align:center}
+  thead th{position:sticky;top:0;z-index:3;background:var(--papel2);color:var(--oliva);font-weight:bold;height:30px;min-width:30px}
+  thead th.hj{color:var(--laranja)}
+  .nm{position:sticky;left:0;z-index:2;background:var(--papel2);text-align:left;padding:5px 8px;min-width:220px;max-width:300px;
+      font-size:.74rem;line-height:1.3;border-right:2px solid var(--linha)}
+  thead .nm{z-index:4}
+  .nm i{font-style:normal;color:var(--laranja);font-weight:bold;margin-right:6px}
+  td.c{width:30px;height:30px;font-size:.72rem;font-weight:bold}
+  td.C{color:var(--ok)} td.C::before{content:"C"}
+  td.NC{background:rgba(255,59,48,.2);color:#ff8a80;cursor:pointer;box-shadow:inset 0 0 0 1px var(--alerta)} td.NC::before{content:"NC"}
+  td.NA{color:#7b8068;opacity:.8} td.NA::before{content:"NA"}
+  td.F{background:repeating-linear-gradient(115deg,transparent 0 5px,rgba(138,154,59,.3) 5px 7px);color:transparent}
+  td.S{background:repeating-linear-gradient(115deg,transparent 0 5px,rgba(224,136,58,.3) 5px 7px)}
+  td.nd{color:#555a40} td.nd::before{content:"·"}
+  td.cp{opacity:.55} /* dia copiado do anterior */
+  tr:hover td:not(.F):not(.S){background-color:rgba(138,154,59,.06)}
+
+  /* inclinômetro */
+  .inc td{padding:5px 8px;min-width:58px;font-variant-numeric:tabular-nums}
+  .inc td.dia{position:sticky;left:0;background:var(--papel2);font-weight:bold;color:var(--laranja);z-index:1;min-width:64px}
+  .inc td.hr{opacity:.8}
+  .inc td.am{color:var(--amarelo);background:rgba(230,176,50,.12);font-weight:bold}
+  .inc td.rd{color:#ff8a80;background:rgba(255,59,48,.16);font-weight:bold}
+  .inc td.ob{text-align:left;min-width:160px;font-size:.72rem}
+  .inc tr.folga td:not(.dia),.inc tr.semop td:not(.dia){background:repeating-linear-gradient(115deg,transparent 0 9px,rgba(138,154,59,.28) 9px 12px);color:var(--oliva);letter-spacing:3px}
+  .inc tr.semop td:not(.dia){background:repeating-linear-gradient(115deg,transparent 0 9px,rgba(224,136,58,.28) 9px 12px);color:var(--laranja)}
+  .inc td.pend{opacity:.5}
+  .chk{display:inline-block;padding:1px 6px;border-radius:10px;font-size:.66rem;border:1px solid var(--amarelo);color:var(--amarelo)}
+
+  .legenda{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.74rem}
+  .legenda span{display:inline-flex;align-items:center;gap:6px}
+  .legenda i{display:inline-block;width:20px;height:16px;border-radius:3px;border:1px solid var(--linha);text-align:center;font-style:normal;font-size:.6rem;line-height:15px;font-weight:bold}
+
+  .obs{margin-top:12px}
+  .obs h3{margin:0 0 6px;font-size:.78rem;letter-spacing:2px;color:var(--oliva);border-bottom:1px dashed var(--linha);padding-bottom:3px;text-transform:uppercase}
+  .ob-i{border:1px solid var(--linha);border-left:3px solid var(--alerta);background:var(--papel);border-radius:6px;padding:7px 10px;margin-bottom:6px;font-size:.78rem;line-height:1.45}
+  .ob-i b{color:var(--laranja)}
+  .ob-i small{display:block;opacity:.7;margin-top:2px}
+
+  /* janela */
+  #janela{position:fixed;inset:0;background:rgba(5,6,3,.7);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:12px;z-index:10}
+  #janela.aberta{display:flex}
+  .caixa{border:1px solid var(--oliva);border-radius:12px;background:var(--papel);padding:18px;width:min(92vw,460px);max-height:88vh;overflow:auto;
+         box-shadow:0 0 30px rgba(138,154,59,.25);position:relative}
+  .caixa h2{margin:0 0 10px;font-size:1rem;color:var(--laranja);text-transform:uppercase;letter-spacing:.5px}
+  .fechar{margin-top:14px;background:transparent;color:var(--laranja);border:1px solid var(--laranja);border-radius:8px;padding:7px 16px;text-transform:uppercase;letter-spacing:1px}
+  .fechar:hover{background:var(--laranja);color:var(--fundo)}
+  footer{margin-top:26px;font-size:.7rem;opacity:.6;text-align:center;line-height:1.6}
+  @media (max-width:560px){.nm{min-width:150px;max-width:170px;font-size:.68rem}}
+</style>
+</head>
+<body>
+<main>
+  <nav class="modulos" id="modulos" aria-label="Módulos do sistema"></nav>
+  <h1>Checklist Tirolesa - SGV</h1>
+  <p class="sub">Verificações diárias da tirolesa, mês a mês. Escolha o mês e a folha. Toque em um <b style="color:#ff8a80">NC</b> para ver a observação.</p>
+
+  <div class="abas" id="meses" role="tablist" aria-label="Meses"></div>
+  <div id="resumo"></div>
+  <div class="abas folhas" id="folhas" role="tablist" aria-label="Folhas"></div>
+  <div id="conteudo"></div>
+  <div class="legenda" id="legenda"></div>
+  <footer>Checklist Tirolesa · Serra Geral Vertical · transcrito das folhas manuscritas (Urbia / SGV)</footer>
+</main>
+
+<div id="janela" role="dialog" aria-modal="true"><div class="caixa" id="caixa"></div></div>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO
+   ============================================================ */
+const ANO = 2026;
+const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+// Inclinômetro: faixa "normal" informada pelo operador
+const FAIXA_CABO = {min:0.9, max:1.0};     // cabos 1 a 6 costumam dar 0.9 ou 1.0
+const FAIXA_TROLLEY = [0, 0.05, 0.1];      // trolley costuma dar 0.00, 0.05 ou 0.1
+
+const MODULOS = [
+  {id:"checklist", nome:"Checklist", on:true},
+  {id:"escala",    nome:"Escala",    off:"em breve"},
+  {id:"molas",     nome:"Molas",     off:"em breve"}
+];
+
+/* Itens de cada formulário (texto resumido, igual ao da folha). */
+const ITENS = {
+  "122": [
+    "Área devidamente sinalizada e isolada?","Área de guarda de cadeirinhas, cintos e capacetes identificada?","Linhas de vida (tipo trilho) conformes?",
+    "Kit de resgate inspecionado e pronto? Com TAG?","Cordas e fitas isentas de sujeira? Com TAG?","Cabo de trabalho (robô/trolley) livre e conforme?",
+    "Cordas em bom estado? Capa íntegra? Alma exposta?","Sinais de queimaduras ou deformações nas cordas?","Terminações das cordas sem desgaste excessivo?",
+    "Pintura de sinalização de limitação no piso conforme?","Escada com peça solta ou frouxidão?","Guarda-corpo de isolamento conforme?",
+    "Molas e batentes da frenagem retraídos ou com anomalia?","Rádio de comunicação disponível e pessoas treinadas?","Inspeção diária de capacetes, cadeirinhas e acessórios realizada?",
+    "Pintura dos clips (grampos) dos cabos das ancoragens conforme?","Pintura dos clips dos cabos de linha de vida conforme?","Cabos de aço tensionados (verificar com inclinômetro)?",
+    "Relatório de lubrificação no prazo?","Check list trimestral geral no prazo?","Relatório de torque e diâmetros em cabos no prazo?",
+    "Maca e talas de imobilização disponíveis?","Cabos de aço da área de frenagem conformes?","Molas do sistema de frenagem fixas no tecnil e encaixadas nos batentes?",
+    "Molas apresentam deformidades?","Molas de frenagem retornam ao ponto correto de inércia?","Cabos de aço da área das molas limpos, sem excesso de vaselina?",
+    "Limpeza e lubrificação das molas no prazo?","Escada da plataforma de inspeção/lubrificação das molas conforme?","Vegetação devidamente aparada na região da plataforma de recebimento?"
+  ],
+  "123": [
+    "Área devidamente sinalizada e isolada?","Área de guarda de cadeirinhas, cintos e capacetes identificada?","Linhas de vida para corda auto seguro no deck conformes?",
+    "Pontos de ancoragem para corda auto seguro conformes?","Cordas e fitas isentas de sujeira? Com TAG?","Cabo de trabalho (robô/trolley) livre e conforme?",
+    "Cordas em bom estado? Capas íntegras? Alma exposta?","Sinais de queimaduras ou deformações nas cordas?","Terminações das cordas sem desgaste excessivo?",
+    "Plataforma superior de montagem limpa e conforme?","Portão de acesso à plataforma de lançamento com trava para fechar?","Guarda-corpo de isolamento conforme?",
+    "Pontos de ancoragem dos backups e backups conformes?","Rádios de comunicação disponíveis e pessoas treinadas?","Inspeção diária de capacetes, cadeirinhas e acessórios realizada?",
+    "Pintura dos clips (grampos) dos cabos das ancoragens conforme?","Pintura dos clips dos cabos de linha de vida conforme?","Cabos de aço das vias tensionados (verificar com inclinômetro)?",
+    "Relatório trimestral de lubrificação no prazo?","Check list trimestral geral no prazo?","Relatório de torque e diâmetros em cabos no prazo?",
+    "Maca e talas de imobilização disponíveis?","Mola do sistema de frenagem do trolley fixa no tecnil e encaixada no batente?","Mola do cabo do trolley sem deformidades? Retorna ao ponto de inércia?",
+    "Sistema de ancoragem do trolley conforme?","Vegetação devidamente aparada/cortada na plataforma?"
+  ],
+  "124": [
+    "Capacete com CA conforme? (visível)","Cadeirinhas (todos os modelos) com CA ou UIAA conforme?","Cintos de segurança (todos os modelos) com CA e conformes?",
+    "Informações do fabricante visíveis?","Capacetes com rachaduras ou outras anomalias?","Fivelas de ajustes conformes?",
+    "Desgastes excessivos ou cortes nas partes têxteis (ancoragem e costuras)?","Abrasão nas partes têxteis que seguram cargas? \"Partes peludas\"?","Pontos de costura cortada, desfiada ou partida?",
+    "Cortes ou áreas endurecidas nas partes têxteis?","Conectores e mosquetões com desgastes ou abrasão?","Acessórios metálicos com deformação?",
+    "Acessórios metálicos isentos de corrosão, fissuras ou anomalias?","Local de armazenagem protegido de intempéries e conforme?","Equipamentos limpos e organizados?",
+    "Fitas de cadeirinhas e capacetes em boas condições?","Fitas das cadeirinhas isentas de sinais de queimaduras?","Toucas e elásticos para cabelos disponíveis? Recipientes para descartes?",
+    "Kits Zip Rider montados e prontos para uso?","Todos os equipamentos com TAG?"
+  ],
+  "125": [
+    "\"Memorial Descritivo\", \"Manual de Operação\" e \"Plano de Manutenção\" disponíveis?","Baterias carregadas e prontas para uso?","Carregadores das baterias conformes?",
+    "Voltímetro em conformidade?","Conectores (tipo Anderson) entre bateria e trolley conformes?","Voltagem para lançamento de subida igual ou maior que 37 Volts?",
+    "Caixa do módulo fixa (proteção das placas eletrônicas)? Apresenta frouxidão?","Botão emergência / liga-desliga / fim de curso / potenciômetro conformes?","Alavancas de subida e descida conformes?",
+    "Correias alinhadas e rodando corretamente?","Carenagens metálicas bem fixas? Parafusos apertados?","Superfície cortante nas bordas de alumínio ou aço?",
+    "Polias sem ruídos e com rotação conforme?","Barulho diferente no motor ao ligar para teste diário?","Orifícios de ancoragem das malhas delta íntegros, sem desgaste ou alargamento?",
+    "Malhas deltas com tags, inspeção em dia e fechadas com chave?","Carga máxima do equipamento (165kg) sinalizada e visível?","Ponto de ancoragem do paraquedas conforme?",
+    "Paraquedas isento de furos, rasgos ou deformidades? Cordins internos conformes?","Costuras das fitas e ponto de ancoragem do paraquedas conformes?",
+    "Paraquedas com deformação com aumento de comprimento (teste prático)?","Cordas, polias e mosquetões do freio do trolley (frenagem por atrito) conformes?",
+    "Corda da \"polia de frenagem\" alinhada com o cabo de sustentação?","\"Polia de frenagem por atrito\" (batedor) em boas condições? Rolamento livre?",
+    "Pontos de ancoragem do sistema de frenagem sem movimentação indesejada ou rachaduras?","Área do sistema de frenagem desobstruída, livre e sinalizada?",
+    "\"Polia de frenagem\" posicionada para parar o trolley ao menos 3 m da porta de acesso?","Após todos os testes o trolley funciona normalmente?"
+  ]
+};
+
+const FOLHAS = [
+  {id:"incl", nome:"Inclinômetro",         tipo:"incl"},
+  {id:"tro",  nome:"Trolley (125)",        tipo:"grade", form:"125"},
+  {id:"rec",  nome:"Recebimento (122)",    tipo:"grade", form:"122"},
+  {id:"cadr", nome:"Cadeirinhas · Receb.", tipo:"grade", form:"124"},
+  {id:"lan",  nome:"Lançamento (123)",     tipo:"grade", form:"123"},
+  {id:"cadl", nome:"Cadeirinhas · Lanç.",  tipo:"grade", form:"124"}
+];
+
+/* ============================================================
+   DADOS TRANSCRITOS
+   Estrutura de cada mês:
+   { status:"parcial"|"ok", ultimoDia:N,
+     folgas:[dias], semOperacao:[dias], copiados:[dias],
+     incl:{ "dia":[c1..c6,trolley,"hora","autor", conferir?] },
+     grade:{ folhaId:{ NA:{item:[dias]}, NC:{item:[dias]}, obs:[{d,item,txt,prazo,resp,real}] } } }
+   Em grade, tudo que não for NC/NA nos dias operados é C.
+   ============================================================ */
+const DADOS = {
+  "2026-10": {
+    status:"parcial", ultimoDia:21,
+    folgas:[6,13,20], semOperacao:[], copiados:[],
+    nota:"Pré-leitura do inclinômetro (folha 1/2 e 2/2) — conferir contra o papel. As demais folhas ainda aguardam transcrição.",
+    incl:{
+      1:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"08:30","G"],
+      2:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"08:30","G"],
+      3:[0.9,0.9,1.0,0.9,1.0,0.9,0.05,"08:30","G"],
+      4:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"09:00","G"],
+      5:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:35","G"],
+      7:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:20","G"],
+      8:[0.9,1.0,0.9,0.9,1.0,1.0,0.05,"08:25","G"],
+      9:[0.9,1.0,1.0,0.9,0.9,1.0,0.05,"08:20","G"],
+      10:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:25","G"],
+      11:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"08:20","G"],
+      12:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"08:16","G"],
+      14:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"08:30","G"],
+      15:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"08:10","G"],
+      16:[1.0,1.0,0.9,1.0,1.0,0.9,0.05,"08:25","G"],
+      17:[1.0,0.9,1.0,1.0,1.0,1.0,0.1,"08:30","G"],
+      18:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:27","G"],
+      19:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"08:25","G"],
+      21:[1.0,0.9,1.0,0.9,1.0,0.9,0.1,"08:20","G"]
+    },
+    grade:{}
+  }
+};
+
+/* ============================================================
+   APLICATIVO
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const diasNoMes = (m) => new Date(ANO, m, 0).getDate();           // m = 1..12
+const chave = m => ANO+"-"+pad(m);
+const hoje = new Date();
+const hojeKey = [hoje.getFullYear(), hoje.getMonth()+1, hoje.getDate()];
+
+let mesSel = (()=>{ try{ const s=localStorage.getItem("ct:mes"); if(s) return +s; }catch(e){} return hojeKey[0]===ANO ? hojeKey[1] : 10; })();
+let folhaSel = (()=>{ try{ return localStorage.getItem("ct:folha")||"incl"; }catch(e){ return "incl"; } })();
+function guarda(){ try{ localStorage.setItem("ct:mes",mesSel); localStorage.setItem("ct:folha",folhaSel); }catch(e){} }
+
+function desenhaModulos(){
+  $("#modulos").innerHTML = MODULOS.map(m => m.on
+    ? `<span class="mod on">${esc(m.nome)}</span>`
+    : `<span class="mod off" title="${esc(m.nome)} entra no sistema integrado em breve">${esc(m.nome)}<small>(${esc(m.off)})</small></span>`).join("");
+}
+
+function statusMes(m){
+  const d = DADOS[chave(m)];
+  return d ? d.status : "vazio";
+}
+
+function desenhaMeses(){
+  $("#meses").innerHTML = MESES.map((n,i)=>{
+    const m=i+1, st=statusMes(m);
+    const futuro = ANO>hojeKey[0] || (ANO===hojeKey[0] && m>hojeKey[1]);
+    return `<button class="aba ${m===mesSel?"on":""}" role="tab" aria-selected="${m===mesSel}" data-m="${m}" ${futuro?"disabled":""}>${n.slice(0,3)}<span class="pt ${st==="vazio"?"":st}"></span></button>`;
+  }).join("");
+  document.querySelectorAll("#meses .aba").forEach(b=>b.onclick=()=>{ mesSel=+b.dataset.m; guarda(); tudo(); });
+}
+
+function desenhaFolhas(){
+  $("#folhas").innerHTML = FOLHAS.map(f=>`<button class="aba ${f.id===folhaSel?"on":""}" role="tab" data-f="${f.id}">${esc(f.nome)}</button>`).join("");
+  document.querySelectorAll("#folhas .aba").forEach(b=>b.onclick=()=>{ folhaSel=b.dataset.f; guarda(); folhas_conteudo(); desenhaFolhas(); });
+}
+
+/* classificação das leituras do inclinômetro */
+function classeCabo(v){ if(v==null) return ""; if(v>=FAIXA_CABO.min-1e-9 && v<=FAIXA_CABO.max+1e-9) return ""; return Math.abs(v-0.95)>0.25 ? "rd" : "am"; }
+function classeTrolley(v){ if(v==null) return ""; return FAIXA_TROLLEY.some(x=>Math.abs(x-v)<1e-9) ? "" : (v>0.3 ? "rd" : "am"); }
+const fmt = (v,casas) => v==null ? "" : v.toFixed(casas);
+
+function resumo(){
+  const d = DADOS[chave(mesSel)];
+  const alvo = $("#resumo");
+  if(!d){ alvo.innerHTML=""; return; }
+  const dias = Object.keys(d.incl||{}).length;
+  let fora=0;
+  Object.values(d.incl||{}).forEach(r=>{ for(let i=0;i<6;i++) if(classeCabo(r[i])) fora++; if(classeTrolley(r[6])) fora++; });
+  let nc=0, obs=0;
+  Object.values(d.grade||{}).forEach(f=>{ Object.values(f.NC||{}).forEach(a=>nc+=a.length); obs+=(f.obs||[]).length; });
+  alvo.innerHTML = `<div class="cards">
+    <div class="card"><div class="l">Dias medidos</div><div class="v">${dias}</div><div class="s">${(d.folgas||[]).length} folgas · ${(d.semOperacao||[]).length} sem operação</div></div>
+    <div class="card"><div class="l">Leituras fora do padrão</div><div class="v ${fora?"am":""}">${fora}</div><div class="s">inclinômetro</div></div>
+    <div class="card"><div class="l">Não conformidades</div><div class="v ${nc?"bad":""}">${nc}</div><div class="s">${obs} observações</div></div>
+    <div class="card"><div class="l">Situação</div><div class="v" style="font-size:1rem;margin-top:8px">${d.status==="ok"?"Conferido":"Parcial"}</div><div class="s">até o dia ${d.ultimoDia}</div></div>
+  </div>`;
+}
+
+function vazioMes(){
+  return `<div class="vazio"><b>Aguardando transcrição</b><span>${MESES[mesSel-1]} de ${ANO} ainda não foi transcrito das folhas do papel.<br>Os dados entram aqui, folha por folha, assim que forem conferidos.</span></div>`;
+}
+
+function tabelaIncl(d){
+  const n = diasNoMes(mesSel);
+  let h = `<table class="inc"><thead><tr><th class="nm" style="min-width:64px">Dia</th><th>Hora</th><th>Cabo 1</th><th>Cabo 2</th><th>Cabo 3</th><th>Cabo 4</th><th>Cabo 5</th><th>Cabo 6</th><th>Trolley</th><th>Autor</th><th>Obs.</th></tr></thead><tbody>`;
+  for(let dia=1; dia<=n; dia++){
+    const wd = new Date(ANO,mesSel-1,dia).toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","");
+    const rot = `${pad(dia)} <small style="opacity:.6;font-weight:normal">${wd}</small>`;
+    const r = d.incl[dia];
+    if(r){
+      h += `<tr><td class="dia">${rot}</td><td class="hr">${esc(r[7]||"")}</td>`
+        + r.slice(0,6).map(v=>`<td class="${classeCabo(v)}">${fmt(v,1)}</td>`).join("")
+        + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">conferir</span>`:""}</td></tr>`;
+    } else if((d.folgas||[]).includes(dia)){
+      h += `<tr class="folga"><td class="dia">${rot}</td><td colspan="10">F O L G A</td></tr>`;
+    } else if((d.semOperacao||[]).includes(dia)){
+      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="10">SEM OPERAÇÃO</td></tr>`;
+    } else {
+      h += `<tr><td class="dia">${rot}</td><td colspan="10" class="pend">—</td></tr>`;
+    }
+  }
+  return h + "</tbody></table>";
+}
+
+function tabelaGrade(f, d){
+  const itens = ITENS[f.form];
+  const dados = (d.grade||{})[f.id];
+  const n = diasNoMes(mesSel);
+  if(!dados) return vazioFolha(f);
+  let h = `<table><thead><tr><th class="nm">Item</th>`;
+  for(let dia=1; dia<=n; dia++) h += `<th class="${(hojeKey[1]===mesSel&&hojeKey[2]===dia&&hojeKey[0]===ANO)?"hj":""}">${dia}</th>`;
+  h += `</tr></thead><tbody>`;
+  itens.forEach((txt,i)=>{
+    const it=i+1;
+    const nc=(dados.NC||{})[it]||[], na=(dados.NA||{})[it]||[];
+    h += `<tr><td class="nm"><i>${it}</i>${esc(txt)}</td>`;
+    for(let dia=1; dia<=n; dia++){
+      let cl, tit="";
+      if((d.folgas||[]).includes(dia)) cl="F";
+      else if((d.semOperacao||[]).includes(dia)) cl="S";
+      else if(dia>d.ultimoDia) cl="nd";
+      else if(nc.includes(dia)) cl="NC";
+      else if(na.includes(dia)||(dados.NAtodos||[]).includes(it)) cl="NA";
+      else cl="C";
+      const cp=(d.copiados||[]).includes(dia)?" cp":"";
+      h += `<td class="c ${cl}${cp}" ${cl==="NC"?`data-it="${it}" data-d="${dia}"`:""}></td>`;
+    }
+    h += `</tr>`;
+  });
+  return h + "</tbody></table>";
+}
+
+function vazioFolha(f){
+  return `<div class="vazio"><b>${esc(f.nome)}</b><span>Folha ainda não transcrita para ${MESES[mesSel-1]}.</span></div>`;
+}
+
+function blocoObs(f, d){
+  const dados=(d.grade||{})[f.id];
+  if(!dados||!(dados.obs||[]).length) return "";
+  return `<div class="obs"><h3>Observações (não conformidades)</h3>`+dados.obs.map(o=>
+    `<div class="ob-i"><b>${esc(o.d)}</b> · ${esc(o.txt)}<small>${o.prazo?`Prazo: ${esc(o.prazo)} · `:""}${o.resp?`Responsável: ${esc(o.resp)} · `:""}${o.real?`Corrigido em: ${esc(o.real)}`:""}</small></div>`).join("")+`</div>`;
+}
+
+function folhas_conteudo(){
+  const f = FOLHAS.find(x=>x.id===folhaSel)||FOLHAS[0];
+  const d = DADOS[chave(mesSel)];
+  const alvo = $("#conteudo");
+  if(!d){ alvo.innerHTML = vazioMes(); legenda(f); return; }
+  let h = d.nota?`<div class="aviso">${esc(d.nota)}</div>`:"";
+  if(f.tipo==="incl"){
+    h += (d.incl && Object.keys(d.incl).length) ? `<div class="cx">${tabelaIncl(d)}</div>` : vazioFolha(f);
+  } else {
+    const t = tabelaGrade(f,d);
+    h += t.startsWith("<table") ? `<div class="cx">${t}</div>${blocoObs(f,d)}` : t;
+  }
+  alvo.innerHTML = h;
+  alvo.querySelectorAll("td.NC").forEach(td=>td.onclick=()=>abreNC(f,d,+td.dataset.it,+td.dataset.d));
+  legenda(f);
+}
+
+function abreNC(f,d,it,dia){
+  const obs=((d.grade||{})[f.id].obs||[]).filter(o=>o.item===it);
+  $("#caixa").innerHTML = `<h2>Item ${it} · dia ${pad(dia)}/${pad(mesSel)}</h2><p style="margin:0 0 8px;font-size:.85rem">${esc(ITENS[f.form][it-1])}</p>`
+    + (obs.length? obs.map(o=>`<div class="ob-i"><b>${esc(o.d)}</b> · ${esc(o.txt)}<small>${o.prazo?`Prazo: ${esc(o.prazo)} `:""}${o.resp?`· ${esc(o.resp)} `:""}${o.real?`· corrigido ${esc(o.real)}`:""}</small></div>`).join("") : `<div class="ob-i">Sem observação registrada na folha.</div>`)
+    + `<button class="fechar" id="fx">Fechar</button>`;
+  $("#janela").classList.add("aberta"); $("#fx").onclick=fecha;
+}
+function fecha(){ $("#janela").classList.remove("aberta"); }
+$("#janela").addEventListener("click",e=>{ if(e.target.id==="janela") fecha(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") fecha(); });
+
+function legenda(f){
+  $("#legenda").innerHTML = f.tipo==="incl"
+   ? `<span><i style="background:rgba(230,176,50,.12);color:var(--amarelo)">1.1</i> fora da faixa 0.9–1.0 (cabos) ou 0.00/0.05/0.1 (trolley)</span><span><i style="background:rgba(255,59,48,.16);color:#ff8a80">1.3</i> muito fora do padrão</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(138,154,59,.5) 3px 5px)"></i> folga</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(224,136,58,.5) 3px 5px)"></i> sem operação</span>`
+   : `<span><i style="color:var(--ok)">C</i> Conforme</span><span><i style="color:#ff8a80;background:rgba(255,59,48,.2)">NC</i> Não conforme</span><span><i style="color:#7b8068">NA</i> Não se aplica</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(138,154,59,.5) 3px 5px)"></i> folga</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(224,136,58,.5) 3px 5px)"></i> sem operação</span><span><i style="opacity:.55;color:var(--ok)">C</i> dia copiado do anterior</span>`;
+}
+
+function tudo(){ desenhaMeses(); resumo(); desenhaFolhas(); folhas_conteudo(); }
+desenhaModulos(); tudo();
+</script>
+</body>
+</html>
