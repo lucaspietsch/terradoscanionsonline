@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checklist Tirolesa - SGV</title>
+<meta name="description" content="Checklist diário da Tirolesa Serra Geral Vertical: inclinômetro, trolley, recebimento, lançamento e cadeirinhas, mês a mês.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12130e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2312130e'/%3E%3Cpath d='M8 20L56 36' stroke='%23e0883a' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M20 40l8 8 16-18' stroke='%238a9a3b' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --fundo:#12130e; --papel:#1b1d15; --papel2:#23261b;
+    --texto:#c9d28a; --oliva:#8a9a3b; --laranja:#e0883a;
+    --linha:#3a3f27; --alerta:#ff3b30; --ok:#8fbf4a; --amarelo:#e6b032;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--texto);font-family:var(--mono);padding:14px 12px 48px;min-height:100vh;
+       background:
+         linear-gradient(rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         linear-gradient(90deg,rgba(138,154,59,.05) 1px,transparent 1px) 0 0/28px 28px,
+         radial-gradient(1000px 500px at 80% -10%,rgba(224,136,58,.12),transparent 60%),
+         var(--fundo)}
+  main{max-width:1100px;margin:0 auto}
+  button{font:inherit;color:inherit;cursor:pointer}
+  h1{font-size:clamp(1.25rem,4.5vw,2.1rem);margin:10px 0 2px;letter-spacing:1px;text-transform:uppercase;
+     color:var(--laranja);text-shadow:0 0 14px rgba(224,136,58,.35)}
+  h1::before{content:"> ";color:var(--oliva)}
+  .sub{margin:0 0 14px;opacity:.8;font-size:.82rem;line-height:1.5}
+
+  /* módulos do sistema integrado */
+  .modulos{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--linha);padding-bottom:10px}
+  .mod{padding:7px 14px;border:1px solid var(--linha);border-radius:8px;background:var(--papel);
+       text-transform:uppercase;letter-spacing:1.5px;font-size:.75rem;color:var(--texto);text-decoration:none}
+  .mod.on{border-color:var(--laranja);color:var(--laranja);box-shadow:0 0 12px rgba(224,136,58,.3)}
+  .mod.off{opacity:.45;cursor:not-allowed}
+  .mod small{opacity:.8;text-transform:none;letter-spacing:0;margin-left:4px}
+
+  /* abas */
+  .abas{display:flex;gap:6px;overflow-x:auto;padding:12px 0 6px;scrollbar-width:thin}
+  .aba{flex:none;padding:7px 12px;border:1px solid var(--linha);border-radius:8px;background:var(--papel);
+       text-transform:uppercase;letter-spacing:1.5px;font-size:.78rem;position:relative}
+  .aba:hover{border-color:var(--laranja)}
+  .aba.on{background:var(--laranja);color:var(--fundo);border-color:var(--laranja);font-weight:bold}
+  .aba:disabled{opacity:.35;cursor:not-allowed}
+  .aba .pt{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:6px;background:var(--linha)}
+  .aba .pt.parcial{background:var(--amarelo)}
+  .aba .pt.ok{background:var(--ok)}
+  .aba.on .pt{box-shadow:0 0 0 1px var(--fundo)}
+  .abas.folhas .aba{font-size:.72rem;letter-spacing:.8px;text-transform:none;border-radius:16px}
+  .abas.folhas .aba.on{background:var(--oliva);border-color:var(--oliva)}
+
+  /* painéis de resumo */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+  .card{background:linear-gradient(160deg,var(--papel2),var(--papel));border:1px solid var(--linha);
+        border-radius:10px;padding:10px 12px}
+  .card .l{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--oliva)}
+  .card .v{font-size:1.5rem;font-weight:bold;color:var(--laranja);margin-top:2px}
+  .card .v.bad{color:var(--alerta)} .card .v.am{color:var(--amarelo)}
+  .card .s{font-size:.72rem;opacity:.75;margin-top:2px}
+
+  .aviso{border:1px dashed var(--amarelo);color:var(--amarelo);background:rgba(230,176,50,.08);
+         border-radius:8px;padding:9px 12px;font-size:.78rem;margin:10px 0;line-height:1.5}
+  .vazio{border:1px dashed var(--linha);border-radius:12px;padding:34px 16px;text-align:center;opacity:.85;margin-top:10px}
+  .vazio b{display:block;color:var(--laranja);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+  .vazio span{font-size:.82rem;line-height:1.6}
+
+  /* tabela / grade */
+  .cx{border:1px solid var(--linha);border-radius:10px;overflow:auto;background:var(--papel);max-height:72vh;margin-top:8px}
+  table{border-collapse:separate;border-spacing:0;font-size:.78rem;width:max-content;min-width:100%}
+  th,td{border-right:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:0;text-align:center}
+  thead th{position:sticky;top:0;z-index:3;background:var(--papel2);color:var(--oliva);font-weight:bold;height:30px;min-width:30px}
+  thead th.hj{color:var(--laranja)}
+  .nm{position:sticky;left:0;z-index:2;background:var(--papel2);text-align:left;padding:5px 8px;min-width:220px;max-width:300px;
+      font-size:.74rem;line-height:1.3;border-right:2px solid var(--linha)}
+  thead .nm{z-index:4}
+  .nm i{font-style:normal;color:var(--laranja);font-weight:bold;margin-right:6px}
+  td.c{width:30px;height:30px;font-size:.72rem;font-weight:bold}
+  td.C{color:var(--ok)} td.C::before{content:"C"}
+  td.NC{background:rgba(255,59,48,.2);color:#ff8a80;cursor:pointer;box-shadow:inset 0 0 0 1px var(--alerta)} td.NC::before{content:"NC"}
+  td.NA{color:#7b8068;opacity:.8} td.NA::before{content:"NA"}
+  td.F{background:repeating-linear-gradient(115deg,transparent 0 5px,rgba(138,154,59,.3) 5px 7px);color:transparent}
+  td.S{background:repeating-linear-gradient(115deg,transparent 0 5px,rgba(224,136,58,.3) 5px 7px)}
+  td.R{background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(150,150,170,.25) 4px 5px)}
+  td.nd{color:#555a40} td.nd::before{content:"·"}
+  td.cp{opacity:.55} /* dia copiado do anterior */
+  tr:hover td:not(.F):not(.S){background-color:rgba(138,154,59,.06)}
+
+  /* inclinômetro */
+  .inc td{padding:5px 8px;min-width:58px;font-variant-numeric:tabular-nums}
+  .inc td.dia{position:sticky;left:0;background:var(--papel2);font-weight:bold;color:var(--laranja);z-index:1;min-width:64px}
+  .inc td.hr{opacity:.8}
+  .inc td.am{color:var(--amarelo);background:rgba(230,176,50,.12);font-weight:bold}
+  .inc td.rd{color:#ff8a80;background:rgba(255,59,48,.16);font-weight:bold}
+  .inc td.ob{text-align:left;min-width:160px;font-size:.72rem}
+  .inc tr.folga td:not(.dia),.inc tr.semop td:not(.dia){background:repeating-linear-gradient(115deg,transparent 0 9px,rgba(138,154,59,.28) 9px 12px);color:var(--oliva);letter-spacing:3px}
+  .inc tr.semop td:not(.dia){background:repeating-linear-gradient(115deg,transparent 0 9px,rgba(224,136,58,.28) 9px 12px);color:var(--laranja)}
+  .inc td.pend{opacity:.5}
+  .chk{display:inline-block;padding:1px 6px;border-radius:10px;font-size:.66rem;border:1px solid var(--amarelo);color:var(--amarelo)}
+
+  /* zoom e mãozinha */
+  .zbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .zbar button{min-width:36px;height:34px;padding:0 10px;border:1px solid var(--linha);border-radius:8px;background:var(--papel);
+               color:var(--texto);font-weight:bold;letter-spacing:1px}
+  .zbar button:hover{border-color:var(--laranja);color:var(--laranja)}
+  .zbar button.on{background:var(--laranja);border-color:var(--laranja);color:var(--fundo)}
+  .zbar .pct{min-width:54px;text-align:center;font-size:.8rem;color:var(--oliva)}
+  .zbar .dica{font-size:.7rem;opacity:.65;margin-left:auto}
+  .cx.mao{cursor:grab} .cx.mao.arrasta{cursor:grabbing;user-select:none}
+  .cx.mao.arrasta *{pointer-events:none}
+  .cx table{zoom:var(--z,1)}
+  .legenda{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.74rem}
+  .legenda span{display:inline-flex;align-items:center;gap:6px}
+  .legenda i{display:inline-block;width:20px;height:16px;border-radius:3px;border:1px solid var(--linha);text-align:center;font-style:normal;font-size:.6rem;line-height:15px;font-weight:bold}
+
+  .obs{margin-top:12px}
+  .obs h3{margin:0 0 6px;font-size:.78rem;letter-spacing:2px;color:var(--oliva);border-bottom:1px dashed var(--linha);padding-bottom:3px;text-transform:uppercase}
+  .ob-i{border:1px solid var(--linha);border-left:3px solid var(--alerta);background:var(--papel);border-radius:6px;padding:7px 10px;margin-bottom:6px;font-size:.78rem;line-height:1.45}
+  .ob-i b{color:var(--laranja)}
+  .ob-i small{display:block;opacity:.7;margin-top:2px}
+
+  /* janela */
+  #janela{position:fixed;inset:0;background:rgba(5,6,3,.7);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:12px;z-index:10}
+  #janela.aberta{display:flex}
+  .caixa{border:1px solid var(--oliva);border-radius:12px;background:var(--papel);padding:18px;width:min(92vw,460px);max-height:88vh;overflow:auto;
+         box-shadow:0 0 30px rgba(138,154,59,.25);position:relative}
+  .caixa h2{margin:0 0 10px;font-size:1rem;color:var(--laranja);text-transform:uppercase;letter-spacing:.5px}
+  .fechar{margin-top:14px;background:transparent;color:var(--laranja);border:1px solid var(--laranja);border-radius:8px;padding:7px 16px;text-transform:uppercase;letter-spacing:1px}
+  .fechar:hover{background:var(--laranja);color:var(--fundo)}
+  footer{margin-top:26px;font-size:.7rem;opacity:.6;text-align:center;line-height:1.6}
+  @media (max-width:560px){.nm{min-width:150px;max-width:170px;font-size:.68rem}}
+</style>
+</head>
+<body>
+<main>
+  <nav class="modulos" id="modulos" aria-label="Módulos do sistema"></nav>
+  <h1>Checklist Tirolesa - SGV</h1>
+  <p class="sub">Verificações diárias da tirolesa, mês a mês. Escolha o mês e a folha. Toque em um <b style="color:#ff8a80">NC</b> para ver a observação.</p>
+
+  <div class="abas" id="meses" role="tablist" aria-label="Meses"></div>
+  <div id="resumo"></div>
+  <div class="abas folhas" id="folhas" role="tablist" aria-label="Folhas"></div>
+  <div id="conteudo"></div>
+  <div class="legenda" id="legenda"></div>
+  <footer>Checklist Tirolesa · Serra Geral Vertical · transcrito das folhas manuscritas (Urbia / SGV)</footer>
+</main>
+
+<div id="janela" role="dialog" aria-modal="true"><div class="caixa" id="caixa"></div></div>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO
+   ============================================================ */
+const ANO = 2026;
+const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+// Inclinômetro: faixa "normal" informada pelo operador
+const FAIXA_CABO = {min:0.9, max:1.0};     // cabos 1 a 6 costumam dar 0.9 ou 1.0
+const FAIXA_TROLLEY = [0, 0.05, 0.1];      // trolley costuma dar 0.00, 0.05 ou 0.1
+
+const MODULOS = [
+  {id:"checklist", nome:"Checklist", on:true},
+  {id:"escala",    nome:"Escala",    off:"em breve"},
+  {id:"molas",     nome:"Molas",     off:"em breve"}
+];
+
+/* Itens de cada formulário (texto resumido, igual ao da folha). */
+const ITENS = {
+  "122": [
+    "Área devidamente sinalizada e isolada?","Área de guarda de cadeirinhas, cintos e capacetes identificada?","Linhas de vida (tipo trilho) conformes?",
+    "Kit de resgate inspecionado e pronto? Com TAG?","Cordas e fitas isentas de sujeira? Com TAG?","Cabo de trabalho (robô/trolley) livre e conforme?",
+    "Cordas em bom estado? Capa íntegra? Alma exposta?","Sinais de queimaduras ou deformações nas cordas?","Terminações das cordas sem desgaste excessivo?",
+    "Pintura de sinalização de limitação no piso conforme?","Escada com peça solta ou frouxidão?","Guarda-corpo de isolamento conforme?",
+    "Molas e batentes da frenagem retraídos ou com anomalia?","Rádio de comunicação disponível e pessoas treinadas?","Inspeção diária de capacetes, cadeirinhas e acessórios realizada?",
+    "Pintura dos clips (grampos) dos cabos das ancoragens conforme?","Pintura dos clips dos cabos de linha de vida conforme?","Cabos de aço tensionados (verificar com inclinômetro)?",
+    "Relatório de lubrificação no prazo?","Check list trimestral geral no prazo?","Relatório de torque e diâmetros em cabos no prazo?",
+    "Maca e talas de imobilização disponíveis?","Cabos de aço da área de frenagem conformes?","Molas do sistema de frenagem fixas no tecnil e encaixadas nos batentes?",
+    "Molas apresentam deformidades?","Molas de frenagem retornam ao ponto correto de inércia?","Cabos de aço da área das molas limpos, sem excesso de vaselina?",
+    "Limpeza e lubrificação das molas no prazo?","Escada da plataforma de inspeção/lubrificação das molas conforme?","Vegetação devidamente aparada na região da plataforma de recebimento?"
+  ],
+  "123": [
+    "Área devidamente sinalizada e isolada?","Área de guarda de cadeirinhas, cintos e capacetes identificada?","Linhas de vida para corda auto seguro no deck conformes?",
+    "Pontos de ancoragem para corda auto seguro conformes?","Cordas e fitas isentas de sujeira? Com TAG?","Cabo de trabalho (robô/trolley) livre e conforme?",
+    "Cordas em bom estado? Capas íntegras? Alma exposta?","Sinais de queimaduras ou deformações nas cordas?","Terminações das cordas sem desgaste excessivo?",
+    "Plataforma superior de montagem limpa e conforme?","Portão de acesso à plataforma de lançamento com trava para fechar?","Guarda-corpo de isolamento conforme?",
+    "Pontos de ancoragem dos backups e backups conformes?","Rádios de comunicação disponíveis e pessoas treinadas?","Inspeção diária de capacetes, cadeirinhas e acessórios realizada?",
+    "Pintura dos clips (grampos) dos cabos das ancoragens conforme?","Pintura dos clips dos cabos de linha de vida conforme?","Cabos de aço das vias tensionados (verificar com inclinômetro)?",
+    "Relatório trimestral de lubrificação no prazo?","Check list trimestral geral no prazo?","Relatório de torque e diâmetros em cabos no prazo?",
+    "Maca e talas de imobilização disponíveis?","Mola do sistema de frenagem do trolley fixa no tecnil e encaixada no batente?","Mola do cabo do trolley sem deformidades? Retorna ao ponto de inércia?",
+    "Sistema de ancoragem do trolley conforme?","Vegetação devidamente aparada/cortada na plataforma?"
+  ],
+  "124": [
+    "Capacete com CA conforme? (visível)","Cadeirinhas (todos os modelos) com CA ou UIAA conforme?","Cintos de segurança (todos os modelos) com CA e conformes?",
+    "Informações do fabricante visíveis?","Capacetes com rachaduras ou outras anomalias?","Fivelas de ajustes conformes?",
+    "Desgastes excessivos ou cortes nas partes têxteis (ancoragem e costuras)?","Abrasão nas partes têxteis que seguram cargas? \"Partes peludas\"?","Pontos de costura cortada, desfiada ou partida?",
+    "Cortes ou áreas endurecidas nas partes têxteis?","Conectores e mosquetões com desgastes ou abrasão?","Acessórios metálicos com deformação?",
+    "Acessórios metálicos isentos de corrosão, fissuras ou anomalias?","Local de armazenagem protegido de intempéries e conforme?","Equipamentos limpos e organizados?",
+    "Fitas de cadeirinhas e capacetes em boas condições?","Fitas das cadeirinhas isentas de sinais de queimaduras?","Toucas e elásticos para cabelos disponíveis? Recipientes para descartes?",
+    "Kits Zip Rider montados e prontos para uso?","Todos os equipamentos com TAG?"
+  ],
+  "tro-sgv": [
+    "Baterias carregadas e prontas para uso?","Cabos e fios de energia das baterias soldados em conformidade?","Cabos e fios na parte interna do Trolley com solda em conformidade?",
+    "Conectores dos cabos do Trolley em conformidade?","Conectores dos cabos das baterias em conformidade?","Alavancas de subida e descida do Trolley com entortamento?",
+    "Botão liga e desliga em conformidade?","Botão de potenciômetro em conformidade?","Visor de carga da bateria funcionando corretamente?",
+    "Voltagem para lançamento de subida do Trolley igual ou maior que 37 Volts?","Barulho diferente no motor ao ligar para teste diário?","Correias alinhadas e rodando corretamente?",
+    "Ao girar o botão de potenciômetro, segue paralelo à aceleração dos motores?","Carenagens metálicas bem fixas? Parafusos apertados?","Parafusos da estrutura pesada com aperto máximo?",
+    "Caixa do módulo fixa? Apresenta frouxidão?","Superfície cortante nas bordas de alumínio ou aço?","Carregadores das baterias com alguma deformidade?",
+    "Fixação de ancoragem do para-quedas (há alguma deformidade?)","Cordins internos do para-quedas em conformidade?","Costuras das fitas do para-quedas em conformidade (visual)?",
+    "Após todos os testes o Trolley funciona normalmente?"
+  ],
+  "trd3": [
+    "Baterias estão carregadas e prontas para uso?","Conectores (conectores Anderson) entre bateria e Trolley estão em conformidade?","Alavancas de subida e descida do Trolley estão conforme e apresentam alguma deformidade?",
+    "Botão emergência / Liga-desliga / Fim de curso / Potenciômetro estão em conformidade?","Voltagem para lançamento de subida do Trolley está igual ou mais que 37 Volts?","Ao ligar o Trolley para teste diário, apresenta algum barulho diferente no motor?",
+    "As correias estão alinhadas e rodando corretamente?","As carenagens metálicas apresentam frouxidão? Os parafusos estão todos apertados?","A caixa do módulo está fixa (estrutura plástica de proteção das placas eletrônicas do trolley)? Apresenta frouxidão?",
+    "Existe superfície cortante nas bordas de alumínio ou de aço?","Carregadores das baterias apresentam alguma deformidade?","Polias estão sem ruídos e com rotação conforme?",
+    "Verificação da fixação do ponto de ancoragem do para-quedas (há alguma deformidade?)","Existe furos, rasgos ou deformidades no para-quedas?","As cordas, polias e mosquetões do freio do trolley estão em conformidade?",
+    "O paraquedas apresenta aumento de comprimento? Não deve ultrapassar a proteção das polias superiores","Memorial Descritivo, Manual de Operação e Plano de manutenção estão disponíveis para consulta da operação?","Após todos os testes o Trolley está funcionando normalmente?",
+    "Verificação dos cordins internos do para-quedas está em conformidade?","As costuras das fitas e ponto de ancoragem do para-quedas estão em conformidade?","Voltímetro está em conformidade?",
+    "Os orifícios de ancoragem onde localiza as malhas delta está íntegra e sem desgaste ou alargamento?","As malhas deltas estão com tags, com inspeção em dia e devidamente fechadas com chave?","Carga máxima do equipamento (165kg) está sinalizada e visível?"
+  ],
+  "trm3": [
+    "Há desgaste excessivo na vulcanização, engrenagens, correntes e se há abrasão do cabo nas polias?","As polias e correntes estão alinhadas?","Existem folgas excessivas entre eixo/polia e eixo/mancal, de forma que atrapalhe o funcionamento do conjunto?",
+    "Os parafusos internos apresentam afrouxamento?","Botão emergência / Liga-desliga / Fim de curso / Potenciômetro estão em conformidade?","Analisar a conformidade da fixação dos fios elétricos e seus conectores, existência fios sem isolamento, soltos ou rompidos",
+    "Nas baterias, existem sinais de oxidação nos polos, vazamentos, estufamento ou danos no invólucro?","Voltímetro indica a tensão do sistema, está em conformidade?","As carenagens metálicas apresentam frouxidão? Os parafusos estão todos apertados?",
+    "A caixa do módulo está fixa (estrutura plástica de proteção das placas eletrônicas do trolley)? Apresenta frouxidão?","Motores, redutor estão bem fixos e alinhados?","As costuras das fitas e ponto de ancoragem do para-quedas estão em conformidade?",
+    "Os orifícios de ancoragem onde localiza as malhas delta está íntegra e sem desgaste e alargamento?","Verificação da fixação do ponto de ancoragem do para-quedas (há alguma deformidade?)","As cordas, polias e mosquetões do freio do trolley estão em conformidade?",
+    "Verificar presença e legibilidade das sinalizações de segurança, capacidade, avisos e instruções","O paraquedas apresenta aumento de comprimento? O paraquedas não deve ultrapassar a proteção das polias superiores, assegurando que não entre em contato com as polias","Realizar teste completo do equipamento em condições normais de uso"
+  ],
+  "125": [
+    "\"Memorial Descritivo\", \"Manual de Operação\" e \"Plano de Manutenção\" disponíveis?","Baterias carregadas e prontas para uso?","Carregadores das baterias conformes?",
+    "Voltímetro em conformidade?","Conectores (tipo Anderson) entre bateria e trolley conformes?","Voltagem para lançamento de subida igual ou maior que 37 Volts?",
+    "Caixa do módulo fixa (proteção das placas eletrônicas)? Apresenta frouxidão?","Botão emergência / liga-desliga / fim de curso / potenciômetro conformes?","Alavancas de subida e descida conformes?",
+    "Correias alinhadas e rodando corretamente?","Carenagens metálicas bem fixas? Parafusos apertados?","Superfície cortante nas bordas de alumínio ou aço?",
+    "Polias sem ruídos e com rotação conforme?","Barulho diferente no motor ao ligar para teste diário?","Orifícios de ancoragem das malhas delta íntegros, sem desgaste ou alargamento?",
+    "Malhas deltas com tags, inspeção em dia e fechadas com chave?","Carga máxima do equipamento (165kg) sinalizada e visível?","Ponto de ancoragem do paraquedas conforme?",
+    "Paraquedas isento de furos, rasgos ou deformidades? Cordins internos conformes?","Costuras das fitas e ponto de ancoragem do paraquedas conformes?",
+    "Paraquedas com deformação com aumento de comprimento (teste prático)?","Cordas, polias e mosquetões do freio do trolley (frenagem por atrito) conformes?",
+    "Corda da \"polia de frenagem\" alinhada com o cabo de sustentação?","\"Polia de frenagem por atrito\" (batedor) em boas condições? Rolamento livre?",
+    "Pontos de ancoragem do sistema de frenagem sem movimentação indesejada ou rachaduras?","Área do sistema de frenagem desobstruída, livre e sinalizada?",
+    "\"Polia de frenagem\" posicionada para parar o trolley ao menos 3 m da porta de acesso?","Após todos os testes o trolley funciona normalmente?"
+  ]
+};
+
+const FOLHAS = [
+  {id:"incl", nome:"Inclinômetro",         tipo:"incl"},
+  {id:"tro",  nome:"Trolley diário",       tipo:"grade", form:"125"},
+  {id:"trm",  nome:"Trolley mensal",       tipo:"grade", form:"trm3", desde:5},
+  {id:"rec",  nome:"Recebimento (122)",    tipo:"grade", form:"122"},
+  {id:"cadr", nome:"Cadeirinhas · Receb.", tipo:"grade", form:"124"},
+  {id:"lan",  nome:"Lançamento (123)",     tipo:"grade", form:"123"},
+  {id:"cadl", nome:"Cadeirinhas · Lanç.",  tipo:"grade", form:"124"}
+];
+
+/* ============================================================
+   DADOS TRANSCRITOS
+   Estrutura de cada mês:
+   { status:"parcial"|"ok", ultimoDia:N,
+     folgas:[dias], semOperacao:[dias], copiados:[dias],
+     incl:{ "dia":[c1..c6,trolley,"hora","autor", conferir?] },
+     grade:{ folhaId:{ NA:{item:[dias]}, NC:{item:[dias]}, obs:[{d,item,txt,prazo,resp,real}] } } }
+   Em grade, tudo que não for NC/NA nos dias operados é C.
+   ============================================================ */
+const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
+const TA = [1,2,3,5,8,9,10,12,14,15,16,17,19,20,21,22,23,24,26,27,30,31];   // agosto: NA em todos os dias, menos 06/08 (Trolley antigo)
+const DADOS = {
+  "2026-09": {
+    status:"ok", ultimoDia:30,
+    folgas:[1,8,15,22,29], semOperacao:[11,21,28], copiados:[],
+    semFolha:["trm"],
+    nota:"Setembro: sem operação nos dias 11, 21 e 28 (todas as folhas). Trolley com itens 18 a 21 não aplicáveis (novo Trolley).",
+    incl:{
+      2:[1.0,1.0,1.0,0.9,1.0,1.0,0.00,"8:15","Lucas P"],
+      3:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"8:10","Lucas P"],
+      4:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"7:50","Lucas P"],
+      5:[0.9,1.0,0.9,1.0,1.0,1.0,0.05,"8:10","Lucas P"],
+      6:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:10","Lucas P"],
+      7:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:10","Lucas P"],
+      9:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"8:20","Lucas P"],
+      10:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"8:15","Lucas P"],
+      12:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:20","Lucas P"],
+      13:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:20","Lucas P"],
+      14:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:07","Lucas P"],
+      16:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:25","Lucas P"],
+      17:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:25","Lucas P"],
+      18:[1.0,0.9,0.9,0.9,1.0,1.0,0.05,"8:20","Lucas P"],
+      19:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"8:20","Lucas P"],
+      20:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:15","Lucas P"],
+      23:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:10","Lucas P"],
+      24:[0.9,1.0,1.0,0.9,0.9,0.9,0.05,"8:20","Lucas P"],
+      25:[1.0,1.0,0.9,1.0,1.0,0.9,0.05,"8:30","Lucas P"],
+      26:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"8:40","Lucas K"],
+      27:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"8:37","Lucas K"],
+      30:[1.0,1.0,0.9,1.0,0.9,0.9,0.05,"8:30","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"125", n:28, NAtodos:[18,19,20,21], resp:"Lucas da Rosa Pietsch (Líder de Operações)", obs:[] },
+      rec:{ form:"122", n:30, NAtodos:[17],
+        NC:{10:[...R(2,7),9,10,12,13,14,...R(16,20),...R(23,27),30],
+            16:[24,25,26,27,30],
+            30:[12,13,14,...R(16,20),...R(23,27),30]},
+        resp:"Lucas da Rosa Pietsch (Líder de Operações)",
+        obs:[
+          {d:"02/09/2026", item:10, txt:"Pintura descascando (não impeditivo)"},
+          {d:"12/09/2026", item:30, txt:"Vegetação alta no deck de Recebimento (não impeditivo)", prazo:"22/09/2026"},
+          {d:"24/09/2026", item:16, txt:"Via 1: realizado torque nos grampos (está sem pintura). Não impeditivo.", prazo:"04/10/2026"}
+        ] },
+      cadr:{ n:20, resp:"Lucas da Rosa Pietsch (Líder de Operações)", obs:[] },
+      lan:{ n:26, NC:{16:[25,26,27],17:[25,26,27]}, resp:"Gabriel Krüger (Coordenador)",
+        obs:[
+          {d:"25/09/2026", item:16, txt:"Cabos foram feita manutenção e não estão pintados os grampos (não impeditivo)", prazo:"04/10/2026"},
+          {d:"27/09/2026", item:17, txt:"Item 16-17: mordentes sem pintura completa.", prazo:"04/10/2026"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador)", obs:[] }
+    }
+  },
+  "2026-08": {
+    status:"ok", ultimoDia:31,
+    folgas:[4,11,18,25], semOperacao:[], inclSemOp:[7,13,28,29], copiados:[31],
+    semFolha:["trm"],
+    nota:"Agosto: o PDF é de 30/08 e o dia 31 estava em branco, então copiei o dia 30 (marcado como copiado). Sem operação em todas as folhas: dias 7, 13, 28 e 29. Em 06/08 o Trolley antigo operou (por isso os itens 9, 18, 19, 20 e 21 voltam a C naquele dia).",
+    incl:{
+      1:[1.0,0.9,1.0,0.9,1.0,0.9,0.00,"8:12","Lucas P"],
+      2:[1.0,0.9,1.0,1.0,1.0,0.9,0.00,"8:07","Lucas P"],
+      3:[1.0,0.9,0.9,0.9,1.0,1.0,0.05,"8:15","Lucas P"],
+      5:[1.0,1.0,1.0,0.9,1.0,0.9,0.00,"8:05","Lucas P"],
+      6:[1.0,1.0,0.9,0.9,1.0,0.9,0.00,"8:30","Lucas P"],
+      8:[1.0,1.0,1.0,1.0,1.0,0.9,0.00,"8:30","Lucas P"],
+      9:[0.9,1.0,1.0,1.0,1.0,0.9,0.00,"8:05","Lucas P"],
+      10:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:20","Lucas P"],
+      12:[0.9,1.0,1.0,1.0,1.0,1.0,0.00,"8:10","Lucas P"],
+      14:[0.9,1.0,1.0,1.0,1.0,1.0,0.00,"8:05","Lucas P"],
+      15:[0.9,1.0,1.0,1.0,1.0,1.0,0.00,"8:02","Gabriel"],
+      16:[0.9,1.0,1.0,1.0,1.0,1.0,0.00,"8:01","Gabriel"],
+      17:[0.9,1.0,1.0,1.0,1.0,1.0,0.00,"7:49","Gabriel"],
+      19:[0.9,1.0,1.0,1.0,0.9,1.0,0.05,"9:40","Lucas P"],
+      20:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"8:07","Lucas P"],
+      21:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"8:05","Lucas K"],
+      22:[0.9,1.0,1.0,0.9,0.9,1.0,0.05,"8:15","Lucas P"],
+      23:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:32","Lucas P"],
+      24:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"8:44","Lucas P"],
+      26:[1.0,1.0,0.9,1.0,0.9,1.0,0.00,"8:05","Lucas P"],
+      27:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"8:30","Lucas P"],
+      30:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:05","Lucas P"],
+      31:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:05","Lucas P","copiado do dia 30"]
+    },
+    grade:{
+      tro:{ form:"125", n:28, semOp:[7,13,28,29],
+        NA:{9:TA,18:TA,19:TA,20:TA,21:TA},
+        resp:"Lucas R. Pietsch (Líder)",
+        obs:[
+          {d:"06/08/2026", item:0, txt:"Trolley antigo em operação."},
+          {d:"08/08/2026", item:0, txt:"Trolley Urbia em operação."}
+        ] },
+      rec:{ form:"122", n:30, semOp:[7,13,28,29], NAtodos:[17],
+        NC:{10:[1,2,3,5,6,8,9,10,12,14,15,16,17,...R(19,24),26,27,30,31],11:[23]},
+        resp:"Lucas R. Pietsch (Líder)",
+        obs:[
+          {d:"01/08/2026", item:10, txt:"Pintura descascada (item 10)"},
+          {d:"23/08/2026", item:11, txt:"11 - Escada de alumínio (parafuso frouxo)", prazo:"23/08/2026", resp:"Pietsch", real:"23/08/2026"}
+        ] },
+      cadr:{ n:20, semOp:[7,13,28,29], resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:26, semOp:[7,13,28,29], resp:"Gabriel Krüger (Coordenador)", obs:[] },
+      cadl:{ n:20, semOp:[7,13,28,29], resp:"Gabriel Krüger (Coordenador)", obs:[] }
+    }
+  },
+  "2026-07": {
+    status:"ok", ultimoDia:31,
+    folgas:[7,14,21,28], semOperacao:[], inclSemOp:[29], copiados:[31],
+    semFolha:["trm"],
+    nota:"Julho: o PDF é de 30/07 e o dia 31 estava em branco, então copiei o dia 30 (marcado como copiado). Dia 29 (chuva): sem operação em todas as folhas. Dias em branco numa folha aparecem como SEM OPERAÇÃO. Novos formulários (rev. 02/03). A partir de 16/07 o novo Trolley entra em operação (itens 9, 18, 19, 20 e 21 não se aplicam).",
+    incl:{
+      1:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"8:02","Lucas P"],
+      2:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"7:52","Lucas P"],
+      3:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"7:55","Lucas P"],
+      4:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:25","Lucas P"],
+      5:[1.0,0.9,1.0,0.9,0.9,1.0,0.00,"7:47","Lucas P"],
+      6:[1.0,0.9,1.0,1.0,1.0,1.0,0.05,"7:53","Lucas P"],
+      8:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"7:50","Lucas P"],
+      9:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"7:47","Lucas P"],
+      10:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"8:15","Lucas P"],
+      11:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"9:00","Lucas P"],
+      12:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:30","Lucas P"],
+      13:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:24","Lucas K"],
+      15:[1.0,1.0,1.0,1.0,1.0,0.9,0.00,"7:55","Lucas P"],
+      16:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"7:50","Lucas P"],
+      17:[1.0,0.9,0.9,1.0,0.9,1.0,0.05,"8:35","Lucas P"],
+      18:[1.0,0.9,0.9,1.0,0.9,1.0,0.05,"8:10","Lucas K"],
+      19:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"7:50","Lucas P"],
+      20:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"7:50","Lucas P"],
+      22:[1.0,1.0,1.0,0.9,1.0,1.0,0.00,"8:23","Lucas P"],
+      23:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:05","Lucas P"],
+      24:[1.0,1.0,1.0,0.9,1.0,0.9,0.00,"8:09","Lucas P"],
+      25:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:20","Lucas P"],
+      26:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"8:20","Lucas P"],
+      27:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:30","Lucas P"],
+      30:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:07","Lucas P"],
+      31:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"8:07","Lucas P","copiado do dia 30"]
+    },
+    grade:{
+      tro:{ form:"125", n:28, semOp:[29],
+        NA:{9:[...R(16,20),...R(22,27),30,31],18:[...R(16,20),...R(22,27),30,31],19:[...R(16,20),...R(22,27),30,31],20:[...R(16,20),...R(22,27),30,31],21:[...R(16,20),...R(22,27),30,31]},
+        resp:"Lucas R. Pietsch (Líder)",
+        obs:[
+          {d:"16/07/2026", item:0, txt:"Itens 9, 18, 19, 20 e 21 não se aplicam ao novo Trolley."},
+          {d:"16/07/2026", item:0, txt:"Novo Trolley em operação."}
+        ] },
+      rec:{ form:"122", n:30, NAtodos:[17],
+        semOp:[29],
+        NC:{10:[...R(17,20),...R(22,27),30,31],16:R(1,5),26:[11,12,13,15,16]},
+        resp:"Lucas R. Pietsch (Líder)",
+        obs:[
+          {d:"04/07/2026", item:16, txt:"16 - Alguns clipes sem pintar (não impeditivo)", prazo:"07/07/2026", resp:"Lucas R. P.", real:"06/07/2026"},
+          {d:"17/07/2026", item:26, txt:"26 - Molas das vias não estão retornando totalmente (não impeditivo)", prazo:"25/07/2026", resp:"Lucas R. P.", real:"16/07/2026"},
+          {d:"12/07/2026", item:28, txt:"28 - Limpeza dos cabos: OK; mas precisa de lubrificação", prazo:"22/07/2026", resp:"Lucas R. P.", real:"16/07/2026"}
+        ] },
+      cadr:{ n:20, semOp:[29], resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:26, semOp:[20,29], resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] },
+      cadl:{ n:20, semOp:[20,29], resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  },
+  "2026-06": {
+    status:"ok", ultimoDia:30,
+    folgas:[2,9,16,23], semOperacao:[], copiados:[30],
+    semFolha:["trm"],
+    nota:"Junho: o PDF é de 29/06 e o dia 30 estava em branco, então copiei o dia 29 (marcado como copiado). O Trolley mensal não consta nos documentos deste mês. De 10 a 15/06 o Trolley novo esteve em teste (itens 3, 14, 15, 17, 19 e 20 não se aplicam).",
+    incl:{
+      1:[0.9,0.9,1.0,0.9,1.0,0.9,0.00,"","Lucas P"],
+      3:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      4:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      5:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      6:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      7:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      8:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      10:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      11:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      12:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      13:[1.1,1.0,1.0,1.0,1.0,1.0,0.1,"","Lucas P"],
+      14:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      15:[1.0,0.9,1.0,1.0,0.9,1.0,0.1,"","Lucas P"],
+      17:[1.0,1.0,0.9,1.0,0.9,1.0,0.1,"","Lucas P"],
+      18:[0.9,1.0,1.0,1.0,0.9,1.0,0.1,"","Lucas P"],
+      19:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      20:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      21:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      22:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      24:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      25:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
+      26:[1.0,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      27:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      28:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"","Lucas P"],
+      29:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
+      30:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P","copiado do dia 29"]
+    },
+    grade:{
+      tro:{ form:"trd3", NA:{3:R(10,15),14:R(10,15),15:R(10,15),17:R(10,15),19:R(10,15),20:R(10,15)}, resp:"Lucas R. Pietsch (Líder)",
+        obs:[
+          {d:"10/06/2026", item:3, txt:"3 - Neste caso, o Trolley novo possui botão de SUBIDA e DESCIDA; se encontra em conformidade", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:14, txt:"14 - Neste caso, o Trolley desce engrenado e não necessita do uso de para-quedas.", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:15, txt:"15 - Neste caso, o freio do Trolley serve como ativador do fim de curso, não necessitando especificamente de frenagem, mas sim a desativação do motor (desligamento).", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:17, txt:"17 - Neste caso, necessita de nova documentação por se tratar de um novo equipamento, de versão atualizada.", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:19, txt:"19 - Não necessita para-quedas", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"10/06/2026", item:20, txt:"20 - Não necessita para-quedas", prazo:"10/07/2026", resp:"Pietsch"},
+          {d:"17/06/2026", item:0, txt:"Finalizados testes do novo Trolley; Trolley antigo de volta à operação."}
+        ] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Oxidação em cabo de ancoragem",24:"Tecnil danificado cabos 3, 4 e 6",25:"Manejo de vegetação"},
+        NC:{11:[1,3]},
+        obs:[
+          {d:"31/05/2026", item:11, txt:"11 - Anomalia em polimento da escada (não impeditivo)", prazo:"07/06/2026", resp:"Pietsch"},
+          {d:"21/04/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3 (não impeditivo)", prazo:"Trimestral", resp:"Pietsch"},
+          {d:"21/04/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6 (não impeditivo)", prazo:"Trimestral", resp:"Pietsch"},
+          {d:"11/06/2026", item:26, txt:"26 - Molas retraídas sem lubrificação", prazo:"11/06/2026", resp:"Pietsch"}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:22, resp:"Lucas K. (Líder de Operação)",
+        obs:[
+          {d:"01/06/2026", item:12, txt:"Item 12: Cerca externa do deck encontra-se rompida. Área ainda é isolada por outro portão (NC não impeditivo)", prazo:"10/06/2026"}
+        ] },
+      cadl:{ n:20, resp:"Lucas K. (Líder de Operação)", obs:[] }
+    }
+  },
+  "2026-05": {
+    status:"ok", ultimoDia:31,
+    folgas:[5,12,19,26], semOperacao:[], copiados:[],
+    nota:"Maio: a partir de 20/05 entram as folhas novas do Trolley (diário e mensal, revisão 03 de 26/03/2026).",
+    incl:{
+      1:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      2:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      3:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      4:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      6:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"","Lucas P"],
+      7:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      8:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      9:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      10:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      11:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      13:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      14:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      15:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      16:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
+      17:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      18:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"","Lucas P"],
+      20:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      21:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"","Lucas P"],
+      22:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      23:[1.0,1.0,0.9,1.0,1.0,1.0,0.00,"","Lucas P"],
+      24:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      25:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas P"],
+      27:[1.0,1.0,0.9,0.9,1.0,1.0,0.05,"","Lucas P"],
+      28:[1.0,1.0,1.0,0.9,1.0,1.0,0.05,"","Lucas P"],
+      29:[1.0,1.0,0.9,0.9,1.0,1.0,0.05,"","Lucas P"],
+      30:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"],
+      31:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"trd3", desde:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      trm:{ form:"trm3", desde:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Oxidação em cabo de ancoragem",24:"Tecnil danificado cabos 3, 4 e 6",25:"Manejo de vegetação"},
+        de:{25:18},
+        NC:{11:[31],25:[18]},
+        obs:[
+          {d:"21/04/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3 (não impeditivo)", prazo:"Trimestral", resp:"Lucas R. Pietsch"},
+          {d:"21/04/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6 (não impeditivo)", prazo:"Trimestral", resp:"Lucas R. Pietsch"},
+          {d:"18/05/2026", item:25, txt:"25 - Deck do recebimento necessita manejo de vegetação", prazo:"28/05/2026", resp:"Lucas R. Pietsch"},
+          {d:"31/05/2026", item:11, txt:"11 - Escada com anomalia em polimento (não impeditivo)", prazo:"07/06/2026", resp:"Lucas R. Pietsch"}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:22, resp:"Gabriel Krüger (Coordenador de Operações)",
+        obs:[
+          {d:"30/05/2026", item:12, txt:"Item 12: Cerca rompida na parte inferior do deck. Ainda em área isolada. Não impeditivo!!!", prazo:"10/06/2026"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  },
+  "2026-04": {
+    status:"ok", ultimoDia:30,
+    folgas:[7,14,28], semOperacao:[], copiados:[],
+    nota:"Abril: 21/04 (terça, feriado de Tiradentes) teve operação normal, sem folga.",
+    incl:{
+      1:[1.0,0.9,0.9,0.9,1.0,0.9,0.05,"","Lucas P"],
+      2:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      3:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      4:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      5:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      6:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      8:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      9:[1.0,1.0,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      10:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      11:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      12:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      13:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      15:[1.0,0.9,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      16:[1.0,0.9,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      17:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      18:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"],
+      19:[1.0,1.0,1.0,1.0,1.0,1.0,0.2,"","Lucas P"],
+      20:[0.9,1.0,0.9,1.0,0.9,1.0,0.2,"","Lucas P"],
+      21:[0.9,1.0,0.9,1.0,0.9,1.0,0.00,"","Lucas P"],
+      22:[0.9,0.9,1.0,1.0,0.9,1.0,0.00,"","Lucas P"],
+      23:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      24:[0.9,1.0,0.9,1.0,0.9,1.0,0.05,"","Lucas P"],
+      25:[1.1,1.0,1.0,1.2,1.0,0.9,0.05,"","Lucas K","cabo 6 escrito 0.09"],
+      26:[1.1,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas K"],
+      27:[1.0,1.0,0.9,1.0,1.0,1.0,0.05,"","Lucas K"],
+      29:[1.0,1.0,1.0,1.0,1.0,1.0,0.05,"","Lucas K"],
+      30:[1.0,1.0,1.0,1.0,1.0,1.0,0.00,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"tro-sgv", n:23, extra:{23:"O clip de fim de curso está fixado em torque de 64nm?"}, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:24, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Oxidação em cabo de ancoragem",24:"Tecnil danificado cabos 3, 4 e 6"},
+        de:{23:1,24:1},
+        NC:{23:[...R(1,6),...R(8,13),...R(15,20)],24:[...R(1,6),...R(8,13),...R(15,21)]},
+        obs:[
+          {d:"26/03/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3", prazo:"26/04/2026", resp:"Lucas R. P."},
+          {d:"27/03/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6", prazo:"27/04/2026", resp:"Lucas R. P."},
+          {d:"21/04/2026", item:23, txt:"23 - Oxidação em cabo de ancoragem 1, 2 e 3 (não impeditivo)", prazo:"Trimestral", resp:"Lucas R. P."},
+          {d:"21/04/2026", item:24, txt:"24 - Tecnil danificado cabos 3, 4 e 6 (não impeditivo)", prazo:"Trimestral", resp:"Lucas R. P."}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      lan:{ n:24, resp:"Gabriel Krüger (Coordenador)",
+        extra:{23:"Banco",24:"Fechadura porta de entrada"},
+        de:{23:1,24:9},
+        NC:{23:[...R(1,6),...R(8,13),15,16],24:[...R(9,13),...R(15,22)]},
+        obs:[
+          {d:"01/04/2026", item:23, txt:"Item 23: Banco de ferro precisa de conserto", prazo:"01/05/2026", resp:"Gabriel Krüger"},
+          {d:"09/04/2026", item:24, txt:"Item 24: Conserto da fechadura da porta de entrada", prazo:"10/05/2026", resp:"Gabriel Krüger"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador)", obs:[] }
+    }
+  },
+  "2026-03": {
+    status:"parcial", ultimoDia:31,
+    folgas:[3,10,17,24,31], semOperacao:[], copiados:[],
+    nota:"Março: a folha do inclinômetro 1/2 (dias 1 a 12) não veio no PDF. Dia 31 (terça) está escrito FOLGA nas folhas de lançamento e cadeirinhas.",
+    incl:{
+      13:[1.0,0.9,0.9,1.0,1.0,0.9,0.00,"","Lucas P"],
+      14:[1.0,0.9,1.0,1.0,0.9,0.9,0.00,"","Lucas P"],
+      15:[1.0,0.9,1.0,0.9,0.9,0.9,0.05,"","Lucas P"],
+      16:[0.9,0.9,0.9,0.9,1.0,0.9,0.05,"","Lucas P"],
+      18:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      19:[1.0,0.9,0.9,0.9,1.0,0.9,0.1,"","Lucas P"],
+      20:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      21:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      22:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"","Lucas K"],
+      23:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      25:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      26:[0.9,0.9,1.0,1.0,0.9,0.9,0.00,"","Lucas P"],
+      27:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      28:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      29:[1.0,0.9,1.0,0.9,0.9,0.9,0.05,"","Lucas P"],
+      30:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"tro-sgv", n:23, extra:{23:"O clip de fim de curso está fixado em torque de 64nm?"}, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Equipamento para o Trolley",24:"Acesso na cerca para extração",25:"Manejo de vegetação"},
+        obs:[
+          {d:"26/03/2026", item:26, txt:"26 - Oxidação em cabo de ancoragem", prazo:"26/04/2026", resp:"Uilliams (supervisor)"},
+          {d:"27/03/2026", item:27, txt:"27 - Tecnil danificado nos cabos 3, 4 e 6", prazo:"27/04/2026", resp:"Uilliams (supervisor)"}
+        ] },
+      cadr:{ n:20, resp:"Lucas P", obs:[] },
+      lan:{ n:25, resp:"Gabriel Krüger (Coordenador de Operações)",
+        extra:{23:"Manutenção vegetação",24:"Manutenção portão acesso",25:"Manutenção armário ferro"},
+        de:{24:6,25:6},
+        NC:{23:[1,2,...R(4,9)],24:[...R(6,9),11,12],25:[6]},
+        obs:[
+          {d:"01/03/2026", item:23, txt:"Item 23 - Manejo vegetação área deck e arredor"},
+          {d:"06/03/2026", item:24, txt:"Item 24 - Arrumar trinco portão acesso à atividade"},
+          {d:"06/03/2026", item:25, txt:"Item 25 - Arrumar porta armário ferro"},
+          {d:"30/03/2026", item:26, txt:"Item 26 - Arrumar banco clientes recepção!"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  },
+  "2026-02": {
+    status:"parcial", ultimoDia:28,
+    folgas:[3,10,17,24], semOperacao:[], copiados:[],
+    nota:"Fevereiro: a folha do inclinômetro 1/2 (dias 1 a 12) não veio no PDF. O Trolley só tem folha a partir de 21/02 (formulário novo de 22 itens, revisão de 19/02).",
+    incl:{
+      13:[0.9,0.9,0.9,0.9,1.0,0.9,0.1,"","Lucas P"],
+      14:[1.0,1.0,1.0,1.0,1.0,1.0,0.0,"","Lucas P"],
+      15:[0.9,1.0,0.9,0.9,0.9,0.9,0.1,"","Lucas P"],
+      16:[0.9,0.9,0.9,0.9,0.8,0.9,0.0,"","Lucas P"],
+      18:[0.9,0.9,0.9,0.8,0.9,1.0,0.1,"","Lucas P"],
+      19:[1.0,1.0,0.9,0.9,1.0,1.0,0.1,"","Lucas P"],
+      20:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      21:[1.0,0.9,1.0,0.9,0.9,0.8,0.05,"","Lucas P"],
+      22:[1.0,1.0,0.9,1.1,1.1,1.0,0.05,"","Lucas K"],
+      23:[1.0,1.0,0.9,1.0,1.1,1.0,0.05,"","Lucas K"],
+      25:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Gabriel"],
+      26:[1.0,1.0,0.9,0.9,1.0,1.0,0.0,"","Lucas P"],
+      27:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      28:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"tro-sgv", desde:21, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Equipamento para o Trolley",24:"Acesso à cerca para extração",25:"Manejo de vegetação"},
+        de:{23:5,24:5,25:5},
+        NC:{23:[...R(5,9),...R(11,16),...R(18,23),...R(25,28)],24:R(5,9),25:R(5,9)},
+        obs:[
+          {d:"05/01/2026", item:23, txt:"23 - Falta de equipamentos no transporte de bags", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"05/01/2026", item:24, txt:"24 - Falta de portão de acesso para equipe de emergência SGV", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"05/01/2026", item:25, txt:"25 - Realizar manejo de vegetação para acesso da equipe de emergência SGV", prazo:"11/02/2026", resp:"Uilliams (supervisor)"}
+        ] },
+      cadr:{ n:20, resp:"Lucas P", obs:[] },
+      lan:{ n:25, resp:"Gabriel Krüger (Coordenador de Operações)",
+        extra:{22:"Maca e talas de imobilização disponíveis para emergência?",23:"Manejo de vegetação",24:"Cadeiras e mesa",25:"Quadro de avisos sem identificação"},
+        de:{23:5,24:5,25:5},
+        NC:{11:[9],23:[...R(5,9),...R(11,16),...R(18,23),...R(25,28)],24:R(5,9),25:[5,6]},
+        obs:[
+          {d:"05/02/2026", item:23, txt:"Item 23: Manejo ao redor do deck, área externa da cerca.", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"05/02/2026", item:24, txt:"Item 24: Substituição de cadeira de escritório e mesa de atendimento.", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"05/02/2026", item:25, txt:"Item 25: Colocação de identificação.", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"05/02/2026", item:26, txt:"Item 26: Falta do kit resgate (lançamento).", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"05/02/2026", item:27, txt:"Item 27: Falta de equipamentos Trolley (malhas rápidas Delta).", prazo:"11/02/2026", resp:"Uilliams (supervisor)"},
+          {d:"09/02/2026", item:11, txt:"Item 11: Portão precisa conserto da polia inferior.", prazo:"11/02/2026", resp:"Uilliams (supervisor)"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  },
+  "2026-01": {
+    status:"parcial", ultimoDia:31,
+    folgas:[6,13,20,27], semOperacao:[19], copiados:[],
+    semFolha:["tro","cadl"],
+    nota:"Janeiro: a folha do inclinômetro 1/2 (dias 1 a 12) não veio no PDF. Em janeiro havia uma única folha de cadeirinhas e o trolley ainda não tinha checklist próprio. Dia 19 em branco em todas as folhas (marcado sem operação).",
+    incl:{
+      14:[1.0,1.0,1.0,1.0,1.0,1.0,0.2,"","Lucas P"],
+      15:[1.0,0.9,1.1,1.0,1.0,0.9,0.1,"","Lucas P"],
+      16:[1.1,1.0,1.0,1.0,1.0,0.9,0.0,"","Lucas P"],
+      17:[1.0,1.0,1.0,1.1,0.9,1.0,0.0,"","Lucas P"],
+      18:[1.0,1.0,0.9,0.9,1.0,0.9,0.5,"","Gabriel"],
+      21:[1.1,1.0,1.1,1.0,1.2,0.9,0.1,"","Lucas P"],
+      22:[1.1,0.9,1.0,0.9,1.0,0.9,0.0,"","Lucas P"],
+      23:[1.0,0.9,1.0,1.0,1.0,1.0,0.0,"","Lucas P"],
+      24:[1.0,1.0,1.0,1.1,1.0,0.9,0.0,"","Lucas P"],
+      25:[1.0,1.0,0.9,1.0,0.9,1.0,0.1,"","Lucas P"],
+      26:[1.0,1.0,1.2,1.0,1.0,0.9,0.1,"","Lucas P"],
+      28:[1.0,0.8,0.9,0.8,1.0,0.9,0.1,"","Lucas P"],
+      29:[0.9,1.0,1.0,0.9,1.0,0.9,0.1,"","Lucas P"],
+      30:[1.0,1.0,0.9,1.1,1.0,1.1,0.0,"","Lucas P"],
+      31:[1.0,1.0,1.0,0.9,0.9,0.9,0.0,"","Lucas P"]
+    },
+    grade:{
+      rec:{ n:22, NAtodos:[17], resp:"Gabriel L. C. Krüger (Coordenador)", obs:[] },
+      lan:{ n:22, resp:"Gabriel L. C. Krüger (Coordenador)", obs:[] },
+      cadr:{ n:23, extra:{21:"Malhas rápidas Zips conquista",22:"Bolsas das Zips",23:"Protetores das fitas tubulares"},
+             NC:{11:[1,2]}, resp:"Gabriel L. C. Krüger (Coordenador)",
+             obs:[
+               {d:"01/01/2026", item:11, txt:"11 - Mosquetões das ZipRiders necessitam ajuste (não impeditivo). Na folha consta \"Escada\"; corrigido."},
+               {d:"02/01/2026", item:11, txt:"11 - Mosquetões das ZipRiders necessitam ajuste (não impeditivo). Na folha consta \"Escada\"; corrigido."}
+             ] }
+    }
+  },
+  "2026-10": {
+    status:"parcial", ultimoDia:21,
+    folgas:[6,13,20], semOperacao:[], copiados:[],
+    semFolha:["trm"],
+    nota:"Outubro: documentos até 21/10/2026 (mês em andamento). Itens 18 a 21 do Trolley não se aplicam (novo Trolley). O Recebimento ganhou o item 31 (ancoragem de ZipRider, parafuso solto, via 3). No Lançamento, os dias 6, 13 e 20 estão em branco (sem operação).",
+    incl:{
+      1:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
+      2:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"8:30","Lucas P"],
+      3:[0.9,0.9,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
+      4:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"9:00","Lucas P"],
+      5:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:35","Lucas P"],
+      7:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:20","Lucas P"],
+      8:[0.9,1.0,0.9,0.9,1.0,1.0,0.05,"8:25","Lucas P"],
+      9:[0.9,1.0,1.0,0.9,0.9,1.0,0.05,"8:20","Lucas P"],
+      10:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:25","Lucas P"],
+      11:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"8:20","Lucas P"],
+      12:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"8:16","Lucas K"],
+      14:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
+      15:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"8:10","Lucas P"],
+      16:[1.0,1.0,0.9,1.0,1.0,0.9,0.05,"8:25","Lucas P"],
+      17:[1.0,0.9,1.0,1.0,1.0,1.0,0.1,"8:30","Lucas P"],
+      18:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:27","Lucas P"],
+      19:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"8:25","Lucas P"],
+      21:[1.0,0.9,1.0,0.9,1.0,0.9,0.1,"8:20","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"125", n:28, NAtodos:[18,19,20,21], resp:"Lucas R. Pietsch (Líder de Operações)", obs:[] },
+      rec:{ form:"122", n:31, NAtodos:[17],
+        extra:{31:"Ancoragem de ZipRider (parafuso solto) - via 3"},
+        de:{31:19},
+        NC:{10:[...R(1,5),...R(7,12),...R(14,19),21],
+            30:[...R(1,5),...R(7,12),...R(14,19)],
+            31:[19]},
+        resp:"Lucas R. Pietsch (Líder de Operações)",
+        obs:[
+          {d:"01/10/2026", item:10, txt:"10 - Pintura do piso descascando (não impeditivo)"},
+          {d:"01/10/2026", item:30, txt:"30 - Vegetação alta em vários pontos", real:"21/10/2026"},
+          {d:"01/10/2026", item:16, txt:"16 - Pintura dos grampos em desconformidade (falta pintura em alguns grampos). Não impeditivo para a operação.", prazo:"05/10/2026", resp:"SGV", real:"05/10/2026"}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder de Operações)", obs:[] },
+      lan:{ n:26, semOp:[6,13,20], resp:"Gabriel Krüger (Coordenador de Operações)",
+        obs:[
+          {d:"01/10/2026", item:16, txt:"16-17 - Pintura dos grampos em desconformidade. Alguns grampos sem pintura (não impeditivo)", prazo:"05/10/2026", resp:"SGV", real:"01/10/2026"}
+        ] },
+      cadl:{ n:20, semOp:[6,13,20], resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  }
+};
+
+/* ============================================================
+   APLICATIVO
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const diasNoMes = (m) => new Date(ANO, m, 0).getDate();           // m = 1..12
+const chave = m => ANO+"-"+pad(m);
+const hoje = new Date();
+const hojeKey = [hoje.getFullYear(), hoje.getMonth()+1, hoje.getDate()];
+
+let mesSel = (()=>{ try{ const s=localStorage.getItem("ct:mes"); if(s) return +s; }catch(e){} return hojeKey[0]===ANO ? hojeKey[1] : 10; })();
+let folhaSel = (()=>{ try{ return localStorage.getItem("ct:folha")||"incl"; }catch(e){ return "incl"; } })();
+function guarda(){ try{ localStorage.setItem("ct:mes",mesSel); localStorage.setItem("ct:folha",folhaSel); }catch(e){} }
+
+function desenhaModulos(){
+  $("#modulos").innerHTML = MODULOS.map(m => m.on
+    ? `<span class="mod on">${esc(m.nome)}</span>`
+    : `<span class="mod off" title="${esc(m.nome)} entra no sistema integrado em breve">${esc(m.nome)}<small>(${esc(m.off)})</small></span>`).join("");
+}
+
+function statusMes(m){
+  const d = DADOS[chave(m)];
+  return d ? d.status : "vazio";
+}
+
+function desenhaMeses(){
+  $("#meses").innerHTML = MESES.map((n,i)=>{
+    const m=i+1, st=statusMes(m);
+    const futuro = ANO>hojeKey[0] || (ANO===hojeKey[0] && m>hojeKey[1]);
+    return `<button class="aba ${m===mesSel?"on":""}" role="tab" aria-selected="${m===mesSel}" data-m="${m}" ${futuro?"disabled":""}>${n.slice(0,3)}<span class="pt ${st==="vazio"?"":st}"></span></button>`;
+  }).join("");
+  document.querySelectorAll("#meses .aba").forEach(b=>b.onclick=()=>{ mesSel=+b.dataset.m; guarda(); tudo(); });
+}
+
+function desenhaFolhas(){
+  $("#folhas").innerHTML = FOLHAS.map(f=>`<button class="aba ${f.id===folhaSel?"on":""}" role="tab" data-f="${f.id}">${esc(f.nome)}</button>`).join("");
+  document.querySelectorAll("#folhas .aba").forEach(b=>b.onclick=()=>{ folhaSel=b.dataset.f; guarda(); folhas_conteudo(); desenhaFolhas(); });
+}
+
+/* classificação das leituras do inclinômetro */
+function classeCabo(v){ if(v==null) return ""; if(v>=FAIXA_CABO.min-1e-9 && v<=FAIXA_CABO.max+1e-9) return ""; return Math.abs(v-0.95)>0.25 ? "rd" : "am"; }
+function classeTrolley(v){ if(v==null) return ""; return FAIXA_TROLLEY.some(x=>Math.abs(x-v)<1e-9) ? "" : (v>0.3 ? "rd" : "am"); }
+const fmt = (v,casas) => v==null ? "" : v.toFixed(casas);
+
+function resumo(){
+  const d = DADOS[chave(mesSel)];
+  const alvo = $("#resumo");
+  if(!d){ alvo.innerHTML=""; return; }
+  const dias = Object.keys(d.incl||{}).length;
+  let fora=0;
+  Object.values(d.incl||{}).forEach(r=>{ for(let i=0;i<6;i++) if(classeCabo(r[i])) fora++; if(classeTrolley(r[6])) fora++; });
+  let nc=0, obs=0;
+  Object.values(d.grade||{}).forEach(f=>{ Object.values(f.NC||{}).forEach(a=>nc+=a.length); obs+=(f.obs||[]).length; });
+  alvo.innerHTML = `<div class="cards">
+    <div class="card"><div class="l">Dias medidos</div><div class="v">${dias}</div><div class="s">${(d.folgas||[]).length} folgas · ${(d.semOperacao||[]).length} sem operação</div></div>
+    <div class="card"><div class="l">Leituras fora do padrão</div><div class="v ${fora?"am":""}">${fora}</div><div class="s">inclinômetro</div></div>
+    <div class="card"><div class="l">Não conformidades</div><div class="v ${nc?"bad":""}">${nc}</div><div class="s">${obs} observações</div></div>
+    <div class="card"><div class="l">Situação</div><div class="v" style="font-size:1rem;margin-top:8px">${d.status==="ok"?"Conferido":"Parcial"}</div><div class="s">até o dia ${d.ultimoDia}</div></div>
+  </div>`;
+}
+
+function vazioMes(){
+  return `<div class="vazio"><b>Aguardando transcrição</b><span>${MESES[mesSel-1]} de ${ANO} ainda não foi transcrito das folhas do papel.<br>Os dados entram aqui, folha por folha, assim que forem conferidos.</span></div>`;
+}
+
+function tabelaIncl(d){
+  const n = diasNoMes(mesSel);
+  const temHora = Object.values(d.incl).some(r=>r[7]);
+  const nc = temHora ? 10 : 9;
+  let h = `<table class="inc"><thead><tr><th class="nm" style="min-width:64px">Dia</th>${temHora?"<th>Hora</th>":""}<th>Cabo 1</th><th>Cabo 2</th><th>Cabo 3</th><th>Cabo 4</th><th>Cabo 5</th><th>Cabo 6</th><th>Trolley</th><th>Autor</th><th>Obs.</th></tr></thead><tbody>`;
+  for(let dia=1; dia<=n; dia++){
+    const wd = new Date(ANO,mesSel-1,dia).toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","");
+    const rot = `${pad(dia)} <small style="opacity:.6;font-weight:normal">${wd}</small>`;
+    const r = d.incl[dia];
+    if(r){
+      h += `<tr><td class="dia">${rot}</td>${temHora?`<td class="hr">${esc(r[7]||"")}</td>`:""}`
+        + r.slice(0,6).map(v=>`<td class="${classeCabo(v)}">${fmt(v,1)}</td>`).join("")
+        + `<td class="${classeTrolley(r[6])}">${fmt(r[6],2)}</td><td>${esc(r[8]||"")}</td><td class="ob">${r[9]?`<span class="chk">${String(r[9]).startsWith("copiado")?"copiado":"conferir"}</span> ${esc(r[9]===true?"":r[9])}`:""}</td></tr>`;
+    } else if((d.folgas||[]).includes(dia)){
+      h += `<tr class="folga"><td class="dia">${rot}</td><td colspan="${nc}">F O L G A</td></tr>`;
+    } else if((d.semRegistro||[]).includes(dia)){
+      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="${nc}">SEM REGISTRO NA FOLHA</td></tr>`;
+    } else if((d.semOperacao||[]).includes(dia) || (d.inclSemOp||[]).includes(dia)){
+      h += `<tr class="semop"><td class="dia">${rot}</td><td colspan="${nc}">SEM OPERAÇÃO</td></tr>`;
+    } else {
+      h += `<tr><td class="dia">${rot}</td><td colspan="${nc}" class="pend">—</td></tr>`;
+    }
+  }
+  return h + "</tbody></table>";
+}
+
+function formDe(f,dados){ return (dados&&dados.form)||f.form; }
+function textoItem(f,dados,it){ return ((dados&&dados.extra)||{})[it] || ITENS[formDe(f,dados)][it-1]; }
+function tabelaGrade(f, d){
+  const dados = (d.grade||{})[f.id];
+  const n = diasNoMes(mesSel);
+  if(!dados) return vazioFolha(f);
+  const itens = []; const nI = dados.n || ITENS[formDe(f,dados)].length;
+  for(let i=1;i<=nI;i++) itens.push(textoItem(f,dados,i));
+  let h = `<table><thead><tr><th class="nm">Item</th>`;
+  for(let dia=1; dia<=n; dia++) h += `<th class="${(hojeKey[1]===mesSel&&hojeKey[2]===dia&&hojeKey[0]===ANO)?"hj":""}">${dia}</th>`;
+  h += `</tr></thead><tbody>`;
+  itens.forEach((txt,i)=>{
+    const it=i+1;
+    const nc=(dados.NC||{})[it]||[], na=(dados.NA||{})[it]||[];
+    h += `<tr><td class="nm"><i>${it}</i>${esc(txt)}</td>`;
+    for(let dia=1; dia<=n; dia++){
+      let cl, tit="";
+      if((d.folgas||[]).includes(dia)) cl="F";
+      else if((d.semRegistro||[]).includes(dia)) cl="R";
+      else if((d.semOperacao||[]).includes(dia) || (dados.semOp||[]).includes(dia)) cl="S";
+      else if(dia>d.ultimoDia || dia<(dados.desde||1) || dia<((dados.de||{})[it]||1)) cl="nd";
+      else if(nc.includes(dia)) cl="NC";
+      else if(na.includes(dia)||(dados.NAtodos||[]).includes(it)) cl="NA";
+      else cl="C";
+      const cp=(d.copiados||[]).includes(dia)?" cp":"";
+      h += `<td class="c ${cl}${cp}" ${cl==="NC"?`data-it="${it}" data-d="${dia}"`:""}></td>`;
+    }
+    h += `</tr>`;
+  });
+  return h + "</tbody></table>";
+}
+
+function vazioFolha(f){
+  if(f.desde && mesSel<f.desde)
+    return `<div class="vazio"><b>${esc(f.nome)}</b><span>Esta folha só existe a partir de ${MESES[f.desde-1]} (o formulário ainda não era usado em ${MESES[mesSel-1]}).</span></div>`;
+  if((((DADOS[chave(mesSel)]||{}).semFolha)||[]).includes(f.id))
+    return `<div class="vazio"><b>${esc(f.nome)}</b><span>Esta folha não consta nos documentos de ${MESES[mesSel-1]}.</span></div>`;
+  return `<div class="vazio"><b>${esc(f.nome)}</b><span>Folha ainda não transcrita para ${MESES[mesSel-1]}.</span></div>`;
+}
+
+function blocoObs(f, d){
+  const dados=(d.grade||{})[f.id];
+  if(!dados||!(dados.obs||[]).length) return "";
+  return `<div class="obs"><h3>Observações (não conformidades)</h3>`+dados.obs.map(o=>
+    `<div class="ob-i"><b>${esc(o.d)}</b> · ${esc(o.txt)}<small>${o.prazo?`Prazo: ${esc(o.prazo)} · `:""}${o.resp?`Responsável: ${esc(o.resp)} · `:""}${o.real?`Corrigido em: ${esc(o.real)}`:""}</small></div>`).join("")+`</div>`;
+}
+
+let zoomV = (()=>{ try{ const v=parseFloat(localStorage.getItem("ct:zoom")); if(v>=.5&&v<=3) return v; }catch(e){} return 1; })();
+let maoOn = (()=>{ try{ return localStorage.getItem("ct:mao")!=="0"; }catch(e){ return true; } })();
+const barraZoom = () => `<div class="zbar" id="zbar">
+    <button data-z="-" title="Diminuir (Ctrl + roda do mouse)" aria-label="Diminuir zoom">−</button>
+    <span class="pct" id="zpct">${Math.round(zoomV*100)}%</span>
+    <button data-z="+" title="Aumentar (Ctrl + roda do mouse)" aria-label="Aumentar zoom">+</button>
+    <button data-z="0" title="Voltar a 100%">100%</button>
+    <button data-z="mao" class="${maoOn?"on":""}" title="Arrastar a tabela com o mouse" aria-pressed="${maoOn}">✋ Mão</button>
+    <span class="dica">arraste para mover · Ctrl + roda para zoom</span></div>`;
+function ligaZoom(alvo){
+  const cx = alvo.querySelector(".cx"); if(!cx) return;
+  const tb = cx.querySelector("table");
+  const aplica = (v)=>{
+    zoomV = Math.min(3, Math.max(.5, Math.round(v*100)/100));
+    cx.style.setProperty("--z", zoomV);
+    const pct=$("#zpct"); if(pct) pct.textContent=Math.round(zoomV*100)+"%";
+    try{ localStorage.setItem("ct:zoom",zoomV); }catch(e){}
+  };
+  aplica(zoomV);
+  cx.classList.toggle("mao", maoOn);
+  $("#zbar").onclick = e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.z==="+") aplica(zoomV+.25);
+    else if(b.dataset.z==="-") aplica(zoomV-.25);
+    else if(b.dataset.z==="0") aplica(1);
+    else { maoOn=!maoOn; try{ localStorage.setItem("ct:mao",maoOn?"1":"0"); }catch(e){} b.classList.toggle("on",maoOn); b.setAttribute("aria-pressed",maoOn); cx.classList.toggle("mao",maoOn); }
+  };
+  // Ctrl + roda do mouse (ou pinça no trackpad) = zoom
+  cx.addEventListener("wheel", e=>{ if(!(e.ctrlKey||e.metaKey)) return; e.preventDefault(); aplica(zoomV + (e.deltaY<0?.15:-.15)); }, {passive:false});
+  // mãozinha: arrastar para mover
+  let ini=null, moveu=false;
+  cx.addEventListener("pointerdown", e=>{
+    if(!maoOn || e.pointerType==="touch" || e.button!==0) return;
+    ini={x:e.clientX,y:e.clientY,l:cx.scrollLeft,t:cx.scrollTop}; moveu=false;
+  });
+  window.addEventListener("pointermove", e=>{
+    if(!ini) return;
+    const dx=e.clientX-ini.x, dy=e.clientY-ini.y;
+    if(!moveu && Math.hypot(dx,dy)<5) return;
+    if(!moveu){ moveu=true; cx.classList.add("arrasta"); }
+    cx.scrollLeft=ini.l-dx; cx.scrollTop=ini.t-dy;
+  });
+  const solta=()=>{ if(!ini) return; ini=null; cx.classList.remove("arrasta"); if(moveu) setTimeout(()=>{moveu=false},0); };
+  window.addEventListener("pointerup", solta); window.addEventListener("pointercancel", solta);
+  // não abre a janela do NC se foi um arrasto
+  cx.addEventListener("click", e=>{ if(moveu){ e.stopPropagation(); e.preventDefault(); } }, true);
+}
+
+function folhas_conteudo(){
+  const f = FOLHAS.find(x=>x.id===folhaSel)||FOLHAS[0];
+  const d = DADOS[chave(mesSel)];
+  const alvo = $("#conteudo");
+  if(!d){ alvo.innerHTML = (f.desde && mesSel<f.desde) ? vazioFolha(f) : vazioMes(); legenda(f); return; }
+  if((d.semFolha||[]).includes(f.id) || (f.desde && mesSel<f.desde)){ alvo.innerHTML = vazioFolha(f); legenda(f); return; }
+  let h = d.nota?`<div class="aviso">${esc(d.nota)}</div>`:"";
+  if(f.tipo==="incl"){
+    h += (d.incl && Object.keys(d.incl).length) ? barraZoom()+`<div class="cx">${tabelaIncl(d)}</div>` : vazioFolha(f);
+  } else {
+    const t = tabelaGrade(f,d);
+    h += t.startsWith("<table") ? barraZoom()+`<div class="cx">${t}</div>${blocoObs(f,d)}` : t;
+  }
+  alvo.innerHTML = h;
+  alvo.querySelectorAll("td.NC").forEach(td=>td.onclick=()=>abreNC(f,d,+td.dataset.it,+td.dataset.d));
+  ligaZoom(alvo);
+  legenda(f);
+}
+
+function abreNC(f,d,it,dia){
+  const obs=((d.grade||{})[f.id].obs||[]).filter(o=>o.item===it);
+  $("#caixa").innerHTML = `<h2>Item ${it} · dia ${pad(dia)}/${pad(mesSel)}</h2><p style="margin:0 0 8px;font-size:.85rem">${esc(textoItem(f,(d.grade||{})[f.id],it))}</p>`
+    + (obs.length? obs.map(o=>`<div class="ob-i"><b>${esc(o.d)}</b> · ${esc(o.txt)}<small>${o.prazo?`Prazo: ${esc(o.prazo)} `:""}${o.resp?`· ${esc(o.resp)} `:""}${o.real?`· corrigido ${esc(o.real)}`:""}</small></div>`).join("") : `<div class="ob-i">Sem observação registrada na folha.</div>`)
+    + `<button class="fechar" id="fx">Fechar</button>`;
+  $("#janela").classList.add("aberta"); $("#fx").onclick=fecha;
+}
+function fecha(){ $("#janela").classList.remove("aberta"); }
+$("#janela").addEventListener("click",e=>{ if(e.target.id==="janela") fecha(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") fecha(); });
+
+function legenda(f){
+  $("#legenda").innerHTML = f.tipo==="incl"
+   ? `<span><i style="background:rgba(230,176,50,.12);color:var(--amarelo)">1.1</i> fora da faixa 0.9–1.0 (cabos) ou 0.00/0.05/0.1 (trolley)</span><span><i style="background:rgba(255,59,48,.16);color:#ff8a80">1.3</i> muito fora do padrão</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(138,154,59,.5) 3px 5px)"></i> folga</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(224,136,58,.5) 3px 5px)"></i> sem operação</span>`
+   : `<span><i style="color:var(--ok)">C</i> Conforme</span><span><i style="color:#ff8a80;background:rgba(255,59,48,.2)">NC</i> Não conforme</span><span><i style="color:#7b8068">NA</i> Não se aplica</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(138,154,59,.5) 3px 5px)"></i> folga</span><span><i style="background:repeating-linear-gradient(115deg,transparent 0 3px,rgba(224,136,58,.5) 3px 5px)"></i> sem operação</span><span><i style="opacity:.55;color:var(--ok)">C</i> dia copiado do anterior</span>`;
+}
+
+function tudo(){ desenhaMeses(); resumo(); desenhaFolhas(); folhas_conteudo(); }
+desenhaModulos(); tudo();
+</script>
+</body>
+</html>
