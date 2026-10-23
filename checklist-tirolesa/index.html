@@ -720,28 +720,49 @@ const DADOS = {
   "2026-10": {
     status:"parcial", ultimoDia:21,
     folgas:[6,13,20], semOperacao:[], copiados:[],
-    nota:"Pré-leitura do inclinômetro (folha 1/2 e 2/2) — conferir contra o papel. As demais folhas ainda aguardam transcrição.",
+    semFolha:["trm"],
+    nota:"Outubro: documentos até 21/10/2026 (mês em andamento). Itens 18 a 21 do Trolley não se aplicam (novo Trolley). O Recebimento ganhou o item 31 (ancoragem de ZipRider, parafuso solto, via 3).",
     incl:{
-      1:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"08:30","G"],
-      2:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"08:30","G"],
-      3:[0.9,0.9,1.0,0.9,1.0,0.9,0.05,"08:30","G"],
-      4:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"09:00","G"],
-      5:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:35","G"],
-      7:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:20","G"],
-      8:[0.9,1.0,0.9,0.9,1.0,1.0,0.05,"08:25","G"],
-      9:[0.9,1.0,1.0,0.9,0.9,1.0,0.05,"08:20","G"],
-      10:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:25","G"],
-      11:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"08:20","G"],
-      12:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"08:16","G"],
-      14:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"08:30","G"],
-      15:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"08:10","G"],
-      16:[1.0,1.0,0.9,1.0,1.0,0.9,0.05,"08:25","G"],
-      17:[1.0,0.9,1.0,1.0,1.0,1.0,0.1,"08:30","G"],
-      18:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"08:27","G"],
-      19:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"08:25","G"],
-      21:[1.0,0.9,1.0,0.9,1.0,0.9,0.1,"08:20","G"]
+      1:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
+      2:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"8:30","Lucas P"],
+      3:[0.9,0.9,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
+      4:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"9:00","Lucas P"],
+      5:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:35","Lucas P"],
+      7:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:20","Lucas P"],
+      8:[0.9,1.0,0.9,0.9,1.0,1.0,0.05,"8:25","Lucas P"],
+      9:[0.9,1.0,1.0,0.9,0.9,1.0,0.05,"8:20","Lucas P"],
+      10:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:25","Lucas P"],
+      11:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"8:20","Lucas P"],
+      12:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"8:16","Lucas K","hora 08:16 ou 09:16; assinatura diferente"],
+      14:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
+      15:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"8:10","Lucas P"],
+      16:[1.0,1.0,0.9,1.0,1.0,0.9,0.05,"8:25","Lucas P"],
+      17:[1.0,0.9,1.0,1.0,1.0,1.0,0.1,"8:30","Lucas P"],
+      18:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:27","Lucas P"],
+      19:[1.0,1.0,1.0,1.0,0.9,1.0,0.05,"8:25","Lucas P"],
+      21:[1.0,0.9,1.0,0.9,1.0,0.9,0.1,"8:20","Lucas P"]
     },
-    grade:{}
+    grade:{
+      tro:{ form:"125", n:28, NAtodos:[18,19,20,21], resp:"Lucas R. Pietsch (Líder de Operações)", obs:[] },
+      rec:{ form:"122", n:31, NAtodos:[17],
+        extra:{31:"Ancoragem de ZipRider (parafuso solto) - via 3"},
+        de:{31:19},
+        NC:{10:[...R(1,5),...R(7,12),...R(14,19),21],
+            30:[...R(1,5),...R(7,12),...R(14,19)],
+            31:[19]},
+        resp:"Lucas R. Pietsch (Líder de Operações)",
+        obs:[
+          {d:"01/10/2026", item:10, txt:"10 - Pintura do piso descascando (não impeditivo)"},
+          {d:"01/10/2026", item:30, txt:"30 - Vegetação alta em vários pontos", real:"21/10/2026"},
+          {d:"01/10/2026", item:16, txt:"16 - Pintura dos grampos em desconformidade (falta pintura em alguns grampos). Não impeditivo para a operação.", prazo:"05/10/2026", resp:"SGV", real:"05/10/2026"}
+        ] },
+      cadr:{ n:20, resp:"Lucas R. Pietsch (Líder de Operações)", obs:[] },
+      lan:{ n:26, resp:"Gabriel Krüger (Coordenador de Operações)",
+        obs:[
+          {d:"01/10/2026", item:16, txt:"16-17 - Pintura dos grampos em desconformidade. Alguns grampos sem pintura (não impeditivo)", prazo:"05/10/2026", resp:"SGV", real:"01/10/2026"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
   }
 };
 
