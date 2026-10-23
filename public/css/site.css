@@ -604,3 +604,5 @@ h1, h2, h3 { font-weight: 600; }
 .roots { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 @media (min-width: 900px) { .roots { grid-template-columns: repeat(3, 1fr); } .root.lead-card { grid-column: 1 / -1; } }
 html[data-input="touch"] kbd { display: none; }
+.hero .tag, .page-hero .tag { margin-bottom: .9rem; }
+.hero .crumbs { margin-bottom: 1.1rem; }
