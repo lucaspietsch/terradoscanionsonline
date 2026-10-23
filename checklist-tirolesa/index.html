@@ -721,7 +721,7 @@ const DADOS = {
     status:"parcial", ultimoDia:21,
     folgas:[6,13,20], semOperacao:[], copiados:[],
     semFolha:["trm"],
-    nota:"Outubro: documentos até 21/10/2026 (mês em andamento). Itens 18 a 21 do Trolley não se aplicam (novo Trolley). O Recebimento ganhou o item 31 (ancoragem de ZipRider, parafuso solto, via 3).",
+    nota:"Outubro: documentos até 21/10/2026 (mês em andamento). Itens 18 a 21 do Trolley não se aplicam (novo Trolley). O Recebimento ganhou o item 31 (ancoragem de ZipRider, parafuso solto, via 3). No Lançamento, os dias 6, 13 e 20 estão em branco (sem operação).",
     incl:{
       1:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
       2:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"8:30","Lucas P"],
@@ -733,7 +733,7 @@ const DADOS = {
       9:[0.9,1.0,1.0,0.9,0.9,1.0,0.05,"8:20","Lucas P"],
       10:[1.0,0.9,1.0,1.0,0.9,1.0,0.05,"8:25","Lucas P"],
       11:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"8:20","Lucas P"],
-      12:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"8:16","Lucas K","hora 08:16 ou 09:16; assinatura diferente"],
+      12:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"8:16","Lucas K"],
       14:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"8:30","Lucas P"],
       15:[0.9,0.9,0.9,1.0,0.9,0.9,0.05,"8:10","Lucas P"],
       16:[1.0,1.0,0.9,1.0,1.0,0.9,0.05,"8:25","Lucas P"],
@@ -757,11 +757,11 @@ const DADOS = {
           {d:"01/10/2026", item:16, txt:"16 - Pintura dos grampos em desconformidade (falta pintura em alguns grampos). Não impeditivo para a operação.", prazo:"05/10/2026", resp:"SGV", real:"05/10/2026"}
         ] },
       cadr:{ n:20, resp:"Lucas R. Pietsch (Líder de Operações)", obs:[] },
-      lan:{ n:26, resp:"Gabriel Krüger (Coordenador de Operações)",
+      lan:{ n:26, semOp:[6,13,20], resp:"Gabriel Krüger (Coordenador de Operações)",
         obs:[
           {d:"01/10/2026", item:16, txt:"16-17 - Pintura dos grampos em desconformidade. Alguns grampos sem pintura (não impeditivo)", prazo:"05/10/2026", resp:"SGV", real:"01/10/2026"}
         ] },
-      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+      cadl:{ n:20, semOp:[6,13,20], resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
     }
   }
 };
