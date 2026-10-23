@@ -190,6 +190,16 @@ const ITENS = {
     "Fitas de cadeirinhas e capacetes em boas condições?","Fitas das cadeirinhas isentas de sinais de queimaduras?","Toucas e elásticos para cabelos disponíveis? Recipientes para descartes?",
     "Kits Zip Rider montados e prontos para uso?","Todos os equipamentos com TAG?"
   ],
+  "tro-sgv": [
+    "Baterias carregadas e prontas para uso?","Cabos e fios de energia das baterias soldados em conformidade?","Cabos e fios na parte interna do Trolley com solda em conformidade?",
+    "Conectores dos cabos do Trolley em conformidade?","Conectores dos cabos das baterias em conformidade?","Alavancas de subida e descida do Trolley com entortamento?",
+    "Botão liga e desliga em conformidade?","Botão de potenciômetro em conformidade?","Visor de carga da bateria funcionando corretamente?",
+    "Voltagem para lançamento de subida do Trolley igual ou maior que 37 Volts?","Barulho diferente no motor ao ligar para teste diário?","Correias alinhadas e rodando corretamente?",
+    "Ao girar o botão de potenciômetro, segue paralelo à aceleração dos motores?","Carenagens metálicas bem fixas? Parafusos apertados?","Parafusos da estrutura pesada com aperto máximo?",
+    "Caixa do módulo fixa? Apresenta frouxidão?","Superfície cortante nas bordas de alumínio ou aço?","Carregadores das baterias com alguma deformidade?",
+    "Fixação de ancoragem do para-quedas (há alguma deformidade?)","Cordins internos do para-quedas em conformidade?","Costuras das fitas do para-quedas em conformidade (visual)?",
+    "Após todos os testes o Trolley funciona normalmente?"
+  ],
   "125": [
     "\"Memorial Descritivo\", \"Manual de Operação\" e \"Plano de Manutenção\" disponíveis?","Baterias carregadas e prontas para uso?","Carregadores das baterias conformes?",
     "Voltímetro em conformidade?","Conectores (tipo Anderson) entre bateria e trolley conformes?","Voltagem para lançamento de subida igual ou maior que 37 Volts?",
@@ -223,7 +233,55 @@ const FOLHAS = [
      grade:{ folhaId:{ NA:{item:[dias]}, NC:{item:[dias]}, obs:[{d,item,txt,prazo,resp,real}] } } }
    Em grade, tudo que não for NC/NA nos dias operados é C.
    ============================================================ */
+const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
 const DADOS = {
+  "2026-02": {
+    status:"parcial", ultimoDia:28,
+    folgas:[3,10,17,24], semOperacao:[], copiados:[],
+    nota:"Fevereiro: a folha do inclinômetro 1/2 (dias 1 a 12) não veio no PDF. O Trolley só tem folha a partir de 21/02 (formulário novo de 22 itens, revisão de 19/02).",
+    incl:{
+      13:[0.9,0.9,0.9,0.9,1.0,0.9,0.1,"","Lucas P"],
+      14:[1.0,1.0,1.0,1.0,1.0,1.0,0.0,"","Lucas P"],
+      15:[0.9,1.0,0.9,0.9,0.9,0.9,0.1,"","Lucas P"],
+      16:[0.9,0.9,0.9,0.9,0.8,0.9,0.0,"","Lucas P"],
+      18:[0.9,0.9,0.9,0.8,0.9,1.0,0.1,"","Lucas P"],
+      19:[1.0,1.0,0.9,0.9,1.0,1.0,0.1,"","Lucas P"],
+      20:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      21:[1.0,0.9,1.0,0.9,0.9,0.8,0.05,"","Lucas P"],
+      22:[1.0,1.0,0.9,1.1,1.1,1.0,0.05,"","Lucas K",true],
+      23:[1.0,1.0,0.9,1.0,1.1,1.0,0.05,"","Lucas K",true],
+      25:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Gabriel"],
+      26:[1.0,1.0,0.9,0.9,1.0,1.0,0.0,"","Lucas P"],
+      27:[1.0,1.0,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      28:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"tro-sgv", desde:21, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Equipamento para o Trolley",24:"Acesso à cerca para extração",25:"Manejo de vegetação"},
+        de:{23:5,24:5,25:5},
+        NC:{23:[...R(5,9),...R(11,16),...R(18,23),...R(25,28)],24:R(5,9),25:R(5,9)},
+        obs:[
+          {d:"05/02/2026", item:23, txt:"23 - Falta de equipamentos no transporte de bags", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"05/02/2026", item:24, txt:"24 - Falta de portão de acesso para equipe de emergência SGV", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"05/02/2026", item:25, txt:"25 - Realizar manejo de vegetação para acesso da equipe de emergência SGV", prazo:"11/02/2026", resp:"Supervisor (ass.)"}
+        ] },
+      cadr:{ n:20, resp:"Lucas P", obs:[] },
+      lan:{ n:25, resp:"Gabriel Krüger (Coordenador de Operações)",
+        extra:{22:"Maca e talas de imobilização disponíveis para emergência?",23:"Manejo de vegetação",24:"Cadeiras e mesa",25:"Quadro de avisos sem identificação"},
+        de:{23:5,24:5,25:5},
+        NC:{11:[9],23:[...R(5,9),...R(11,16),...R(18,23),...R(25,28)],24:R(5,9),25:[5,6]},
+        obs:[
+          {d:"05/02/2026", item:23, txt:"Item 23: Manejo ao redor do deck, área externa da cerca.", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"05/02/2026", item:24, txt:"Item 24: Substituição de cadeira de escritório e mesa de atendimento.", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"05/02/2026", item:25, txt:"Item 25: Colocação de identificação.", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"05/02/2026", item:26, txt:"Item 26: Falta do kit resgate (lançamento).", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"05/02/2026", item:27, txt:"Item 27: Falta de equipamentos Trolley (malhas rápidas Delta).", prazo:"11/02/2026", resp:"Supervisor (ass.)"},
+          {d:"09/02/2026", item:11, txt:"Item 11: Portão precisa conserto da polia inferior.", prazo:"11/02/2026", resp:"Supervisor (ass.)"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  },
   "2026-01": {
     status:"parcial", ultimoDia:31,
     folgas:[6,13,20,27], semOperacao:[19], copiados:[],
@@ -375,12 +433,13 @@ function tabelaIncl(d){
   return h + "</tbody></table>";
 }
 
-function textoItem(f,dados,it){ return ((dados&&dados.extra)||{})[it] || ITENS[f.form][it-1]; }
+function formDe(f,dados){ return (dados&&dados.form)||f.form; }
+function textoItem(f,dados,it){ return ((dados&&dados.extra)||{})[it] || ITENS[formDe(f,dados)][it-1]; }
 function tabelaGrade(f, d){
   const dados = (d.grade||{})[f.id];
   const n = diasNoMes(mesSel);
   if(!dados) return vazioFolha(f);
-  const itens = []; const nI = dados.n || ITENS[f.form].length;
+  const itens = []; const nI = dados.n || ITENS[formDe(f,dados)].length;
   for(let i=1;i<=nI;i++) itens.push(textoItem(f,dados,i));
   let h = `<table><thead><tr><th class="nm">Item</th>`;
   for(let dia=1; dia<=n; dia++) h += `<th class="${(hojeKey[1]===mesSel&&hojeKey[2]===dia&&hojeKey[0]===ANO)?"hj":""}">${dia}</th>`;
@@ -394,7 +453,7 @@ function tabelaGrade(f, d){
       if((d.folgas||[]).includes(dia)) cl="F";
       else if((d.semRegistro||[]).includes(dia)) cl="R";
       else if((d.semOperacao||[]).includes(dia)) cl="S";
-      else if(dia>d.ultimoDia) cl="nd";
+      else if(dia>d.ultimoDia || dia<(dados.desde||1) || dia<((dados.de||{})[it]||1)) cl="nd";
       else if(nc.includes(dia)) cl="NC";
       else if(na.includes(dia)||(dados.NAtodos||[]).includes(it)) cl="NA";
       else cl="C";
