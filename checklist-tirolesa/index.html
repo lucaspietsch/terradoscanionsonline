@@ -235,6 +235,50 @@ const FOLHAS = [
    ============================================================ */
 const R = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);   // R(5,9) = [5,6,7,8,9]
 const DADOS = {
+  "2026-03": {
+    status:"parcial", ultimoDia:31,
+    folgas:[3,10,17,24,31], semOperacao:[], copiados:[],
+    nota:"Março: a folha do inclinômetro 1/2 (dias 1 a 12) não veio no PDF. Dia 31 (terça) está escrito FOLGA nas folhas de lançamento e cadeirinhas.",
+    incl:{
+      13:[1.0,0.9,0.9,1.0,1.0,0.9,0.00,"","Lucas P"],
+      14:[1.0,0.9,1.0,1.0,0.9,0.9,0.00,"","Lucas P"],
+      15:[1.0,0.9,1.0,0.9,0.9,0.9,0.05,"","Lucas P"],
+      16:[0.9,0.9,0.9,0.9,1.0,0.9,0.05,"","Lucas P"],
+      18:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      19:[1.0,0.9,0.9,0.9,1.0,0.9,0.1,"","Lucas P"],
+      20:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      21:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      22:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"","Lucas K"],
+      23:[1.0,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      25:[0.9,0.9,1.0,1.0,1.0,0.9,0.05,"","Lucas P"],
+      26:[0.9,0.9,1.0,1.0,0.9,0.9,0.00,"","Lucas P"],
+      27:[1.0,1.0,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      28:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"],
+      29:[1.0,0.9,1.0,0.9,0.9,0.9,0.05,"","Lucas P"],
+      30:[1.0,0.9,1.0,0.9,1.0,0.9,0.05,"","Lucas P"]
+    },
+    grade:{
+      tro:{ form:"tro-sgv", n:23, extra:{23:"O clip de fim de curso está fixado em torque de 64nm?"}, resp:"Lucas R. Pietsch (Líder)", obs:[] },
+      rec:{ n:25, NAtodos:[17], resp:"Lucas R. Pietsch (Líder)",
+        extra:{23:"Equipamento para o Trolley",24:"Acesso na cerca para extração",25:"Manejo de vegetação"},
+        obs:[
+          {d:"26/03/2026", item:26, txt:"26 - Oxidação em cabo de ancoragem", prazo:"26/04/2026", resp:"Uilliams (supervisor)"},
+          {d:"27/03/2026", item:27, txt:"27 - Tecnil danificado nos cabos 3, 4 e 6", prazo:"27/04/2026", resp:"Uilliams (supervisor)"}
+        ] },
+      cadr:{ n:20, resp:"Lucas P", obs:[] },
+      lan:{ n:25, resp:"Gabriel Krüger (Coordenador de Operações)",
+        extra:{23:"Manutenção vegetação",24:"Manutenção portão acesso",25:"Manutenção armário ferro"},
+        de:{24:6,25:6},
+        NC:{23:[1,2,...R(4,9)],24:[...R(6,9),11,12],25:[6]},
+        obs:[
+          {d:"01/03/2026", item:23, txt:"Item 23 - Manejo vegetação área deck e arredor"},
+          {d:"06/03/2026", item:24, txt:"Item 24 - Arrumar trinco portão acesso à atividade"},
+          {d:"06/03/2026", item:25, txt:"Item 25 - Arrumar porta armário ferro"},
+          {d:"30/03/2026", item:26, txt:"Item 26 - Arrumar banco clientes recepção!"}
+        ] },
+      cadl:{ n:20, resp:"Gabriel Krüger (Coordenador de Operações)", obs:[] }
+    }
+  },
   "2026-02": {
     status:"parcial", ultimoDia:28,
     folgas:[3,10,17,24], semOperacao:[], copiados:[],
