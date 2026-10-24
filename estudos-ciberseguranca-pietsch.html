@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudos CiberSecurity Pietsch</title>
+<meta name="description" content="Central de estudos de Ciber Segurança: biblioteca de PDFs de hacking (traduzidos e transcritos), faculdade e aulas gratuitas de TI.">
+<meta name="theme-color" content="#04010d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304010d'/%3E%3Cpath d='M32 8 12 16v14c0 12 8 21 20 26 12-5 20-14 20-26V16z' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Cpath d='m24 30 6 6 11-12' fill='none' stroke='%23a78bfa' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+/* ============ Variáveis e reset ============ */
+:root{
+  --bg:#04010d; --bg2:#0a0620;
+  --violet:#8b5cf6; --violet-2:#a78bfa; --blue:#3b82f6; --cyan:#22d3ee; --pink:#e879f9;
+  --green:#39ff9c; --red:#ff4d8d; --amber:#fbbf24;
+  --text:#e8eaff; --muted:#9ba3cf;
+  --glass:rgba(12,7,36,.68); --glass-2:rgba(22,13,60,.78);
+  --line:rgba(139,92,246,.38); --line-2:rgba(34,211,238,.42);
+  --glow-v:0 0 18px rgba(139,92,246,.55); --glow-c:0 0 18px rgba(34,211,238,.5);
+  --font-ui:'Rajdhani','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-mono:'Share Tech Mono','JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --font-title:'Orbitron','Rajdhani',system-ui,sans-serif;
+  --transition:all .28s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg);scroll-padding-top:84px;overflow-x:clip}
+body{font-family:var(--font-ui);font-size:17px;line-height:1.55;color:var(--text);background:transparent;overflow-x:hidden;min-height:100vh}
+h1,h2,h3{font-family:var(--font-title);letter-spacing:.04em;line-height:1.2}
+h1{font-size:clamp(1.7rem,5vw,3rem)}
+h2{font-size:clamp(1.3rem,3.6vw,1.9rem)}
+h3{font-size:1.05rem}
+a{color:var(--cyan);text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+::selection{background:rgba(139,92,246,.55)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#07031a}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--violet),var(--blue));border-radius:6px}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.container{width:92%;max-width:1240px;margin:0 auto}
+.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em;flex:none}
+.mono{font-family:var(--font-mono)}
+.muted{color:var(--muted)}
+
+/* ============ Fundo cibernético ============ */
+#bgVideo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-5;opacity:0;transition:opacity 1.2s;pointer-events:none}
+body.has-video #bgVideo{opacity:.6}
+#bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:-4;opacity:var(--fx-opacity,.9);transition:opacity .6s}
+body.has-video #bgCanvas{opacity:calc(var(--fx-opacity,.9) * .45);mix-blend-mode:screen}
+body.fx-off #bgCanvas,body.fx-off .bg-figure,body.fx-off .bg-floor,body.fx-off .bg-scan{display:none}
+.bg-figure{position:fixed;bottom:-2vh;z-index:-3;pointer-events:none;opacity:.55;filter:drop-shadow(0 0 22px rgba(139,92,246,.55))}
+.bg-figure.left{left:-2vw;width:clamp(180px,26vw,420px)}
+.bg-figure.right{right:-3vw;width:clamp(140px,19vw,310px);transform:scaleX(-1);opacity:.4}
+.bg-floor{position:fixed;left:-20%;right:-20%;bottom:0;height:42vh;z-index:-3;pointer-events:none;opacity:.32;
+  background:
+    linear-gradient(90deg,rgba(139,92,246,.7) 1px,transparent 1px) 0 0/70px 70px,
+    linear-gradient(rgba(34,211,238,.6) 1px,transparent 1px) 0 0/70px 70px;
+  transform:perspective(420px) rotateX(62deg);transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(transparent,#000 70%);mask-image:linear-gradient(transparent,#000 70%);
+  animation:floorMove 5s linear infinite}
+@keyframes floorMove{to{background-position:0 70px,0 70px}}
+.bg-overlay{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 0% 100%,rgba(139,92,246,.28),transparent 45%),
+    radial-gradient(ellipse at 100% 0%,rgba(34,211,238,.18),transparent 45%),
+    radial-gradient(ellipse at 50% 35%,rgba(4,1,13,.05) 0%,rgba(4,1,13,.7) 80%),
+    linear-gradient(180deg,rgba(4,1,13,.38),rgba(10,6,32,.5))}
+.bg-scan{position:fixed;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:overlay;opacity:.7;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);animation:flicker 6s infinite steps(1)}
+@keyframes flicker{0%,100%{opacity:.7}47%{opacity:.7}48%{opacity:.45}50%{opacity:.8}52%{opacity:.7}}
+
+/* ============ Glass / cards ============ */
+.glass{background:var(--glass);backdrop-filter:blur(10px) saturate(130%);-webkit-backdrop-filter:blur(10px) saturate(130%);
+  border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.45),inset 0 0 30px rgba(139,92,246,.06)}
+.card{position:relative;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:14px;padding:1.2rem 1.25rem;
+  display:flex;flex-direction:column;gap:.55rem;transition:var(--transition);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(135deg,var(--violet),transparent 42%,var(--cyan));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55;transition:.3s}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,0%),rgba(139,92,246,.26),transparent 62%)}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 28px rgba(139,92,246,.25)}
+.card:hover::before{opacity:1}
+.card:hover::after{opacity:1}
+.card h3{color:#fff;font-size:1rem;line-height:1.3}
+.card p{color:var(--muted);font-size:.95rem}
+.card .row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.card .spacer{flex:1}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem}
+
+/* ============ Botões ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.6rem 1.15rem;border:1px solid transparent;border-radius:9px;
+  cursor:pointer;font-weight:600;font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;transition:var(--transition);text-decoration:none;white-space:nowrap;background:none}
+.btn-primary{background:linear-gradient(135deg,var(--violet),var(--blue));color:#fff;box-shadow:0 0 16px rgba(99,102,241,.45)}
+.btn-primary:hover{filter:brightness(1.18);box-shadow:0 0 26px rgba(99,102,241,.8);transform:translateY(-1px)}
+.btn-ghost{border-color:var(--line-2);color:var(--cyan);background:rgba(34,211,238,.05)}
+.btn-ghost:hover{background:rgba(34,211,238,.16);box-shadow:var(--glow-c)}
+.btn-danger{border-color:rgba(255,77,141,.5);color:var(--red);background:rgba(255,77,141,.06)}
+.btn-danger:hover{background:rgba(255,77,141,.18);box-shadow:0 0 16px rgba(255,77,141,.4)}
+.btn-sm{padding:.32rem .65rem;font-size:.8rem}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-width:38px;height:38px;padding:0 .6rem;border-radius:9px;border:1px solid var(--line);
+  background:rgba(139,92,246,.1);cursor:pointer;color:var(--violet-2);transition:var(--transition)}
+.icon-btn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:var(--glow-c)}
+.icon-btn.on{color:var(--green);border-color:rgba(57,255,156,.55)}
+.icon-btn.star-on{color:var(--amber);border-color:rgba(251,191,36,.6)}
+.icon-btn.star-on .i{fill:var(--amber)}
+.icon-btn.sm{min-width:30px;height:30px;padding:0 .4rem;font-size:.85rem}
+kbd{font-family:var(--font-mono);font-size:.7rem;border:1px solid var(--line);border-radius:5px;padding:.05rem .35rem;color:var(--muted)}
+
+/* ============ Header ============ */
+.site-header{position:sticky;top:0;z-index:200;background:linear-gradient(180deg,rgba(5,2,18,.92),rgba(5,2,18,.74));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);box-shadow:0 0 28px rgba(139,92,246,.22)}
+.site-header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent);opacity:.8}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem 0}
+.brand{display:flex;align-items:center;gap:.7rem;color:#fff}
+.brand-ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(139,92,246,.35),rgba(34,211,238,.25));border:1px solid var(--line-2);color:var(--cyan);box-shadow:var(--glow-c)}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt b{font-family:var(--font-title);font-size:clamp(.78rem,2.2vw,1.02rem);letter-spacing:.09em}
+.brand-txt small{font-family:var(--font-mono);color:var(--violet-2);font-size:.75rem;letter-spacing:.3em}
+.glitch{position:relative;display:inline-block;text-shadow:0 0 12px rgba(34,211,238,.6)}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0;opacity:.8;pointer-events:none}
+.glitch::before{color:var(--pink);animation:glitchA 4.2s infinite steps(1);clip-path:inset(0 0 55% 0)}
+.glitch::after{color:var(--cyan);animation:glitchB 3.6s infinite steps(1);clip-path:inset(55% 0 0 0)}
+@keyframes glitchA{0%,92%,100%{transform:translate(0)}93%{transform:translate(-2px,1px)}95%{transform:translate(2px,-1px)}97%{transform:translate(-1px,0)}}
+@keyframes glitchB{0%,86%,100%{transform:translate(0)}87%{transform:translate(2px,0)}89%{transform:translate(-2px,1px)}91%{transform:translate(1px,-1px)}}
+.nav ul{display:flex;list-style:none;gap:.25rem}
+.nav a{display:flex;align-items:center;gap:.4rem;padding:.5rem .85rem;border-radius:8px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.88rem;transition:var(--transition);white-space:nowrap}
+.nav a:hover{color:#fff;background:rgba(139,92,246,.18)}
+.nav a.active{color:var(--cyan);background:rgba(34,211,238,.1);box-shadow:inset 0 -2px 0 var(--cyan)}
+.hd-actions{display:flex;gap:.45rem;align-items:center}
+.burger{display:none}
+@media (max-width:980px){
+  .burger{display:inline-flex}
+  .nav{position:absolute;top:100%;left:0;right:0;background:rgba(5,2,18,.97);border-bottom:1px solid var(--line);padding:.6rem 4%;display:none}
+  .nav.open{display:block}
+  .nav ul{flex-direction:column}
+  #btnSearch kbd{display:none}
+}
+
+/* ============ Seções ============ */
+section.sec{padding:3.4rem 0 1.5rem}
+.sec-head{text-align:center;margin-bottom:2rem;position:relative;isolation:isolate}
+.sec-head::before{content:"";position:absolute;inset:-1.2rem -6% -.6rem;z-index:-1;background:radial-gradient(ellipse at center,rgba(4,1,13,.88) 0%,rgba(4,1,13,.6) 55%,transparent 78%);pointer-events:none}
+.sec-tag{font-family:var(--font-mono);color:var(--green);font-size:.82rem;letter-spacing:.25em;text-transform:uppercase}
+.sec-head h2{margin:.3rem 0 .6rem;color:#fff;text-shadow:0 0 18px rgba(139,92,246,.7)}
+.sec-head p{color:#c3c9ee;max-width:720px;margin:0 auto;text-shadow:0 0 10px #04010d}
+.sec-head::after{content:"";display:block;width:110px;height:3px;margin:1rem auto 0;border-radius:3px;background:linear-gradient(90deg,var(--violet),var(--cyan));box-shadow:var(--glow-v)}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ Hero ============ */
+.hero{padding:3.2rem 0 1rem}
+.hero-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:1.4rem;align-items:stretch}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.term{padding:0;overflow:hidden}
+.term-bar{display:flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-bottom:1px solid var(--line);background:rgba(139,92,246,.1);font-family:var(--font-mono);font-size:.8rem;color:var(--muted)}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.term-bar i:nth-child(1){background:#ff5f7e}.term-bar i:nth-child(2){background:var(--amber)}.term-bar i:nth-child(3){background:var(--green)}
+.term-bar span{margin-left:.6rem}
+.term-body{padding:1.1rem 1.2rem 1.3rem}
+.hero h1{margin:.2rem 0 1rem;color:#fff;text-shadow:0 0 22px rgba(139,92,246,.8)}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet-2),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px rgba(34,211,238,.5))}
+.tty{font-family:var(--font-mono);font-size:.95rem;color:var(--green);min-height:9.2em;white-space:pre-wrap;word-break:break-word}
+.tty .p{color:var(--violet-2)} .tty .o{color:var(--cyan)} .tty .m{color:var(--muted)}
+.tty .cur{display:inline-block;width:.55em;height:1.05em;background:var(--green);vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.1rem}
+.side-col{display:flex;flex-direction:column;gap:1.4rem}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;padding:1.1rem}
+.stat{padding:.8rem .9rem;border:1px solid var(--line);border-radius:12px;background:rgba(139,92,246,.07)}
+.stat b{display:block;font-family:var(--font-mono);font-weight:400;font-size:2rem;color:var(--cyan);text-shadow:var(--glow-c);line-height:1.1}
+.stat span{font-size:.82rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.pomo{padding:1.1rem;display:flex;align-items:center;gap:1.1rem}
+.pomo-ring{--p:0;width:96px;height:96px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--cyan) calc(var(--p)*1%),rgba(139,92,246,.2) 0);box-shadow:var(--glow-v)}
+.pomo-ring div{width:80px;height:80px;border-radius:50%;background:#07031a;display:grid;place-items:center;font-family:var(--font-title);font-size:1.15rem;color:#fff}
+.pomo h3{color:var(--violet-2);margin-bottom:.3rem}
+.pomo .row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.4rem}
+@media (max-width:760px){.quick{grid-template-columns:1fr}}
+.quick .card{cursor:pointer;min-height:140px}
+.quick .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.4rem;border:1px solid var(--line-2);color:var(--cyan);background:rgba(34,211,238,.08);box-shadow:var(--glow-c)}
+.quick .card:nth-child(2) .ico{color:var(--violet-2);border-color:var(--line);background:rgba(139,92,246,.1);box-shadow:var(--glow-v)}
+.quick .card:nth-child(3) .ico{color:var(--green);border-color:rgba(57,255,156,.4);background:rgba(57,255,156,.07);box-shadow:0 0 18px rgba(57,255,156,.35)}
+
+/* ============ Toolbar / filtros ============ */
+.toolbar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;padding:.8rem;margin-bottom:1.2rem}
+.toolbar .grow{flex:1;min-width:200px}
+.field{display:flex;flex-direction:column;gap:.3rem}
+.field>label,.lbl{font-size:.8rem;color:var(--violet-2);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+input[type=text],input[type=url],input[type=date],input[type=search],select,textarea{width:100%;background:rgba(5,2,20,.75);border:1px solid var(--line);border-radius:9px;padding:.55rem .75rem;transition:var(--transition);color-scheme:dark}
+input::placeholder,textarea::placeholder{color:#6c73a3}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.18),var(--glow-c)}
+textarea{min-height:110px;resize:vertical;font-family:var(--font-mono);font-size:.92rem;line-height:1.5}
+select option{background:#0a0620}
+input[type=file]{padding:.45rem;font-size:.9rem}
+input[type=file]::file-selector-button{margin-right:.7rem;padding:.35rem .8rem;border:1px solid var(--line-2);background:rgba(34,211,238,.08);color:var(--cyan);border-radius:7px;cursor:pointer;font-weight:600}
+input[type=range]{accent-color:var(--violet);width:100%}
+input[type=checkbox],input[type=radio]{accent-color:var(--violet);width:1.05rem;height:1.05rem}
+.search-wrap{position:relative}
+.search-wrap .i{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:var(--violet-2)}
+.search-wrap input{padding-left:2.2rem}
+
+/* ============ Chips / badges ============ */
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.12rem .55rem;border-radius:20px;font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);color:var(--violet-2);background:rgba(139,92,246,.1)}
+.chip.c{color:var(--cyan);border-color:var(--line-2);background:rgba(34,211,238,.08)}
+.chip.g{color:var(--green);border-color:rgba(57,255,156,.4);background:rgba(57,255,156,.08)}
+.chip.a{color:var(--amber);border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.08)}
+.chip.r{color:var(--red);border-color:rgba(255,77,141,.45);background:rgba(255,77,141,.08)}
+.chip.dim{opacity:.55}
+.tag{font-family:var(--font-mono);font-size:.75rem;color:var(--muted)}
+.tag::before{content:"#"}
+
+/* ============ Biblioteca de PDFs ============ */
+.pdf-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+.pdf-card .doc-ico{width:42px;height:48px;flex:none;border-radius:6px;border:1px solid var(--line-2);display:grid;place-items:center;color:var(--cyan);background:linear-gradient(160deg,rgba(34,211,238,.14),rgba(139,92,246,.1));box-shadow:var(--glow-c);font-family:var(--font-mono);font-size:.7rem;font-weight:700}
+.pdf-card .ticks{display:flex;gap:.7rem;font-size:.78rem;color:var(--muted);flex-wrap:wrap}
+.pdf-card .ticks .yes{color:var(--green)}
+.pdf-card .ticks .no{opacity:.45}
+.empty{text-align:center;padding:2.6rem 1.2rem;color:var(--muted);grid-column:1/-1}
+.empty .i{width:2.6rem;height:2.6rem;color:var(--violet-2);margin-bottom:.7rem;filter:drop-shadow(0 0 10px rgba(139,92,246,.7))}
+.empty h3{color:#fff;margin-bottom:.4rem}
+.empty .btn{margin-top:1rem}
+
+/* ============ Faculdade ============ */
+.disc-card{cursor:pointer}
+.disc-card .code{font-family:var(--font-mono);color:var(--green);font-size:.78rem;letter-spacing:.14em}
+.progress{height:7px;border-radius:5px;background:rgba(139,92,246,.2);overflow:hidden}
+.progress i{display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,var(--violet),var(--cyan));box-shadow:var(--glow-c);transition:width .8s ease}
+.fac-detail .back{margin-bottom:1rem}
+.fac-head{padding:1.3rem 1.4rem;margin-bottom:1.2rem;display:flex;flex-direction:column;gap:.7rem}
+.fac-head .tt{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:flex-start}
+.fac-head h2{color:#fff}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+@media (max-width:900px){.cols{grid-template-columns:1fr}}
+.panel{padding:1.1rem 1.15rem}
+.panel>.ph{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap}
+.panel>.ph h3{color:var(--cyan);display:flex;align-items:center;gap:.5rem}
+.rows{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.rowitem{display:flex;align-items:center;gap:.7rem;padding:.6rem .7rem;border:1px solid var(--line);border-radius:10px;background:rgba(139,92,246,.06);transition:var(--transition)}
+.rowitem:hover{border-color:var(--line-2);background:rgba(34,211,238,.06)}
+.rowitem.done .rt{text-decoration:line-through;opacity:.55}
+.rowitem .rt{flex:1;min-width:0;font-weight:600;cursor:pointer;overflow-wrap:anywhere}
+.rowitem .rt small{display:block;color:var(--muted);font-weight:400;font-size:.8rem}
+.rowitem .acts{display:flex;gap:.3rem;flex:none}
+.chk{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--violet-2);background:transparent;cursor:pointer;display:grid;place-items:center;color:transparent;flex:none;transition:var(--transition)}
+.chk:hover{border-color:var(--cyan);box-shadow:var(--glow-c)}
+.chk.on{background:linear-gradient(135deg,var(--green),var(--cyan));border-color:transparent;color:#04110c;box-shadow:0 0 14px rgba(57,255,156,.55)}
+
+/* ============ Aulas grátis ============ */
+.tabs{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1rem}
+.tab{padding:.5rem .95rem;border-radius:9px;border:1px solid var(--line);background:rgba(139,92,246,.07);color:var(--muted);cursor:pointer;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;transition:var(--transition);display:inline-flex;gap:.45rem;align-items:center}
+.tab:hover{color:#fff;border-color:var(--line-2)}
+.tab.active{color:#04010d;background:linear-gradient(135deg,var(--cyan),var(--violet-2));border-color:transparent;box-shadow:var(--glow-c)}
+.tab .n{font-family:var(--font-mono);font-size:.72rem;opacity:.8}
+.link-card .lvl{margin-left:auto}
+.link-card .cat-dot{width:9px;height:9px;border-radius:50%;background:var(--cc,var(--violet));box-shadow:0 0 10px var(--cc,var(--violet))}
+.link-card.seen{opacity:.65}
+.channels{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.1rem;align-items:center}
+.channels>span{font-size:.8rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+/* ============ Modal ============ */
+.modal-back{position:fixed;inset:0;z-index:1000;background:rgba(2,0,10,.82);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-back.open{display:flex;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{position:relative;width:100%;max-width:760px;max-height:92vh;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(18,10,50,.96),rgba(8,4,26,.97));
+  border:1px solid var(--line-2);border-radius:16px;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 60px rgba(139,92,246,.35),0 30px 80px rgba(0,0,0,.7);animation:pop .3s ease}
+.modal.wide{max-width:1040px}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--line)}
+.modal-hd h2{font-size:1.1rem;color:#fff;overflow-wrap:anywhere}
+.modal-bd{padding:1.2rem;overflow-y:auto;flex:1}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.form-grid .full{grid-column:1/-1}
+@media (max-width:640px){.form-grid{grid-template-columns:1fr}}
+.form-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:1.1rem;flex-wrap:wrap}
+.hint{font-size:.82rem;color:var(--muted)}
+.radio-row{display:flex;gap:1.1rem;flex-wrap:wrap}
+.radio-row label{display:flex;gap:.4rem;align-items:center;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.95rem;color:var(--text)}
+
+/* leitor */
+.reader-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem;border-bottom:1px solid var(--line);padding-bottom:.6rem}
+.rt-btn{padding:.42rem .85rem;border-radius:8px;border:1px solid transparent;background:none;cursor:pointer;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem}
+.rt-btn:hover{color:#fff}
+.rt-btn.active{color:var(--cyan);border-color:var(--line-2);background:rgba(34,211,238,.08)}
+.rt-btn .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:.35rem;box-shadow:0 0 8px var(--green)}
+.pdf-frame{width:100%;height:68vh;border:1px solid var(--line);border-radius:10px;background:#1a1530}
+.reader-tools{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+.prose{max-height:62vh;overflow-y:auto;padding:1rem 1.2rem;border:1px solid var(--line);border-radius:10px;background:rgba(5,2,20,.6);line-height:1.7;font-size:1.02rem}
+.prose h2,.prose h3,.prose h4,.prose h5{color:var(--cyan);margin:1.1rem 0 .5rem;font-size:1.05rem}
+.prose h2:first-child{margin-top:0}
+.prose p{margin-bottom:.8rem}
+.prose ul{margin:0 0 .9rem 1.3rem}
+.prose li{margin-bottom:.25rem}
+.prose code{font-family:var(--font-mono);background:rgba(139,92,246,.18);color:var(--pink);padding:.05rem .35rem;border-radius:5px;font-size:.9em}
+.prose pre{background:#05020f;border:1px solid var(--line);border-radius:9px;padding:.8rem 1rem;overflow-x:auto;margin-bottom:.9rem}
+.prose pre code{background:none;color:var(--green);padding:0}
+.notes-area{min-height:50vh;font-size:1rem}
+.video-wrap{aspect-ratio:16/9;width:100%;background:#000;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;box-shadow:var(--glow-c)}
+.video-wrap video,.video-wrap iframe{width:100%;height:100%;border:0;display:block}
+
+/* palette de busca */
+.palette{max-width:640px;align-self:flex-start;margin-top:10vh}
+.pal-input{padding:.9rem 1.1rem;border:0;border-bottom:1px solid var(--line);border-radius:16px 16px 0 0;background:transparent;font-size:1.1rem;font-family:var(--font-mono)}
+.pal-input:focus{box-shadow:none}
+.pal-list{list-style:none;max-height:56vh;overflow-y:auto;padding:.4rem}
+.pal-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;border-radius:9px;cursor:pointer}
+.pal-item.sel,.pal-item:hover{background:rgba(139,92,246,.22)}
+.pal-item .i{color:var(--cyan)}
+.pal-item small{color:var(--muted);margin-left:auto;font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase}
+
+/* toast */
+#toasts{position:fixed;right:1rem;bottom:1rem;z-index:2000;display:flex;flex-direction:column;gap:.5rem;max-width:min(92vw,380px)}
+.toast{padding:.7rem 1rem;border-radius:10px;background:rgba(10,6,32,.96);border:1px solid var(--line-2);box-shadow:var(--glow-c);font-size:.95rem;animation:pop .3s ease}
+.toast.err{border-color:rgba(255,77,141,.6);box-shadow:0 0 18px rgba(255,77,141,.4)}
+
+footer{margin-top:3rem;padding:2rem 0 2.4rem;text-align:center;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,rgba(5,2,18,.8))}
+footer b{color:var(--cyan)}
+footer .warn{max-width:760px;margin:.6rem auto 0;font-size:.82rem;opacity:.85}
+
+@media (max-width:480px){
+  body{font-size:16px}
+  .hd{gap:.5rem}
+  .brand{gap:.45rem;min-width:0}
+  .brand-ico{width:32px;height:32px}
+  .brand-txt b{font-size:.6rem;letter-spacing:.05em}
+  .brand-txt small{font-size:.62rem;letter-spacing:.22em}
+  .hd-actions{gap:.3rem;flex:none}
+  .icon-btn{min-width:34px;height:34px;padding:0 .4rem}
+  .tty{font-size:.85rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<noscript><p style="padding:2rem;color:#fff">Este sistema precisa de JavaScript habilitado.</p></noscript>
+
+<!-- ===== Camadas de fundo ===== -->
+<video id="bgVideo" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div class="bg-floor" aria-hidden="true"></div>
+<svg class="bg-figure left" viewBox="0 0 400 420" aria-hidden="true">
+  <defs>
+    <linearGradient id="hg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1565"/><stop offset="1" stop-color="#0b0420"/></linearGradient>
+    <radialGradient id="scr1" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#22d3ee" stop-opacity=".85"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="215" cy="330" rx="190" ry="95" fill="url(#scr1)" opacity=".5"/>
+  <path d="M40 420C40 320 100 262 168 244C146 224 140 196 146 168C155 120 188 92 222 92C258 92 288 120 294 168C300 196 292 224 270 244C338 262 392 320 392 420Z" fill="url(#hg1)" stroke="#8b5cf6" stroke-width="2"/>
+  <path d="M168 244C190 262 250 262 270 244" fill="none" stroke="#22d3ee" stroke-opacity=".6" stroke-width="2"/>
+  <ellipse cx="220" cy="176" rx="40" ry="50" fill="#02000a"/>
+  <path d="M190 172h16M236 172h16" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+  <path d="M120 392 180 322h120l60 70z" fill="#0d0728" stroke="#22d3ee" stroke-opacity=".5"/>
+</svg>
+<svg class="bg-figure right" viewBox="0 0 400 420" aria-hidden="true">
+  <path d="M40 420C40 320 100 262 168 244C146 224 140 196 146 168C155 120 188 92 222 92C258 92 288 120 294 168C300 196 292 224 270 244C338 262 392 320 392 420Z" fill="url(#hg1)" stroke="#3b82f6" stroke-width="2"/>
+  <ellipse cx="220" cy="176" rx="40" ry="50" fill="#02000a"/>
+  <path d="M190 172h16M236 172h16" stroke="#e879f9" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+</svg>
+<div class="bg-overlay" aria-hidden="true"></div>
+<div class="bg-scan" aria-hidden="true"></div>
+
+<!-- ===== Header ===== -->
+<header class="site-header">
+  <div class="container hd">
+    <a class="brand" href="#inicio" aria-label="Estudos CiberSecurity Pietsch - início">
+      <span class="brand-ico" data-icon="shield"></span>
+      <span class="brand-txt"><b class="glitch" data-text="ESTUDOS CIBERSECURITY">ESTUDOS CIBERSECURITY</b><small>PIETSCH</small></span>
+    </a>
+    <nav class="nav" id="nav" role="navigation" aria-label="Menu principal">
+      <ul>
+        <li><a href="#inicio" data-sec="inicio"><span data-icon="terminal"></span>Início</a></li>
+        <li><a href="#pdfs" data-sec="pdfs"><span data-icon="file"></span>Hacking PDFs</a></li>
+        <li><a href="#faculdade" data-sec="faculdade"><span data-icon="cap"></span>Faculdade</a></li>
+        <li><a href="#aulas" data-sec="aulas"><span data-icon="video"></span>Aulas Grátis</a></li>
+      </ul>
+    </nav>
+    <div class="hd-actions">
+      <button class="icon-btn" id="btnSearch" title="Busca global (Ctrl+K)"><span data-icon="search"></span><kbd>Ctrl K</kbd></button>
+      <button class="icon-btn" id="btnFx" title="Ligar/desligar efeitos de fundo" aria-label="Efeitos de fundo"><span data-icon="zap"></span></button>
+      <button class="icon-btn" id="btnSettings" title="Configurações" aria-label="Configurações"><span data-icon="sliders"></span></button>
+      <button class="icon-btn burger" id="btnBurger" aria-label="Abrir menu" aria-expanded="false"><span data-icon="menu"></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ===== Início ===== -->
+<section id="inicio" class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="glass term reveal">
+        <div class="term-bar"><i></i><i></i><i></i><span id="termTitle">pietsch@cyber-lab: ~/estudos</span></div>
+        <div class="term-body">
+          <h1><span id="greet">Bem-vindo</span>,<br><em>Hacker Ético</em></h1>
+          <div class="tty" id="tty" aria-live="off"></div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#pdfs"><span data-icon="file"></span>Hacking PDFs</a>
+            <a class="btn btn-ghost" href="#faculdade"><span data-icon="cap"></span>Faculdade</a>
+            <a class="btn btn-ghost" href="#aulas"><span data-icon="video"></span>Aulas Grátis</a>
+          </div>
+        </div>
+      </div>
+      <div class="side-col">
+        <div class="glass stats reveal" aria-label="Estatísticas">
+          <div class="stat"><b id="stPdf">0</b><span>PDFs na biblioteca</span></div>
+          <div class="stat"><b id="stRead">0</b><span>PDFs concluídos</span></div>
+          <div class="stat"><b id="stAulas">0</b><span>Aulas da faculdade</span></div>
+          <div class="stat"><b id="stLinks">0</b><span>Cursos estudados</span></div>
+        </div>
+        <div class="glass pomo reveal">
+          <div class="pomo-ring" id="pomoRing"><div id="pomoTime">25:00</div></div>
+          <div>
+            <h3 id="pomoLabel">Modo foco</h3>
+            <p class="hint">Técnica Pomodoro: 25 min de estudo, 5 de pausa.</p>
+            <div class="row">
+              <button class="btn btn-primary btn-sm" id="pomoGo">Iniciar</button>
+              <button class="btn btn-ghost btn-sm" id="pomoReset">Zerar</button>
+              <button class="btn btn-ghost btn-sm" id="pomoMode">Pausa 5</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quick">
+      <article class="card reveal" data-go="pdfs"><div class="ico" data-icon="file"></div><h3>Hacking _ PDFs</h3><p>Biblioteca com leitor, transcrição e tradução PT-BR lado a lado.</p></article>
+      <article class="card reveal" data-go="faculdade"><div class="ico" data-icon="cap"></div><h3>Faculdade</h3><p>Disciplinas de Tecnologia em Ciber Segurança com aulas gravadas e materiais.</p></article>
+      <article class="card reveal" data-go="aulas"><div class="ico" data-icon="video"></div><h3>Aulas Grátis de TI</h3><p>Trilhas no YouTube: Excel, Linux, Hacking, Cibersegurança, Programação e Redes.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Hacking PDFs ===== -->
+<section id="pdfs" class="sec">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// 01 — biblioteca</div>
+      <h2>Hacking _ PDFs</h2>
+      <p>Seus PDFs de hacking com leitor integrado. Cada material tem aba de <b>transcrição</b> (texto original), <b>tradução PT-BR</b> e <b>notas</b> pessoais.</p>
+    </div>
+    <div class="glass toolbar reveal">
+      <div class="field grow"><label for="pdfQ">Buscar</label><div class="search-wrap"><span data-icon="search"></span><input type="search" id="pdfQ" placeholder="título, tag, conteúdo…"></div></div>
+      <div class="field"><label for="pdfCat">Categoria</label><select id="pdfCat"></select></div>
+      <div class="field"><label for="pdfStatus">Status</label>
+        <select id="pdfStatus"><option value="">Todos</option><option value="novo">Não lido</option><option value="lendo">Lendo</option><option value="concluido">Concluído</option><option value="fav">★ Favoritos</option></select></div>
+      <div class="field"><label for="pdfLang">Idioma</label>
+        <select id="pdfLang"><option value="">Todos</option><option value="en">Inglês</option><option value="pt">Português</option></select></div>
+      <div class="field"><label>&nbsp;</label><button class="btn btn-primary" data-act="pdf-new"><span data-icon="plus"></span>Adicionar PDF</button></div>
+    </div>
+    <div class="cards" id="pdfGrid"></div>
+  </div>
+</section>
+
+<!-- ===== Faculdade ===== -->
+<section id="faculdade" class="sec">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// 02 — graduação</div>
+      <h2>Faculdade — Tecnologia em Ciber Segurança</h2>
+      <p>Organize cada disciplina com suas <b>aulas gravadas</b> (arquivo ou link) e os <b>PDFs</b> do curso. Marque o que já concluiu e acompanhe o progresso.</p>
+    </div>
+    <div id="facHost"></div>
+  </div>
+</section>
+
+<!-- ===== Aulas Grátis ===== -->
+<section id="aulas" class="sec">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// 03 — youtube</div>
+      <h2>Aulas Grátis de TI</h2>
+      <p>Trilhas de estudo gratuitas separadas por área. Cada cartão abre uma busca no YouTube já filtrada pelo tema; você também pode salvar os seus próprios links.</p>
+    </div>
+    <div class="glass toolbar reveal">
+      <div class="field grow"><label for="lnkQ">Buscar nas aulas</label><div class="search-wrap"><span data-icon="search"></span><input type="search" id="lnkQ" placeholder="ex.: nmap, python, tabela dinâmica…"></div></div>
+      <div class="field"><label>&nbsp;</label><button class="btn btn-primary" data-act="link-new"><span data-icon="plus"></span>Salvar meu link</button></div>
+    </div>
+    <div class="tabs" id="linkTabs" role="tablist"></div>
+    <div class="channels" id="linkChannels"></div>
+    <div class="cards" id="linkGrid"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <div><b>ESTUDOS CIBERSECURITY // PIETSCH</b> — seus dados ficam salvos apenas neste navegador.</div>
+    <div class="warn">Conteúdo educacional. Pratique técnicas de segurança somente em ambientes próprios, laboratórios (CTFs, máquinas virtuais) ou com autorização expressa por escrito.</div>
+  </div>
+</footer>
+
+<div id="toasts" role="status" aria-live="polite"></div>
+<div class="modal-back" id="modalBack" aria-hidden="true">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-hd"><h2 id="modalTitle"></h2><button class="icon-btn sm" data-act="modal-close" aria-label="Fechar"><span data-icon="close"></span></button></div>
+    <div class="modal-bd" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* =====================================================================
+   ESTUDOS CIBERSECURITY // PIETSCH
+   ===================================================================== */
+
+/* ---------- utilitários ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const rnd = (a, b) => a + Math.random() * (b - a);
+const ri = n => Math.floor(Math.random() * n);
+const pick = a => a[ri(a.length)];
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+
+const ICONS = {
+  search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  video:'<rect x="2" y="5" width="14" height="14" rx="2"/><path d="m22 8-6 4 6 4z"/>',
+  link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+  play:'<path d="m6 4 14 8-14 8z"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  close:'<path d="M18 6 6 18M6 6l12 12"/>',
+  folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  ext:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+  terminal:'<path d="m4 17 6-6-6-6M12 19h8"/>',
+  menu:'<path d="M3 6h18M3 12h18M3 18h18"/>',
+  zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+  cap:'<path d="m22 9-10-5L2 9l10 5z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5M22 9v6"/>',
+  back:'<path d="m15 18-6-6 6-6"/>',
+  eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+};
+const icon = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+const hydrateIcons = (root = document) => $$('[data-icon]', root).forEach(el => { if (!el.dataset.done) { el.innerHTML = icon(el.dataset.icon); el.dataset.done = 1; } });
+
+function toast(msg, err = false) {
+  const t = document.createElement('div');
+  t.className = 'toast' + (err ? ' err' : '');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => { t.style.transition = 'opacity .4s'; t.style.opacity = 0; setTimeout(() => t.remove(), 450); }, err ? 5000 : 2800);
+}
+
+/* mini-markdown para transcrições e traduções */
+function md(src) {
+  if (!src) return '';
+  const blocks = [];
+  const t = esc(src).replace(/```([\s\S]*?)```/g, (m, c) => { blocks.push(c.replace(/^\n/, '')); return `\u0000${blocks.length - 1}\u0000`; });
+  const inline = s => s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\*([^*]+)\*/g, '<i>$1</i>');
+  let out = '', list = false, para = [];
+  const flushP = () => { if (para.length) { out += `<p>${inline(para.join(' '))}</p>`; para = []; } };
+  const closeL = () => { if (list) { out += '</ul>'; list = false; } };
+  for (const ln of t.split('\n')) {
+    let m;
+    if ((m = ln.match(/^\u0000(\d+)\u0000$/))) { flushP(); closeL(); out += `<pre><code>${blocks[m[1]]}</code></pre>`; }
+    else if ((m = ln.match(/^(#{1,4})\s+(.*)/))) { flushP(); closeL(); const l = m[1].length + 1; out += `<h${l}>${inline(m[2])}</h${l}>`; }
+    else if ((m = ln.match(/^\s*(?:[-*]|\d+[.)])\s+(.*)/))) { flushP(); if (!list) { out += '<ul>'; list = true; } out += `<li>${inline(m[1])}</li>`; }
+    else if (!ln.trim()) { flushP(); closeL(); }
+    else { closeL(); para.push(ln.trim()); }
+  }
+  flushP(); closeL();
+  return out;
+}
+
+/* ---------- armazenamento (IndexedDB com fallback em memória) ---------- */
+const DB = {
+  db: null, volatile: false, mem: { items: new Map(), files: new Map() },
+  open() {
+    return new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error('IndexedDB indisponível'));
+      let r;
+      try { r = indexedDB.open('estudos-cyber-pietsch', 1); } catch (e) { return rej(e); }
+      r.onupgradeneeded = () => { const d = r.result; d.createObjectStore('items', { keyPath: 'id' }); d.createObjectStore('files'); };
+      r.onsuccess = () => { this.db = r.result; res(); };
+      r.onerror = () => rej(r.error);
+      r.onblocked = () => rej(new Error('bloqueado'));
+    });
+  },
+  _tx(stores, mode, fn) {
+    return new Promise((res, rej) => {
+      const t = this.db.transaction(stores, mode);
+      let rq; try { rq = fn(t); } catch (e) { return rej(e); }
+      t.oncomplete = () => res(rq ? rq.result : undefined);
+      t.onerror = t.onabort = () => rej(t.error);
+    });
+  },
+  all() { return this.volatile ? Promise.resolve([...this.mem.items.values()]) : this._tx('items', 'readonly', t => t.objectStore('items').getAll()); },
+  put(it) { if (this.volatile) { this.mem.items.set(it.id, it); return Promise.resolve(); } return this._tx('items', 'readwrite', t => t.objectStore('items').put(it)); },
+  putFile(id, blob) { if (this.volatile) { this.mem.files.set(id, blob); return Promise.resolve(); } return this._tx('files', 'readwrite', t => t.objectStore('files').put(blob, id)); },
+  getFile(id) { if (this.volatile) return Promise.resolve(this.mem.files.get(id)); return this._tx('files', 'readonly', t => t.objectStore('files').get(id)); },
+  delFile(id) { if (this.volatile) { this.mem.files.delete(id); return Promise.resolve(); } return this._tx('files', 'readwrite', t => t.objectStore('files').delete(id)); },
+  del(id) {
+    if (this.volatile) { this.mem.items.delete(id); this.mem.files.delete(id); return Promise.resolve(); }
+    return this._tx(['items', 'files'], 'readwrite', t => { t.objectStore('items').delete(id); return t.objectStore('files').delete(id); });
+  },
+  clear() {
+    if (this.volatile) { this.mem.items.clear(); this.mem.files.clear(); return Promise.resolve(); }
+    return this._tx(['items', 'files'], 'readwrite', t => { t.objectStore('items').clear(); return t.objectStore('files').clear(); });
+  },
+};
+
+/* ---------- estado ---------- */
+const state = { items: [], facView: 'list', linkCat: 'all', objectUrls: [] };
+const settings = Object.assign({ fx: true, opacity: 0.9, bgUrl: '' }, lsGet('cyber.settings', {}));
+const saveSettings = () => lsSet('cyber.settings', settings);
+let watched = new Set(lsGet('cyber.watched', []));
+let customLinks = lsGet('cyber.links', []);
+
+const getItem = id => state.items.find(i => i.id === id);
+async function saveItem(it, file) {
+  it.updated = Date.now();
+  try {
+    await DB.put(it);
+    if (file) await DB.putFile(it.id, file);
+  } catch (e) {
+    toast('Não foi possível salvar (armazenamento cheio?)', true);
+    throw e;
+  }
+  const idx = state.items.findIndex(x => x.id === it.id);
+  if (idx >= 0) state.items[idx] = it; else state.items.push(it);
+}
+async function removeItem(id) { await DB.del(id); state.items = state.items.filter(i => i.id !== id); }
+
+/* =====================================================================
+   FUNDO: parede de telas (hackers / investigação / terminais)
+   ===================================================================== */
+const BG = (() => {
+  const cv = $('#bgCanvas'), ctx = cv.getContext('2d');
+  let W = 0, H = 0, panels = [], raf = 0, last = 0, running = false, fpsGap = reduceMotion ? 160 : 33;
+  const HB = 20, PANEL = '#070318';
+  const KANA = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789ABCDEF<>{}[]/\\|=+*';
+  const COLORS = ['#22d3ee', '#a78bfa', '#39ff9c', '#60a5fa', '#e879f9'];
+  const ORDER = ['matrix', 'log', 'radar', 'code', 'graph', 'case', 'hex', 'wave', 'bars'];
+  const TITLES = { matrix: 'ACESSO.REMOTO', log: 'SYSLOG // TRACE', graph: 'MAPA.DE.REDE', hex: 'MEMDUMP 0x7FFF', radar: 'RADAR.SCAN', wave: 'SINAL.OSC', code: 'scan.py', bars: 'CPU // THREADS', case: 'UNIDADE.CIBERCRIME' };
+  const ip = () => `${pick([10, 172, 192])}.${pick([0, 16, 168])}.${ri(255)}.${ri(255)}`;
+  const hex = n => Array.from({ length: n }, () => ri(16).toString(16)).join('');
+  const LOGGERS = [
+    () => ['[+] porta ' + pick([22, 80, 443, 445, 3306, 8080]) + '/tcp aberta em ' + ip(), '#39ff9c'],
+    () => ['[*] varredura nmap -sV ' + ip(), '#22d3ee'],
+    () => ['[!] login SSH negado (tentativa ' + ri(900) + ')', '#ff4d8d'],
+    () => ['[*] hash capturado: ' + hex(16), '#a78bfa'],
+    () => ['[+] sessão aberta -> ' + ip(), '#39ff9c'],
+    () => ['[CYBER] rastreando origem do ataque…', '#e879f9'],
+    () => ['[*] mandado #' + (1000 + ri(8999)) + ' emitido', '#60a5fa'],
+    () => ['[!] firewall: pacote bloqueado ' + ip(), '#fbbf24'],
+    () => ['[+] evidência ' + hex(8) + ' preservada', '#39ff9c'],
+  ];
+  const SNIPPET = [
+    'import socket, sys', '', 'def scan(host, ports):', '    abertas = []', '    for p in ports:', '        s = socket.socket()', '        s.settimeout(0.4)',
+    '        if s.connect_ex((host, p)) == 0:', '            abertas.append(p)', '            print("[+] aberta:", p)', '        s.close()', '    return abertas', '',
+    '# somente em laboratório autorizado', 'scan("192.168.0.10", range(1, 1024))',
+  ];
+
+  function init(kind, w, h) {
+    const bh = h - HB;
+    switch (kind) {
+      case 'matrix': { const fs = 14, n = Math.floor(w / fs); return { fs, drops: Array.from({ length: n }, () => rnd(-30, bh / fs)), sp: Array.from({ length: n }, () => rnd(7, 20)) }; }
+      case 'log': return { lines: [], t: 0 };
+      case 'graph': { const n = Math.max(8, Math.floor(w * bh / 5200)); return { nodes: Array.from({ length: n }, () => ({ x: rnd(10, w - 10), y: rnd(10, bh - 10), vx: rnd(-14, 14), vy: rnd(-14, 14) })), alert: 0, t: 0 }; }
+      case 'hex': { const cols = Math.max(4, Math.floor((w - 70) / 24)), rows = Math.max(2, Math.floor(bh / 13)); return { cols, rows, cells: Array.from({ length: rows * cols }, () => hex(2)), hot: new Float32Array(rows * cols), base: ri(0xffff) }; }
+      case 'radar': return { a: rnd(0, 6.28), blips: [] };
+      case 'wave': return { ph: 0 };
+      case 'bars': { const n = Math.max(6, Math.floor(w / 10)); return { v: Array.from({ length: n }, () => Math.random()), tg: Array.from({ length: n }, () => Math.random()), t: 0 }; }
+      case 'code': return { line: 0, ch: 0, shown: [''], wait: 0 };
+      case 'case': return { scan: 0, pct: 0, id: 1000 + ri(8999), t: 0 };
+    }
+  }
+
+  function layout() {
+    const dpr = 1;
+    W = cv.width = Math.floor(innerWidth * dpr); H = cv.height = Math.floor(innerHeight * dpr);
+    const gap = 10, cols = Math.max(1, Math.round(W / 390)), rows = Math.max(2, Math.round(H / 270));
+    const pw = (W - gap * (cols + 1)) / cols, ph = (H - gap * (rows + 1)) / rows;
+    panels = [];
+    let n = 0;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++, n++) {
+      const kind = ORDER[(n + (r * 2)) % ORDER.length];
+      const x = gap + c * (pw + gap), y = gap + r * (ph + gap);
+      panels.push({ kind, x, y, w: pw, h: ph, color: COLORS[n % COLORS.length], s: init(kind, pw, ph) });
+    }
+    ctx.fillStyle = '#04010d'; ctx.fillRect(0, 0, W, H);
+    for (const p of panels) {
+      ctx.fillStyle = PANEL; ctx.fillRect(p.x, p.y, p.w, p.h);
+      ctx.fillStyle = 'rgba(139,92,246,.14)'; ctx.fillRect(p.x, p.y, p.w, HB);
+      ctx.strokeStyle = p.color; ctx.globalAlpha = .55; ctx.lineWidth = 1; ctx.strokeRect(p.x + .5, p.y + .5, p.w - 1, p.h - 1);
+      ctx.globalAlpha = .18; ctx.lineWidth = 4; ctx.strokeRect(p.x + 2, p.y + 2, p.w - 4, p.h - 4); ctx.globalAlpha = 1;
+      ctx.font = '10px "Share Tech Mono", monospace'; ctx.fillStyle = p.color; ctx.textBaseline = 'middle';
+      ctx.fillText(TITLES[p.kind], p.x + 8, p.y + HB / 2 + 1);
+    }
+  }
+
+  const draw = {
+    matrix(p, dt) {
+      const s = p.s, bh = p.h - HB;
+      ctx.fillStyle = 'rgba(7,3,24,.17)'; ctx.fillRect(0, 0, p.w, bh);
+      ctx.font = s.fs + 'px monospace'; ctx.textBaseline = 'top';
+      for (let i = 0; i < s.drops.length; i++) {
+        const y = s.drops[i] * s.fs;
+        if (y > -s.fs) {
+          ctx.fillStyle = p.color; ctx.globalAlpha = .75; ctx.fillText(KANA[ri(KANA.length)], i * s.fs, y - s.fs);
+          ctx.globalAlpha = 1; ctx.fillStyle = '#e8fff6'; ctx.fillText(KANA[ri(KANA.length)], i * s.fs, y);
+        }
+        s.drops[i] += s.sp[i] * dt;
+        if (y > bh && Math.random() > .96) s.drops[i] = rnd(-12, 0);
+      }
+    },
+    log(p, dt) {
+      const s = p.s, bh = p.h - HB, max = Math.floor((bh - 6) / 13);
+      s.t += dt;
+      while (s.t > .22) { s.t -= .22; s.lines.push(pick(LOGGERS)()); if (s.lines.length > max) s.lines.shift(); }
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      ctx.font = '11px "Share Tech Mono", monospace'; ctx.textBaseline = 'top';
+      s.lines.forEach((l, i) => { ctx.fillStyle = l[1]; ctx.globalAlpha = .55 + .45 * (i / s.lines.length); ctx.fillText(l[0], 8, 5 + i * 13, p.w - 14); });
+      ctx.globalAlpha = 1;
+    },
+    graph(p, dt) {
+      const s = p.s, bh = p.h - HB;
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      s.t += dt; if (s.t > 2.6) { s.t = 0; s.alert = ri(s.nodes.length); }
+      for (const n of s.nodes) { n.x += n.vx * dt; n.y += n.vy * dt; if (n.x < 6 || n.x > p.w - 6) n.vx *= -1; if (n.y < 6 || n.y > bh - 6) n.vy *= -1; }
+      ctx.lineWidth = 1;
+      for (let i = 0; i < s.nodes.length; i++) for (let j = i + 1; j < s.nodes.length; j++) {
+        const a = s.nodes[i], b = s.nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 120) { ctx.strokeStyle = p.color; ctx.globalAlpha = (1 - d / 120) * .7; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      }
+      ctx.globalAlpha = 1;
+      s.nodes.forEach((n, i) => {
+        const hot = i === s.alert;
+        ctx.fillStyle = hot ? '#ff4d8d' : p.color; ctx.beginPath(); ctx.arc(n.x, n.y, hot ? 4 + Math.sin(performance.now() / 120) * 1.5 : 2.6, 0, 6.283); ctx.fill();
+        if (hot) { ctx.strokeStyle = '#ff4d8d'; ctx.globalAlpha = .5; ctx.beginPath(); ctx.arc(n.x, n.y, 11, 0, 6.283); ctx.stroke(); ctx.globalAlpha = 1; }
+      });
+    },
+    hex(p) {
+      const s = p.s, bh = p.h - HB;
+      for (let k = 0; k < 4; k++) { const i = ri(s.cells.length); s.cells[i] = hex(2); s.hot[i] = 1; }
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      ctx.font = '11px "Share Tech Mono", monospace'; ctx.textBaseline = 'top';
+      for (let r = 0; r < s.rows; r++) {
+        ctx.fillStyle = '#6b6fa3'; ctx.fillText((s.base + r * s.cols).toString(16).padStart(4, '0'), 8, 4 + r * 13);
+        for (let c = 0; c < s.cols; c++) {
+          const i = r * s.cols + c;
+          ctx.fillStyle = s.hot[i] > .05 ? '#e8fff6' : p.color; ctx.globalAlpha = s.hot[i] > .05 ? 1 : .6;
+          ctx.fillText(s.cells[i], 48 + c * 24, 4 + r * 13); s.hot[i] *= .92;
+        }
+      }
+      ctx.globalAlpha = 1;
+    },
+    radar(p, dt) {
+      const s = p.s, bh = p.h - HB, cx = p.w / 2, cy = bh / 2, R = Math.min(p.w, bh) / 2 - 8;
+      s.a += dt * 1.7;
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      ctx.strokeStyle = p.color; ctx.lineWidth = 1; ctx.globalAlpha = .35;
+      for (let k = 1; k <= 4; k++) { ctx.beginPath(); ctx.arc(cx, cy, R * k / 4, 0, 6.283); ctx.stroke(); }
+      ctx.beginPath(); ctx.moveTo(cx - R, cy); ctx.lineTo(cx + R, cy); ctx.moveTo(cx, cy - R); ctx.lineTo(cx, cy + R); ctx.stroke();
+      for (let k = 0; k < 24; k++) { ctx.globalAlpha = (1 - k / 24) * .5; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R, s.a - k * .035 - .035, s.a - k * .035); ctx.closePath(); ctx.fillStyle = p.color; ctx.fill(); }
+      ctx.globalAlpha = 1;
+      if (Math.random() < .06 && s.blips.length < 7) s.blips.push({ a: s.a - rnd(0, .5), d: rnd(.2, .95), life: 1 });
+      for (const b of s.blips) { ctx.fillStyle = '#ff4d8d'; ctx.globalAlpha = b.life; ctx.beginPath(); ctx.arc(cx + Math.cos(b.a) * R * b.d, cy + Math.sin(b.a) * R * b.d, 3, 0, 6.283); ctx.fill(); b.life -= dt * .35; }
+      s.blips = s.blips.filter(b => b.life > 0); ctx.globalAlpha = 1;
+    },
+    wave(p, dt) {
+      const s = p.s, bh = p.h - HB; s.ph += dt * 3;
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      ctx.strokeStyle = 'rgba(139,92,246,.2)'; ctx.lineWidth = 1;
+      for (let x = 0; x < p.w; x += 24) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, bh); ctx.stroke(); }
+      for (let y = 0; y < bh; y += 24) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(p.w, y); ctx.stroke(); }
+      [[p.color, 1, .9], ['#e879f9', 1.7, .5]].forEach(([c, f, a], k) => {
+        ctx.strokeStyle = c; ctx.globalAlpha = a; ctx.lineWidth = 1.6; ctx.beginPath();
+        for (let x = 0; x <= p.w; x += 3) { const y = bh / 2 + Math.sin(x * .03 * f + s.ph * f) * bh * .22 + Math.sin(x * .09 + s.ph * 2.3 + k) * bh * .12 * Math.sin(s.ph * .7); x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+        ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    },
+    bars(p, dt) {
+      const s = p.s, bh = p.h - HB, bw = p.w / s.v.length; s.t += dt;
+      if (s.t > .18) { s.t = 0; for (let i = 0; i < s.tg.length; i++) if (Math.random() < .5) s.tg[i] = Math.random(); }
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      const g = ctx.createLinearGradient(0, bh, 0, 0); g.addColorStop(0, '#3b82f6'); g.addColorStop(.6, p.color); g.addColorStop(1, '#e879f9');
+      ctx.fillStyle = g;
+      for (let i = 0; i < s.v.length; i++) { s.v[i] += (s.tg[i] - s.v[i]) * Math.min(1, dt * 8); const h = s.v[i] * (bh - 14); ctx.fillRect(i * bw + 2, bh - 4 - h, bw - 4, h); }
+    },
+    code(p, dt) {
+      const s = p.s, bh = p.h - HB, max = Math.floor((bh - 6) / 13);
+      if (s.wait > 0) { s.wait -= dt; if (s.wait <= 0) { s.line = 0; s.ch = 0; s.shown = ['']; } }
+      else {
+        s.ch += dt * 30;
+        const src = SNIPPET[s.line];
+        s.shown[s.shown.length - 1] = src.slice(0, Math.floor(s.ch));
+        if (s.ch >= src.length + 4) { s.line++; s.ch = 0; if (s.line >= SNIPPET.length) s.wait = 3; else { s.shown.push(''); if (s.shown.length > max) s.shown.shift(); } }
+      }
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      ctx.font = '11px "Share Tech Mono", monospace'; ctx.textBaseline = 'top';
+      s.shown.forEach((ln, i) => {
+        if (ln.trim().startsWith('#')) { ctx.fillStyle = '#6b6fa3'; ctx.fillText(ln, 8, 5 + i * 13); return; }
+        let x = 8;
+        for (const tk of ln.split(/(\b(?:def|for|if|import|return|in|print)\b|"[^"]*")/)) {
+          if (!tk) continue;
+          ctx.fillStyle = /^(def|for|if|import|return|in|print)$/.test(tk) ? '#e879f9' : tk[0] === '"' ? '#39ff9c' : '#8fb4ff';
+          ctx.fillText(tk, x, 5 + i * 13); x += ctx.measureText(tk).width;
+        }
+      });
+      if (Math.floor(performance.now() / 500) % 2 === 0 && s.wait <= 0) { const i = s.shown.length - 1; ctx.fillStyle = '#39ff9c'; ctx.fillRect(8 + ctx.measureText(s.shown[i]).width + 1, 5 + i * 13, 6, 11); }
+    },
+    case(p, dt) {
+      const s = p.s, bh = p.h - HB; s.t += dt; s.scan = (s.scan + dt * .55) % 1; s.pct = Math.min(99, s.pct + dt * 9); if (s.pct >= 99 && s.t > 14) { s.pct = 0; s.t = 0; s.id = 1000 + ri(8999); }
+      ctx.fillStyle = PANEL; ctx.fillRect(0, 0, p.w, bh);
+      const bw = Math.min(p.w * .42, bh * .8), bx = 12, by = (bh - bw * 1.1) / 2, bhh = bw * 1.1;
+      ctx.strokeStyle = p.color; ctx.lineWidth = 1.5; ctx.globalAlpha = .9;
+      const k = 12;
+      [[bx, by, 1, 1], [bx + bw, by, -1, 1], [bx, by + bhh, 1, -1], [bx + bw, by + bhh, -1, -1]].forEach(([x, y, dx, dy]) => { ctx.beginPath(); ctx.moveTo(x + dx * k, y); ctx.lineTo(x, y); ctx.lineTo(x, y + dy * k); ctx.stroke(); });
+      ctx.globalAlpha = .55; ctx.fillStyle = '#a78bfa';
+      ctx.beginPath(); ctx.ellipse(bx + bw / 2, by + bhh * .38, bw * .2, bhh * .2, 0, 0, 6.283); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(bx + bw * .08, by + bhh); ctx.quadraticCurveTo(bx + bw / 2, by + bhh * .5, bx + bw * .92, by + bhh); ctx.fill();
+      ctx.globalAlpha = 1;
+      const sy = by + s.scan * bhh; const g = ctx.createLinearGradient(0, sy - 10, 0, sy + 2); g.addColorStop(0, 'rgba(34,211,238,0)'); g.addColorStop(1, 'rgba(34,211,238,.9)');
+      ctx.fillStyle = g; ctx.fillRect(bx, sy - 10, bw, 12);
+      ctx.font = '11px "Share Tech Mono", monospace'; ctx.textBaseline = 'top'; const tx = bx + bw + 14;
+      const rowsT = [['ALVO #' + s.id, '#e8fff6'], ['STATUS: RASTREANDO', '#fbbf24'], ['ORIGEM: ' + (s.t > 5 ? 'IDENTIFICADA' : 'ANALISANDO…'), s.t > 5 ? '#39ff9c' : '#8fb4ff'], ['MATCH: ' + s.pct.toFixed(0) + '%', '#e879f9'], ['EVIDÊNCIAS: ' + Math.min(48, Math.floor(s.t * 3.2)), '#8fb4ff']];
+      rowsT.forEach(([t, c], i) => { ctx.fillStyle = c; ctx.fillText(t, tx, 8 + i * 15, p.w - tx - 6); });
+      ctx.fillStyle = 'rgba(139,92,246,.25)'; ctx.fillRect(tx, 90, Math.max(20, p.w - tx - 10), 6); ctx.fillStyle = p.color; ctx.fillRect(tx, 90, Math.max(20, p.w - tx - 10) * s.pct / 100, 6);
+    },
+  };
+
+  function frame(ts) {
+    raf = requestAnimationFrame(frame);
+    if (ts - last < fpsGap) return;
+    const dt = Math.min(.1, (ts - last) / 1000); last = ts;
+    for (const p of panels) {
+      ctx.save(); ctx.beginPath(); ctx.rect(p.x + 1, p.y + HB, p.w - 2, p.h - HB - 1); ctx.clip(); ctx.translate(p.x, p.y + HB);
+      draw[p.kind](p, dt); ctx.restore();
+      ctx.fillStyle = PANEL; ctx.fillRect(p.x + p.w - 38, p.y + 2, 36, HB - 3);
+      ctx.fillStyle = (ts / 600 | 0) % 2 ? '#ff4d8d' : 'rgba(255,77,141,.25)'; ctx.beginPath(); ctx.arc(p.x + p.w - 28, p.y + HB / 2, 3, 0, 6.283); ctx.fill();
+      ctx.fillStyle = '#9ba3cf'; ctx.font = '9px "Share Tech Mono", monospace'; ctx.textBaseline = 'middle'; ctx.fillText('REC', p.x + p.w - 22, p.y + HB / 2 + 1);
+    }
+  }
+  const start = () => { if (running || !settings.fx || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(frame); };
+  const stop = () => { running = false; cancelAnimationFrame(raf); };
+  layout();
+  addEventListener('resize', debounce(() => { layout(); }, 250));
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  return { start, stop, layout };
+})();
+
+function applyFx() {
+  document.body.classList.toggle('fx-off', !settings.fx);
+  document.documentElement.style.setProperty('--fx-opacity', settings.opacity);
+  $('#btnFx').classList.toggle('on', settings.fx);
+  settings.fx ? BG.start() : BG.stop();
+}
+
+/* vídeo de fundo (URL direta ou arquivo local salvo no navegador) */
+let bgVideoObjUrl = null;
+async function applyBgVideo() {
+  const v = $('#bgVideo');
+  if (bgVideoObjUrl) { URL.revokeObjectURL(bgVideoObjUrl); bgVideoObjUrl = null; }
+  let src = '';
+  try {
+    const f = await DB.getFile('__bgvideo');
+    if (f) { bgVideoObjUrl = URL.createObjectURL(f); src = bgVideoObjUrl; }
+  } catch {}
+  if (!src && settings.bgUrl) src = settings.bgUrl;
+  if (!src) { v.removeAttribute('src'); v.load(); document.body.classList.remove('has-video'); return; }
+  v.onerror = () => { document.body.classList.remove('has-video'); toast('Não foi possível carregar o vídeo de fundo.', true); };
+  v.oncanplay = () => document.body.classList.add('has-video');
+  v.src = src; v.muted = true; v.play().catch(() => {});
+}
+
+/* =====================================================================
+   DADOS: aulas grátis, disciplinas sugeridas, conteúdo incluído
+   ===================================================================== */
+const CATS = {
+  excel:  { label: 'Excel', color: '#39ff9c', channels: ['Hashtag Treinamento', 'Ninja do Excel', 'Curso em Vídeo'] },
+  linux:  { label: 'Linux', color: '#fbbf24', channels: ['Diolinux', 'Linux Tips', 'Curso em Vídeo'] },
+  hacking:{ label: 'Hacking', color: '#e879f9', channels: ['Desec Security', 'NetworkChuck', 'The Cyber Mentor', 'John Hammond', 'IppSec'] },
+  ciber:  { label: 'Cibersegurança', color: '#a78bfa', channels: ['Professor Messer', 'Mente Binária', 'Papo Binário', 'David Bombal'] },
+  prog:   { label: 'Programação', color: '#22d3ee', channels: ['Curso em Vídeo', 'freeCodeCamp', 'Rocketseat', 'Filipe Deschamps'] },
+  redes:  { label: 'Redes', color: '#60a5fa', channels: ['Professor Messer', 'NetworkChuck', 'David Bombal'] },
+  labs:   { label: 'Labs & Plataformas', color: '#ff4d8d', channels: [] },
+};
+const yt = q => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+// [título, descrição, termo de busca no YouTube, nível]
+const COURSES = {
+  excel: [
+    ['Excel do básico ao avançado', 'Curso completo: interface, fórmulas, formatação e gráficos.', 'curso de excel completo básico ao avançado', 'Iniciante'],
+    ['Fórmulas e funções essenciais', 'SOMA, SE, CONT.SE, SOMASES e funções de texto e data.', 'excel fórmulas e funções essenciais aula', 'Iniciante'],
+    ['PROCV, PROCX e funções de busca', 'Cruze tabelas e localize informações em planilhas grandes.', 'excel procv procx índice corresp aula', 'Intermediário'],
+    ['Tabela dinâmica passo a passo', 'Resuma milhares de linhas em relatórios dinâmicos.', 'tabela dinâmica excel curso passo a passo', 'Intermediário'],
+    ['Dashboards no Excel', 'Painéis com gráficos dinâmicos e segmentação de dados.', 'dashboard excel passo a passo', 'Intermediário'],
+    ['Power Query', 'Importe e trate dados automaticamente.', 'power query excel curso completo', 'Avançado'],
+    ['Macros e VBA do zero', 'Automatize tarefas repetitivas com VBA.', 'excel vba macros curso do zero', 'Avançado'],
+    ['Excel para análise de logs', 'Filtre e analise logs e relatórios de segurança em planilhas.', 'excel analisar dados filtros avançados tabela dinâmica', 'Intermediário'],
+  ],
+  linux: [
+    ['Linux completo para iniciantes', 'Do zero: conceitos, instalação e uso diário.', 'curso de linux completo para iniciantes', 'Iniciante'],
+    ['Comandos básicos do terminal', 'ls, cd, cp, mv, grep, find, pipes e redirecionamentos.', 'comandos básicos linux terminal aula', 'Iniciante'],
+    ['Permissões, usuários e grupos', 'chmod, chown, sudo e o modelo de permissões.', 'linux permissões usuários grupos chmod chown aula', 'Iniciante'],
+    ['Shell script (Bash) do zero', 'Variáveis, laços, condicionais e automações.', 'shell script bash curso do zero', 'Intermediário'],
+    ['Kali Linux: instalação e primeiros passos', 'Monte seu laboratório em máquina virtual.', 'kali linux instalação virtualbox primeiros passos', 'Iniciante'],
+    ['Redes no Linux', 'ip, ss, netstat, iptables/nftables e DNS.', 'linux redes ip ss iptables aula', 'Intermediário'],
+    ['Administração de servidores Linux', 'Serviços, systemd, logs, SSH e backups.', 'administração servidor linux curso systemd ssh', 'Avançado'],
+    ['Linux Essentials / LPI', 'Preparatório para certificação LPI.', 'linux essentials lpi curso', 'Intermediário'],
+  ],
+  hacking: [
+    ['Ethical Hacking — curso completo', 'Metodologia de pentest para iniciantes.', 'curso de ethical hacking completo iniciantes', 'Iniciante'],
+    ['Nmap: varredura e enumeração', 'Descubra hosts, portas e serviços em laboratório.', 'nmap tutorial completo varredura enumeração', 'Iniciante'],
+    ['Metasploit Framework', 'Exploits, payloads e sessões em ambiente controlado.', 'metasploit framework tutorial pentest', 'Intermediário'],
+    ['Burp Suite e hacking web', 'Intercepte e teste aplicações web (OWASP Top 10).', 'burp suite tutorial owasp top 10 hacking web', 'Intermediário'],
+    ['CTF para iniciantes', 'Resolva desafios práticos e aprenda jogando.', 'ctf para iniciantes tryhackme hack the box passo a passo', 'Iniciante'],
+    ['OSINT — inteligência em fontes abertas', 'Coleta de informações públicas.', 'osint curso inteligência fontes abertas', 'Iniciante'],
+    ['Wireshark: análise de pacotes', 'Capture e investigue tráfego de rede.', 'wireshark análise de pacotes tutorial', 'Intermediário'],
+    ['Engenharia reversa e buffer overflow', 'Entenda binários, memória e exploração.', 'engenharia reversa buffer overflow tutorial', 'Avançado'],
+    ['Pentest em redes Wi‑Fi (laboratório)', 'Auditoria de redes sem fio próprias.', 'pentest wifi aircrack laboratório tutorial', 'Intermediário'],
+  ],
+  ciber: [
+    ['Fundamentos de Segurança da Informação', 'CIA, ameaças, vulnerabilidades e controles.', 'fundamentos de segurança da informação aula', 'Iniciante'],
+    ['CompTIA Security+', 'Preparatório para a certificação mais pedida.', 'comptia security+ curso aula', 'Intermediário'],
+    ['Criptografia explicada', 'Simétrica, assimétrica, hashes e certificados.', 'criptografia explicada simétrica assimétrica hash aula', 'Iniciante'],
+    ['Análise forense computacional', 'Evidências digitais, imagens de disco e cadeia de custódia.', 'forense computacional curso aula', 'Intermediário'],
+    ['SOC, Blue Team e SIEM', 'Monitoramento, detecção e resposta a incidentes.', 'soc blue team siem curso resposta a incidentes', 'Intermediário'],
+    ['ISO 27001 e gestão de riscos', 'Governança, políticas e análise de risco.', 'iso 27001 gestão de riscos segurança da informação aula', 'Intermediário'],
+    ['LGPD na prática', 'Lei Geral de Proteção de Dados para profissionais de TI.', 'lgpd na prática curso aula', 'Iniciante'],
+    ['Engenharia social e phishing', 'Como atacam pessoas e como se defender.', 'engenharia social phishing como funciona aula', 'Iniciante'],
+    ['MITRE ATT&CK e Threat Intelligence', 'Táticas e técnicas de adversários.', 'mitre att&ck threat intelligence tutorial', 'Avançado'],
+  ],
+  prog: [
+    ['Lógica de programação', 'A base de tudo: algoritmos e fluxogramas.', 'lógica de programação curso completo iniciantes', 'Iniciante'],
+    ['Python do zero', 'Curso gratuito completo para começar.', 'curso de python do zero completo', 'Iniciante'],
+    ['Python para segurança', 'Sockets, scanners e automação de pentest.', 'python para hacking segurança sockets scanner tutorial', 'Intermediário'],
+    ['HTML, CSS e JavaScript', 'Fundamentos da web.', 'curso html css javascript completo', 'Iniciante'],
+    ['C para iniciantes', 'Base para entender memória e exploração.', 'curso de linguagem c completo iniciantes', 'Intermediário'],
+    ['Git e GitHub', 'Versionamento e trabalho colaborativo.', 'git e github curso completo', 'Iniciante'],
+    ['SQL e banco de dados', 'Consultas, modelagem — e depois SQL Injection.', 'curso sql banco de dados completo', 'Iniciante'],
+    ['PowerShell para administração e segurança', 'Automação em ambientes Windows.', 'powershell curso completo administração', 'Intermediário'],
+  ],
+  redes: [
+    ['Redes de computadores do zero', 'Conceitos, equipamentos e topologias.', 'redes de computadores curso completo do zero', 'Iniciante'],
+    ['Modelo OSI e TCP/IP', 'As camadas e como os dados trafegam.', 'modelo osi tcp ip explicado aula', 'Iniciante'],
+    ['Sub-redes e endereçamento IP', 'Máscaras, CIDR e subnetting.', 'subnetting sub-redes cidr aula', 'Intermediário'],
+    ['CCNA — aulas gratuitas', 'Roteamento, switching e configuração Cisco.', 'ccna curso completo aula', 'Intermediário'],
+    ['DNS, DHCP, HTTP e protocolos', 'Os serviços que sustentam a internet.', 'dns dhcp http protocolos de rede aula', 'Iniciante'],
+    ['Firewall, VPN e IDS/IPS', 'Defesa de perímetro.', 'firewall vpn ids ips pfsense tutorial', 'Intermediário'],
+  ],
+};
+const PLATFORMS = [
+  ['TryHackMe', 'Salas guiadas de hacking e defesa, ótimas para começar.', 'https://tryhackme.com'],
+  ['Hack The Box', 'Máquinas e desafios de pentest (plano gratuito).', 'https://www.hackthebox.com'],
+  ['OverTheWire', 'Jogos de wargames para aprender Linux e segurança.', 'https://overthewire.org/wargames/'],
+  ['PortSwigger Web Security Academy', 'Laboratórios gratuitos de segurança web da criadora do Burp Suite.', 'https://portswigger.net/web-security'],
+  ['picoCTF', 'CTF educacional da Carnegie Mellon.', 'https://picoctf.org'],
+  ['OWASP', 'Top 10, cheat sheets e guias de teste.', 'https://owasp.org'],
+  ['MITRE ATT&CK', 'Base de conhecimento de táticas e técnicas de ataque.', 'https://attack.mitre.org'],
+  ['CyberChef', 'Canivete suíço para codificar, decodificar e analisar dados.', 'https://gchq.github.io/CyberChef/'],
+  ['Linux Journey', 'Aprenda Linux por lições interativas.', 'https://linuxjourney.com'],
+  ['Cisco Skills for All', 'Cursos gratuitos de redes e cibersegurança da Cisco.', 'https://skillsforall.com'],
+  ['freeCodeCamp', 'Programação gratuita com certificados.', 'https://www.freecodecamp.org'],
+  ['VulnHub', 'Máquinas virtuais vulneráveis para praticar offline.', 'https://www.vulnhub.com'],
+];
+const DISC_SUGGEST = [
+  'Fundamentos de Segurança da Informação', 'Redes de Computadores', 'Sistemas Operacionais (Linux e Windows)', 'Lógica e Linguagem de Programação',
+  'Criptografia', 'Segurança em Redes e Firewalls', 'Ethical Hacking e Testes de Invasão (Pentest)', 'Análise Forense Computacional',
+  'Gestão de Riscos e Governança de TI', 'Legislação, Ética e LGPD', 'Segurança de Aplicações Web', 'Resposta a Incidentes e SOC',
+];
+const PDF_CATS = ['Pentest', 'Redes', 'Web', 'Malware', 'Forense', 'Criptografia', 'OSINT', 'Engenharia Social', 'Linux', 'Programação', 'Outros'];
+
+/* Conteúdo incluído no sistema (adicionado na primeira abertura; pode ser excluído). */
+const BUILTIN = [
+  {
+    id: 'b-exemplo-pentest', kind: 'pdf', title: 'Modelo de entrada — Fases de um Pentest (exemplo)', cat: 'Pentest', lang: 'en', status: 'novo',
+    tags: ['exemplo', 'metodologia'],
+    original: `# Penetration Testing Phases
+
+A penetration test is an authorized, simulated attack against a system to evaluate its security. It is normally split into the following phases.
+
+## 1. Planning and Reconnaissance
+Define scope, rules of engagement and written authorization. Collect public information about the target (OSINT).
+
+## 2. Scanning and Enumeration
+Identify live hosts, open ports and services.
+- Port scanning
+- Service and version detection
+- Vulnerability scanning
+
+## 3. Gaining Access
+Exploit identified weaknesses to obtain a foothold, always within the agreed scope.
+
+## 4. Maintaining Access and Post-Exploitation
+Evaluate how far an attacker could go: privilege escalation and lateral movement.
+
+## 5. Reporting
+Document findings, evidence, risk level and remediation steps.`,
+    translated: `# Fases de um Teste de Invasão (Pentest)
+
+Um teste de invasão é um ataque simulado e **autorizado** contra um sistema para avaliar sua segurança. Normalmente ele é dividido nas fases a seguir.
+
+## 1. Planejamento e Reconhecimento
+Defina o escopo, as regras de engajamento e a autorização por escrito. Colete informações públicas sobre o alvo (OSINT).
+
+## 2. Varredura e Enumeração
+Identifique hosts ativos, portas abertas e serviços.
+- Varredura de portas
+- Detecção de serviços e versões
+- Varredura de vulnerabilidades
+
+## 3. Obtenção de Acesso
+Explore as fraquezas identificadas para obter um ponto de apoio, sempre dentro do escopo combinado.
+
+## 4. Manutenção de Acesso e Pós-Exploração
+Avalie até onde um atacante poderia chegar: escalonamento de privilégios e movimento lateral.
+
+## 5. Relatório
+Documente achados, evidências, nível de risco e passos de correção.`,
+    notes: 'Este é apenas um modelo para mostrar como os materiais ficam: PDF + transcrição (original) + tradução PT-BR + notas. Pode excluir.',
+  },
+];
+
+/* =====================================================================
+   MODAL
+   ===================================================================== */
+let lastFocus = null, modalCleanup = null;
+function openModal(title, html, { wide = false, className = '', onClose } = {}) {
+  closeModal(true);
+  lastFocus = document.activeElement;
+  $('#modalTitle').textContent = title;
+  $('#modalBody').innerHTML = html;
+  $('#modal').className = 'modal ' + (wide ? 'wide ' : '') + className;
+  const back = $('#modalBack'); back.classList.add('open'); back.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  hydrateIcons($('#modal'));
+  modalCleanup = onClose || null;
+  const f = $('#modalBody input:not([type=file]):not([type=hidden]), #modalBody textarea, #modalBody select');
+  if (f && matchMedia('(pointer:fine)').matches) f.focus();
+}
+function closeModal(silent) {
+  const back = $('#modalBack');
+  if (!back.classList.contains('open')) return;
+  back.classList.remove('open'); back.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (modalCleanup) { try { modalCleanup(); } catch {} modalCleanup = null; }
+  state.objectUrls.forEach(u => URL.revokeObjectURL(u)); state.objectUrls = [];
+  $('#modalBody').innerHTML = '';
+  if (!silent && lastFocus && lastFocus.focus) lastFocus.focus();
+}
+const objUrl = blob => { const u = URL.createObjectURL(blob); state.objectUrls.push(u); return u; };
+
+/* =====================================================================
+   PDFs — lista, formulário e leitor
+   ===================================================================== */
+const STATUS = { novo: ['Não lido', ''], lendo: ['Lendo', 'a'], concluido: ['Concluído', 'g'] };
+const pdfItems = () => state.items.filter(i => i.kind === 'pdf');
+
+function fillPdfCats() {
+  const sel = $('#pdfCat'); const cur = sel.value;
+  sel.innerHTML = '<option value="">Todas</option>' + PDF_CATS.map(c => `<option>${esc(c)}</option>`).join('');
+  sel.value = cur;
+}
+
+function renderPdfs() {
+  const q = norm($('#pdfQ').value), cat = $('#pdfCat').value, st = $('#pdfStatus').value, lang = $('#pdfLang').value;
+  const list = pdfItems().filter(i => {
+    if (cat && i.cat !== cat) return false;
+    if (lang && i.lang !== lang) return false;
+    if (st === 'fav' ? !i.fav : st && i.status !== st) return false;
+    if (q && !norm([i.title, i.cat, (i.tags || []).join(' '), i.original, i.translated, i.notes].join(' ')).includes(q)) return false;
+    return true;
+  }).sort((a, b) => (b.fav ? 1 : 0) - (a.fav ? 1 : 0) || b.created - a.created);
+  const host = $('#pdfGrid');
+  if (!list.length) {
+    host.innerHTML = pdfItems().length
+      ? `<div class="empty glass">${icon('search')}<h3>Nada encontrado</h3><p>Ajuste os filtros ou a busca.</p></div>`
+      : `<div class="empty glass">${icon('file')}<h3>Sua biblioteca está vazia</h3><p>Adicione seu primeiro PDF de hacking. Você pode anexar o arquivo e colar a transcrição e a tradução.</p><button class="btn btn-primary" data-act="pdf-new">${icon('plus')}Adicionar PDF</button></div>`;
+    return;
+  }
+  host.innerHTML = list.map(i => {
+    const [stLabel, stCls] = STATUS[i.status] || STATUS.novo;
+    const yes = (ok, t) => `<span class="${ok ? 'yes' : 'no'}">${ok ? '✔' : '○'} ${t}</span>`;
+    return `<article class="card pdf-card reveal in" data-id="${i.id}">
+      <div class="top">
+        <div class="doc-ico">${i.hasFile ? 'PDF' : 'TXT'}</div>
+        <div style="flex:1;min-width:0"><h3>${esc(i.title)}</h3><div class="row" style="margin-top:.35rem"><span class="chip c">${esc(i.cat || 'Outros')}</span><span class="chip ${stCls}">${stLabel}</span><span class="chip dim">${i.lang === 'en' ? 'EN → PT' : 'PT-BR'}</span></div></div>
+        <button class="icon-btn sm ${i.fav ? 'star-on' : ''}" data-act="pdf-fav" data-id="${i.id}" title="Favoritar" aria-label="Favoritar">${icon('star')}</button>
+      </div>
+      <div class="row">${(i.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+      <div class="ticks">${yes(i.hasFile, 'PDF')}${yes(!!i.original, 'Transcrição')}${yes(!!i.translated, 'Tradução PT-BR')}${yes(!!i.notes, 'Notas')}</div>
+      <div class="row" style="margin-top:.2rem">
+        <button class="btn btn-primary btn-sm" data-act="reader" data-id="${i.id}">${icon('eye')}Abrir</button>
+        <button class="btn btn-ghost btn-sm" data-act="pdf-edit" data-id="${i.id}">${icon('edit')}Editar</button>
+        <span class="spacer"></span>
+        <button class="icon-btn sm" data-act="item-del" data-id="${i.id}" title="Excluir" aria-label="Excluir">${icon('trash')}</button>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+function pdfForm(id, opts = {}) {
+  const it = id ? getItem(id) : null;
+  const isMat = (it ? it.kind : opts.kind) === 'material';
+  const d = it || { title: '', cat: 'Pentest', lang: 'en', status: 'novo', tags: [], original: '', translated: '', notes: '' };
+  const heading = it ? 'Editar material' : (isMat ? 'Novo material da disciplina' : 'Adicionar PDF de hacking');
+  openModal(heading, `
+    <form data-form="pdf" data-id="${it ? it.id : ''}" data-kind="${isMat ? 'material' : 'pdf'}" data-disc="${esc(it ? it.disc : opts.disc || '')}">
+      <div class="form-grid">
+        <div class="field full"><label for="f-file">Arquivo PDF ${it && it.hasFile ? '(já anexado — escolha outro só para substituir)' : ''}</label><input type="file" id="f-file" name="file" accept="application/pdf,.pdf">
+          <span class="hint">O PDF fica salvo no seu navegador (IndexedDB) e não é enviado para nenhum servidor.</span></div>
+        <div class="field full"><label for="f-title">Título</label><input type="text" id="f-title" name="title" required maxlength="160" value="${esc(d.title)}" placeholder="ex.: The Hacker Playbook 3 — Cap. 2"></div>
+        ${isMat ? '' : `<div class="field"><label for="f-cat">Categoria</label><select id="f-cat" name="cat">${PDF_CATS.map(c => `<option ${c === d.cat ? 'selected' : ''}>${c}</option>`).join('')}</select></div>`}
+        <div class="field"><label for="f-lang">Idioma do original</label><select id="f-lang" name="lang"><option value="en" ${d.lang === 'en' ? 'selected' : ''}>Inglês (traduzir p/ PT-BR)</option><option value="pt" ${d.lang === 'pt' ? 'selected' : ''}>Português</option></select></div>
+        <div class="field"><label for="f-status">Status</label><select id="f-status" name="status">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${k === d.status ? 'selected' : ''}>${v[0]}</option>`).join('')}</select></div>
+        <div class="field ${isMat ? '' : ''}"><label for="f-tags">Tags (separe por vírgula)</label><input type="text" id="f-tags" name="tags" value="${esc((d.tags || []).join(', '))}" placeholder="nmap, recon, web"></div>
+        <div class="field full"><label for="f-orig">Transcrição (texto do original)</label><textarea id="f-orig" name="original" placeholder="Cole aqui o texto transcrito do PDF. Aceita # títulos, - listas, **negrito**, \`código\` e blocos \`\`\`.">${esc(d.original)}</textarea></div>
+        <div class="field full"><label for="f-tr">Tradução PT-BR</label><textarea id="f-tr" name="translated" placeholder="Tradução para português do Brasil.">${esc(d.translated)}</textarea></div>
+        <div class="field full"><label for="f-notes">Notas pessoais</label><textarea id="f-notes" name="notes" style="min-height:70px">${esc(d.notes)}</textarea></div>
+      </div>
+      <div class="form-actions"><button type="button" class="btn btn-ghost" data-act="modal-close">Cancelar</button><button class="btn btn-primary" type="submit">${icon('check')}Salvar</button></div>
+    </form>`, { wide: true });
+}
+
+async function readerOpen(id, tab) {
+  const it = getItem(id); if (!it) return;
+  const file = it.hasFile ? await DB.getFile(id).catch(() => null) : null;
+  const url = file ? objUrl(file) : null;
+  const tabs = [
+    ['pdf', 'PDF', it.hasFile], ['orig', 'Transcrição', !!it.original], ['tr', 'Tradução PT-BR', !!it.translated], ['notes', 'Notas', !!it.notes],
+  ];
+  const start = tab || (it.hasFile ? 'pdf' : it.translated ? 'tr' : it.original ? 'orig' : 'notes');
+  const body = t => {
+    if (t === 'pdf') return url
+      ? `<div class="reader-tools"><a class="btn btn-ghost btn-sm" href="${url}" target="_blank" rel="noopener">${icon('ext')}Abrir em nova aba</a><a class="btn btn-ghost btn-sm" href="${url}" download="${esc(it.fileName || it.title + '.pdf')}">${icon('download')}Baixar</a></div><iframe class="pdf-frame" src="${url}" title="${esc(it.title)}"></iframe>`
+      : `<div class="empty">${icon('file')}<h3>Nenhum PDF anexado</h3><p>Use “Editar” para anexar o arquivo.</p></div>`;
+    if (t === 'orig' || t === 'tr') {
+      const txt = t === 'orig' ? it.original : it.translated;
+      if (!txt) return `<div class="empty">${icon('file')}<h3>${t === 'orig' ? 'Sem transcrição ainda' : 'Sem tradução ainda'}</h3><p>Use “Editar” para adicionar o texto.</p></div>`;
+      const gt = t === 'orig' && it.lang === 'en' ? `<a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://translate.google.com/?sl=en&tl=pt&op=translate&text=${encodeURIComponent(txt.slice(0, 3800))}">${icon('globe')}Google Tradutor</a>` : '';
+      return `<div class="reader-tools"><button class="btn btn-ghost btn-sm" data-act="r-copy" data-t="${t}">${icon('copy')}Copiar</button><button class="btn btn-ghost btn-sm" data-act="r-dl" data-t="${t}">${icon('download')}Baixar .md</button>${gt}</div><div class="prose">${md(txt)}</div>`;
+    }
+    return `<textarea class="notes-area" id="r-notes" placeholder="Anotações, dúvidas, comandos para testar no laboratório…">${esc(it.notes || '')}</textarea><p class="hint" style="margin-top:.4rem">Salvo automaticamente.</p>`;
+  };
+  openModal(it.title, `
+    <div class="reader-tabs" role="tablist">${tabs.map(([k, l, ok]) => `<button class="rt-btn ${k === start ? 'active' : ''}" role="tab" data-act="r-tab" data-t="${k}">${l}${ok ? '<span class="dot"></span>' : ''}</button>`).join('')}<span style="flex:1"></span><button class="btn btn-ghost btn-sm" data-act="${it.kind === 'material' ? 'mat-edit' : 'pdf-edit'}" data-id="${id}">${icon('edit')}Editar</button></div>
+    <div id="readerBody">${body(start)}</div>`, { wide: true });
+  const modal = $('#modal');
+  modal._reader = { it, body };
+  bindNotes();
+}
+function bindNotes() {
+  const ta = $('#r-notes'); if (!ta) return;
+  const it = $('#modal')._reader.it;
+  ta.addEventListener('input', debounce(async () => { it.notes = ta.value; await saveItem(it); renderAll(false); }, 500));
+}
+
+/* =====================================================================
+   FACULDADE
+   ===================================================================== */
+const discItems = () => state.items.filter(i => i.kind === 'disc').sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+const childrenOf = id => state.items.filter(i => (i.kind === 'aula' || i.kind === 'material') && i.disc === id);
+const progressOf = id => { const c = childrenOf(id); const d = c.filter(x => x.status === 'concluido').length; return { done: d, total: c.length, pct: c.length ? Math.round(d * 100 / c.length) : 0 }; };
+
+function renderFac() {
+  const host = $('#facHost');
+  const discs = discItems();
+  if (state.facView !== 'list') {
+    const d = getItem(state.facView);
+    if (!d) { state.facView = 'list'; return renderFac(); }
+    const kids = childrenOf(d.id), aulas = kids.filter(k => k.kind === 'aula').sort((a, b) => a.created - b.created), mats = kids.filter(k => k.kind === 'material').sort((a, b) => a.created - b.created);
+    const pr = progressOf(d.id);
+    const days = d.exam ? Math.ceil((new Date(d.exam + 'T00:00:00') - new Date().setHours(0, 0, 0, 0)) / 864e5) : null;
+    const examChip = days == null ? '' : days < 0 ? `<span class="chip dim">Avaliação passou</span>` : `<span class="chip ${days <= 7 ? 'r' : 'a'}">Avaliação em ${days} dia${days === 1 ? '' : 's'}</span>`;
+    host.innerHTML = `<div class="fac-detail">
+      <button class="btn btn-ghost btn-sm back" data-act="fac-back">${icon('back')}Todas as disciplinas</button>
+      <div class="glass fac-head reveal in">
+        <div class="tt"><div><div class="code">${esc(d.code || 'DISCIPLINA')}${d.semester ? ' · ' + esc(d.semester) : ''}</div><h2>${esc(d.name)}</h2></div>
+          <div class="row" style="display:flex;gap:.4rem;flex-wrap:wrap">${examChip}<button class="btn btn-ghost btn-sm" data-act="disc-edit" data-id="${d.id}">${icon('edit')}Editar</button><button class="btn btn-danger btn-sm" data-act="item-del" data-id="${d.id}">${icon('trash')}Excluir</button></div></div>
+        ${d.desc ? `<p class="muted">${esc(d.desc)}</p>` : ''}
+        <div><div class="row" style="display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:.3rem"><span>Progresso</span><span>${pr.done}/${pr.total} concluídos · ${pr.pct}%</span></div><div class="progress"><i style="width:${pr.pct}%"></i></div></div>
+      </div>
+      <div class="cols">
+        <div class="glass panel reveal in"><div class="ph"><h3>${icon('video')}Aulas gravadas (${aulas.length})</h3><button class="btn btn-primary btn-sm" data-act="aula-new" data-disc="${d.id}">${icon('plus')}Aula</button></div>
+          <ul class="rows">${aulas.length ? aulas.map(a => rowItem(a, 'play')).join('') : `<li class="hint">Nenhuma aula ainda. Adicione um arquivo de vídeo ou o link da aula.</li>`}</ul></div>
+        <div class="glass panel reveal in"><div class="ph"><h3>${icon('file')}PDFs e materiais (${mats.length})</h3><button class="btn btn-primary btn-sm" data-act="mat-new" data-disc="${d.id}">${icon('plus')}PDF</button></div>
+          <ul class="rows">${mats.length ? mats.map(a => rowItem(a, 'reader')).join('') : `<li class="hint">Nenhum material ainda. Anexe os PDFs da disciplina.</li>`}</ul></div>
+      </div>
+      <div class="glass panel reveal in" style="margin-top:1.1rem"><div class="ph"><h3>${icon('edit')}Anotações da disciplina</h3></div><textarea id="discNotes" placeholder="Resumos, prazos, dúvidas para o professor…" style="min-height:120px">${esc(d.notes || '')}</textarea></div>
+    </div>`;
+    const ta = $('#discNotes'); if (ta) ta.addEventListener('input', debounce(async () => { d.notes = ta.value; await saveItem(d); }, 500));
+    return;
+  }
+  const head = `<div class="glass toolbar reveal in"><div class="grow" style="flex:1"><b>${discs.length}</b> disciplina${discs.length === 1 ? '' : 's'} · Tecnologia em Ciber Segurança</div><button class="btn btn-ghost" data-act="disc-suggest">${icon('cap')}Sugestões de disciplinas</button><button class="btn btn-primary" data-act="disc-new">${icon('plus')}Nova disciplina</button></div>`;
+  if (!discs.length) {
+    host.innerHTML = head + `<div class="cards"><div class="empty glass">${icon('cap')}<h3>Nenhuma disciplina cadastrada</h3><p>Crie suas disciplinas e, dentro de cada uma, envie as aulas gravadas e os PDFs do curso. Se preferir, comece com uma lista sugerida de disciplinas comuns do curso.</p><div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap"><button class="btn btn-primary" data-act="disc-new">${icon('plus')}Nova disciplina</button><button class="btn btn-ghost" data-act="disc-suggest">Usar sugestões</button></div></div></div>`;
+    return;
+  }
+  host.innerHTML = head + `<div class="cards">${discs.map(d => {
+    const p = progressOf(d.id), n = childrenOf(d.id), na = n.filter(x => x.kind === 'aula').length;
+    return `<article class="card disc-card reveal in" data-act="disc-open" data-id="${d.id}" tabindex="0" role="button">
+      <div class="code">${esc(d.code || 'DISCIPLINA')}${d.semester ? ' · ' + esc(d.semester) : ''}</div><h3 style="font-size:1.1rem">${esc(d.name)}</h3>
+      ${d.desc ? `<p>${esc(d.desc)}</p>` : ''}
+      <div class="row"><span class="chip c">${icon('video')} ${na} aulas</span><span class="chip">${icon('file')} ${n.length - na} PDFs</span></div>
+      <div class="progress"><i style="width:${p.pct}%"></i></div><div class="hint">${p.done}/${p.total} concluídos · ${p.pct}%</div></article>`;
+  }).join('')}</div>`;
+}
+function rowItem(a, openAct) {
+  const done = a.status === 'concluido';
+  const sub = a.kind === 'aula' ? (a.hasFile ? 'Arquivo local' : a.url ? hostOf(a.url) : '') : [a.hasFile ? 'PDF' : '', a.original ? 'transcrição' : '', a.translated ? 'tradução' : ''].filter(Boolean).join(' · ');
+  return `<li class="rowitem ${done ? 'done' : ''}">
+    <button class="chk ${done ? 'on' : ''}" data-act="toggle-done" data-id="${a.id}" title="Marcar como concluído" aria-label="Marcar como concluído">${icon('check')}</button>
+    <div class="rt" data-act="${openAct}" data-id="${a.id}">${esc(a.title)}<small>${esc(sub)}</small></div>
+    <div class="acts"><button class="icon-btn sm" data-act="${openAct}" data-id="${a.id}" title="Abrir" aria-label="Abrir">${icon(openAct === 'play' ? 'play' : 'eye')}</button>
+    <button class="icon-btn sm" data-act="${a.kind === 'aula' ? 'aula-edit' : 'mat-edit'}" data-id="${a.id}" title="Editar" aria-label="Editar">${icon('edit')}</button>
+    <button class="icon-btn sm" data-act="item-del" data-id="${a.id}" title="Excluir" aria-label="Excluir">${icon('trash')}</button></div></li>`;
+}
+const hostOf = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
+
+function discForm(id) {
+  const d = id ? getItem(id) : { name: '', code: '', semester: '', exam: '', desc: '' };
+  openModal(id ? 'Editar disciplina' : 'Nova disciplina', `<form data-form="disc" data-id="${id || ''}"><div class="form-grid">
+    <div class="field full"><label for="d-name">Nome da disciplina</label><input type="text" id="d-name" name="name" required maxlength="120" value="${esc(d.name)}" placeholder="ex.: Redes de Computadores"></div>
+    <div class="field"><label for="d-code">Código (opcional)</label><input type="text" id="d-code" name="code" maxlength="20" value="${esc(d.code)}" placeholder="ex.: CSC102"></div>
+    <div class="field"><label for="d-sem">Semestre / módulo</label><input type="text" id="d-sem" name="semester" maxlength="20" value="${esc(d.semester)}" placeholder="ex.: 1º semestre"></div>
+    <div class="field"><label for="d-exam">Próxima avaliação / entrega</label><input type="date" id="d-exam" name="exam" value="${esc(d.exam)}"></div>
+    <div class="field full"><label for="d-desc">Descrição</label><input type="text" id="d-desc" name="desc" maxlength="200" value="${esc(d.desc)}" placeholder="professor, ementa, observações"></div>
+  </div><div class="form-actions"><button type="button" class="btn btn-ghost" data-act="modal-close">Cancelar</button><button class="btn btn-primary" type="submit">${icon('check')}Salvar</button></div></form>`);
+}
+function suggestForm() {
+  openModal('Sugestões de disciplinas', `<form data-form="suggest"><p class="hint" style="margin-bottom:.8rem">Marque as que fazem parte do seu curso. Você pode renomear ou excluir depois.</p>
+    <div style="display:grid;gap:.5rem">${DISC_SUGGEST.map((n, i) => `<label class="radio-row" style="gap:.6rem"><input type="checkbox" name="s" value="${i}" checked> <span style="text-transform:none;letter-spacing:0;font-size:1rem;color:var(--text)">${esc(n)}</span></label>`).join('')}</div>
+    <div class="form-actions"><button type="button" class="btn btn-ghost" data-act="modal-close">Cancelar</button><button class="btn btn-primary" type="submit">${icon('plus')}Adicionar selecionadas</button></div></form>`);
+}
+function aulaForm(id, disc) {
+  const a = id ? getItem(id) : { title: '', url: '', notes: '', status: 'novo' };
+  const mode = a.hasFile ? 'file' : (a.url ? 'url' : 'file');
+  openModal(id ? 'Editar aula' : 'Nova aula gravada', `<form data-form="aula" data-id="${id || ''}" data-disc="${esc(id ? a.disc : disc)}"><div class="form-grid">
+    <div class="field full"><label for="a-title">Título da aula</label><input type="text" id="a-title" name="title" required maxlength="160" value="${esc(a.title)}" placeholder="ex.: Aula 03 — Modelo OSI"></div>
+    <div class="field full"><span class="lbl">Origem do vídeo</span><div class="radio-row"><label><input type="radio" name="mode" value="file" ${mode === 'file' ? 'checked' : ''}> Arquivo do computador</label><label><input type="radio" name="mode" value="url" ${mode === 'url' ? 'checked' : ''}> Link (YouTube, Drive, mp4…)</label></div></div>
+    <div class="field full" data-show="file"><label for="a-file">Arquivo de vídeo/áudio ${a.hasFile ? '(já salvo — escolha outro só para substituir)' : ''}</label><input type="file" id="a-file" name="file" accept="video/*,audio/*"><span class="hint">Vídeos grandes ocupam espaço do navegador. Para aulas muito pesadas prefira o link.</span></div>
+    <div class="field full" data-show="url"><label for="a-url">Link da aula</label><input type="url" id="a-url" name="url" value="${esc(a.url)}" placeholder="https://youtu.be/…  ou  https://drive.google.com/file/d/…"></div>
+    <div class="field"><label for="a-status">Status</label><select id="a-status" name="status"><option value="novo" ${a.status === 'novo' ? 'selected' : ''}>Não assistida</option><option value="lendo" ${a.status === 'lendo' ? 'selected' : ''}>Em andamento</option><option value="concluido" ${a.status === 'concluido' ? 'selected' : ''}>Concluída</option></select></div>
+    <div class="field full"><label for="a-notes">Anotações</label><textarea id="a-notes" name="notes" style="min-height:90px">${esc(a.notes || '')}</textarea></div>
+  </div><div class="form-actions"><button type="button" class="btn btn-ghost" data-act="modal-close">Cancelar</button><button class="btn btn-primary" type="submit">${icon('check')}Salvar</button></div></form>`);
+  syncAulaMode();
+}
+function syncAulaMode() {
+  const f = $('form[data-form=aula]'); if (!f) return;
+  const m = f.mode.value;
+  $$('[data-show]', f).forEach(el => el.style.display = el.dataset.show === m ? '' : 'none');
+}
+function embedFor(url) {
+  let m;
+  if ((m = url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/))) return { type: 'iframe', src: `https://www.youtube.com/embed/${m[1]}?rel=0` };
+  if ((m = url.match(/drive\.google\.com\/file\/d\/([\w-]+)/))) return { type: 'iframe', src: `https://drive.google.com/file/d/${m[1]}/preview` };
+  if (/\.(mp4|webm|ogg|ogv|m4v|mov|mp3|wav)(\?|#|$)/i.test(url)) return { type: 'video', src: url };
+  return null;
+}
+async function playAula(id) {
+  const a = getItem(id); if (!a) return;
+  let media = '', ext = '';
+  if (a.hasFile) {
+    const f = await DB.getFile(id).catch(() => null);
+    if (f) media = `<div class="video-wrap"><video id="aulaVideo" controls controlsList="nodownload" src="${objUrl(f)}"></video></div>`;
+  } else if (a.url) {
+    const e = embedFor(a.url);
+    if (e && e.type === 'iframe') media = `<div class="video-wrap"><iframe src="${esc(e.src)}" title="${esc(a.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+    else if (e) media = `<div class="video-wrap"><video id="aulaVideo" controls src="${esc(e.src)}"></video></div>`;
+    ext = `<a class="btn btn-ghost btn-sm" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">${icon('ext')}Abrir link original</a>`;
+    if (!media) media = `<div class="empty glass">${icon('link')}<h3>Este link não pode ser incorporado</h3><p>Abra-o em uma nova aba.</p></div>`;
+  }
+  if (!media) media = `<div class="empty glass">${icon('video')}<h3>Vídeo indisponível</h3><p>Edite a aula para anexar o arquivo ou informar um link.</p></div>`;
+  openModal(a.title, `${media}
+    <div class="row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin:.9rem 0">${ext}<button class="btn ${a.status === 'concluido' ? 'btn-ghost' : 'btn-primary'} btn-sm" data-act="toggle-done" data-id="${id}" data-reopen="${id}">${icon('check')}${a.status === 'concluido' ? 'Desmarcar concluída' : 'Marcar como concluída'}</button><button class="btn btn-ghost btn-sm" data-act="aula-edit" data-id="${id}">${icon('edit')}Editar</button></div>
+    <label class="lbl" for="aulaNotes">Anotações da aula</label><textarea id="aulaNotes" style="min-height:130px" placeholder="Escreva enquanto assiste…">${esc(a.notes || '')}</textarea>`,
+    { wide: true, onClose: () => { const v = $('#aulaVideo'); if (v && v.currentTime > 3) { a.pos = v.currentTime; DB.put(a).catch(() => {}); } } });
+  const v = $('#aulaVideo'); if (v && a.pos) v.addEventListener('loadedmetadata', () => { v.currentTime = Math.min(a.pos, v.duration - 2); }, { once: true });
+  const ta = $('#aulaNotes'); ta.addEventListener('input', debounce(async () => { a.notes = ta.value; await saveItem(a); }, 500));
+}
+
+/* =====================================================================
+   AULAS GRÁTIS
+   ===================================================================== */
+function allLinks() {
+  const out = [];
+  for (const [cat, arr] of Object.entries(COURSES)) arr.forEach((c, i) => out.push({ id: `c-${cat}-${i}`, cat, title: c[0], desc: c[1], url: yt(c[2]), level: c[3], mine: false }));
+  PLATFORMS.forEach((p, i) => out.push({ id: `p-${i}`, cat: 'labs', title: p[0], desc: p[1], url: p[2], level: 'Prática', mine: false, direct: true }));
+  customLinks.forEach(l => out.push({ ...l, mine: true, direct: true }));
+  return out;
+}
+const LVL = { Iniciante: 'g', Intermediário: 'a', Avançado: 'r', Prática: 'c' };
+function renderLinks() {
+  const q = norm($('#lnkQ').value), cat = state.linkCat;
+  const all = allLinks();
+  const tabs = [['all', 'Todas']].concat(Object.entries(CATS).map(([k, v]) => [k, v.label]));
+  $('#linkTabs').innerHTML = tabs.map(([k, l]) => {
+    const list = k === 'all' ? all : all.filter(x => x.cat === k), seen = list.filter(x => watched.has(x.id)).length;
+    return `<button class="tab ${cat === k ? 'active' : ''}" role="tab" data-act="link-tab" data-cat="${k}">${esc(l)} <span class="n">${seen}/${list.length}</span></button>`;
+  }).join('');
+  const ch = cat !== 'all' ? CATS[cat].channels : [];
+  $('#linkChannels').innerHTML = ch.length ? `<span>Canais para seguir:</span>` + ch.map(c => `<a class="chip c" href="${yt(c)}" target="_blank" rel="noopener noreferrer">${esc(c)}</a>`).join('') : '';
+  const list = all.filter(x => (cat === 'all' || x.cat === cat) && (!q || norm(x.title + ' ' + x.desc + ' ' + CATS[x.cat].label).includes(q)));
+  const host = $('#linkGrid');
+  if (!list.length) { host.innerHTML = `<div class="empty glass">${icon('search')}<h3>Nenhuma aula encontrada</h3><p>Tente outro termo ou salve um link seu.</p></div>`; return; }
+  host.innerHTML = list.map(x => {
+    const seen = watched.has(x.id);
+    return `<article class="card link-card reveal in ${seen ? 'seen' : ''}" style="--cc:${CATS[x.cat].color}">
+      <div class="row"><span class="cat-dot"></span><span class="chip" style="color:${CATS[x.cat].color};border-color:${CATS[x.cat].color}55">${esc(CATS[x.cat].label)}</span>${x.mine ? '<span class="chip g">Meu link</span>' : ''}<span class="chip ${LVL[x.level] || ''} lvl">${esc(x.level || '')}</span></div>
+      <h3>${esc(x.title)}</h3><p>${esc(x.desc || '')}</p>
+      <div class="row" style="margin-top:auto">
+        <a class="btn btn-primary btn-sm" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${icon(x.direct ? 'ext' : 'play')}${x.direct ? 'Acessar' : 'Ver no YouTube'}</a>
+        <button class="btn ${seen ? 'btn-ghost' : 'btn-ghost'} btn-sm" data-act="link-seen" data-id="${x.id}" aria-pressed="${seen}">${icon('check')}${seen ? 'Estudado' : 'Marcar'}</button>
+        <span class="spacer"></span>
+        ${x.mine ? `<button class="icon-btn sm" data-act="link-del" data-id="${x.id}" title="Excluir" aria-label="Excluir">${icon('trash')}</button>` : ''}
+      </div></article>`;
+  }).join('');
+}
+function linkForm() {
+  openModal('Salvar meu link de estudo', `<form data-form="link"><div class="form-grid">
+    <div class="field full"><label for="l-title">Título</label><input type="text" id="l-title" name="title" required maxlength="140" placeholder="ex.: Curso de Nmap — Canal X"></div>
+    <div class="field full"><label for="l-url">Link (URL)</label><input type="url" id="l-url" name="url" required placeholder="https://www.youtube.com/watch?v=…"></div>
+    <div class="field"><label for="l-cat">Seção</label><select id="l-cat" name="cat">${Object.entries(CATS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('')}</select></div>
+    <div class="field"><label for="l-lvl">Nível</label><select id="l-lvl" name="level"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select></div>
+    <div class="field full"><label for="l-desc">Descrição</label><input type="text" id="l-desc" name="desc" maxlength="200" placeholder="o que se aprende neste material"></div>
+  </div><div class="form-actions"><button type="button" class="btn btn-ghost" data-act="modal-close">Cancelar</button><button class="btn btn-primary" type="submit">${icon('check')}Salvar</button></div></form>`);
+}
+
+/* =====================================================================
+   BUSCA GLOBAL (Ctrl+K)
+   ===================================================================== */
+let palSel = 0, palRes = [];
+function openPalette() {
+  openModal('Busca global', `<div style="margin:-1.2rem"><input class="pal-input" id="palQ" placeholder="Buscar PDFs, aulas, disciplinas, cursos…" autocomplete="off"><ul class="pal-list" id="palList" role="listbox"></ul></div>`, { className: 'palette' });
+  $('.modal-hd').style.display = 'none';
+  const q = $('#palQ'); q.focus(); q.addEventListener('input', palRender); q.addEventListener('keydown', palKey); palRender();
+  const prev = modalCleanup; modalCleanup = () => { $('.modal-hd').style.display = ''; prev && prev(); };
+}
+function palRender() {
+  const q = norm($('#palQ').value);
+  const res = [];
+  state.items.forEach(i => {
+    const t = i.kind === 'disc' ? i.name : i.title;
+    if (!q || norm([t, i.cat, (i.tags || []).join(' '), i.original, i.translated, i.notes].join(' ')).includes(q))
+      res.push({ ico: i.kind === 'aula' ? 'video' : i.kind === 'disc' ? 'cap' : 'file', title: t, tag: { pdf: 'PDF', material: 'Material', aula: 'Aula', disc: 'Disciplina' }[i.kind], run: () => { closeModal(); gotoItem(i); } });
+  });
+  allLinks().forEach(l => { if (q && norm(l.title + ' ' + l.desc).includes(q)) res.push({ ico: 'link', title: l.title, tag: CATS[l.cat].label, run: () => window.open(l.url, '_blank', 'noopener') }); });
+  palRes = res.slice(0, 40); palSel = 0;
+  $('#palList').innerHTML = palRes.length ? palRes.map((r, i) => `<li class="pal-item ${i === 0 ? 'sel' : ''}" data-i="${i}" role="option">${icon(r.ico)}<span>${esc(r.title)}</span><small>${esc(r.tag)}</small></li>`).join('') : `<li class="pal-item"><span class="muted">Nenhum resultado</span></li>`;
+}
+function palKey(e) {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); palSel = (palSel + (e.key === 'ArrowDown' ? 1 : -1) + palRes.length) % Math.max(1, palRes.length); $$('.pal-item').forEach((el, i) => el.classList.toggle('sel', i === palSel)); const s = $('.pal-item.sel'); s && s.scrollIntoView({ block: 'nearest' }); }
+  else if (e.key === 'Enter' && palRes[palSel]) { e.preventDefault(); palRes[palSel].run(); }
+}
+function gotoItem(i) {
+  if (i.kind === 'disc') { state.facView = i.id; renderFac(); go('faculdade'); }
+  else if (i.kind === 'aula') { state.facView = i.disc; renderFac(); playAula(i.id); }
+  else if (i.kind === 'material') { state.facView = i.disc; renderFac(); readerOpen(i.id); }
+  else readerOpen(i.id);
+}
+const go = id => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }); };
+
+/* =====================================================================
+   CONFIGURAÇÕES / BACKUP
+   ===================================================================== */
+async function settingsOpen() {
+  let est = '';
+  try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); est = `${(e.usage / 1048576).toFixed(1)} MB usados de ~${Math.round(e.quota / 1048576).toLocaleString('pt-BR')} MB disponíveis`; } } catch {}
+  const hasLocalBg = !!(await DB.getFile('__bgvideo').catch(() => null));
+  openModal('Configurações', `<form data-form="settings">
+    <h3 style="color:var(--cyan);margin-bottom:.6rem">Fundo cibernético</h3>
+    <div class="form-grid">
+      <label class="radio-row full" style="gap:.6rem"><input type="checkbox" name="fx" ${settings.fx ? 'checked' : ''}> <span style="color:var(--text);font-size:1rem">Efeitos animados (parede de telas, hackers, radar)</span></label>
+      <div class="field full"><label for="s-op">Intensidade dos efeitos</label><input type="range" id="s-op" name="opacity" min="0.25" max="1" step="0.05" value="${settings.opacity}"></div>
+      <div class="field full"><label for="s-url">Vídeo de fundo — link direto (.mp4 / .webm)</label><input type="url" id="s-url" name="bgUrl" value="${esc(settings.bgUrl)}" placeholder="https://…/video-hacker.mp4"></div>
+      <div class="field full"><label for="s-file">…ou escolha um vídeo do seu computador ${hasLocalBg ? '(já há um vídeo salvo)' : ''}</label><input type="file" id="s-file" name="bgFile" accept="video/*">
+        <span class="hint">Use um vídeo de pessoas hackeando / sala de investigação / várias telas. Ele roda em loop, sem som, por trás das animações. Vídeos curtos (10–30 s) e leves funcionam melhor.</span></div>
+      ${hasLocalBg ? `<div class="field full"><button type="button" class="btn btn-danger btn-sm" data-act="bg-remove">${icon('trash')}Remover vídeo de fundo salvo</button></div>` : ''}
+    </div>
+    <h3 style="color:var(--cyan);margin:1.2rem 0 .6rem">Dados e backup</h3>
+    <p class="hint">${esc(est) || 'Seus dados ficam no armazenamento deste navegador.'}${DB.volatile ? ' <b style="color:var(--red)">(modo temporário: os dados se perdem ao fechar a página)</b>' : ''}</p>
+    <div class="row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem">
+      <button type="button" class="btn btn-ghost btn-sm" data-act="export">${icon('download')}Exportar backup (JSON)</button>
+      <label class="btn btn-ghost btn-sm" style="cursor:pointer">${icon('upload')}Importar backup<input type="file" id="importFile" accept="application/json,.json" hidden></label>
+      <button type="button" class="btn btn-danger btn-sm" data-act="wipe">${icon('trash')}Apagar tudo</button>
+    </div>
+    <p class="hint" style="margin-top:.5rem">O backup inclui textos, notas, progresso e links. Os arquivos (PDFs e vídeos) permanecem no navegador — guarde as cópias originais.</p>
+    <div class="form-actions"><button type="button" class="btn btn-ghost" data-act="modal-close">Fechar</button><button class="btn btn-primary" type="submit">${icon('check')}Aplicar</button></div>
+  </form>`);
+}
+async function exportBackup() {
+  const data = { app: 'estudos-cybersecurity-pietsch', version: 1, exported: new Date().toISOString(), items: state.items.filter(i => !i.id.startsWith('__')).map(i => ({ ...i })), links: customLinks, watched: [...watched] };
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+  a.download = `backup-estudos-cyber-${new Date().toISOString().slice(0, 10)}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast('Backup exportado.');
+}
+async function importBackup(file) {
+  try {
+    const data = JSON.parse(await file.text());
+    if (data.app !== 'estudos-cybersecurity-pietsch' || !Array.isArray(data.items)) throw new Error('arquivo inválido');
+    let n = 0;
+    for (const it of data.items) { if (it && it.id && !getItem(it.id)) { it.hasFile = false; await saveItem(it); n++; } }
+    if (Array.isArray(data.links)) data.links.forEach(l => { if (!customLinks.some(x => x.id === l.id)) customLinks.push(l); });
+    if (Array.isArray(data.watched)) data.watched.forEach(w => watched.add(w));
+    lsSet('cyber.links', customLinks); lsSet('cyber.watched', [...watched]);
+    renderAll(); toast(`Backup importado (${n} itens novos).`);
+  } catch (e) { toast('Não foi possível importar: ' + e.message, true); }
+}
+
+/* =====================================================================
+   AÇÕES (delegação de eventos)
+   ===================================================================== */
+const ACT = {
+  'modal-close': () => closeModal(),
+  'pdf-new': () => pdfForm(null),
+  'pdf-edit': d => pdfForm(d.id),
+  'mat-new': d => pdfForm(null, { kind: 'material', disc: d.disc }),
+  'mat-edit': d => pdfForm(d.id),
+  reader: d => readerOpen(d.id),
+  'pdf-fav': async d => { const it = getItem(d.id); it.fav = !it.fav; await saveItem(it); renderPdfs(); },
+  'r-tab': d => {
+    const m = $('#modal')._reader; if (!m) return;
+    $$('.rt-btn').forEach(b => b.classList.toggle('active', b.dataset.t === d.t));
+    $('#readerBody').innerHTML = m.body(d.t); bindNotes();
+  },
+  'r-copy': async d => { const m = $('#modal')._reader; try { await navigator.clipboard.writeText(d.t === 'orig' ? m.it.original : m.it.translated); toast('Texto copiado.'); } catch { toast('Não foi possível copiar.', true); } },
+  'r-dl': d => {
+    const m = $('#modal')._reader, txt = d.t === 'orig' ? m.it.original : m.it.translated;
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/markdown' })); a.download = `${m.it.title.replace(/[^\w\-]+/g, '_')}_${d.t === 'orig' ? 'original' : 'ptbr'}.md`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  },
+  'item-del': async d => {
+    const it = getItem(d.id); if (!it) return;
+    const extra = it.kind === 'disc' ? ` e todas as ${childrenOf(it.id).length} aulas/materiais dela` : '';
+    if (!confirm(`Excluir “${it.title || it.name}”${extra}? Esta ação não pode ser desfeita.`)) return;
+    if (it.kind === 'disc') for (const c of childrenOf(it.id)) await removeItem(c.id);
+    await removeItem(it.id); if (state.facView === it.id) state.facView = 'list';
+    closeModal(); renderAll(); toast('Excluído.');
+  },
+  'toggle-done': async d => {
+    const it = getItem(d.id); it.status = it.status === 'concluido' ? 'novo' : 'concluido'; await saveItem(it);
+    if (d.reopen) playAula(d.reopen); else renderAll(false);
+  },
+  'disc-new': () => discForm(null), 'disc-edit': d => discForm(d.id), 'disc-suggest': suggestForm,
+  'disc-open': d => { state.facView = d.id; renderFac(); go('faculdade'); },
+  'fac-back': () => { state.facView = 'list'; renderFac(); },
+  'aula-new': d => aulaForm(null, d.disc), 'aula-edit': d => aulaForm(d.id), play: d => playAula(d.id),
+  'link-new': linkForm,
+  'link-tab': d => { state.linkCat = d.cat; renderLinks(); },
+  'link-seen': d => { watched.has(d.id) ? watched.delete(d.id) : watched.add(d.id); lsSet('cyber.watched', [...watched]); renderLinks(); renderStats(); },
+  'link-del': d => { if (!confirm('Excluir este link?')) return; customLinks = customLinks.filter(l => l.id !== d.id); watched.delete(d.id); lsSet('cyber.links', customLinks); renderLinks(); renderStats(); },
+  export: exportBackup,
+  'bg-remove': async () => { await DB.delFile('__bgvideo'); await applyBgVideo(); settingsOpen(); toast('Vídeo removido.'); },
+  wipe: async () => {
+    if (!confirm('Apagar TODOS os PDFs, aulas, disciplinas, notas e links salvos? Isso não pode ser desfeito.')) return;
+    await DB.clear(); state.items = []; customLinks = []; watched = new Set(); localStorage.removeItem('cyber.seeded');
+    lsSet('cyber.links', []); lsSet('cyber.watched', []); state.facView = 'list'; closeModal(); renderAll(); applyBgVideo(); toast('Dados apagados.');
+  },
+};
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]');
+  if (t && ACT[t.dataset.act]) {
+    if (t.tagName === 'A' && !t.dataset.act) return;
+    // evita disparar a ação do cartão quando se clica em um botão interno
+    if (t.matches('.disc-card') && e.target.closest('button,a') && e.target.closest('[data-act]') !== t) return;
+    ACT[t.dataset.act](t.dataset, e); return;
+  }
+  const g = e.target.closest('[data-go]'); if (g) go(g.dataset.go);
+  const pi = e.target.closest('.pal-item[data-i]'); if (pi && palRes[+pi.dataset.i]) palRes[+pi.dataset.i].run();
+  if (e.target.id === 'modalBack') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openPalette(); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.disc-card')) { e.preventDefault(); ACT['disc-open'](e.target.dataset); }
+});
+document.addEventListener('change', e => {
+  if (e.target.name === 'mode') syncAulaMode();
+  if (e.target.id === 'importFile' && e.target.files[0]) importBackup(e.target.files[0]);
+});
+document.addEventListener('input', e => { if (e.target.name === 'opacity') document.documentElement.style.setProperty('--fx-opacity', e.target.value); });
+document.addEventListener('pointermove', e => {
+  const c = e.target.closest && e.target.closest('.card'); if (!c) return;
+  const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
+
+/* envio de formulários */
+document.addEventListener('submit', async e => {
+  const f = e.target.closest('form[data-form]'); if (!f) return;
+  e.preventDefault();
+  const fd = new FormData(f), kind = f.dataset.form, id = f.dataset.id;
+  try {
+    if (kind === 'pdf') {
+      const file = fd.get('file'); const hasNew = file && file.size > 0;
+      if (hasNew && file.size > 200 * 1048576) return toast('Arquivo maior que 200 MB.', true);
+      const old = id ? getItem(id) : null;
+      const it = old || { id: uid(), kind: f.dataset.kind, created: Date.now(), disc: f.dataset.disc || undefined };
+      it.title = (fd.get('title') || (hasNew ? file.name.replace(/\.pdf$/i, '') : 'Sem título')).toString().trim();
+      it.cat = f.dataset.kind === 'material' ? 'Faculdade' : fd.get('cat'); it.lang = fd.get('lang'); it.status = fd.get('status');
+      it.tags = (fd.get('tags') || '').toString().split(',').map(s => s.trim()).filter(Boolean);
+      it.original = fd.get('original'); it.translated = fd.get('translated'); it.notes = fd.get('notes');
+      if (hasNew) { it.hasFile = true; it.fileName = file.name; }
+      await saveItem(it, hasNew ? file : null);
+      closeModal(); renderAll(); toast('Material salvo.');
+    } else if (kind === 'disc') {
+      const it = id ? getItem(id) : { id: uid(), kind: 'disc', created: Date.now() };
+      ['name', 'code', 'semester', 'exam', 'desc'].forEach(k => it[k] = (fd.get(k) || '').toString().trim());
+      await saveItem(it); closeModal(); renderAll(); toast('Disciplina salva.');
+    } else if (kind === 'suggest') {
+      const sel = fd.getAll('s'); const have = new Set(discItems().map(d => d.name));
+      for (const i of sel) { const name = DISC_SUGGEST[+i]; if (!have.has(name)) await saveItem({ id: uid(), kind: 'disc', name, created: Date.now() + (+i) }); }
+      closeModal(); renderAll(); toast(`${sel.length} disciplina(s) adicionada(s).`);
+    } else if (kind === 'aula') {
+      const mode = fd.get('mode'), file = fd.get('file'), hasNew = mode === 'file' && file && file.size > 0, url = (fd.get('url') || '').toString().trim();
+      const old = id ? getItem(id) : null;
+      if (!old && mode === 'file' && !hasNew) return toast('Escolha um arquivo de vídeo ou use a opção de link.', true);
+      if (mode === 'url' && !url) return toast('Informe o link da aula.', true);
+      const it = old || { id: uid(), kind: 'aula', created: Date.now(), disc: f.dataset.disc };
+      it.title = fd.get('title').toString().trim(); it.status = fd.get('status'); it.notes = fd.get('notes');
+      if (mode === 'url') { it.url = url; if (it.hasFile) { await DB.delFile(it.id); it.hasFile = false; } }
+      else if (hasNew) { it.hasFile = true; it.url = ''; it.fileName = file.name; it.pos = 0; }
+      await saveItem(it, hasNew ? file : null); closeModal(); renderAll(); toast('Aula salva.');
+    } else if (kind === 'link') {
+      customLinks.push({ id: 'u-' + uid(), cat: fd.get('cat'), title: fd.get('title').toString().trim(), url: fd.get('url').toString().trim(), level: fd.get('level'), desc: fd.get('desc').toString().trim() });
+      lsSet('cyber.links', customLinks); state.linkCat = fd.get('cat'); closeModal(); renderLinks(); renderStats(); toast('Link salvo.');
+    } else if (kind === 'settings') {
+      settings.fx = !!fd.get('fx'); settings.opacity = +fd.get('opacity'); settings.bgUrl = (fd.get('bgUrl') || '').toString().trim();
+      const bg = fd.get('bgFile');
+      if (bg && bg.size > 0) { if (bg.size > 150 * 1048576) return toast('Vídeo maior que 150 MB.', true); await DB.putFile('__bgvideo', bg); }
+      saveSettings(); applyFx(); await applyBgVideo(); closeModal(); toast('Configurações aplicadas.');
+    }
+  } catch (err) { console.error(err); }
+});
+
+/* =====================================================================
+   RENDER GERAL, ESTATÍSTICAS, HERO
+   ===================================================================== */
+function animateNum(el, to) {
+  const from = +el.textContent || 0; if (from === to) return;
+  if (reduceMotion) { el.textContent = to; return; }
+  const t0 = performance.now();
+  (function step(t) { const k = Math.min(1, (t - t0) / 700); el.textContent = Math.round(from + (to - from) * k); if (k < 1) requestAnimationFrame(step); })(t0);
+}
+function renderStats() {
+  const pdfs = pdfItems(), aulas = state.items.filter(i => i.kind === 'aula');
+  animateNum($('#stPdf'), pdfs.length);
+  animateNum($('#stRead'), pdfs.filter(p => p.status === 'concluido').length);
+  animateNum($('#stAulas'), aulas.length);
+  animateNum($('#stLinks'), watched.size);
+}
+function renderAll(full = true) {
+  renderStats();
+  renderPdfs();
+  const ae = document.activeElement; // não recria a tela de faculdade enquanto o usuário digita as anotações
+  if (full || !(ae && ae.id === 'discNotes')) renderFac();
+  renderLinks();
+  hydrateIcons();
+  observeReveal();
+}
+
+let io;
+function observeReveal() {
+  if (!('IntersectionObserver' in window)) { $$('.reveal').forEach(e => e.classList.add('in')); return; }
+  io = io || new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .08 });
+  $$('.reveal:not(.in)').forEach(el => io.observe(el));
+}
+
+/* terminal da home */
+function typeHero() {
+  const host = $('#tty');
+  const lines = [
+    ['<span class="p">$</span> whoami', 'o'], ['<span class="o">pietsch</span> // estudante de Ciber Segurança', ''],
+    ['<span class="p">$</span> ls ~/estudos', ''], ['<span class="m">hacking_pdfs/   faculdade/   aulas_gratis/</span>', ''],
+    ['<span class="p">$</span> ./iniciar --modo=estudo', ''], ['<span class="o">[OK]</span> ambiente carregado. Bons estudos, hacker ético_', ''],
+  ];
+  if (reduceMotion) { host.innerHTML = lines.map(l => l[0]).join('\n'); return; }
+  let li = 0; host.innerHTML = '<span class="cur"></span>';
+  const out = [];
+  (function next() {
+    if (li >= lines.length) { host.innerHTML = out.join('\n') + '<span class="cur"></span>'; return; }
+    const html = lines[li][0], plain = html.replace(/<[^>]+>/g, '');
+    let n = 0; const isCmd = plain.startsWith('$');
+    (function tick() {
+      n += isCmd ? 1 : 3;
+      if (n >= plain.length) { out.push(html); host.innerHTML = out.join('\n') + '<span class="cur"></span>'; li++; setTimeout(next, isCmd ? 350 : 180); return; }
+      host.innerHTML = out.join('\n') + (out.length ? '\n' : '') + esc(plain.slice(0, n)) + '<span class="cur"></span>';
+      setTimeout(tick, isCmd ? 55 : 14);
+    })();
+  })();
+}
+
+/* Pomodoro */
+const Pomo = (() => {
+  let mode = 'foco', total = 25 * 60, left = total, timer = null;
+  const fmt = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  function paint() {
+    $('#pomoTime').textContent = fmt(left); $('#pomoRing').style.setProperty('--p', ((total - left) / total * 100).toFixed(1));
+    $('#pomoLabel').textContent = mode === 'foco' ? 'Modo foco' : 'Pausa'; $('#pomoGo').textContent = timer ? 'Pausar' : 'Iniciar'; $('#pomoMode').textContent = mode === 'foco' ? 'Pausa 5' : 'Foco 25';
+  }
+  function tick() { left--; if (left <= 0) { clearInterval(timer); timer = null; left = 0; toast(mode === 'foco' ? 'Foco concluído! Hora de uma pausa.' : 'Pausa encerrada. Bora estudar!'); document.title = 'Estudos CiberSecurity Pietsch'; } else document.title = `${fmt(left)} · ${mode === 'foco' ? 'Foco' : 'Pausa'}`; paint(); }
+  $('#pomoGo').onclick = () => { if (timer) { clearInterval(timer); timer = null; } else { if (left <= 0) left = total; timer = setInterval(tick, 1000); } paint(); };
+  $('#pomoReset').onclick = () => { clearInterval(timer); timer = null; left = total; document.title = 'Estudos CiberSecurity Pietsch'; paint(); };
+  $('#pomoMode').onclick = () => { clearInterval(timer); timer = null; mode = mode === 'foco' ? 'pausa' : 'foco'; total = left = (mode === 'foco' ? 25 : 5) * 60; document.title = 'Estudos CiberSecurity Pietsch'; paint(); };
+  paint();
+})();
+
+/* navegação */
+function initNav() {
+  $('#btnBurger').onclick = () => { const o = $('#nav').classList.toggle('open'); $('#btnBurger').setAttribute('aria-expanded', o); };
+  $$('#nav a').forEach(a => a.addEventListener('click', () => $('#nav').classList.remove('open')));
+  $('#btnSearch').onclick = openPalette; $('#btnSettings').onclick = settingsOpen;
+  $('#btnFx').onclick = () => { settings.fx = !settings.fx; saveSettings(); applyFx(); toast(settings.fx ? 'Efeitos ligados.' : 'Efeitos desligados.'); };
+  ['pdfQ', 'lnkQ'].forEach(id => $('#' + id).addEventListener('input', debounce(() => id === 'pdfQ' ? renderPdfs() : renderLinks(), 120)));
+  ['pdfCat', 'pdfStatus', 'pdfLang'].forEach(id => $('#' + id).addEventListener('change', renderPdfs));
+  const secs = ['inicio', 'pdfs', 'faculdade', 'aulas'].map(id => document.getElementById(id));
+  const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) $$('#nav a').forEach(a => a.classList.toggle('active', a.dataset.sec === en.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+  secs.forEach(s => spy.observe(s));
+}
+
+/* conteúdo incluído (somente na primeira abertura de cada item) */
+async function seedBuiltins() {
+  const seeded = lsGet('cyber.seeded', []);
+  const have = new Set((await DB.all()).map(i => i.id));
+  for (const b of BUILTIN) {
+    if ((seeded.includes(b.id) && !DB.volatile) || have.has(b.id)) continue;
+    const it = { ...b, created: Date.now() - 1000, hasFile: !!b.fileData };
+    delete it.fileData;
+    if (b.fileData) { try { const blob = await (await fetch(b.fileData)).blob(); await DB.putFile(b.id, blob); } catch { it.hasFile = false; } }
+    await DB.put(it); seeded.push(b.id);
+  }
+  lsSet('cyber.seeded', seeded);
+}
+
+/* ---------- inicialização ---------- */
+(async function init() {
+  hydrateIcons();
+  const h = new Date().getHours();
+  $('#greet').textContent = h < 5 ? 'Boa madrugada' : h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  fillPdfCats(); initNav(); applyFx(); typeHero();
+  try { await DB.open(); } catch (e) { DB.volatile = true; setTimeout(() => toast('Armazenamento do navegador indisponível: os dados valem só até fechar a página.', true), 800); }
+  try { await seedBuiltins(); state.items = (await DB.all()).filter(i => !i.id.startsWith('__')); } catch (e) { console.error(e); }
+  renderAll();
+  applyBgVideo();
+})();
+</script>
+</body>
+</html>
